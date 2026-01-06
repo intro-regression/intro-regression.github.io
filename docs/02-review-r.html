@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Maria Tackett">
+<title>2&nbsp; Data analysis in R – Introduction to Regression Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./03-eda.html" rel="next">
+<link href="./01-intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-31c3c5ec0f84e3846e28bd1517aa8340.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script defer="" data-domain="https://matackett.github.io/regression-book/" src="https://plausible.io/js/script.js"></script>
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-intro.html">Part 1: Getting started</a></li><li class="breadcrumb-item"><a href="./02-review-r.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data analysis in R</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Regression Analysis</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/matackett/regression-book" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00-preface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 1: Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regression in the data science workflow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-review-r.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data analysis in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 2: Simple linear regression</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-slr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-slr-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Inference for simple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-slr-conditions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Model conditions and diagnostics</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 3: Multiple linear regression</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-mlr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-mlr-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Inference for multiple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-mlr-transformations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Variable transformations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-model-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model selection</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 4: Beyond linear regression</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-logistic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistic regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-logistic-prediction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Logistic regression: Prediction and evaluation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-special-topics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Special topics</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-linear.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Mathematics of linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-logistic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Mathematics of logistic regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Data sets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
+  <li><a href="#sec-penguins-intro" id="toc-sec-penguins-intro" class="nav-link" data-scroll-target="#sec-penguins-intro"><span class="header-section-number">2.1</span> Data: Palmer penguins</a></li>
+  <li>
+<a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation"><span class="header-section-number">2.2</span> Installation</a>
+  <ul class="collapse">
+<li><a href="#installing-r-and-rstudio" id="toc-installing-r-and-rstudio" class="nav-link" data-scroll-target="#installing-r-and-rstudio"><span class="header-section-number">2.2.1</span> Installing R and RStudio</a></li>
+  <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link" data-scroll-target="#installing-r-packages"><span class="header-section-number">2.2.2</span> Installing R packages</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#sec-tidyverse" id="toc-sec-tidyverse" class="nav-link" data-scroll-target="#sec-tidyverse"><span class="header-section-number">2.3</span> Tidyverse</a>
+  <ul class="collapse">
+<li><a href="#sec-tidy-data" id="toc-sec-tidy-data" class="nav-link" data-scroll-target="#sec-tidy-data"><span class="header-section-number">2.3.1</span> Tidy data</a></li>
+  <li><a href="#the-pipe" id="toc-the-pipe" class="nav-link" data-scroll-target="#the-pipe"><span class="header-section-number">2.3.2</span> <strong>The pipe</strong></a></li>
+  </ul>
+</li>
+  <li>
+<a href="#data-manipulation-with-dplyr" id="toc-data-manipulation-with-dplyr" class="nav-link" data-scroll-target="#data-manipulation-with-dplyr"><span class="header-section-number">2.4</span> Data manipulation with dplyr</a>
+  <ul class="collapse">
+<li><a href="#data-manipulation-by-row" id="toc-data-manipulation-by-row" class="nav-link" data-scroll-target="#data-manipulation-by-row"><span class="header-section-number">2.4.1</span> Data manipulation by row</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#data-manipulation-by-column" id="toc-data-manipulation-by-column" class="nav-link" data-scroll-target="#data-manipulation-by-column"><span class="header-section-number">2.5</span> Data manipulation by column</a>
+  <ul class="collapse">
+<li><a href="#data-manipulation-by-group" id="toc-data-manipulation-by-group" class="nav-link" data-scroll-target="#data-manipulation-by-group"><span class="header-section-number">2.5.1</span> Data manipulation by group</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#data-visualizations-using-ggplot2" id="toc-data-visualizations-using-ggplot2" class="nav-link" data-scroll-target="#data-visualizations-using-ggplot2"><span class="header-section-number">2.6</span> Data visualizations using ggplot2</a>
+  <ul class="collapse">
+<li><a href="#geoms" id="toc-geoms" class="nav-link" data-scroll-target="#geoms"><span class="header-section-number">2.6.1</span> Geoms</a></li>
+  <li><a href="#sec-customize-plots" id="toc-sec-customize-plots" class="nav-link" data-scroll-target="#sec-customize-plots"><span class="header-section-number">2.6.2</span> Customizing plots</a></li>
+  <li><a href="#faceting" id="toc-faceting" class="nav-link" data-scroll-target="#faceting"><span class="header-section-number">2.6.3</span> Faceting</a></li>
+  <li><a href="#sec-color-palettes" id="toc-sec-color-palettes" class="nav-link" data-scroll-target="#sec-color-palettes"><span class="header-section-number">2.6.4</span> Color palettes</a></li>
+  </ul>
+</li>
+  <li><a href="#sec-quarto" id="toc-sec-quarto" class="nav-link" data-scroll-target="#sec-quarto"><span class="header-section-number">2.7</span> Quarto</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">2.8</span> Summary</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-intro.html">Part 1: Getting started</a></li><li class="breadcrumb-item"><a href="./02-review-r.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data analysis in R</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-ch-computing" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data analysis in R</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="learning-goals" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="learning-goals">Learning goals</h2>
+<ul>
+<li>Wrangle and manipulate data using <strong>dplyr</strong>
+</li>
+<li>Create visualizations using <strong>ggplot2</strong>
+</li>
+<li>Customize <strong>ggplot2</strong> visualizations</li>
+<li>Create reproducible documents using Quarto</li>
+</ul></section><section id="sec-penguins-intro" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="sec-penguins-intro">
+<span class="header-section-number">2.1</span> Data: Palmer penguins</h2>
+<p>In this chapter, explore data about penguins collected at the Palmer Station in Antarctica. The data were collected 2007 - 2009 by Dr.&nbsp;Kristen Gorman with the Palmer Station Long Term Ecological Research Program. The data are in the <code>penguins</code> data frame in the <strong>palmerpenguins</strong> R package <span class="citation" data-cites="palmerpenguins">(<a href="references.html#ref-palmerpenguins" role="doc-biblioref">Horst, Hill, and Gorman 2020</a>)</span>.</p>
+<p>We will use the following variables:</p>
+<ul>
+<li><p><code>species</code>: Penguins species (Adelie, Chinstrap, Gentoo)</p></li>
+<li><p><code>island:</code> Island in Palmer Archipelago (Biscoe, Dream, Torgersen)</p></li>
+<li><p><code>bill_length_mm</code>: Bill length in millimeters</p></li>
+<li><p><code>flipper_length_mm</code> : Flipper length in millimeters</p></li>
+<li><p><code>sex</code> : Penguins sex (female, male)</p></li>
+<li><p><code>year</code> : Study year (2007, 2008, 2009)</p></li>
+</ul>
+<p>See the <span class="citation" data-cites="palmerpenguins">(<a href="references.html#ref-palmerpenguins" role="doc-biblioref">Horst, Hill, and Gorman 2020</a>)</span> for the full code book.</p>
+</section><section id="installation" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="installation">
+<span class="header-section-number">2.2</span> Installation</h2>
+<section id="installing-r-and-rstudio" class="level3" data-number="2.2.1"><h3 data-number="2.2.1" class="anchored" data-anchor-id="installing-r-and-rstudio">
+<span class="header-section-number">2.2.1</span> Installing R and RStudio</h3>
+<p>We will use the statistical analysis software R. Go to <a href="https://cran.rstudio.com/">https://cran.rstudio.com</a> to download and install R. R version 4.5.0 was used for the computing in this book. We use R through an integrated user environment (IDE). The IDE is a user-friendly interface with additional features that make it easier to use the underlying software. <span class="citation" data-cites="moderndive">Ismay and Kim (<a href="references.html#ref-moderndive" role="doc-biblioref">2019</a>)</span> describes it this way, “R is like a car’s engine while [the IDE] is like a car’s dashboard.” <!--# do i need a page number?--></p>
+<p>There are two widely used IDEs for R offered by the open-source data science company Posit: RStudio and Positron. At this point, RStudio is the most commonly used environment for R <span class="citation" data-cites="posit-downloads">(<a href="references.html#ref-posit-downloads" role="doc-biblioref">Posit Software, PBC 2025</a>)</span> and is widely used by R programmers in classes, academic research, and industry. Go to <a href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop</a> to download RStudio on a laptop or desktop computer. A cloud-based version is also available on Posit Cloud (<a href="https://posit.cloud/" class="uri">https://posit.cloud/</a>). Positron is a new IDE designed specifically for a data science workflow. It has more advanced data exploration and AI-assistance capabilities compared to RStudio. Go to <a href="https://positron.posit.co/">https://positron.posit.co</a> to download Positron<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Overall, the content in this chapter is the same when using RStudio and Positron, with the exception of a minor difference mentioned in <a href="#sec-quarto" class="quarto-xref"><span>Section 2.7</span></a>.</p>
+</section><section id="installing-r-packages" class="level3" data-number="2.2.2"><h3 data-number="2.2.2" class="anchored" data-anchor-id="installing-r-packages">
+<span class="header-section-number">2.2.2</span> Installing R packages</h3>
+<p>Coding in R is primarily done by calling functions that perform specific tasks. These functions are located in packages. There is a collection of “base R” functions that are automatically loaded in R. A list of packages for the most recent version of R is available at <span class="citation" data-cites="R-base-package-index">R Core Team (<a href="references.html#ref-R-base-package-index" role="doc-biblioref">2025</a>)</span>.</p>
+<p>Even with a lot of functionality built into R, we may want to utilize advanced or specialized functions that are available through R packages. There are two primary ways to install packages: from the Comprehensive R Archive Network (CRAN) or from GitHub repositories.</p>
+<p>CRAN is the official network for hosting R packages and documentation, and packages must undergo R a rigorous review and testing process to be hosted on CRAN. We use the code <code>install.packages("Package Name")</code> to install packages from CRAN. For example, the code to install the <strong>tidyverse</strong> package is</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Packages that are not available on CRAN are typically available through a GitHub repository created by the package developer. This is often the cases for new packages or in-development versions of existing packages. We use the code <code>remotes::install_github("Package repo")</code> to install packages from GitHub. The code <code>remotes::</code> calls the <strong>remotes</strong> package <span class="citation" data-cites="remotes">(<a href="references.html#ref-remotes" role="doc-biblioref">Csárdi et al. 2024</a>)</span> that contains the <code>install_github</code> function.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<!--# I think I'm ok without an example of installing from GitHub?-->
+<p>Packages only need to be installed <u><strong>once</strong></u> on a given computer or virtual machine; however, we can periodically update them as new versions are released. Once the package is installed, we use the <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> function to load it into R. Though we only install packages once, we need to load packages each time we have a new instance of R.</p>
+<div class="analysis_in_practice">
+<p>Installing versus loading packages has been compared to the lights in the room. The light bulbs are installed once, but we still need to flip a switch to turn on the light each time we enter a room.</p>
+<!--# citation for this-->
+</div>
+</section></section><section id="sec-tidyverse" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="sec-tidyverse">
+<span class="header-section-number">2.3</span> Tidyverse</h2>
+<p>The <strong>tidyverse</strong> <span class="citation" data-cites="tidyverse">(<a href="references.html#ref-tidyverse" role="doc-biblioref">Wickham et al. 2019</a>)</span> is an “an opinionated collection of R packages designed for data science” <span class="citation" data-cites="tidyverse-website">(<a href="references.html#ref-tidyverse-website" role="doc-biblioref">tidyverse Development Team 2025</a>)</span>. Packages in the tidyverse have a common structure and syntax, making it more streamlined to utilize functions from multiple packages in a data analysis. As shown in the previous section, <strong>tidyverse</strong> is available on CRAN. We load <strong>tidyverse</strong> using the code below. From the output, we see the nine core packages that load as part of <strong>tidyverse</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This chapter focuses on <strong>dplyr</strong> <span class="citation" data-cites="dplyr">(<a href="references.html#ref-dplyr" role="doc-biblioref">Wickham et al. 2023</a>)</span>, the package for data manipulation, and <strong>ggplot2</strong> <span class="citation" data-cites="ggplot2">(<a href="references.html#ref-ggplot2" role="doc-biblioref">Wickham 2016</a>)</span>, the package data visualization. We will introduce other packages, as needed, in subsequent chapters. <!--# confirm if I actually do this--> See <a href="https://tidyverse.orghttps://tidyverse.org/">https://tidyverse.org</a> for a full description of all the core <strong>tidyverse</strong> packages.</p>
+<section id="sec-tidy-data" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="sec-tidy-data">
+<span class="header-section-number">2.3.1</span> Tidy data</h3>
+<p>A central component of the tidyverse is the notion of “tidy” data. <span class="citation" data-cites="wickham2014tidy">Wickham (<a href="references.html#ref-wickham2014tidy" role="doc-biblioref">2014</a>)</span> defines <strong>tidy data</strong> as data sets that have the following characteristics:</p>
+<blockquote class="blockquote">
+<ol type="1">
+<li>Each variable forms a column.</li>
+<li>Each observation forms a row.</li>
+<li>Each type of observational unit forms a table.</li>
+</ol>
+</blockquote>
+<p>Let’s take a look at the <code>penguins</code> data frame from the <strong>palmerpenguins</strong> package that was introduced in <a href="#sec-penguins-intro" class="quarto-xref"><span>Section 2.1</span></a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://allisonhorst.github.io/palmerpenguins/">palmerpenguins</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The first ten rows of <code>penguins</code> is shown in <a href="#tbl-penguins" class="quarto-xref">Table&nbsp;<span>2.1</span></a>.</p>
+<div id="tbl-penguins" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-penguins-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.1: First 10 rows of <code>penguins</code> data
+</figcaption><div aria-describedby="tbl-penguins-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 4 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+</figure>
+</div>
+<p>Let’s use the criteria above to evaluate whether this is a tidy data frame.</p>
+<ol type="1">
+<li>
+<em>Each variable forms a column.</em>
+<ul>
+<li>Yes, the variables are stored in individual columns. There are no instances of multiple variables stored in a single column or a single variable stored across multiple columns.</li>
+</ul>
+</li>
+<li>
+<em>Each observation forms a row.</em>
+<ul>
+<li>Yes, the information for one penguin (observation) is across a single row. There are no instances of multiple penguins represented on a single row or a single penguin represented across multiple rows.</li>
+</ul>
+</li>
+<li>
+<em>Each type of observational unit forms a table.</em>
+<ul>
+<li>Yes, the observational unit is the set of penguins included in the study. The data from these penguins makes up the data frame.</li>
+</ul>
+</li>
+</ol>
+<p><strong>All the criteria are met, so <code>penguins</code> is a tidy data frame.</strong></p>
+<p>All the data sets used in the book are tidy, so we can focus on regression analysis concepts and methods. In practice, we may need to “tidy” data before doing any analysis. <span class="citation" data-cites="wickham2014tidy">Wickham (<a href="references.html#ref-wickham2014tidy" role="doc-biblioref">2014</a>)</span> has recommendations for handling different issues that make data untidy.</p>
+<p>The data sets in the tidyverse are stored as tibbles. <strong>Tibbles</strong> are like data frames in R with some differences in the underlying features. As <span class="citation" data-cites="wickham2023r">Wickham, Çetinkaya-Rundel, and Grolemund (<a href="references.html#ref-wickham2023r" role="doc-biblioref">2023</a>)</span> puts it, a tibble is a data frame that modifies “some older behaviours to make life a little easier”. One nice feature of tibbles is that they show summary information about the data set overall and for each variable. For example, in <a href="#tbl-penguins" class="quarto-xref">Table&nbsp;<span>2.1</span></a> we see there are 344 rows (observations) and 8 columns (variables). We also see the format of each column, e.g.&nbsp;<code>species</code> is stored as a <code>&lt;fct&gt;</code> (factor). We talk more about data formats in <a href="03-eda.html#sec-initial-check" class="quarto-xref"><span>Section 3.3</span></a>.</p>
+</section><section id="the-pipe" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="the-pipe">
+<span class="header-section-number">2.3.2</span> <strong>The pipe</strong>
+</h3>
+<p>One benefit of the <strong>tidyverse</strong> syntax is its readability. Though it can be more verbose than other coding styles, its naming convention and structure makes it easy <!--# better word here--> to read and understand. A key part of the readability is due to the pipe. The <strong>pipe</strong>, coded as <code>|&gt;</code>, is used to pass data from one function to the next. If we think of reading code aloud in English, we say “and then” when we see a pipe <span class="citation" data-cites="cetinkaya2021educator">(<a href="references.html#ref-cetinkaya2021educator" role="doc-biblioref">Çetinkaya-Rundel et al. 2021</a>)</span>.</p>
+<p>For example, let’s suppose we write code to describe the steps to make a ham and cheese sandwich. <!--# idea from me, code inspiration from chat gpt--></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bread_slice</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_layer</span><span class="op">(</span>ingredient <span class="op">=</span> <span class="st">"ham"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">add_layer</span><span class="op">(</span>ingredient <span class="op">=</span> <span class="st">"cheese"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">add_bread_slice</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We would read this aloud in English as the following:</p>
+<blockquote class="blockquote">
+<p>Start with a bread slice,</p>
+<p><em>and then add</em> a layer of ham</p>
+<p><em>and then</em> add a layer of cheese,</p>
+<p><em>and then add another bread slice.</em></p>
+</blockquote>
+<!--# does layer make sense here?-->
+<p>A series of functions joined by pipes, like the sandwich example above, is called a <strong>pipeline</strong>. We will see pipelines throughout the next section as we introduce data manipulation with <strong>dplyr.</strong></p>
+</section></section><section id="data-manipulation-with-dplyr" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="data-manipulation-with-dplyr">
+<span class="header-section-number">2.4</span> Data manipulation with dplyr</h2>
+<p>The <strong>dplyr</strong> package is <strong>tidyverse</strong>’s primary package for data wrangling and manipulation. We often use functions from <strong>dplyr</strong> for analysis steps such as data exploration (<a href="03-eda.html" class="quarto-xref"><span>Chapter 3</span></a>), evaluating model conditions (<a href="06-slr-conditions.html" class="quarto-xref"><span>Chapter 6</span></a>), and applying variable transformations (<a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>).</p>
+<p>The functions in <strong>dplyr</strong> perform one of the following tasks: manipulate the data by row, manipulate the data by column, or manipulate groups of rows. We will show key functions in each of these categories that are used frequently in the text. The full list of <strong>dplyr</strong> functions is available at the dplyr reference site <a href="https://dplyr.tidyverse.org/index.html">https://dplyr.tidyverse.org</a>.</p>
+<section id="data-manipulation-by-row" class="level3" data-number="2.4.1"><h3 data-number="2.4.1" class="anchored" data-anchor-id="data-manipulation-by-row">
+<span class="header-section-number">2.4.1</span> Data manipulation by row</h3>
+<section id="filter" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="filter"><code>filter()</code></h4>
+<p>The <code>filter</code> function is used to choose rows based on a set of criteria defined by the columns in the data. For example, we may use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> to narrow the data to a specific subgroup of observations. The filtering criteria can be based on one variable or multiple variables. For example, let’s filter the data such that we choose the rows for penguins in the Adelie species.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">"Adelie"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 152 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 146 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<div class="yourturn">
+<p>How many penguins are in the Adelie species?<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+</div>
+<p>We can filter based on multiple variables by specifying “and” or “or” criteria. For example, let’s filter the data so that we choose rows for penguins in the Adelie species <u><strong>and</strong></u> from Dream island.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">"Adelie"</span> <span class="op">&amp;</span> <span class="va">island</span> <span class="op">==</span> <span class="st">"Dream"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 56 × 8
+  species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Dream            39.5          16.7               178        3250
+2 Adelie  Dream            37.2          18.1               178        3900
+3 Adelie  Dream            39.5          17.8               188        3300
+4 Adelie  Dream            40.9          18.9               184        3900
+5 Adelie  Dream            36.4          17                 195        3325
+6 Adelie  Dream            39.2          21.1               196        4150
+# ℹ 50 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>There are 56 penguins from the Adelie species and Dream island. This is a smaller subset than in the previous example, because observations have to satisfy both criteria to be included in the resulting tibble.</p>
+<p>Alternatively, let’s suppose we wish to filter the data such that we choose penguins who are from the Adelie species <u><strong>or</strong></u> from Dream island.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">"Adelie"</span> <span class="op">|</span> <span class="va">island</span> <span class="op">==</span> <span class="st">"Dream"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 220 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 214 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>There are 220 penguins in the resulting tibble. There are more penguins in this tibble than in the previous two, because penguins can meet one or both of the criteria to be included in the resulting tibble.</p>
+<p>Lastly, we use <code>!</code> to define criteria in terms of excluding observations that take a certain value. For example, let’s select the penguins in the Adelie species and are <u><strong>not</strong></u> on Dream island.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">"Adelie"</span> <span class="op">&amp;</span> <span class="va">island</span> <span class="op">!=</span> <span class="st">"Dream"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 96 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 90 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+</section><section id="arrange" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="arrange"><code>arrange()</code></h4>
+<p>The <code>arrange</code> function is used to sort the data based on the values in one or more columns. This can be useful as we explore the data to identify outlying observations with unusually high or unusually low values. In the code below, the observations are sorted in ascending order (smallest to largest) based on values of <code>bill_length_mm</code> .</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Dream               32.1          15.5               188        3050
+2 Adelie  Dream               33.1          16.1               178        2900
+3 Adelie  Torgersen           33.5          19                 190        3600
+4 Adelie  Dream               34            17.1               185        3400
+5 Adelie  Torgersen           34.1          18.1               193        3475
+6 Adelie  Torgersen           34.4          18.4               184        3325
+# ℹ 338 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>From the first few observations, we see the values of <code>bill_length_mm</code> increase as we move down the list of observations. Now we can more easily see the smallest <code>bill_length_mm</code> in the data, 32.1 mm. Including the <code>desc</code> argument in the <code>arrange</code> function sorts the data in descending order (largest to smallest). The code below sorts the observations in descending order by <code>bill_length_mm</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+  species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Gentoo    Biscoe           59.6          17                 230        6050
+2 Chinstrap Dream            58            17.8               181        3700
+3 Gentoo    Biscoe           55.9          17                 228        5600
+4 Chinstrap Dream            55.8          19.8               207        4000
+5 Gentoo    Biscoe           55.1          16                 230        5850
+6 Gentoo    Biscoe           54.3          15.7               231        5650
+# ℹ 338 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>The largest bill length in the data set is 59.6 mm.</p>
+<div class="analysis_in_practice">
+<p>These examples illustrate a feature of <strong>tidyverse</strong> pipelines. <strong>Pipeline</strong> always start with a tibble (<code>penguins</code> in these examples) and produce a tibble by default. We can extract a vector of values using <code><a href="https://dplyr.tidyverse.org/reference/pull.html">pull()</a></code> at the end of pipeline.</p>
+<p><br></p>
+<p>For example, the code below extracts a vector of bill lengths sorted in ascending order.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 32.1 33.1 33.5 34.0 34.1 34.4 34.5 34.6 34.6 35.0</code></pre>
+</div>
+</div>
+</div>
+</section></section></section><section id="data-manipulation-by-column" class="level2" data-number="2.5"><h2 data-number="2.5" class="anchored" data-anchor-id="data-manipulation-by-column">
+<span class="header-section-number">2.5</span> Data manipulation by column</h2>
+<section id="select" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="select"><code>select()</code></h4>
+<p>The <code>select</code> function narrows the data by choosing specific columns. We use this function when we want to retain or display only certain columns. For example, let’s create a new tibble that only contains the columns <code>bill_length_mm</code> and <code>flipper_length_mm</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, <span class="va">flipper_length_mm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 2
+  bill_length_mm flipper_length_mm
+           &lt;dbl&gt;             &lt;int&gt;
+1           39.1               181
+2           39.5               186
+3           40.3               195
+4           NA                  NA
+5           36.7               193
+6           39.3               190
+# ℹ 338 more rows</code></pre>
+</div>
+</div>
+<p>Note that the number of rows remains unchanged from the original data.</p>
+<p>We may also exclude columns by using <code>-</code> in front of the column name. For example, in the code below we create a new tibble that excludes the column <code>species</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">species</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 7
+  island  bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex    year
+  &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+1 Torger…           39.1          18.7               181        3750 male   2007
+2 Torger…           39.5          17.4               186        3800 fema…  2007
+3 Torger…           40.3          18                 195        3250 fema…  2007
+4 Torger…           NA            NA                  NA          NA &lt;NA&gt;   2007
+5 Torger…           36.7          19.3               193        3450 fema…  2007
+6 Torger…           39.3          20.6               190        3650 male   2007
+# ℹ 338 more rows</code></pre>
+</div>
+</div>
+</section><section id="mutate" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="mutate"><code>mutate()</code></h4>
+<p>The <code>mutate</code> function is used to create new columns or change the values in an existing column. We often use this in the analysis to create new variables from existing ones or to impute values for missing data.</p>
+<p>For example, let’s create a new variable called <code>dream</code> that takes value <code>1</code> if the penguin is from the Dream island and the value <code>0</code> otherwise (called an indicator variable).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>dream <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">island</span> <span class="op">==</span> <span class="st">"Dream"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 9
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 338 more rows
+# ℹ 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, dream &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>At the top of the tibble, we see the number of observations hasn’t changed, but we now have an additional column in the data set. Below are the values of <code>island</code> and <code>dream</code> for ten randomly selected observations.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+  island dream
+  &lt;fct&gt;  &lt;dbl&gt;
+1 Dream      1
+2 Biscoe     0
+3 Biscoe     0
+4 Biscoe     0
+5 Biscoe     0
+6 Dream      1
+# ℹ 4 more rows</code></pre>
+</div>
+</div>
+<p>This code uses the <code><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else()</a></code> function, a useful function for applying “if/else” statements. The structure of the function is <code>if_else([Criteria], [Result if true], [Result if false])</code>.</p>
+<p>The <code>mutate</code> function is also used to change the values in existing columns. Using the name of an existing column will overwrite the data in that column based on the output from <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>. For example, there are 11 penguins in the data with missing values for <code>sex</code>. Therefore, we would like to input the value <code>Missing</code> if the data are missing and otherwise keep the original value of <code>sex</code>. The values of <code>sex</code> for ten randomly selected penguins are below.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>, <span class="st">"Missing"</span>, <span class="va">sex</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+  sex    
+  &lt;chr&gt;  
+1 Missing
+2 male   
+3 female 
+4 male   
+5 male   
+6 female 
+# ℹ 4 more rows</code></pre>
+</div>
+</div>
+<p>The code above uses <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code>, a logical function that returns <code>TRUE</code> if the value is missing and <code>FALSE</code> otherwise.</p>
+<div class="yourturn">
+<p>Create a tibble that only includes penguins from <code>Biscoe</code> island. Arrange the rows in descending order of <code>bill_length_mm</code>. Display the columns <code>species</code> and <code>bill_length_mm</code>. What is the species and bill length for the first observation?<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+</div>
+</section><section id="data-manipulation-by-group" class="level3" data-number="2.5.1"><h3 data-number="2.5.1" class="anchored" data-anchor-id="data-manipulation-by-group">
+<span class="header-section-number">2.5.1</span> Data manipulation by group</h3>
+<section id="count" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="count"><code>count()</code></h4>
+<p>The <code>count</code> function is used to compute the number of observations that take each unique value in a column or combination of columns. We often use this in data analysis to produce frequency tables for categorical variables.</p>
+<p>For example, the code below produces the number of observations from each island.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">island</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  island        n
+  &lt;fct&gt;     &lt;int&gt;
+1 Biscoe      168
+2 Dream       124
+3 Torgersen    52</code></pre>
+</div>
+</div>
+<p>We may also compute the number of observations that take each combination of values for two or more variables. The code below produces the number of observations that take each combination of <code>island</code> and <code>species</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">island</span>, <span class="va">species</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  island    species       n
+  &lt;fct&gt;     &lt;fct&gt;     &lt;int&gt;
+1 Biscoe    Adelie       44
+2 Biscoe    Gentoo      124
+3 Dream     Adelie       56
+4 Dream     Chinstrap    68
+5 Torgersen Adelie       52</code></pre>
+</div>
+</div>
+<p>Some combinations of <code>island</code> and <code>species</code> are missing from the output. This means there are no observations in the data with that combination of values. For example, there are no penguins in the data who are from Biscoe island and the Chinstrap species. Include the argument <code>.drop = FALSE</code> to see all possible combinations of values, including those with zero observations in the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">island</span>, <span class="va">species</span>, .drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+  island species       n
+  &lt;fct&gt;  &lt;fct&gt;     &lt;int&gt;
+1 Biscoe Adelie       44
+2 Biscoe Chinstrap     0
+3 Biscoe Gentoo      124
+4 Dream  Adelie       56
+5 Dream  Chinstrap    68
+6 Dream  Gentoo        0
+# ℹ 3 more rows</code></pre>
+</div>
+</div>
+</section><section id="summarize" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="summarize"><code>summarize()</code></h4>
+<p>The <code>summarize</code><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> function computes summary statistics for columns in the data. See the <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> reference page at <a href="https://dplyr.tidyverse.org/">https://dplyr.tidyverse.org</a> for a list of commonly used summary statistics.</p>
+<p>For example, we want to compute the mean and standard deviation of <code>bill_length_mm</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean_bill_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span>,</span>
+<span>            sd_bill_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  mean_bill_length sd_bill_length
+             &lt;dbl&gt;          &lt;dbl&gt;
+1               NA             NA</code></pre>
+</div>
+</div>
+<p>This code did not return values but instead produced <code>NA</code>. By default, the functions for computing specific summary statistics, e.g., <code><a href="https://rdrr.io/r/base/mean.html">mean()</a></code>, do not remove missing values (<code>NA)</code> from the computation. Thus, they are unable to compute summary statistics if there any values are missing in the column. We use the argument <code>na.rm = TRUE</code> to ignore missing values when computing summary statistics.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean_bill_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>            sd_bill_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  mean_bill_length sd_bill_length
+             &lt;dbl&gt;          &lt;dbl&gt;
+1             43.9           5.46</code></pre>
+</div>
+</div>
+<p>Note, this now means we have the mean and standard deviation of <code>bill_length_mm</code> among the rows that do not have missing observations, not all observations. Missing data is discussed in more detail in <a href="03-eda.html" class="quarto-xref"><span>Chapter 3</span></a>. <!--# put specific section when written.--></p>
+</section><section id="group_by" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="group_by"><code>group_by()</code></h4>
+<p>The last <strong>dplyr</strong> function we introduce here is <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code>. This function is used to perform calculations separately for subgroups of the data. This is often useful when we want to compare results between groups. For example, let’s look at the mean and standard deviation of <code>bill_length_mm</code> by <code>species</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean_bill_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>            sd_bill_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">bill_length_mm</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  species   mean_bill_length sd_bill_length
+  &lt;fct&gt;                &lt;dbl&gt;          &lt;dbl&gt;
+1 Adelie                38.8           2.66
+2 Chinstrap             48.8           3.34
+3 Gentoo                47.5           3.08</code></pre>
+</div>
+</div>
+<p>All functions following <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> in the pipeline will be performed separately for each subgroup. The <code>ungroup</code>function removes the grouping structure, so any functions following <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup()</a></code> are applied to all observations.</p>
+<div class="yourturn">
+<p>Use <code><a href="https://rdrr.io/r/stats/median.html">median()</a></code> to compute the median bill length separately for each combination of island and species. What is the median bill length for Adelie penguins on Dream island? <a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+</div>
+<p>This section provided a short overview of the <strong>dplyr</strong> functions that are used frequently in this book. See Chapter 3 in <em>R for Data Science</em> <span class="citation" data-cites="wickham2023r">(<a href="references.html#ref-wickham2023r" role="doc-biblioref">Wickham, Çetinkaya-Rundel, and Grolemund 2023</a>)</span> for more on data manipulation and Chapter 5 for more on tidy data.</p>
+</section></section></section><section id="data-visualizations-using-ggplot2" class="level2" data-number="2.6"><h2 data-number="2.6" class="anchored" data-anchor-id="data-visualizations-using-ggplot2">
+<span class="header-section-number">2.6</span> Data visualizations using ggplot2</h2>
+<p><strong>ggplot2</strong> is the primary package for data visualizations in <strong>tidyverse</strong>. The code in <strong>ggplot2</strong> is designed to produce plots in layers, with each layer separated by <code>+</code>. This section is an overview of the package that largely follows the structure of Chapter 1 in <em>R for Data Science</em> <span class="citation" data-cites="wickham2023r">(<a href="references.html#ref-wickham2023r" role="doc-biblioref">Wickham, Çetinkaya-Rundel, and Grolemund 2023</a>)</span>. We point readers there for a more detailed introduction to the package.</p>
+<p>The general structure of code to create a visualization is as follows</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> [data set], <span class="fu">aes</span>(<span class="at">x =</span> [x<span class="sc">-</span>var], <span class="at">y =</span> [y<span class="sc">-</span>var])) <span class="sc">+</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_xx</span>() <span class="sc">+</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  other options </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<!--# do i need to cite this code example?-->
+<p>The first part of the code establishes the base layer by specifying the tibble that will be used to make the visualization.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ggplot-base" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-base-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-base-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;2.1: Base layer for a ggplot2 visualization"><img src="02-review-r_files/figure-html/fig-ggplot-base-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-base-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Base layer for a ggplot2 visualization
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>The next part of the code is used to set the <strong>aes</strong>thetics that indicate how the variables are mapped onto features of the plot. It is defined in the <code>mapping =</code> argument inside the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> function. Often times, we do not see the argument name <code>mapping =</code> in the code, but it is the second argument of <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>.</p>
+<p>Let’s map the aesthetics such <code>bill_length_mm</code> is on the x-axis and <code>flipper_length_mm</code> is on the y-axis.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ggplot-variables" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-variables-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-variables-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2.2: Define variables for a ggplot2 visualization"><img src="02-review-r_files/figure-html/fig-ggplot-variables-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-variables-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Define variables for a ggplot2 visualization
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>Now that we have the foundation, the next layer of the code defines the type of plot to make. The plot types are defined using functions with the prefix <code>geom_</code>. Here we use <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> to make a scatterplot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ggplot-geom" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-geom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-geom-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2.3: Specify geom (plot type) for ggplot2 visualization"><img src="02-review-r_files/figure-html/fig-ggplot-geom-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-geom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Specify <code>geom</code> (plot type) for ggplot2 visualization
+</figcaption></figure>
+</div>
+</div>
+</div>
+<section id="geoms" class="level3" data-number="2.6.1"><h3 data-number="2.6.1" class="anchored" data-anchor-id="geoms">
+<span class="header-section-number">2.6.1</span> Geoms</h3>
+<p>We will focus on the scatterplot for the majority of this section, but there are many other geoms available in <strong>ggplot2</strong>. Below are some of the geoms that will be used frequently throughout the book.</p>
+<p>The first plots are a histogram and a density plot. Both are used to visualize the distribution of a single quantitative variable. The code and output produce the histogram and density plot for <code>bill_length_mm</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># histogram</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># density plot</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fig-histogram-density" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-histogram-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-histogram-density" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-histogram-density-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-histogram-density-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-histogram-density-1.png" class="lightbox" data-gallery="fig-histogram-density" title="Figure&nbsp;2.4&nbsp;(a): Histogram"><img src="02-review-r_files/figure-html/fig-histogram-density-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-histogram-density"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-histogram-density-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Histogram
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-histogram-density" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-histogram-density-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-histogram-density-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-histogram-density-2.png" class="lightbox" data-gallery="fig-histogram-density" title="Figure&nbsp;2.4&nbsp;(b): Density plot"><img src="02-review-r_files/figure-html/fig-histogram-density-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-histogram-density"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-histogram-density-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Density plot
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.4: Geoms for single quantitative variable
+</figcaption></figure>
+</div>
+<p>A common plot for the distribution of a single categorical variable is a bar graph. Below are the code and output of a bar graph of the distribution of <code>island</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">island</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-bar-graph" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bar-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-bar-graph-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;2.5: Bar graph for single categorical variable"><img src="02-review-r_files/figure-html/fig-bar-graph-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bar-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.5: Bar graph for single categorical variable
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>Side-by-side boxplots are used to visualize the relationship between a quantitative variable and a categorical variable. The code and output for a side-by-side boxplot of <code>bill_length_mm</code> versus <code>species</code> is below.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">species</span>, y <span class="op">=</span> <span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-boxplot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-boxplot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;2.6: Boxplot for quantitative and categorical variables"><img src="02-review-r_files/figure-html/fig-boxplot-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.6: Boxplot for quantitative and categorical variables
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>These are a few of the many <code>geom</code>s available in <strong>ggplot2</strong>. A full list is available at <a href="https://ggplot2.tidyverse.org/index.html">https://ggplot2.tidyverse.org</a>.</p>
+</section><section id="sec-customize-plots" class="level3" data-number="2.6.2"><h3 data-number="2.6.2" class="anchored" data-anchor-id="sec-customize-plots">
+<span class="header-section-number">2.6.2</span> Customizing plots</h3>
+<p>There are a multitude of ways to customize plots in <strong>ggplot2</strong>. In this section, we will focus on customization that is used in the text and is useful for effective and clear data analysis and communication. These features are illustrated on the scatterplot of <code>bill_length_mm</code> versus <code>flipper_length_mm</code>, but they can be applied to any type of <strong>ggplot2</strong> visualization.</p>
+<section id="labels" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="labels">Labels</h4>
+<p>By default, <strong>ggplot2</strong> labels the components of the plot using the variable names from <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>. If the variables have clear names, then these default labels are generally sufficient. When we are ready to communicate results (e.g,. through reports or presentations), the plot labels should be clear to the intended audience. This means using full words (or meaningful abbreviations), units when appropriate, and a title or caption.</p>
+<p>The <code><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs()</a></code> function is used to create a new layer on the visualization with updated labels. The code below is used to change the labels on the x- and y-axes and add a title to the scatterplot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>, </span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length "</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ggplot-labels" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-labels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-labels-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;2.7: Scatterplot with axis labels and title"><img src="02-review-r_files/figure-html/fig-ggplot-labels-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-labels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.7: Scatterplot with axis labels and title
+</figcaption></figure>
+</div>
+</div>
+</div>
+</section><section id="aesthetics" class="level4" data-number="2.6.2.1"><h4 data-number="2.6.2.1" class="anchored" data-anchor-id="aesthetics">
+<span class="header-section-number">2.6.2.1</span> Aesthetics</h4>
+<p>There are a variety of aesthetics, visual features, that can be customized in <strong>ggplot2</strong>. Some commonly used aesthetics include <code>color</code>, <code>shape</code>, <code>size</code>, <code>alpha</code> (transparency), <code>fill</code>, and <code>linetype</code>. The same aesthetics can be applied across the entire plot, or aesthetics can be applied based on values of a variable.</p>
+<p>We often apply the same aesthetic across an entire plot to make it more visually appealing or easier to read. This type of aesthetic change does not add any additional information to the visualization.</p>
+<p>For example, the code below changes the color of all points on the plot by adding the <code>color =</code> argument in <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code>. The colors can be defined based on a list of over 600 colors<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> or HTML hex color codes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>, </span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length "</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ggplot-color-points" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-color-points-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-color-points-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;2.8: Color points on scatterplot"><img src="02-review-r_files/figure-html/fig-ggplot-color-points-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-color-points-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.8: Color points on scatterplot
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>The second way to apply aesthetics is to map them to specific variables. This adds makes the visualization engaging and adds additional information about the data. This is useful in data analysis when we want to make comparisons across subgroups of data.</p>
+<p>The aesthetics are defined inside <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> to map them to a particular variable (similar to defining the variables that go on each axis). For example, the code below colors the points based on <code>species</code>. We also add a subtitle and update the <code>color</code> label in <code><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs()</a></code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span>, </span>
+<span>                            color <span class="op">=</span> <span class="va">species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>, </span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length"</span>, </span>
+<span>       color <span class="op">=</span> <span class="st">"Species"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"By species"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ggplot-color-by-species" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-color-by-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-color-by-species-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;2.9: Scatterplot with points colored by species"><img src="02-review-r_files/figure-html/fig-ggplot-color-by-species-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-color-by-species-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.9: Scatterplot with points colored by <code>species</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>Now we are able to see the relationship between <code>bill_length_mm</code> and <code>flipper_length_mm</code> by species and make comparisons between species.</p>
+<p>We can also map multiple aesthetics to variables. In the code below, the color of the points is based on <code>species</code> and the shape is based on <code>island</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span>, </span>
+<span>                            color <span class="op">=</span> <span class="va">species</span>, shape <span class="op">=</span> <span class="va">island</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>, </span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length"</span>, </span>
+<span>       color <span class="op">=</span> <span class="st">"Species"</span>, </span>
+<span>       shape <span class="op">=</span> <span class="st">"Island"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"By species and island"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-ggplot-color-shape" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-color-shape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-color-shape-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;2.10: Scatterplot with color by species and shape by island"><img src="02-review-r_files/figure-html/fig-ggplot-color-shape-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-color-shape-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.10: Scatterplot with color by <code>species</code> and shape by <code>island</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="yourturn">
+<p>The code below produces the plot of the <code>bill_length_mm</code> versus <code>species</code> in <a href="#fig-boxplot" class="quarto-xref">Figure&nbsp;<span>2.6</span></a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">species</span>, y <span class="op">=</span> <span class="va">bill_length_mm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Describe how to update the code such that</p>
+<ol type="1">
+<li><p>all boxes are filled in using the color <code>cyan</code>.</p></li>
+<li><p>the color of the boxes are filled in based on <code>species</code>.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p></li>
+</ol>
+</div>
+</section></section><section id="faceting" class="level3" data-number="2.6.3"><h3 data-number="2.6.3" class="anchored" data-anchor-id="faceting">
+<span class="header-section-number">2.6.3</span> Faceting</h3>
+<p>Another way to view a visualization by subgroups is by <strong>faceting</strong>, creating a separate plot for each subgroup. The <code>facet_wrap</code> function is used to facet based on a single variable. In the code below, we modify the previous plot by faceting by <code>island</code> rather than changing the shape based on <code>island</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span>, </span>
+<span>                            color <span class="op">=</span> <span class="va">species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length"</span>, </span>
+<span>       color <span class="op">=</span> <span class="st">"Species"</span>, </span>
+<span>       shape <span class="op">=</span> <span class="st">"Island"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"Faceted by island"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">island</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-facet-wrap" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-facet-wrap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-facet-wrap-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;2.11: Scatterplot faceted by island"><img src="02-review-r_files/figure-html/fig-facet-wrap-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-facet-wrap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.11: Scatterplot faceted by <code>island</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>Because there is a lot of overlap across islands, the faceted plot makes it easier to see the relationship within each island and identify which species are on each island.</p>
+<p>We use <code><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid()</a></code> to facet based on two variables, such that one variable defines the rows and the other defines the columns. In the code below, we now update the previous plot such that the rows are defined by <code>island</code> the columns are defined by <code>species</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span>, </span>
+<span>                            color <span class="op">=</span> <span class="va">species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>, </span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length"</span>,</span>
+<span>       color <span class="op">=</span> <span class="st">"Species"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"Faceted by island and species"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">island</span><span class="op">)</span>,</span>
+<span>             cols <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html">vars</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-facet-grid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-facet-grid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-facet-grid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;2.12: Scatterplot faceted by island and species"><img src="02-review-r_files/figure-html/fig-facet-grid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-facet-grid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.12: Scatterplot faceted by <code>island</code> and <code>species</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>Note that <code><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid()</a></code> creates a plot for every possible combination of the variables. The empty plots indicate combinations of <code>island</code> and <code>species</code> that do not exist in the data.</p>
+<div class="yourturn">
+<p>Recreate the plot below of <code>flipper_length_mm</code> versus <code>species</code> faceted by <code>year</code>. <a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ggplot-yourturn" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ggplot-yourturn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-ggplot-yourturn-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;2.13: Boxplot of flipper_length_mm versus species faceted by year"><img src="02-review-r_files/figure-html/fig-ggplot-yourturn-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-yourturn-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.13: Boxplot of <code>flipper_length_mm</code> versus <code>species</code> faceted by <code>year</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+<!--# figure out how to get this in the callout box in latex-->
+</section><section id="sec-color-palettes" class="level3" data-number="2.6.4"><h3 data-number="2.6.4" class="anchored" data-anchor-id="sec-color-palettes">
+<span class="header-section-number">2.6.4</span> Color palettes</h3>
+<p>Thus far, we have relied on the default color palette in <strong>ggplot2</strong> when we’ve mapped an aesthetic to color. We may wish to choose colors to align with a particular color scheme or those that are more accessible. The functions <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual()</a></code> are used to “manually” define color palettes. We use <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual()</a></code> to define a color palette that maps onto the <code>color</code> aesthetic and <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual()</a></code> to define a color palette that maps to the <code>fill</code> aesthetic.</p>
+<p>Packages such as <strong>viridis</strong> <span class="citation" data-cites="viridis">(<a href="references.html#ref-viridis" role="doc-biblioref">Garnier et al. 2024</a>)</span> and <strong>PNWColors</strong> <span class="citation" data-cites="PNWColors">(<a href="references.html#ref-PNWColors" role="doc-biblioref">Lawlor 2020</a>)</span> have pre-defined color palettes. Both packages are available on CRAN. In the code below, we apply the <em>Bay</em> color palette from the <strong>PNWColors</strong> package to <a href="#fig-ggplot-color-by-species" class="quarto-xref">Figure&nbsp;<span>2.9</span></a>, the scatterplot of <code>bill_length_mm</code> versus <code>flipper_length_mm</code> colored by <code>species</code>.</p>
+<p>The argument <code>values = pnw_palette("Bay", 3)</code> indicates that the colors are mapped to the <em>Bay</em> color palette using there colors (one for each species).<br></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jakelawlor/PNWColors">PNWColors</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span>, </span>
+<span>                            color <span class="op">=</span> <span class="va">species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>, </span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length"</span>, </span>
+<span>       subtitle <span class="op">=</span> <span class="st">"By species"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/PNWColors/man/pnw_palette.html">pnw_palette</a></span><span class="op">(</span><span class="st">"Bay"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-color-palette" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-color-palette-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-color-palette-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;2.14: Scatterplot with color palette from PNWColors"><img src="02-review-r_files/figure-html/fig-color-palette-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-color-palette-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.14: Scatterplot with color palette from PNWColors
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>We may also wish to create a color palette. For example, here we apply the palette <code>my_color_palette</code> that is defined using HTML hex codes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_color_palette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#993399"</span>, <span class="st">"#2B8181"</span>, <span class="st">"#CB4F04"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bill_length_mm</span>, y <span class="op">=</span> <span class="va">flipper_length_mm</span>, </span>
+<span>                            color <span class="op">=</span> <span class="va">species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Bill length (in millimeters)"</span>, </span>
+<span>       y <span class="op">=</span> <span class="st">"Flipper length (in millimeters)"</span>, </span>
+<span>       title <span class="op">=</span> <span class="st">"Bill length versus Flipper length"</span>, </span>
+<span>       subtitle <span class="op">=</span> <span class="st">"By species and island"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">my_color_palette</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-custom-color-palette" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-custom-color-palette-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="02-review-r_files/figure-html/fig-custom-color-palette-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;2.15: Scatterplot with user-define color palette"><img src="02-review-r_files/figure-html/fig-custom-color-palette-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-custom-color-palette-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.15: Scatterplot with user-define color palette
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>When choosing a color palette, it is important to consider the accessibility of the color choices, how they may be viewed by individuals with color-blindness <!--# is this correct-->, and how they appear in gray scale. There are multiple ways to check the accessibility of color palettes. The Color Palette Finder on the R Graph Gallery website (<a href="https://r-graph-gallery.com/color-palette-finder" class="uri">https://r-graph-gallery.com/color-palette-finder</a>) is a tool for checking the accessibility of pre-defined color palettes. The <strong>colorblindcheck</strong> R package <span class="citation" data-cites="colorblindcheck">(<a href="references.html#ref-colorblindcheck" role="doc-biblioref">Nowosad 2019</a>)</span> allows users to check the accessibility of pre-defined or custom color palettes.</p>
+</section></section><section id="sec-quarto" class="level2" data-number="2.7"><h2 data-number="2.7" class="anchored" data-anchor-id="sec-quarto">
+<span class="header-section-number">2.7</span> Quarto</h2>
+<p>In <a href="01-intro.html" class="quarto-xref"><span>Chapter 1</span></a> we introduced reproducibility, a key component of data science in which analysis is conducted in such a way that another person (or ourselves months later) can produce the same results given the same code and data set.</p>
+<p>Quarto is “an open-source scientific and technical publishing system” <span class="citation" data-cites="quarto2025">(<a href="references.html#ref-quarto2025" role="doc-biblioref">PBC 2025</a>)</span> developed by Posit for conducting reproducible data science. Quarto documents can produce many different types of formats <!--# other word here--> including PDFs, Word documents, websites, books, and others using a consistent syntax and document structure.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> Quarto is not automatically included in RStudio, so it must be installed. It can be downloaded from <a href="https://quarto.org/docs/get-started/">https://quarto.org/docs/get-started</a>. It is automatically installed in Positron.</p>
+<div id="fig-quarto" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-quarto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/02-quarto.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;2.16: Example Quarto document"><img src="images/02-quarto.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-quarto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.16: Example Quarto document
+</figcaption></figure>
+</div>
+<p><a href="#fig-quarto" class="quarto-xref">Figure&nbsp;<span>2.16</span></a> is an example of a Quarto (<code>.qmd</code>) document. All code, output, and narrative are in a single document, and the resulting output updates as changes are made to the document. This eliminates the need to copy and paste results from one document to another throughout the analysis, a process that is prone to error. Let’s take a look at the parts of the Quarto document in <a href="#fig-quarto" class="quarto-xref">Figure&nbsp;<span>2.16</span></a>.</p>
+<p>The <strong>YAML</strong> (“Yet Another Markup Language” or “YAML Ain’t Markup Language”) is considered the “front matter” of the document. This is where we include content for the heading, such as title, author, and date. This is also where we specify the format type and other global features to be applied for the entire document. The YAML in <a href="#fig-quarto" class="quarto-xref">Figure&nbsp;<span>2.16</span></a> shows global code chunk options applied so that the code is displayed when the document is rendered <code>echo: true</code> , but all additional warnings and messages are suppressed <code>warning: false</code> and <code>message: false</code> <!--# or is this messages?--></p>
+<p>The <strong>code chunk</strong> is where we put all code that is executed when the document is rendered. R code chunks<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> can be added to the document by starting with <code>```{r}</code> and ending with <code>```</code>. They can also be added from the <em>Insert</em> menu in the tool bar of the visual editor. A variety of options can be applied to code chunks primarily to customize how they display code and results in the rendered document. Section 28.5 in <em>R for Data Science</em> <span class="citation" data-cites="wickham2023r">(<a href="references.html#ref-wickham2023r" role="doc-biblioref">Wickham, Çetinkaya-Rundel, and Grolemund 2023</a>)</span> provides an extensive overview of code chunks and the set of options to customize them.</p>
+<p>The <strong>narrative</strong> is written in the white space of the document. The visual editor in RStudio and Positron makes formatting the narrative (e.g, making text bold or adding lists) similar to formatting in word processors such as Google Docs, Apple Pages, or Microsoft Word. The visual editor also makes it easy to add images and tables within the narrative.</p>
+<div id="fig-quarto-render" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-quarto-render-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-quarto-render" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-quarto-render-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-quarto-render-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/02-quarto-render-rstudio.jpg" class="lightbox" data-gallery="fig-quarto-render" title="Figure&nbsp;2.17&nbsp;(a): Rendering in RStudio"><img src="images/02-quarto-render-rstudio.jpg" class="img-fluid figure-img" data-ref-parent="fig-quarto-render"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-quarto-render-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Rendering in RStudio
+</figcaption></figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-quarto-render" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-quarto-render-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-quarto-render-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="images/02-quarto-render-positron.jpg" class="lightbox" data-gallery="fig-quarto-render" title="Figure&nbsp;2.17&nbsp;(b): Rendering in Positron"><img src="images/02-quarto-render-positron.jpg" class="img-fluid figure-img" data-ref-parent="fig-quarto-render"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-quarto-render-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Rendering in Positron
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-quarto-render-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.17
+</figcaption></figure>
+</div>
+<p>Throughout the analysis workflow, we regularly render the Quarto document to see the updated results and narrative. Documents are rendered by clicking the “Render” button in RStudio (<a href="#fig-quarto-render-1" class="quarto-xref">Figure&nbsp;<span>2.17 (a)</span></a>) and the “Preview” button in Positron (<a href="#fig-quarto-render-2" class="quarto-xref">Figure&nbsp;<span>2.17 (b)</span></a>). We also see the resulting PDFs in the Viewer pane of each IDE. When a document is rendered, all code and narrative are executed sequentially from beginning to end. Therefore, all necessary code must be in the Quarto document to render properly; code in the console is not executed when a document is rendered.</p>
+<p>The assignments in the supplemental materials for this book are designed to be written in Quarto. See Chapter 28 in <em>R for Data Science</em> <span class="citation" data-cites="wickham2023r">(<a href="references.html#ref-wickham2023r" role="doc-biblioref">Wickham, Çetinkaya-Rundel, and Grolemund 2023</a>)</span> and <a href="https://quarto.org">quarto.org</a> for further reading and resources on Quarto.</p>
+<!--# do i need github here? Yes!-->
+</section><section id="summary" class="level2" data-number="2.8"><h2 data-number="2.8" class="anchored" data-anchor-id="summary">
+<span class="header-section-number">2.8</span> Summary</h2>
+<p>In this chapter, we introduced data wrangling and data visualization using the <strong>tidyverse</strong> (specifically <strong>dplyr</strong> and <strong>ggplot2</strong> packages), focusing on code for the analysis tasks frequently used in this book. We also showed ways to customize plots for effective communication and accessibility, and we introduced Quarto for writing reproducible reports. There are many online resources about the <strong>tidyverse</strong> and Quarto. A few primary resources for additional reference and practice are the following: <em>R for Data Science</em> <span class="citation" data-cites="wickham2023r">(<a href="references.html#ref-wickham2023r" role="doc-biblioref">Wickham, Çetinkaya-Rundel, and Grolemund 2023</a>)</span>, <a href="https://tidyverse.org">tidyverse.org</a>, and <a href="https://quarto.org">quarto.org</a>.</p>
+<p>In <a href="03-eda.html" class="quarto-xref"><span>Chapter 3</span></a>, we utilize the computing from this chapter as we begin analyzing data in the exploratory data analysis.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-cetinkaya2021educator" class="csl-entry" role="listitem">
+Çetinkaya-Rundel, Mine, Johanna Hardin, Benjamin S Baumer, Amelia McNamara, Nicholas J Horton, and Colin Rundel. 2021. <span>“An Educator’s Perspective of the Tidyverse.”</span> <em>arXiv Preprint arXiv:2108.03510</em>.
+</div>
+<div id="ref-remotes" class="csl-entry" role="listitem">
+Csárdi, Gábor, Jim Hester, Hadley Wickham, Winston Chang, Martin Morgan, and Dan Tenenbaum. 2024. <span>“Remotes: R Package Installation from Remote Repositories, Including ’GitHub’.”</span> <a href="https://doi.org/10.32614/CRAN.package.remotes">https://doi.org/10.32614/CRAN.package.remotes</a>.
+</div>
+<div id="ref-viridis" class="csl-entry" role="listitem">
+Garnier, Simon, Ross, Noam, Rudis, Robert, Camargo, et al. 2024. <em><span class="nocase">viridis(Lite)</span> - Colorblind-Friendly Color Maps for r</em>. <a href="https://doi.org/10.5281/zenodo.4679423">https://doi.org/10.5281/zenodo.4679423</a>.
+</div>
+<div id="ref-palmerpenguins" class="csl-entry" role="listitem">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <span>“Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data.”</span> <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
+</div>
+<div id="ref-moderndive" class="csl-entry" role="listitem">
+Ismay, Chester, and Albert Y Kim. 2019. <em>Statistical Inference via Data Science: A Moderndive into r and the Tidyverse</em>.
+</div>
+<div id="ref-PNWColors" class="csl-entry" role="listitem">
+Lawlor, Jake. 2020. <span>“PNWColors: Color Palettes Inspired by Nature in the US Pacific Northwest.”</span> <a href="https://doi.org/10.32614/CRAN.package.PNWColors">https://doi.org/10.32614/CRAN.package.PNWColors</a>.
+</div>
+<div id="ref-colorblindcheck" class="csl-entry" role="listitem">
+Nowosad, Jakub. 2019. <em>Check Color Palettes for Problems with Color Vision Deficiency</em>. <a href="https://jakubnowosad.com/colorblindcheck/">https://jakubnowosad.com/colorblindcheck/</a>.
+</div>
+<div id="ref-quarto2025" class="csl-entry" role="listitem">
+PBC, Posit. 2025. <span>“Quarto: An Open-Source Scientific and Technical Publishing System.”</span> <a href="https://quarto.org/" class="uri">https://quarto.org/</a>.
+</div>
+<div id="ref-posit-downloads" class="csl-entry" role="listitem">
+Posit Software, PBC. 2025. <span>“Download RStudio – Posit.”</span> <a href="https://posit.co/downloads/" class="uri">https://posit.co/downloads/</a>.
+</div>
+<div id="ref-R-base-package-index" class="csl-entry" role="listitem">
+R Core Team. 2025. <span>“The r Base Package — Index (Version 4.6.0).”</span> Seminar für Statistik, ETH Zürich; <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html" class="uri">https://stat.ethz.ch/R-manual/R-devel/library/base/html/00Index.html</a>.
+</div>
+<div id="ref-tidyverse-website" class="csl-entry" role="listitem">
+tidyverse Development Team. 2025. <span>“Tidyverse: R Packages for Data Science.”</span> tidyverse; <a href="https://tidyverse.org/" class="uri">https://tidyverse.org/</a>.
+</div>
+<div id="ref-wickham2014tidy" class="csl-entry" role="listitem">
+Wickham, Hadley. 2014. <span>“Tidy Data.”</span> <em>Journal of Statistical Software</em> 59: 1–23.
+</div>
+<div id="ref-ggplot2" class="csl-entry" role="listitem">
+———. 2016. <span>“Ggplot2: Elegant Graphics for Data Analysis.”</span> <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry" role="listitem">
+Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. <span>“Welcome to the <span></span>Tidyverse<span></span>”</span> 4: 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>.
+</div>
+<div id="ref-wickham2023r" class="csl-entry" role="listitem">
+Wickham, Hadley, Mine Çetinkaya-Rundel, and Garrett Grolemund. 2023. <em>R for Data Science</em>. 2nd ed. " O’Reilly Media, Inc.".
+</div>
+<div id="ref-dplyr" class="csl-entry" role="listitem">
+Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <span>“Dplyr: A Grammar of Data Manipulation.”</span> <a href="https://doi.org/10.32614/CRAN.package.dplyr">https://doi.org/10.32614/CRAN.package.dplyr</a>.
+</div>
+</div>
+</section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
+<ol>
+<li id="fn1"><p>At this point, Positron is fairly new, so it has not been widely adopted in the classroom. We anticipate that will change over time as more users move to Positron.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Use <code>install.packages("remotes")</code> if the <strong>remotes</strong> package is not installed.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>There are 152 penguins in the Adelie species.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Only the first 10 observations are displayed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><code>penguins |&gt; filter(island == "Biscoe") |&gt; arrange(desc(bill_length_mm)) |&gt; select(species, bill_length_mm)</code> . The species is Gentoo and the bill length is 59.6 mm.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>This function can also be spelled <code>summarise().</code><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Code to compute median bill length by species and island: <code>penguins |&gt; group_by(sex, species) |&gt; summarize(median_bill_length = median(bill_length_mm, na.rm = TRUE))</code> . The median bill length for Adelie penguins on Dream island is 38.55 mm.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Type <code><a href="https://rdrr.io/r/grDevices/colors.html">colors()</a></code> in R to see the full list of built-in colors.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9">
+<ol type="1">
+<li>Include <code>fill = "cyan"</code> in <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code> .</li>
+<li>Include <code>fill = species</code> in <code>aes().</code>
+</li>
+</ol>
+<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a>
+</li>
+<li id="fn10"><p><code>ggplot(data = penguins, aes(x = species, y = flipper_length_mm, fill = species)) + geom_boxplot() + facet_wrap(vars(year))</code><a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>In fact, this book was written using Quarto in RStudio!<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Quarto supports other coding languages such as Python and Julia.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/introregressio\.netlify\.app");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./01-intro.html" class="pagination-link" aria-label="Regression in the data science workflow">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regression in the data science workflow</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./03-eda.html" class="pagination-link" aria-label="Exploratory data analysis">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+</body></html>
