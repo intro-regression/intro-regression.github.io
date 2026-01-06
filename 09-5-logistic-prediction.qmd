@@ -1,0 +1,91 @@
+# Logistic regression: Prediction and Assessment {#sec-ch-logistic-prediction}
+
+## Learning goals {.unnumbered}
+
+## R packages {.unnumbered}
+
+-   `ggridges` [@ggridges]
+
+-   `Hmisc` [@Hmisc-2]
+
+-   `knitr` [@knitr-2]
+
+-   `Stat2Data` [@Stat2Data-2]
+
+-   `tidymodels` [@tidymodels-5]
+
+-   `tidyverse` [@tidyverse-2]
+
+## Introduction: General Social Survey
+
+```{r}
+#| echo: false
+
+library(tidyverse)
+library(tidymodels)
+library(ggridges)
+library(knitr)
+library(Hmisc)
+library(Stat2Data)
+
+# load gss data for 2024
+
+gss24 <- gssr::gss_get_yr(2024)
+
+# keep only respondents with answer to question about comfort with driverless car and make response variable
+
+gss24_ai <- gss24 |>
+  filter(!is.na(aidrive)) |>
+  mutate(aidrive_comfort = factor(if_else(aidrive == 0, "0", "1")))
+
+
+# prepare the predictor variables
+
+gss24_ai <- gss24_ai |>
+  filter(!is.na(aidrive),
+         !is.na(age), 
+         !is.na(sex)) |>
+  mutate(sex = as_factor(sex), 
+         income_fct = as_factor(case_when(
+           income16 < 13 ~ "Less than $20k", 
+           income16 >= 13 & income16 <= 18 ~ "$20-50k",
+           income16 > 18 & income16 <= 22 ~ "$50-110k", 
+           income16 > 22 ~ "$110k or more", 
+           is.na(income16) ~ "Not reported")
+         ),
+         polviews_fct = as_factor(case_when(
+           polviews %in% c(1, 2, 3) ~ "Liberal", 
+           polviews == 4 ~ "Moderate", 
+           polviews %in% c(5, 6, 7) ~ "Conservative",
+           is.na(polviews) ~ "Not reported")), 
+         tech_harm = as_factor(case_when(
+           harmgood1 %in% c(1, 2) ~ "Agree",
+           harmgood1 %in% c(4, 5) ~ "Disagree", 
+           harmgood1 == 3 ~ "Neutral",
+           TRUE ~ "Can't choose")),
+         tech_easy = as_factor(case_when(
+           techesy %in% c(1, 2) ~ "Agree", 
+           techesy %in% c(4, 5) ~ "Disagree",
+           techesy == 3 ~ "Neutral",
+           TRUE ~ "Can't choose"
+         ))
+         ) |>
+  mutate(income_fct = factor(income_fct, levels = 
+                                c("Less than $20k", "$20-50k", "$50-110k", "$110k or more", "Not reported")), 
+         polviews_fct = factor(polviews_fct, levels = 
+                                 c("Moderate", "Liberal", "Conservative", "Not reported")),
+         tech_harm = factor(tech_harm, levels = c("Neutral", "Can't choose", "Agree", "Disagree")), 
+         tech_easy = factor(tech_easy, levels = c("Neutral", "Can't choose", "Agree", "Disagree")), 
+         age = as.numeric(age) # get rid of the labels on age
+         )
+
+# main effects model
+m <- glm(aidrive_comfort ~ sex + age + income_fct + tech_harm + tech_easy, data = gss24_ai, family = binomial)
+```
+
+
+## Summary
+
+-   What was covered based on the learning goals
+
+-   Next chapter will cover predictions and classification, model evaluation, model selection.

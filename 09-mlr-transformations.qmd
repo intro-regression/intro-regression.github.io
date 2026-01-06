@@ -1,0 +1,987 @@
+---
+execute: 
+  echo: false
+bibliography: references.bib
+---
+
+# Variable transformations {#sec-ch-transformations}
+
+```{r}
+#| include: false
+source("_common.R")
+```
+
+## Learning goals {.unnumbered}
+
+-   Identify when a variable transformation is needed to summarize the relationship between a response variable and predictor variable(s)
+-   Explain the role of variance-stabilizing transformations in regression analysis
+-   Fit and interpret models with a log-transformed response variable
+-   Fit and interpret models with one or more log-transformed predictor variables
+
+```{=html}
+<!--#
+## R packages {.unnumbered}
+
+-   `tidyverse` [@tidyverse]
+-   `tidymodels` [@tidymodels-2]
+-   `knitr` [@knitr]
+-->
+```
+
+## Introduction: College basketball expenditures {#sec-transform-eda}
+
+<!--# [INSERT SOME HOOK ABOUT MARCH MADNESS AND NCAA BASKETBALL].-->
+
+The analysis in this chapter focuses on the amount of money colleges and universities spend in total on men's and women's basketball programs in a single year. The data come from the Equity in Athletics Data Analysis (EADA) tool from the Office of Postsecondary Education in the United States Department of Education ([ope.ed.gov/athletics](https://ope.ed.gov/athletics/#/)). Every college and university in the United States that offers both student financial aid and intercollegiate programs (this includes nearly all colleges and universities) are required by law to submit information about its spending and revenue on athletic programs annually [@ope_equity_athletics_database].
+
+The EADA is a very rich data set with over 300 hundred variables about basketball and all other collegiate sports for all 2-year and 4-year institutions that meet the federal reporting requirements.[^09-mlr-transformations-1] This analysis will focus on data from schools in the National Collegiate Athletics Association (NCAA) Division I. According to the NCAA, Division I institutions are those that "have to sponsor at least seven sports for men and seven for women (or six for men and eight for women) with two team sports for each gender. Each playing season has to be represented by each gender as well. There are contest and participant minimums for each sport, as well as scheduling criteria" [@ncaa_divisional_differences_2013]. We will refer to these institutions as "NCAA Division I colleges" or just "colleges" throughout the remainder of the chapter.
+
+[^09-mlr-transformations-1]: Interested readers are encouraged to visit the EADA for further data exploration!
+
+The data in `ncaa-basketball-DI-2023-2024.csv` contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.
+
+-   `expenditure_m`: Total expenditure on basketball programs (in millions of US dollars)
+-   `enrollment_th`: Total student enrollment (in thousands)
+-   `type`: Whether the college is public or private
+-   `region`: Region where the college is located. The regions are defined using the `state.region` vector in R.
+
+::: {.objective latex=""}
+The goal of this analysis is to use the student enrollment, region, and type of college to explain variability in the total expenditure on basketball programs in the 2023 - 2024 academic year.
+:::
+
+### Exploratory data analysis {#sec-ncaa-eda}
+
+```{r}
+#| label: make-ncaa-dataset
+#| eval: false
+#| echo: false
+
+# NCAA data from the Equity in Athletics Analysis data base from US department of education. Retrieved July 2025
+
+# https://ope.ed.gov/athletics/#/
+
+library(tidyverse)
+library(tidymodels)
+library(readxl)
+library(usmap)
+
+ncaa <- read_excel("data/ncaa-schools.xlsx", sheet = 1)
+
+# join regions 
+
+state_region_lookup <- tibble(
+  state_cd = state.abb,
+  region = state.region
+)
+
+
+## filter data to NCAA Soccer at 4-year institutions
+
+
+ncaa_basketball <- ncaa |> 
+  filter(Sports %in% c("Basketball"), # limit to basketball
+         str_detect(classification_name, "NCAA"),  #NCAA division
+         sector_name != "Sector Unknown", # remove if school type is unknown
+         #!str_detect(classification_name, "NCAA Division II"), 
+         !str_detect(sector_name, "for-profit"),  #remove for profit institutions
+         !str_detect(sector_name, "2-year"), # remove 2-year colleges
+         state_cd != "PR") |>   # remove puerto rico schools
+  mutate(type = if_else(str_detect(sector_name , "Private"), "Private", "Public")) |> #simplify school type to pubic or private
+  left_join(state_region_lookup, by = "state_cd") |> #add the region data 
+  mutate(region = if_else(state_cd == "DC", "Northeast", region), # assign a region to Washington DC
+         division = case_when( #simplify divisions to Division I, II , III
+           str_detect(classification_name, "Division III") ~ "Division III", 
+           str_detect(classification_name, "Division II") ~ 'Division II', 
+           TRUE ~ "Division I" 
+         )
+  )
+
+# Variables to use 
+#TOTAL_EXP_MENWOMEN - total expenditure in men and womens (need to put in millions of dollars)
+# region 
+# EFTotalCount - total enrollment (need to put in hundreds or thousands of students
+# division 
+# type - type of institution - private vs public
+
+# make the variable transformations and rename variables 
+
+ncaa_basketball <- ncaa_basketball |>
+  mutate(expenditure_m = TOTAL_EXP_MENWOMEN/ 1000000, 
+         enrollment_th = EFTotalCount/ 1000)
+
+# save data set for this chapter
+ncaa_basketball |>
+  select(institution_name, 
+         city = city_txt,
+         state = state_cd,
+         type, 
+         division, 
+         region,
+         expenditure_m,
+         enrollment_th
+  ) |>
+  write_csv("data/ncaa-basketball-2023-2024.csv")
+
+ncaa_basketball |> 
+  filter(division == "Division I") |>
+  select(OPEID, institution_name, city_txt, state_cd, zip_text, type, region, division, expenditure_m, enrollment_th) |>
+  write_csv("data/ncaa-basketball-DI-2023-2024.csv")
+         
+```
+
+```{r}
+#| label: load-packages-ncaa-data
+
+library(tidyverse)
+library(tidymodels)
+library(knitr)
+library(skimr)
+
+ncaa_basketball <- read_csv("data/ncaa-basketball-DI-2023-2024.csv")
+
+```
+
+```{r}
+#| label: fig-ncaa-response-eda
+#| fig-cap: Distribution of the response variable `expenditure_m`
+
+ncaa_expend_orig <- ggplot(data = ncaa_basketball, aes(x = expenditure_m)) + 
+  geom_histogram(fill = "steelblue", color = "black") + 
+  labs(x = "Basketball Expenditure (in millions)",
+       y = "Count") +
+  theme_bw()
+
+ncaa_expend_orig
+```
+
+```{r}
+#| label: fig-ncaa-pred-eda
+#| layout-ncol: 2
+#| fig-cap: Distributions of predictor variables
+#| fig-subcap: 
+#|   - "`enrollment_th`"
+#|   - "`region`"
+#|   - "`type`"
+
+ggplot(data = ncaa_basketball, aes(x = enrollment_th)) + 
+  geom_histogram(fill = "steelblue", color = "black") + 
+  labs(x = "Enrollment (in thousands)",
+       y = "Count") +
+  theme_bw()
+
+ggplot(data = ncaa_basketball, aes(x = region)) + 
+  geom_bar(fill = "steelblue", color = "black") + 
+  labs(x = "Region",
+       y = "Count") +
+  theme_bw()
+
+ggplot(data = ncaa_basketball, aes(x = type)) + 
+  geom_bar(fill = "steelblue", color = "black") + 
+  labs(x = "Type",
+       y = "Count") +
+  theme_bw()
+
+```
+
+```{r}
+#| label: tbl-ncaa-univariate-summary
+#| tbl-cap: "Summary statistics for `enrollment_th` and `expenditure_m`"
+
+ncaa_basketball |>
+  skim(expenditure_m, enrollment_th) |>
+  select(skim_variable, numeric.mean, numeric.sd, numeric.p0, 
+         numeric.p25, numeric.p50, numeric.p75, numeric.p100, n_missing) |>
+  kable(col.names = c("Variable", "Mean", "SD", "Min", "Q1", 
+                      "Median (Q2)", "Q3", "Max","Missing"), 
+        digits = 1)
+```
+
+The response variable `expenditure_m` in @fig-ncaa-response-eda is unimodal and skewed right. The median expenditure on basketball programs is 5 million dollars, but there are a few colleges that spent over 30 million dollars on basketball programs in 2023 - 2024. Similarly, `enrollment_th` in @fig-ncaa-pred-eda-1 is unimodal and skewed right, with a median enrollment of about 7900 students. There are some very large colleges in the data set with enrollments of over 40,000 students.
+
+Almost half of the `r nrow(ncaa_basketball)` colleges in the data are located in the South region (@fig-ncaa-pred-eda-2), and about two-thirds of the colleges in the data set are public institutions (@fig-ncaa-pred-eda-3).
+
+```{r}
+#| label: fig-ncaa-bivariate-eda
+#| layout-ncol: 2
+#| fig-cap: Bivariate exploratory data analysis
+#| fig-subcap: 
+#|   - "`expenditure_m` versus `enrollment_th`"
+#|   - "`expenditure_m` versus `region`"
+#|   - "`expenditure_m` versus `type`"
+
+ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m)) + 
+  geom_point() + 
+  labs(x = "Enrollment (in thousands)",
+       y = "Expenditure (in millions)") +
+  theme_bw()
+
+
+ggplot(data = ncaa_basketball, aes(x = region, y = expenditure_m)) + 
+  geom_boxplot(fill = "steelblue", color = "black") + 
+  labs(x = "Region",
+       y = "Expenditure (in millions)") +
+  theme_bw()
+
+ggplot(data = ncaa_basketball, aes(x = type, y = expenditure_m)) + 
+  geom_boxplot(fill = "steelblue", color = "black") + 
+  labs(x = "Type",
+       y = "Expenditure (in millions)") +
+  theme_bw()
+```
+
+```{r}
+#| eval: false
+
+# code to try to make a map to view the expenditure by region
+library(maps)
+library(mapdata)
+library(viridis)
+library(scales)
+
+# Get US state map data
+us_states <- map_data("state")
+
+# Define US regions for clear marking
+regions <- data.frame(
+  region = ncaa_basketball |> distinct(region) |> pull() ,
+  region_color = c("#E31A1C", "#1F78B4", "#33A02C", "#FF7F00")
+)
+
+get_coords_zipcode <- function(zip_codes) {
+  tryCatch({
+    # Get coordinates for zip codes
+    coords <- zipcodeR::geocode_zip(zip_codes)
+    return(coords)
+  }, error = function(e) {
+    message("zipcodeR package not available. Using alternative method.")
+    return(NULL)
+  })
+}
+
+ncaa_basketball <- ncaa_basketball |> 
+  mutate(zipcode =  as.numeric(str_sub(zip_text, 1, 5))) 
+
+coordinates <- geocode_zip(ncaa_basketball$zipcode)
+  
+ncaa_basketball <- ncaa_basketball |> 
+  bind_cols(coordinates)
+ 
+# Create the map
+p <- ggplot() +
+  # Add state boundaries
+  geom_polygon(data = us_states, 
+               aes(x = long, y = lat, group = group),
+               fill = "white", color = "gray70", size = 0.3) +
+  # Add college points colored by athletics expenditure
+  geom_point(data = ncaa_basketball,
+             aes(x = longitude, y = latitude, 
+                 color = expenditure_m,
+                 size = expenditure_m),
+             alpha = 0.7) +
+  
+  # Color scale for expenditure
+  scale_color_viridis_c(name = "Athletics\nExpenditure",
+                        labels = label_dollar(scale = 1e-6, suffix = "M"),
+                        guide = guide_colorbar(barwidth = 1, barheight = 8)) +
+  
+  # Size scale for expenditure  
+  scale_size_continuous(name = "Athletics\nExpenditure",
+                        range = c(0.5, 3),
+                        labels = label_dollar(scale = 1e-6, suffix = "M"),
+                        guide = guide_legend(override.aes = list(alpha = 1))) +
+  
+  # Add region labels
+  annotate("text", x = -72, y = 42, label = "South", 
+           color = "#E31A1C", fontface = "bold", size = 4) +
+  annotate("text", x = -90, y = 44, label = "West", 
+           color = "#1F78B4", fontface = "bold", size = 4) +
+  annotate("text", x = -85, y = 32, label = "Northeast", 
+           color = "#33A02C", fontface = "bold", size = 4) +
+  annotate("text", x = -115, y = 40, label = "North Central", 
+           color = "#FF7F00", fontface = "bold", size = 4) +
+  
+  # Coordinate system and theme
+  coord_fixed(1.3) +
+  theme_void() +
+  theme(
+    plot.title = element_text(size = 16, hjust = 0.5, margin = margin(b = 20)),
+    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "gray60"),
+    legend.position = "right",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 9),
+    panel.background = element_rect(fill = "aliceblue", color = NA)
+  ) +
+  
+  # Add titles
+  labs(
+    title = "College Athletics Expenditures Across the United States",
+    subtitle = "Point size and color represent total athletics expenditure by institution",
+    caption = "Data: Sample data for demonstration purposes\nSource: Simulated based on typical athletics expenditure patterns"
+  )
+
+# Display the map
+print(p)
+```
+
+From the bivariate exploratory data analysis in @fig-ncaa-bivariate-eda-1, there appears to be a strong positive relationship between the enrollment and expenditure. This aligns with what we might expect; colleges with more students are likely to spend more on basketball programs. We note that this trend does seem to level off for colleges with very high enrollment, because their expenditure is lower than what we would expect if expenditure increased as a constant rate for values of enrollment (called *monotonically increasing*).
+
+The plot also shows two other interesting features of the relationship. The first is that the variability in the expenditure increases as enrollment increases. Thus, there is more variability in how much colleges with larger enrollments spend on basketball programs compared to colleges with small enrollments. We will keep this issue of the changing variability in mind as we fit a model and evaluate the model conditions. The second observation is the appearance of a "V" shape in the trend, indicating two different trajectories. This could be an indication of a potential interaction, so let's look at multivariate plots to explore a potential interaction between enrollment and type and one between enrollment and region.
+
+```{r}
+#| label: fig-ncaa-eda-multivariate
+#| fig-cap: "Exploration of potential interaction terms"
+#| fig-subcap: 
+#|    - "`expenditure_m` versus `enrollment_th` by `type`"
+#|    - "`expenditure_m` versus `enrollment_th` by `region`"
+#| layout-ncol: 2
+
+ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m, color = type)) +
+  geom_point(alpha = 0.7) + 
+  labs(x = "Enrollment (in thousands)",
+       y = "Expenditure (in millions)", 
+       color = "Type") +
+  theme_bw()
+
+ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m, color = region)) +
+  geom_point(alpha = 0.7) + 
+  labs(x = "Enrollment (in thousands)",
+       y = "Expenditure (in millions)", 
+       color = "Region") +
+  theme_bw()
+```
+
+::: {.yourturn latex=""}
+Based on the plots in @fig-ncaa-eda-multivariate, do there appear to be any potential interaction effects? Explain.[^09-mlr-transformations-2]
+:::
+
+[^09-mlr-transformations-2]: There appears to be a potential interaction between `enrollment_th` and `type` . The slope of the relationship between `enrollment_th` and `expenditure` appears to be different based on the type of college.
+
+### Initial model
+
+We include the interaction between `type` and `enrollment_th` in the first modeling attempt, shown in @tbl-ncaa-model-orig. The plot of the residuals versus fitted values along with the distribution of the residuals are in @fig-ncaa-orig-resid.
+
+```{r}
+#| label: tbl-ncaa-model-orig
+#| tbl-cap: Model for NCAA basketball expenditure with 95% confidence intervals
+
+ncaa_model_orig <- lm(expenditure_m ~ enrollment_th + region + type + enrollment_th * type, data = ncaa_basketball)
+tidy(ncaa_model_orig, conf.int = TRUE) |>
+  kable(digits = 3)
+```
+
+```{r}
+#| label: fig-ncaa-orig-resid
+#| fig-cap: Residual plots from original NCAA basketball expenditure model
+#| fig-subcap: 
+#|   - Residuals versus predicted 
+#|   - Distribution of residuals
+#| layout-ncol: 2
+
+ncaa_orig_aug <- augment(ncaa_model_orig)
+
+ncaa_orig_resid <- ggplot(data = ncaa_orig_aug, aes(x = .fitted, y = .resid)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0, linetype = 2, color = "red") + 
+  labs(x = "Predicted value", 
+       y = "Residual") +
+  theme_bw()
+
+mean_resid <- mean(ncaa_orig_aug$.resid)
+sd_resid <- sd(ncaa_orig_aug$.resid)
+
+ncaa_orig_resid_dist <- ggplot(data = ncaa_orig_aug, aes(x = .resid)) + 
+  geom_histogram(aes(y = after_stat(density)), fill = "steelblue", color = "black") + 
+  labs(x = "Residual", 
+       y = "Count") +
+   stat_function(
+    fun = dnorm, 
+    args = list(mean = mean_resid, sd = sd_resid), 
+    lwd = 2, 
+    color = 'red') +
+  theme_bw() 
+
+ncaa_orig_resid
+ncaa_orig_resid_dist
+```
+
+There is a "fan" shape in @fig-ncaa-orig-resid, so the equal variance condition is not met. Because the equal variance condition is not met, the results of theory-based inference output in @tbl-ncaa-model-orig cannot reliably be used to draw conclusions about the relationships between the response and predictor variables. For example, the inferential results suggest the interaction between enrollment and institution type is not useful in this model, despite what we observed in @fig-ncaa-eda-multivariate. Before making a final conclusion about the interaction term ad any other term in the model, let's first address the issue with the equal variance condition.
+
+Here is a summary of some of the points of interest we've observed thus far in the exploratory data analysis and initial modeling attempt.
+
+1.  The relationship between `enrollment_th` and `expenditure_m` seems to "level off" for high-enrollment colleges, thus the relationship may be non-linear.
+
+2.  There is a fan shape in the plot of the residuals versus predicted values, indicating a violation of the equal variance condition.
+
+3.  The exploratory data analysis suggests there is a potential interaction between `enrollment_th` and `type`.
+
+Note that items (1) and (2) are about the model fit and item (3) is about a conclusion drawn from the model. Thus we need to address items (1) and (2) before digging further into item (3). To do so, we will examine three additional models that differ based on transformations on the response variable `expenditure_m` and/or `enrollment_th`, the quantitative predictor variable. Transformations only apply to quantitative variables, so `type` and `region` will remain unchanged in the subsequent models throughout the chapter.
+
+Throughout the chapter, we will interpret the coefficients and evaluate the model conditions for each of the new candidate models. We'll then use model performance statistics along with the conditions to select the model that best fits the data. The candidate models are the following:
+
+A.  Original model with no transformations (shown in @tbl-ncaa-model-orig)
+B.  Log-transformation on the response variable, $\log(y)$
+C.  Log-transformation on the quantitative predictor variable, $\log(x)$
+D.  Log-transformation on the response and quantitative predictor variables, $\log(x)$ and $\log(y)$
+
+```{r}
+#| label: fig-ncaa-model-compare
+#| fig-cap: "Relationship between `expenditure_m` and `enrollment_th` for four candidate models"
+#| layout-ncol: 2
+#| fig-subcap: 
+#|   - Original 
+#|   - log(y)
+#|   - log(x)
+#|   - log(x) and log(y)
+
+ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m)) + 
+  geom_point() + 
+  labs(x = "Enrollment (in thousands)",
+       y = "Expenditure (in millions)") +
+  theme_bw()
+
+ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = log(expenditure_m))) + 
+  geom_point() + 
+  labs(x = "Enrollment (in thousands)",
+       y = "log(Expenditure)") +
+  theme_bw()
+
+ggplot(data = ncaa_basketball, aes(x = log(enrollment_th), y = expenditure_m)) + 
+  geom_point() + 
+  labs(x = "log(Enrollment)",
+       y = "Expenditure (in millions)") +
+  theme_bw()
+
+ggplot(data = ncaa_basketball, aes(x = log(enrollment_th), y = log(expenditure_m))) + 
+  geom_point() + 
+  labs(x = "log(Enrollment)",
+       y = "log(Expenditure)") +
+  theme_bw()
+```
+
+::: {.yourturn latex=""}
+Which relationship visualized in @fig-ncaa-model-compare would be best summarized by a linear regression model?[^09-mlr-transformations-3]
+:::
+
+[^09-mlr-transformations-3]: From the figure, it appears @fig-ncaa-model-compare-4 with with a log transformation on both `enrollment_th` and `expenditure_m` would be best represented by a linear model, because the shape is most linear.
+
+The plots in @fig-ncaa-model-compare can help provide intuition on what to expect as we do the analysis. In this chapter, we will look at the transformations presented in Plots B - D in the order they are plotted. In practice, however, you can use insights from the exploratory data analysis to start with the model that appears to be the best fit for the data. We do not draw definitive conclusions from the exploratory data analysis, so we will use inference, model conditions, and model fit statistics to select the best fit model. For now, we will just discuss these transformations in terms of a main effects model. In @sec-transform-choose-model, we add the interaction term to our selected model.
+
+## Transformation on the response variable {#sec-transform-logy}
+
+<!--# need to make it clear somewhere that this is the natural log, not something like log10-->
+
+The plot of residuals versus predicted variables in @fig-ncaa-orig-resid shows a clear violation in the equal variance condition based on the fan-shaped pattern of the residuals when moving from left to right. Recall from @sec-conditions-not-satisfied that it is necessary to satisfy the equal variance condition when doing theory-based inference (the inference results produced by output), because it relies on a single estimate of $\hat{\sigma}_{\epsilon}$, the regression standard error (variability about the regression line). We can easily see in @fig-ncaa-orig-resid that a single value would not be representative of the vertical spread of the residuals for all predicted values. Thus, the inferential results in @tbl-ncaa-model-orig should be interpreted with caution.
+
+One solution to this is to use the simulation-based inference methods introduced in @sec-mlr-sim-inf, because the sampling distribution and null distribution for an estimated coefficient $\hat{\beta}_j$ are constructed relying only on the data, rather than any underlying assumptions about the distribution of $\hat{\beta}_j$. Another approach is to use a transformation on the response variable to reduce the impacts of the different vertical spreads in the response variable. Such transformations are called **variance-stabilizing transformations**.
+
+<!--# do i need a callout terminology box highlighting the definition of variance-stabilizing transformaiton?-->
+
+<!--# i really need to figure out syntax..upper or lower case y and x-->
+
+Some commonly used variance-stabilizing transformations are the square-root transformation, $\sqrt{y}$ , and the reciprocal transformation, $1/y$ . In fact, the square root and reciprocal transformations are just two examples from the class of transformations called the **Box-Cox transformations** [@box1964analysis]. These transformations are designed to handle a non-normal response variable of any shape. While Box-Cox transformations, such as $\sqrt{y}$ and $1/y$, can be the optional choice for stabilizing variance and making the distribution of the response variable more normal (recall the normality condition), it is often difficult to interpret the coefficients for models with such transformed response variables in a way that an be easily understood by readers. Therefore, we will not focus on Box-Cox transformations in this text, because one of our primary objectives is to produce models that are easily interpretable.
+
+<!--# read more about these and make sure this all aligns-->
+
+<!--# add callout box for Box-Cox transformations. History, what they are, and resources to learn more-->
+
+Let's consider another transformation for the response variable that can help address the violations in the equal variance condition while also being easily interpreted by the reader. We can apply a natural log transformation on the response variable, $\log(y)$ (also written as $\ln(y)$), such that $\log(y)$ has the linear relationship with the predictor variables. @eq-log-y shows the statistical model when applying such transformation to the response variable.
+
+$$
+\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
+$$ {#eq-log-y}
+
+::: {.math_rules latex=""}
+**log = ln**
+
+In statistics, the term "log" refers to the natural log (typically denoted $\ln$ in mathematics).
+:::
+
+As shown in @eq-log-y, the log transformation is applied to the individual values of $Y$, and the transformed values are used in the model. Therefore, when we use a log (or any) transformation on the response variable, we assume the assumptions from @sec-slr-foundation apply to the relationship between the predictors and the transformed values of $Y$. Using @eq-log-y, this means we make assumptions about the relationship between the predictors and $\log(y_i)$. The full analysis, including evaluating conditions and diagnostics, conducting inference, and computing predictions are done in terms of $\log(y)$. Interpretations, however, are in terms of the original variable $y$. Although we can write interpretations in terms of $\log(y)$ (we'll see an example of this shortly), it is not as intuitive for readers to understand interpretations on a log-scale as on the natural scale.
+
+Let's begin by looking at the distribution of `log(expenditure_m)`, its relationship with `enrollment_th`, and how these compare to the exploratory data analysis in @sec-transform-eda.
+
+```{r}
+#| label: fig-expend-compare
+#| fig-cap: "Univariate and bivariate EDA for original and log-transformed `expenditure_m`"
+#| fig-subcap: 
+#| - "Distribution of `expenditure_m`"
+#| - "Distribution of log-transformed `expenditure_m`"
+#| - "`expenditure_m` versus `enrollmenth_th`"
+#| - "Log-transformed `expenditure_m` versus `enrollment_th`"
+#| layout-ncol: 2
+
+
+ncaa_expend_log <- ggplot(data = ncaa_basketball, aes(x = log(expenditure_m))) + 
+  geom_histogram(fill = "steelblue", color = "black") + 
+  labs(x = "log(Expenditure (in millions))", 
+       y = "Count") + 
+  theme_bw()
+
+ncaa_bivariate_orig <- ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m)) + 
+  geom_point() + 
+  labs(x = "Enrollment (in thousands)",
+       y = "Expenditure (in millions)") +
+  theme_bw()
+
+ncaa_bivariate_logy <- ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = log(expenditure_m))) + 
+  geom_point() + 
+  labs(x = "Enrollment (in thousands)",
+       y = "log(Expenditure (in millions))") +
+  theme_bw()
+
+
+ncaa_expend_orig
+ncaa_expend_log
+ncaa_bivariate_orig
+ncaa_bivariate_logy
+```
+
+Now we fit the main effects model using `log(expenditure_m)`, the log-transformed expenditure, as the response variable. The output for the new is in @tbl-ncaa-model-logy and the equation is in @eq-ncaa-model-logy.
+
+```{r}
+#| label: tbl-ncaa-model-logy
+#| tbl-cap: Model with log-transformed expenditure as the response variable 
+#| echo: false
+
+ncaa_model_logy <- lm(log(expenditure_m) ~ enrollment_th + region + type, data = ncaa_basketball)
+
+tidy(ncaa_model_logy, conf.int = TRUE) |>
+  kable(digits = 3)
+```
+
+$$
+\begin{aligned}
+\widehat{\log(\text{expenditure\_m})} = & 1.783 + 0.056 \times \text{enrollment\_th}\\ 
+&- 0.311 \times \text{Northeast} - 0.176 \times \text{South} \\
+& - 0.218 \times \text{West} - 0.672 \times \text{Public}
+\end{aligned}
+$$ {#eq-ncaa-model-logy}
+
+Before using the model, we analyze the residuals versus predicted values to evaluate whether the concerns with equal variance have been addressed by the transformation. @fig-ncaa-logy-resid shows the original plot of the residuals versus predicted values and the plot for the model using the log-transformed response variable.
+
+```{r}
+#| label: fig-ncaa-logy-resid 
+#| fig-cap: "Residuals versus predicted values for original model and model with log-transformed `expenditure_m`"
+#| fig-subcap: 
+#| - Original model 
+#| - "Model with log-transformed `expenditure_m`"
+#| layout-ncol: 2
+#| echo: false
+
+ncaa_logy_aug <- augment(ncaa_model_logy)
+
+ncaa_logy_resid <- ggplot(data = ncaa_logy_aug, aes(x = .fitted, y = .resid)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0, linetype = 2, color = "red") + 
+  labs(x = "Predicted value", 
+       y = "Residual (in terms of log(expenditure)") +
+  theme_bw()
+
+ncaa_orig_resid
+ncaa_logy_resid
+```
+
+Comparing the plots in @fig-ncaa-logy-resid, the first observation is that the $y$-axis differs on the plots. This is the because the residuals are on the same scale and use the same units as the response variable. The residuals in @fig-ncaa-logy-resid-1 are in terms of the original variable `expenditure_m`, and the residuals in @fig-ncaa-logy-resid-2 are in terms of `log(expenditure_m)`. The same is true for the predicted values on the $x$-axis. The second observation is that the vertical spread of the residuals is much more equal @fig-ncaa-logy-resid-2 with the log-transformed response variable. Given this, it appears applying a log transformation on the response variable has addressed some of the problems with the equal variance condition.
+
+We can consider other transformations to improve the model fit even more; we'll discuss those as the chapter continues. For now, let's interpret the coefficients for the model in @tbl-ncaa-model-logy. The approach for interpreting the model coefficients in terms of the log-transformed response variable is the same as the one introduced in @sec-transform-logy for other multiple linear regression models. Below are the interpretations for `enrollment_th` and `regionNortheast` in terms of `log(expenditure)`.
+
+> *For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to increase by 0.056 log(millions of dollars), on average, holding region and type constant.*
+>
+> *The total log(expenditure) on basketball programs for NCAA Division I colleges is expected to be 0.311 log(millions of dollars) less, on average, for colleges in the Northeast region compared to those in the North Central region, holding enrollment and type constant.*
+
+Though these interpretations are technically correct, it is difficult to fully comprehend what a change in log(millions of dollars) to the log(expenditure) really means. Therefore, we need to get back to the original variable (`expenditure_m)` and back to the original units (millions of dollars) to write an interpretation that is more intuitive.
+
+::: {.math_rules latex=""}
+-   $e^{\log(a)} = a$
+
+-   $e^{a+b} = e^ae^b$
+:::
+
+Given @eq-log-y with a log-transformed response variable, the predicted values in terms of the original response variable is
+
+$$
+\begin{aligned}
+\hat{y}_i &= e^{\hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2}+ \dots + \hat{\beta}_px_{ip}} \\[10pt]
+& = e^{\hat{\beta}_0}e^{\hat{\beta}_1x_{i1}}e^{\hat{\beta}_2x_{i2}} \dots e^{\hat{\beta}_px_{ip}}
+\end{aligned}
+$$ {#eq-log-y-orig}
+
+From @eq-log-y-orig, the interpretations in terms of the original response variable are about a multiplicative change in the response when the predictor variable changes. Specifically, when $X_j$ increases by one unit, $Y$ is expected to multiply by a factor of $e^{\hat{\beta}_j}$. The mathematical details for @eq-log-y-orig and the interpretations are in @sec-transform-y-math.
+
+Now let's use @eq-log-y-orig to interpret the coefficients of `enrollment_th` and `regionNortheast` in terms of `expenditure_m`.
+
+> *For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to **multiply by a factor** of `r round(exp(0.056), 3)` (*$e^{0.056}$*), holding region and type constant.*
+>
+> *The total expenditure on basketball programs for NCAA Division I colleges in the Northeast region is expected to be `r round(exp(-0.311), 3)` (*$e^{-0.311}$*) **times** the expenditure at colleges in the North Central region, holding enrollment and type constant.*
+
+::: {.yourturn latex=""}
+Write the interpretation for `typePublic` in @tbl-ncaa-model-logy in terms of the change in enrollment. [^09-mlr-transformations-4]
+:::
+
+[^09-mlr-transformations-4]: The total expenditure on basketball programs for NCAA Division I colleges that are public is expected to be `r round(exp(-0.672), 3)` ($e^{-0.672}$) **times** the expenditure at private institutions, holding enrollment and region constant.
+
+The intercept, the expected response when all predictors are equal to 0, is $e^{\hat{\beta}_0}$. Thus, the interpretation of the intercept for @tbl-ncaa-model-logy in terms of the original response variable is
+
+> *The total expenditure on basketball programs for private NCAA Division I colleges in the North Central region with no students enrolled is expected to be `r round(exp(1.783),3)`* $(e^{1.783})$ million dollars.
+
+::: {.yourturn latex=""}
+Is the interpretation of the intercept for the model in @tbl-ncaa-model-logy meaningful? If not, what can we do to make the interpretation meaningful?[^09-mlr-transformations-5]
+:::
+
+[^09-mlr-transformations-5]: No. The interpretation of the intercept is not meaningful, because there cannot be a college with 0 students. We could center `enrollment_th` , so that the intercept represents colleges with some other value of enrollment (e.g., the mean enrollment in the data).
+
+## Transformation on predictor variable(s) {#sec-transform-logx}
+
+Transformations on the response variable are often done to address violations in the equal variance condition, as shown in the previous section. In this section, we introduce transformations on one or more quantitative predictor variables that are used to model non-linear relationships with the response variable.
+
+In the exploratory data analysis in @sec-ncaa-eda, we observed that the relationship between `expenditure_m` and `enrollment_th` flattened as `enrollment_th` increased. For Colleges with larger enrollments generally have a smaller increase in expenditures on basketball programs for each additional 1000 students compared to the increase in expenditures for colleges with smaller enrollments. We account for this decreasing effect by applying a log transformation on the predictor variable. Here we will transform a single predictor but we can apply a log transformation to multiple quantitative predictors in a model.
+
+The general form of the linear regression model with a log-transformed predictor variable $x_j$ is shown in @eq-mlr-logx .
+
+$$
+y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
+$$ {#eq-mlr-logx}
+
+@eq-ncaa-logx shows the form of the model for NCAA Division I basketball expenditure using log-transformed values of enrollment.
+
+$$
+\begin{aligned}
+\text{expenditure\_m}_i = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
+&+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
+\end{aligned}
+$$ {#eq-ncaa-logx}
+
+At this point, we are using the original response variable, `expenditure_m`, so we can focus on understanding the log-transformed predictor variable. In the next section, we will look at the scenario in which both the response variable and one or more predictor variables is transformed. The output of the model with log-transformed enrollment is in @tbl-ncaa-model-logx.
+
+```{r}
+#| label: tbl-ncaa-model-logx
+#| tbl-cap: "Output of model with log-transformed `enrollment_th`"
+#| eval: true
+
+ncaa_model_logx <- lm(expenditure_m ~ log(enrollment_th) + region + type, data = ncaa_basketball)
+
+
+model_logx_intercept <- tidy(ncaa_model_logx) |> filter(term == "(Intercept)") |> pull(estimate)
+
+model_logx_enrollment <- tidy(ncaa_model_logx) |> filter(term == "log(enrollment_th)") |> pull(estimate)
+
+tidy(ncaa_model_logx) |>
+  kable(digits = 3)
+```
+
+Let's start by interpreting the intercept for this model. Because we have used the log-transformed value of enrollment in the model, the intercept represents the subgroup of NCAA Division 1 colleges such that `log(enrollment_th)` and all the other predictors are equal to 0. Based on the rules of logarithms, `log(enrollment_th)` is equal to 0 when `enrollment_th` is equal to 1, corresponding to an institution with 1000 students enrolled. The interpretation of the intercept for this model is the following:
+
+> *The expenditure on basketball programs for private NCAA Division 1 colleges in the North Central region with 1000 students enrolled (`log(enrollment_th) = 0`) is expected to be `r round(model_logx_intercept, 3)` million dollars.*
+
+Now let's look at the interpretation of the predictor variable `enrollment_th`. Using the coefficient interpretations introduced in @sec-mlr-interpret-quantitative, the interpretation is the following:
+
+> *When the log-transformed enrollment increases by 1, the expenditure on basketball programs at NCAA Division 1 colleges is expected to increase by `r round(model_logx_enrollment, 3)` million dollars, holding type and region constant.*
+
+Though this interpretation is technically accurate, it is difficult to comprehend what an increase in the log-transformed enrollment actually means. Therefore, rather than interpreting the coefficient in terms of the log-transformed enrollment, we interpret enrollment in terms of its original units of 1000 students.
+
+Because \`enrollment_th\` is on the logarithmic scale in the model, it is most straightforward <!--# diff word here--> to interpret the change in expenditure when enrollment is multiplied by a constant $C$. In general terms, given a model of the form in @eq-mlr-logx, the interpretation of predictor $X_j$ is below. The mathematical details for this interpretation are in @sec-transform-x-math. <!--# Maybe add more explanation about why you multiply a log-transformed variable rather than just increase by 1. Maybe show the counterfactual, if we just increase by 1-->
+
+> *When* $X_j$ *is multiplied by a constant* $C$*,* $Y$ *is expected to change (increase or decrease) by* $\beta_j \log(C)$ *units, holding all else constant.*
+
+::: {.math_rules latex=""}
+$\log(ab) = \log(a) +  \log(b)$
+
+Applying this to @eq-mlr-logx,
+
+$\beta_j\log(CX_j) = \beta_j[\log(C) + \log(X_j)] = \beta_j\log(C) + \beta_j \log(X_j)$
+:::
+
+Now let's interpret the effect of `enrollment_th` in terms of the expected change in `expenditure_m` when `enrollment_th` doubles ($C = 2$).
+
+> When the enrollment doubles (is multiplied by 2), the expenditure on basketball programs at NCAA Division 1 institutions is expected to increase by `r round(log(2) * model_logx_enrollment, 3)` (`r round(model_logx_enrollment, 3)` $\times$ log(2)) million dollar, on average, holding type and region constant.
+
+When writing these interpretations, the constant $C$ can take any value between $-\infty$ and $\infty$. When choosing $C$, however, we need to be mindful about potential extrapolation and writing interpretations for values far outside the range of the data. Use values of $C$ between 1 and 2 to reduce potential extrapolation. Values in this range provide straightforward interpretations about the expected change when there is some percentage increase in the predictor (for example, $C = 1.1$ equals a 10% increase in the value of the predictor). Note, however, that there is a risk of extrapolating for observations with values at or near the maximum value of the predictor. For example, there is a college in the data with enrollment around 59,000. We should be cautious when using the model to interpret the expected change when enrollment doubles for this institution. This would equal an enrollment of over 118,000 students, which is far outside the range of the data. We cannot safely assume the relationship between `enrollment_th` and `expenditure_m` observed in @tbl-ncaa-model-logx is the same for colleges with such high enrollment (or that such colleges even exist!).
+
+::: {.yourturn latex=""}
+Write the interpretation of the expected change in expenditure on basketball programs when enrollment increases by 50% $(C = 1.5)$.[^09-mlr-transformations-6]
+:::
+
+[^09-mlr-transformations-6]: When the enrollment increases by 50% (is multiplied by 1.5), the expenditure on basketball programs at NCAA Division I colleges is expected to increase by `r round(log(1.5) * model_logx_enrollment, 3)` (`r round(model_logx_enrollment, 3)` $\times$ log(1.5)) million dollars, on average, holding type and region constant.
+
+```{r}
+#| label: fig-ncaa-logx-resid
+#| fig-cap: "Residuals vs. fitted values for plot with log-transformed `enrollment_th`"
+
+ncaa_model_logx_aug <- augment(ncaa_model_logx)
+
+ggplot(data = ncaa_model_logx_aug, aes(x = .fitted, y = .resid)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0, color = "red", linetype = 2) + 
+  labs(x = "Fitted values",
+         y = "Residuals") +
+  theme_bw()
+```
+
+The plot of the residuals versus fitted values for the model @tbl-ncaa-model-logx is shown in @fig-ncaa-logx-resid. This plot has a fan shape similar to the one observed in @fig-ncaa-orig-resid. Therefore, even though the log transformation on `enrollment_th` accounted for its non-linear relationship with `expenditure_m`, it did not address the violation in the equal variance condition like the log transformation on the response variable in @sec-transform-logy. In the next section, we introduce a model that includes both a log-transformed response variable and log-transformed predictor.
+
+## Transformation on the response variable and predictor variable(s) {#sec-transform-logx-logy}
+
+Models with transformations on both the response variable and one or more quantitative predictor variables can both address violations in the equal variance condition and capture non-linear relationships. Given what we have observed in the exploratory data analysis in @sec-ncaa-eda and the residual plots in @fig-ncaa-orig-resid, @fig-ncaa-logy-resid , and @fig-ncaa-logx-resid, we will now fit a model using both `log(expenditure_m)` and `log(enrollment_th)`.
+
+@eq-mlr-logx-logy is the general form of the model with a log-transformed response variable and a log-transformed predictor variable $x_j$ is shown in
+
+$$
+\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
+$$ {#eq-mlr-logx-logy}
+
+@eq-ncaa-logx-logy shows the form of the model for NCAA Division I basketball expenditure, and the output of the estimated model is in @tbl-ncaa-model-logx-logy.
+
+$$
+\begin{aligned}
+\log(\text{expenditure\_m}_i) = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
+&+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
+\end{aligned}
+$$ {#eq-ncaa-logx-logy}
+
+```{r}
+#| label: tbl-ncaa-model-logx-logy
+#| tbl-cap: Output of model with log-transformed expenditure and log-transformed enrollment
+
+ncaa_model_logx_logy <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type, data = ncaa_basketball)
+
+
+model_logx_logy_intercept <- tidy(ncaa_model_logx_logy) |> filter(term == "(Intercept)") |> pull(estimate)
+
+model_logx_logy_enrollment <- tidy(ncaa_model_logx_logy) |> filter(term == "log(enrollment_th)") |> pull(estimate)
+
+model_logx_logy_public <- tidy(ncaa_model_logx_logy) |> filter(term == "typePublic") |> pull(estimate)|> round(3)
+
+tidy(ncaa_model_logx_logy) |>
+  kable(digits = 3)
+```
+
+To interpret the model in @tbl-ncaa-model-logx-logy that has both a log-transformed response and predictor variable, we will combine the approach to interpretations from @sec-transform-logy and @sec-transform-logx.
+
+The intercept is the expected value of `log(y)` when all the predictors are equal to 0. Because there is a log-transformed predictor $x_j$ in the model in @eq-mlr-logx-logy, this will be when $\log(x_j)$ is equal to 0, meaning $x_j$ is equal to 1. In terms of the model on NCAA Division I basketball expenditures shown in @tbl-ncaa-model-logx-logy, the intercept `r round(model_logx_logy_intercept, 3)` is interpreted as follows:
+
+> *The expected log-transformed expenditure on basketball programs at private NCAA Division I colleges in the North Central region with 1000 students enrolled is `r round(model_logx_logy_intercept, 3)`.*
+
+For readability, we won't present results in terms of log-transformed expenditure, so we get back to the original response variable `expenditure_m`.
+
+> *The expected expenditure on basketball programs at private NCAA Division I colleges in the North Central region with 1000 students enrolled is `r round(exp(round(model_logx_logy_intercept, 3)), 3)` (exp(`r round(model_logx_logy_intercept,3)`)) million dollars.*
+
+The interpretation for $\beta_j$, the coefficient for $\log(X_j)$ in @eq-mlr-logx-logy is a bit more involved, as it incorporates the multiplicative change in both $X$ and $Y$. We'll start by writing the interpretation in terms of $\log(Y)$.
+
+> *When* $X_j$ *multiplies by a factor of* $C$*,* $\log(Y)$ *is expected to change (increase or decrease) by* $\beta_j \log(C)$ *, on average, holding all else constant.*
+
+::: {.math_rules latex=""}
+$e^{a\log(b)} = b^a$
+:::
+
+Note that this interpretation is very similar to the interpretation from @sec-transform-logx, when there is a log-transformed predictor variable. The full mathematical details to get back to the original response variable are in @sec-transform-x-y-math .The final interpretation in terms of the original response variable when $X_j$ is multiplied by $C$ is
+
+> *When* $X_j$ *multiplies by a factor of* $C$*,* $Y$ *is expected multiply by a factor of* $C^{\beta_j}$ *, holding all else constant.*
+
+Now let's use this to interpret `enrollment_th` for the model in @tbl-ncaa-model-logx-logy. Below is the interpretation in terms of a 20% increase in enrollment, $C = 1.2$.
+
+> *When enrollment at NCAA Division I colleges increases by 20% (multiples by 1.2), the expenditure on basketball programs is expected to multiply by a factor of `r round(1.2^round(model_logx_logy_enrollment, 3), 3)` (* $1.2^{0.707}$*), holding type and region constant.*
+
+::: {.yourturn latex=""}
+Write the interpretation for `typePublic` in @tbl-ncaa-model-logx-logy in the context of the data. Write the interpretation in terms of the original variable `expenditure_m`. [^09-mlr-transformations-7]
+:::
+
+[^09-mlr-transformations-7]: The expenditure on basketball programs at public NCAA Division I colleges is expected to be `r round(exp(model_logx_logy_public), 3)` times the expenditure at private institutions, holding region and enrollment constant. Note, since the there is no transformation on the predictor `type` (or any categorical predictor), the interpretation is very similar to the interpretations in @sec-transform-logy.
+
+The plot of residuals versus predicted for the model in @tbl-ncaa-model-logx-logy is shown in @fig-ncaa-logx-logy-resid. This plot shows improvement in the equal variance condition compared to the original residuals plot in @fig-ncaa-orig-resid, given the vertical spread of the residuals is more equal around the majority of the data. There is less variability in the residuals for institutions with low predicted expenditure, but there are few institutions with predicted `log(expenditure)` less than 1.
+
+```{r}
+#| label: fig-ncaa-logx-logy-resid
+#| fig-cap: Residuals vs. fitted values for plot with log-transformed enrollment and expenditure
+
+ncaa_model_logx_logy_aug <- augment(ncaa_model_logx_logy)
+
+ggplot(data = ncaa_model_logx_logy_aug, aes(x = .fitted, y = .resid)) + 
+  geom_point(color = "darkgrey") + 
+  geom_hline(yintercept = 0, color = "red", linetype = 2) + 
+  labs(x = "Fitted values",
+         y = "Residuals") +
+  theme_bw()
+```
+
+## Choosing a model {#sec-transform-choose-model}
+
+So far we have looked at four potential models using `enrollment_th`, `type` and `region` to understand variability in `expenditure_m`. The next step is to select one of these models to use for prediction and inference based on the original analysis objectives. In addition to checking the residual plots and model conditions, we use performance statistics, such as $R^2$, to help select the model that best fits the data. We discuss model evaluation and selection in-depth in @sec-ch-model-eval.
+
+```{r}
+#| label: tbl-ncaa-compare-models
+#| tbl-cap: "R-Squared values for models presented in this chapter"
+
+orig_rsq <- glance(ncaa_model_orig)$r.squared
+logy_rsq <- glance(ncaa_model_logy)$r.squared
+logx_rsq <- glance(ncaa_model_logx)$r.squared
+logx_logy_rsq <- glance(ncaa_model_logx_logy)$r.squared
+
+orig_rsq |> 
+  bind_cols(logy_rsq, logx_rsq, logx_logy_rsq) |> 
+  kable(digits = 3, col.names = c("Original", "log(y)", "log(x)", "log(x) & log(y)"))
+
+```
+
+@tbl-ncaa-compare-models shows the $R^2$ values for the four candidate models. Based on the $R^2$ values and the plots of the residuals versus predicted values, the model that includes both `log(expenditure_m)` and `log(enrollmet_th)` is the one that best fits the data.
+
+### Adding interaction term
+
+Now that we have selected the main effects, let's reconsider the interaction between `enrollment_th` and `type`. @fig-ncaa-logx-logy-int visualizes `log(expenditure_m)` versus `log(enrollment_th)` by `type` to see if there is a potential interaction effect using the transformed variables.
+
+```{r}
+#| label: fig-ncaa-logx-logy-int
+#| fig-cap: Expenditure versus enrollment by institution type
+#| 
+ggplot(data = ncaa_basketball, aes(x = log(enrollment_th), y = log(expenditure_m), color = type)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "log(Enrollment)",
+       y = "log(Expenditure)", 
+       color = "Institution type") +
+  theme_bw()
+```
+
+The plot shows that there may be an interaction effect, because the slope of the relationship between `log(expenditure_m)` and `log(enrollment_th)` is steeper for public colleges than for private colleges. Given this plot, we include the interaction term to the model selected in @sec-transform-choose-model. The output is in @tbl-ncaa-model-logx-logy-int.
+
+```{r}
+#| label: tbl-ncaa-model-logx-logy-int
+#| tbl-cap: Model including interaction term with 95% confidence intervals
+
+ncaa_model_logx_logy_int <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type + log(enrollment_th) * type, data = ncaa_basketball)
+
+enrollment_private <- tidy(ncaa_model_logx_logy_int) |>
+  filter(term == "log(enrollment_th)") |> 
+  pull(estimate) |> 
+  round(3)
+
+enrollment_public_int <- tidy(ncaa_model_logx_logy_int) |>
+  filter(term == "log(enrollment_th):typePublic") |> 
+  pull(estimate) |> 
+  round(3)
+
+tidy(ncaa_model_logx_logy_int, conf.int = TRUE) |>
+  kable(digits = 3)
+```
+
+The confidence interval for `log(enrollment_th):typePublic` gives evidence that the interaction is useful to include in the model. Additionally, the $R^2$ for this model is `r round(glance(ncaa_model_logx_logy_int)$r.squared,3)`, which is higher than the model chosen from @tbl-ncaa-compare-models. The equation for the model with the interaction term is
+
+$$
+\begin{aligned}
+\widehat{\log(\text{expenditure\_m}_i)} &= 1.308 + 0.524 \times \log(\text{enrollment\_th}_i)\\
+&- 0.339 \times \text{Northeast}_i - 0.117 \times \text{South}_i \\
+&- 0.232 \times \text{West}_i - 1.284 \times \text{Public}_i \\
+& + 0.255 \times \log(\text{enrollment\_th}_i) \times \text{Public}_i
+\end{aligned}
+$$
+
+We put together the concepts from @sec-mlr-interaction and @sec-transform-logx-logy to interpret the model coefficients describing the relationship between `enrollment_th`, `type`, and `expenditure_m` on basketball programs. The coefficient of the interaction term $\hat{\beta}_{interaction} = 0.255$ means that $\log(\text{expenditure})$ changes (increases or decreases) by an additional $C \times 0.255$ for public colleges compared to private colleges when enrollment is multiplied by a factor $C$. This means that the expenditure is expected to multiply by an additional $C^{0.255}$ for public institutions compared to private ones.
+
+Below are the interpretations of the relationship between enrollment and expenditure for public and private schools given a 10% increase in the enrollment.
+
+> *For each additional 10% increase (* $C = 1.1$*) in enrollment at **private** NCAA Division I **private** colleges, the expenditure on basketball programs is expected to multiply by `r round(exp(enrollment_private), 3)`* $(e^{0.524})$*, holding region constant.*
+>
+> *For each additional 10% increase (* $C = 1.1$*) in enrollment at **public** NCAA Division I colleges, the expenditure on basketball programs is expected to multiply by `r round(exp(enrollment_private + enrollment_public_int), 3)`* $(e^{0.524 + 0.255})$*, holding region constant.*
+
+<!--# maybe clarify the wording here to make it clear that is addition-->
+
+<!--# start here-->
+
+::: {.analysis_in_practice latex=""}
+We interpreted the relationship between enrollment and expenditure and how it differs for public and private colleges. But what if we wish to just describe how expenditure differs between public and private colleges, on average?
+
+The coefficient of Public, $\hat{\beta}_{\text{public}} = -1.284$ is the expected difference in the expenditure on basketball programs between public and private colleges [with `enrollment_th = 0`]{.underline}. A college with zero students does not make sense in practice, so we cannot meaningfully interpret this value in isolation.
+
+<br>
+
+Therefore, we need to include both the main effect and the interaction term in order to describe how expenditures at public and private colleges differ, on average (`-1.284 + 0.255 * enrollment_th`). We plug in different values of enrollment to interpret the difference.
+
+<br>
+
+For example, let's consider how the average expenditure differs between public and private colleges for colleges with 5000 students. Assume region is the same.
+
+> Public NCAA Division I institutions with 5000 students are expected to spend `r -1.284 + 0.255 * 5000` (`-1.284 + 0.255 * 5000`) times the expenditure at private colleges with the same enrollment in the same region.
+:::
+
+::: {.yourturn latex=""}
+Describe how the expenditure on basketball programs compare between public and private NCAA Division I colleges with 10,000 students enrolled. Assume both are in the South region.[^09-mlr-transformations-8]
+:::
+
+[^09-mlr-transformations-8]: Public NCAA Division I institutions with 10,000 students are expected to spend `r -1.284 + 0.255 * 10000` (`-1.284 + 0.255 * 10000`) times the expenditure at private colleges with the same enrollment, holding region constant.
+
+## Variable transformations in R
+
+The code for fitting a linear regression model with one or more transformed variables is very similar to the code shown in @sec-mlr-estimate-r. Use `log()` to apply the (natural) log transformation on a variable. The code for all the models introduced in this chapter is shown below:
+
+**Original model**
+
+```{r}
+#| eval: false
+#| echo: true
+
+ncaa_model_orig <- lm(expenditure_m ~ enrollment_th + region + type, 
+                      data = ncaa_basketball)
+```
+
+**Model with `log(expenditure_m)`**
+
+```{r}
+#| eval: false
+#| echo: true
+
+ncaa_model_logy <- lm(log(expenditure_m) ~ enrollment_th + region + type, 
+                      data = ncaa_basketball)
+```
+
+**Model with `log(enrollment_th)`**
+
+```{r}
+#| eval: false
+#| echo: true
+
+ncaa_model_logx <- lm(expenditure_m ~ log(enrollment_th) + region + type, 
+                      data = ncaa_basketball)
+```
+
+**Model with `log(enrollment_th)` , `log(expenditure_m)` , and interaction**
+
+```{r}
+#| eval: true
+#| echo: true
+
+ncaa_model_final <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type + 
+                         log(enrollment_th) * type,
+                       data = ncaa_basketball)
+```
+
+The function `exp()` is used to exponentiate coefficients when writing interpretations for models with a log-transformed response variable. For example, $e^2$ is computed as `exp(2)` in R. Below is code and output to make a new column with the exponentiated coefficients for the final model with `log(enrollment_th)`, `log(expenditure_m)`, and the interaction term. Note when displaying results using `tidy()` the coefficients are contained in the column `estimate` .
+
+```{r}
+#| echo: true
+
+tidy(ncaa_model_final) |> 
+  mutate(exp_coefficient = exp(estimate))
+```
+
+Instead of adding a new column, we may wish to automatically produce the exponentiated coefficients. The output produced by `tidy()` is in terms of the response variable by default. Therefore, the output is in terms of $\log(y)$ when fitting a model with a log-transformed response variable. The argument `exponentiate = TRUE` in `tidy()` is used to output the exponentiated coefficients, $e^{\beta_j}$, so the model output is in terms of the original variable.
+
+Below is the code and output for the model in @tbl-ncaa-model-logx-logy-int in terms of the original response `expenditure_m`.
+
+```{r}
+#| label: tbl-ncaa-final-exponentiated
+#| tbl-cap: Exponentiated coefficients for model using log-transformed repsonse and predictor
+#| echo: true
+
+
+ncaa_model_final <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type + 
+                         log(enrollment_th) * type, 
+                       data = ncaa_basketball)
+
+tidy(ncaa_model_final, exponentiate = TRUE) |> 
+  kable(digits = 3)
+```
+
+## Summary
+
+In this chapter, we introduced transformations for non-linear relationships, with a focus on log transformations. We used exploratory data analysis, plots of residuals versus fitted values, and subject matter knowledge to identify scenarios in which a transformation is needed to best capture the relationships in the data. We introduced variance-stabilizing transformations on the response variable to address violations of the equal variance condition and a log transformation on the predictor variable to capture decreasing effect as the predictor increases. We also presented and interpreted models with log transformations on both the response and predictor variables.
+
+We used $R^2$ to select the model that best fit the data; however, there are other model performance statistics available to compare and select a model. In @sec-ch-model-eval, we will discuss model evaluation and selection in more depth, including stepwise methods and cross validation.

@@ -2,25 +2,105 @@ project:
   type: book
   output-dir: docs
 
+
 book:
-  title: "book-2"
-  author: "Norah Jones"
-  date: "1/6/2026"
+  title: "Introduction to Regression Analysis"
+  subtitle: "A Data Science Approach"
+  author: "Maria Tackett"
+  reader-mode: true
+  site-url: https://introregressio.netlify.app
+  repo-url: https://github.com/matackett/regression-book
+  repo-actions: [issue]
+  date: "today"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
-    - references.qmd
+    - 00-preface.qmd 
+    
+    - part: "Part 1: Getting started"
+      chapters: 
+        - 01-intro.qmd
+        - 02-review-r.qmd
+        - 03-eda.qmd
+        
+    - part: "Part 2: Simple linear regression"
+      chapters: 
+        - 04-slr.qmd
+        - 05-slr-inference.qmd
+        - 06-slr-conditions.qmd 
 
-bibliography: references.bib
+    - part: "Part 3: Multiple linear regression"
+      chapters:
+        - 07-mlr.qmd
+        - 08-mlr-inference.qmd
+        - 09-mlr-transformations.qmd
+        - 10-model-eval.qmd
+    
+    - part: "Part 4: Beyond linear regression"
+      chapters:
+        - 11-logistic.qmd
+        - 12-logistic-prediction.qmd
+        - 13-special-topics.qmd
+        
+  appendices:
+    - appendix-linear.qmd
+    - appendix-logistic.qmd
+    - datasets.qmd
+    - references.qmd
+ 
+bibliography: 
+   - references.bib
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
+    theme: [cosmo, style.scss]
+    code-copy: true
+    code-link: true
+    author-meta: "Maria Tackett"
+    include-in-header: "plausible.html"
+   # callout-appearance: default
+    fig-dpi: 300
+    fig-show: hold 
+    fig-align: center
+    lightbox: 
+      match: auto
+      loop: false
+    toc: true
+    toc-depth: 3
+    
+  
   pdf:
-    documentclass: scrreprt
-
+    documentclass: krantz
+    include-in-header: latex/style.tex
+    include-before-body: latex/before_body.tex
+    include-after-body: latex/after_body.tex
+    pdf-engine: xelatex
+    block-headings: false
+    top-level-division: chapter
+    keep-tex: true
+    callout-appearance: default
+    fig-dpi: 300
+    fig-show: hold
+    fig-pos: H
+    tbl-pos: H
+    fig-align: center
+    toc: true
+    toc-depth: 2
+  
 editor: visual
+
+execute: 
+  freeze: auto
+  warning: false
+  message: false
+  echo: false
+
+knitr:
+  opts_chunk: 
+    dev: "ragg_png"
+    fig-asp: 0.618  # 1 / phi
+    fig-width: 8
+
+comments:
+  hypothesis: false
+  
 

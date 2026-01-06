@@ -1,0 +1,11 @@
+# Model predictions
+
+To be posted.
+
+<!--# Inference for predictions-->
+
+<!--# Two types of prediction-->
+
+<!--# Estimated mean response for a subset of observations-->
+
+<!--# Predicted response for an individual observation-->

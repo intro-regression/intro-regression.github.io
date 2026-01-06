@@ -1,0 +1,114 @@
+# Mathematics of logistic regression {#sec-appendix-logistic}
+
+```{r}
+#| include: false
+source("_common.R")
+```
+
+In @sec-ch-logistic, we introduced logistic regression models for binary response variables. Here we will show some of the mathematics underlying these models, making using of the matrix notation for regression introduced in @sec-appendix-linear.
+
+## Matrix representation of logistic regression
+
+Given a binary response variable $Y$ and predictors $X_1, X_2, \ldots, X_p$, the logistic regression model is
+
+$$
+\text{logit}(\pi) = \log\Big(\frac{\pi}{1-\pi}\Big) = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p
+$$ {#eq-logistic-model}
+
+where $\pi = Pr(Y = 1)$.
+
+Similar to linear regression, we can write a matrix representation of @eq-logistic-model.
+
+$$
+\text{logit}(\boldsymbol{\pi}) = \log\Big(\frac{\boldsymbol{\pi}}{1 - \boldsymbol{\pi}}\Big) = \mathbf{X}\boldsymbol{\beta}
+$$ {#eq-logistic-matrix}
+
+We have the following components in @eq-logistic-matrix:
+
+-   $\boldsymbol{\pi}$ is the $n \times 1$ vector of probabilities, such that $\boldsymbol{\pi}_i = Pr(y_i = 1)$
+-   $\mathbf{X}$ is the $n \times (p + 1)$ design matrix. Similar to linear regression, the first column is $\mathbf{1}$, a column of 1's corresponding to the intercept.
+-   $\boldsymbol{\beta}$ is a $(p+1) \times 1$ vector of model coefficients.
+
+Though not directly in @eq-logistic-model or @eq-logistic-matrix, the underlying data also includes $\mathbf{y}$, an $n\times 1$ vector of the binary response variables.
+
+We are often interested in the probabilities computed from the logistic regression model. The probabilities computed from @eq-logistic-matrix are
+
+$$\boldsymbol{\pi} = \frac{e^{\mathbf{X}\boldsymbol{\beta}}}{1 + e^{\mathbf{X}\boldsymbol{\beta}}}$$ {#eq-logistic-probability-matrix} See @sec-prob-odds for more detail about the relationship between the logit, odds, and probability.
+
+## Estimation {#sec-logistic-estimation-matrix}
+
+We want to find estimates $\hat{\boldsymbol{\beta}}$ that are the best fit for the data based on the model in @eq-logistic-matrix. In @sec-logistic-interpret-coef, we outlined how we use maximum likelihood estimation to find $\hat{\boldsymbol{\beta}}$. Here we will show more of the mathematical details behind the model estimation.
+
+::: {.math_rules latex=""}
+Let $Z$ be a random variable that takes values 0 or 1. Then $Z$ follows a **Bernoulli distribution** such that
+
+$$
+Pr(Z = z) = p^{z}(1 - p)^{1-z}
+$$
+
+where $p = Pr(z = 1)$.
+
+<br>
+
+$E(Z) = p$ and $Var(Z) = p(1-p)$.
+:::
+
+The response variable follows a Bernoulli distribution, such that $P(Y = y_i) = \pi_{i}^{y_i}(1 - \pi_i)^{1-\pi_i}$. Let $\mathbf{x}_i^\mathsf{T}$ be the $i^{th}$ row of the design matrix $\mathbf{X}$. Then, using @eq-logistic-probability-matrix, we have
+
+$$
+P(Y=y_i) = \Big(\frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big)^{y_i}\Big(1 - \frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big)^{1 - y_i}
+$$ {#eq-logistic-proby-matrix} that the likelihood function is a measure of how likely we observe the data given particular values of the model parameters $\hat{\boldsymbol{\beta}}$.
+
+::: {.math_rules latex=""}
+Let $Z_1, Z_2, \ldots, Z_n$ be independent Bernoulli random variables. The **joint distribution** of $Z_1, Z_2, \ldots, Z_n$ (the probability of observing these values) is
+
+$$
+f(Z_1, Z_2, \ldots, Z_n) = \prod_{i=1}^n p_i^{z_i}(1-p_i)^{1-z_i}
+$$
+
+where $p_i = Pr(Z_i = 1)$ .
+:::
+
+Using @eq-logistic-proby-matrix, the likelihood function for logistic regression is
+
+$$
+L(\boldsymbol{\beta}|\mathbf{X},\mathbf{y}) = \prod_{i=1}^n\Big(\frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big)^{y_i}\Big(1 - \frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big)^{1 - y_i}
+$$ {#eq-logistic-likelihood}
+
+To make the math more manageable, we will maximize the log likelihood shown in @eq-logistic-log-likelihood. Maximizing @eq-logistic-log-likelihood is equivalent to maximizing @eq-logistic-likelihood.
+
+$$
+\begin{aligned}
+\log L(\boldsymbol{\beta}|\mathbf{X},\mathbf{y}) &= \sum_{i=1}^n y_i \log\Big(\frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big) + \sum_{i=1}^n(1-y_i)\log\Big(1 - \frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big)\\[10pt]
+& \Bigg[\text{Given } 1 - \frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}} = \frac{1}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Bigg] \\[10pt]
+& =  \sum_{i=1}^n y_i \log(e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}) - \sum_{i=1}^ny_i \log(1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}) - \sum_{i=1}^n\log(1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}) + \sum_{i=1}^ny_i \log(1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}})  \\[10pt]
+& = \sum_{i=1}^ny_i\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta} - \sum_{i=1}^n\log(1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}})
+\end{aligned}
+$$ {#eq-logistic-log-likelihood}
+
+We take the first derivative of @eq-logistic-log-likelihood with respect to $\boldsymbol{\beta}$. An outline of the steps is shown below. The maximum likelihood estimator is the vector of coefficients such that is the solution to $\frac{\partial \log L}{\partial \boldsymbol{\beta}} = 0$ .
+
+$$
+\begin{aligned}
+\frac{\partial \log L}{\partial \boldsymbol{\beta}} &= \sum_{i=1}^ny_ix_i^\mathsf{T}\boldsymbol{\beta} - \sum_{i=1}^n\log(1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}) \\[10pt]
+&= \sum_{i=1}^ny_i\mathbf{x}_i^\mathsf{T} - \frac{e^{\mathbf{x}_i^\mathbf{T}\boldsymbol{\beta}} \mathbf{x}_i^\mathsf{T}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}
+\end{aligned}
+$$ {#eq-logistic-par-deriv}
+
+There is no closed-from solution for this, i.e., there is no neat formula for $\hat{\boldsymbol{\beta}}$ as we found in @sec-least-sq-matrix for linear regression. Therefore, numerical approximation methods such are used to find the maximum likelihood estimators $\hat{\boldsymbol{\beta}}$. One popular method is Newton-Raphson, a "root-finding algorithm which produces successively better approximations to the roots (or zeroes) of a real-valued function" [@wikipedia_newtons_method]. Numerical approximation methods such as Newton Raphson systematically search the space of of possible values of $\hat{\boldsymbol{\beta}}$ until it converges on the solution (the "root") to @eq-logistic-par-deriv.
+
+## Inference for logistic regression {#sec-logistic-inference-matrix}
+
+In @sec-logistic-inf, we introduced inference for a single coefficient $\beta_j$ in the logistic regression model. Because there is no closed-form solution for the maximum likelihood estimator $\hat{\boldsymbol{\beta}}$ found in @sec-logistic-estimation-matrix, there is no closed form solution for the mean and variance for the distribution of $\hat{\boldsymbol{\beta}}$. We rely on theoretical results to know the distribution of $\hat{\boldsymbol{\beta}}$ as $n$ gets large (called *asymptotic results*)**.**
+
+Given $n$ is large,
+
+$$
+\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, (\mathbf{X}^\mathsf{T}\mathbf{V}\mathbf{X})^{-1})
+$$ {#eq-dist-beta-logistic}
+
+where $\mathbf{V}$ is an $n \times n$ diagonal matrix, such that $V_{ii}$ is the estimated variance for the $i^{th}$ observation.[^appendix-logistic-1]
+
+[^appendix-logistic-1]: Recall that the variance of the Bernoulli distribution depends on $\pi$, so each observation has a different variance. This is in contrast to linear regression, where all observations have the same variance $\sigma^2_{\epsilon}$.
+
+The standard error used for hypothesis testing and confidence intervals for a single coefficient $\beta_j$ , is computed as the $j^{th}$ diagonal element of $Var(\hat{\boldsymbol{\beta}})^{1/2} = (\mathbf{X}^\mathsf{T}\mathbf{V}\mathbf{X})^{-1/2}$. This is why the hypothesis tests and confidence intervals in @sec-logistic-inf-theory are only reliable for large $n$, because they depend on asymptotic approximations in @eq-dist-beta-logistic. We can use simulation-based methods if the data has a small sample size.

@@ -1,0 +1,1249 @@
+# Special topics {#sec-ch-special-topics}
+
+```{r}
+#| include: false
+source("_common.R")
+```
+
+```{r}
+#| label: load-packages-data
+
+library(tidyverse)
+library(tidymodels)
+library(nnet)
+library(knitr)
+library(ggridges)
+library(lme4)
+library(broom.mixed)
+library(rpart.plot)
+library(ggridges)
+library(skimr)
+
+voters <- read_csv("data/fivethirtyeight-voters-data.csv") |>
+  mutate(party_id = case_when(Q30 == 1 ~ "Republican", 
+                              Q30 == 2 ~ "Democrat", 
+                              TRUE ~ "No affiliation"), 
+         voter_category = factor(voter_category, 
+                                 levels = c("rarely/never", "sporadic", "always"))
+         ) |>
+         rename(age = ppage)
+
+## lemurs repeated measures data
+lemurs <- read_csv("data/lemurs-repeated-measures.csv")
+
+# color palette
+sunset2 <- PNWColors::pnw_palette("Sunset2",2)
+sunset3 <- PNWColors::pnw_palette("Sunset2",3)
+sunset4 <- PNWColors::pnw_palette("Sunset2",4)
+```
+
+## Learning goals {.unnumbered}
+
+This chapter introduces readers to a collection to models that are extensions of linear and logistic regression. The goal is to provide an introduction to the topic along with resources for those interested in learning more. The following topics are introduced:
+
+-   Multinomial logistic regression
+-   Random intercepts models
+-   Decision trees for regression and classification
+-   Causal inference using propensity score models
+
+## Multinomial logistic regression {#sec-multinomial}
+
+In @sec-ch-logistic, we introduced logistic regression models for binary response variables. In this section, we introduce multinomial logistic regression, models for categorical response variables with three or more levels.
+
+### Data: Voting frequency {#sec-voters-data}
+
+In the 2020 article “Why Many Americans Don’t Vote” [@ThomsonDeVeaux_et_al_2020] on the now defunct data journalism website FiveThirtyEight, journalists explored the voting behavior of eligible voters in the United States. <!--# maybe add something else here about the article--> As indicated by the article's title, their primary objective was to understand why many eligible voters choose not to vote at all or only vote sporadically. <!--# include something here about the data collection--> They considered numerous factors in their analysis, but we will focus on a few, age and political affiliation, for this analysis. <!--# need to include somewhere that this is includes people who were eligible in the last four elections-->
+
+The data were obtained from the FiveThirtyEight data website ([https://data.fivethirtyeight.com](https://data.fivethirtyeight.com/)) and is available in `fivethirtyeight-voters-data.csv`. It contains survey responses <!--# is survey correct?--> from `r nrow(voters)` respondents. All survey participants had been eligible to vote in at least four prior elections. The variables used in this analysis are below. The definitions are adapted from the data documentation (<https://github.com/fivethirtyeight/data/tree/master/non-voters>)
+
+-   `voter_category`: An respondent's past voting behavior, categorized as
+
+    -   `always`: respondent voted in all or all-but-one of the elections they were eligible in
+
+    -   `sporadic`: respondent voted in at least two, but fewer than all-but-one of the elections they were eligible in
+
+    -   `rarely/never`: respondent voted in 0 or 1 of the elections they were eligible in
+
+-   `age`: Respondent's age in years (called `ppage` in original data set)
+
+-   `party_id`: Respondent's political affiliation categorized as `Democrat`, `Republican` , `No affiliation`. This variable was derived from the variable `Q30` in the original data set, defined as the following:
+
+    -   *Response to the question “Generally speaking, do you think of yourself as a…”*
+
+        -   *1:Republican*
+
+        -   *2: Democrat*
+
+        -   *3: Independent*
+
+        -   *4: Another party, please specify*
+
+        -   *5: No preference*
+
+        -   *-1: No response*
+
+    -   Responses `3, 4, 5,-1` are classified as "No affiliation" in this analysis.
+
+-   `income_cat`: Respondent's annual income (`Less than $40k`, `$40-75k`, `$75-125k`, `$125k or more`)
+
+The goal of this analysis is to use `age` and `party_id` to predict `voting_id` and describe factors associated with variability in voting behavior. The univariate exploratory data analysis is in @fig-voting-univar-eda and @tbl-voting-univar-eda.
+
+```{r}
+#| label: fig-voting-univar-eda 
+#| fig-cap: "Univariate EDA for voting frequency data"
+#| fig-subcap: 
+#|   - "`voter_category`" 
+#|   - "`age`"
+#|   - "`party_id`"
+#| layout: "[[1], [1,1]]"
+
+# response variable 
+ggplot(data = voters, aes(x = voter_category)) + 
+  geom_bar(fill = "steelblue", color = "black") + 
+  labs(x = "Voter category", 
+       y = "Count") +
+  theme_bw()
+
+# age
+ggplot(data = voters, aes(x = age)) + 
+  geom_histogram(fill = "steelblue", color = "black") + 
+  labs(x = "Age (in years)", 
+       y = "Count") +
+  theme_bw()
+
+## party id 
+ggplot(data = voters, aes(x = party_id)) + 
+  geom_bar(fill = "steelblue", color = "black") + 
+  labs(x = "Political party identification", 
+       y = "Count") +
+  theme_bw()
+```
+
+```{r}
+#| label: tbl-voting-univar-eda
+#| tbl-cap: "Summary statistics for `age`"
+
+voters |>
+  skim(age) |>
+  select(skim_variable, numeric.mean, numeric.sd, numeric.p0, 
+         numeric.p25, numeric.p50, numeric.p75, numeric.p100, n_missing) |>
+  kable(col.names = c("Variable", "Mean", "SD", "Min", "Q1", 
+                      "Median (Q2)", "Q3", "Max","Missing"), 
+        digits = 1)
+```
+
+```{r}
+#| label: voters-univar-eda-props
+
+prop_voting <- voters |>
+  count(voter_category) |>
+  mutate(p = n /sum(n)) |>
+  pull(p)
+
+p_rare <- prop_voting[1]
+p_sporadic <- prop_voting[2]
+p_always <- prop_voting[3]
+
+
+prop_party <- voters |>
+  count(party_id) |>
+  mutate(p = n /sum(n)) |>
+  pull(p)
+
+p_democrat <- prop_party[1]
+p_none <- prop_party[2]
+p_republican <- prop_party[3]
+
+```
+
+The most common voting frequency among respondents in `sporadic`, with `r round(p_sporadic,3) * 100`% of the voters being in this category. About `r round(p_rare, 3)* 100`% of the respondents vote rarely or never, and `r round(p_always, 3) * 100`% of the respondents voted always. The distribution of `age` is bimodal and skewed right. The median age in the data set is `r median(voters$age)` years old, and the IQR is `r IQR(voters$age)` years. The most common political party identification is "No affiliation" with about `r round(p_none, 3)*100`% of the respondents. About `r round(p_democrat, 3)*100`% of the respondents identified as "Democrat" and about `r round(p_republican, 3)*100`% as "Republican".
+
+```{r}
+#| label: fig-voting-bivar-eda
+#| fig-cap: "Bivariate EDA for voting frequency data. Blue: rarely/never, Red: sporadic, Yellow: always"
+#| fig-subcap:
+#|   - "`voter_category` versus `age`"
+#|   - "`voter_category` versus `party_id`"
+#| layout-ncol: 2
+
+
+# voting vs. age
+ggplot(data = voters, aes(x = age, y = voter_category, fill = voter_category)) + 
+  geom_density_ridges(color = "black") +
+  labs(y = "Voter category", 
+       x = "Age (in years)") +
+  theme_bw() + 
+  theme(legend.position = "none") +
+  scale_fill_manual(values = sunset3)
+
+# voting vs. party ID 
+ggplot(data = voters, aes(x = party_id, fill = voter_category)) + 
+  geom_bar(position = "fill", color = "black") + 
+  labs(x = "Party Identification", 
+       y = "Proportion",
+       fill = "Voting frequency") +
+  theme_bw() + 
+  scale_fill_manual(values = sunset3)
+
+```
+
+The bivariate exploratory data analysis is in @fig-voting-bivar-eda. From @fig-voting-bivar-eda-1, the distribution of `age` among voters categorized as "always" is bimodal with a peak around 25 years old and another around 60 years old. In contrast, the distribution of `age` among voters categorized as "rarely/never" is unimodal and skewed towards younger voters. This suggest there may be a relationship between age and voting frequency.
+
+From @fig-voting-bivar-eda-2, the voters who have no political party affiliation are the most likely to vote "rarely/never" and the least likely to vote "always". The distribution of voting frequency appears to be similar between Democrats and Republicans. This indicates there may be some relationship between political party identification (or even whether or not someone identifies with a political party) and voting frequency.
+
+We have some initial insights from the data about overall voting frequency and potential relationships with age and political party affiliation, so we want to fit a model to summarize the relationship between these variables that we can use to draw robust conclusions and make predictions.
+
+### Multinomial logistic model
+
+The response variable in this analysis has three levels, so we will use an extension of the logistic regression model. **Multinomial logistic regression** is part of the wider class of models called *generalized linear models*. It is a model for data with a categorical response variable that has three or more levels. Such response variables follow a multinomial distribution.
+
+::: {.math_rules latex=""}
+**Multinomial distribution**
+
+Let $Y$ be a categorical random variable with $K > 2$ levels. Then,
+
+$$P(Y = 1) = \pi_1, P(Y = 2) = \pi_2, \ldots, P(Y = K) = \pi_K$$ such that $\sum_{k=1}^K \pi_K = 1$
+:::
+
+Let's look at the general form of the multinomial logistic regression model, then apply it to model voting frequency. Suppose we have a categorical response variable that takes values $A$, $B$, and $C$. Let $A$ be the baseline level. Then, the general form of the multinomial logistic regression model is
+
+$$\begin{aligned}
+\log\Big(\frac{\pi_B}{\pi_A}\Big) = \beta_{0
+B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
+\log\Big(\frac{\pi_C}{\pi_A}\Big) = \beta_{0C} + \beta_{1C}X_1 +\beta_{2C}X_2 + \dots + \beta_{pC}X_p 
+\end{aligned}
+$$ {#eq-multinom-general}
+
+From @eq-multinom-general, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline[^13-special-topics-1]. WE saw this implicitly in logistic regression, where the response variable, $\log(\frac{\pi}{1-\pi})$, is the "log odds of $Y = 1$ versus $Y = 0$."
+
+[^13-special-topics-1]: Similar to how categorical predictors are interpreted as one level versus the baseline ([see @sec-mlr-interpret-categorical]).
+
+The next feature of multinomial logistic regression is the multiple equations that comprise the model. More specifically, if the response variable has $K$ levels, then there will be $K - 1$ equations in the model. We will ultimately use the model to compute the predicted probabilities an observation takes each level of the response variable, so we need all $K-1$ equations in order to compute the predicted probabilities for every level of the response variable.
+
+The last feature is that each of the $K -1$ equations have the same form but different values of the coefficients. This is shown in @eq-multinom-general as the $\beta's$ have unique indices in each equation. As with logistic regression, the coefficients for multinomial logistic regression are estimated using maximum likelihood estimation ([see @sec-logistic-interpret-coef]).
+
+@tbl-voter-model is the multinomial logistic regression model using `age` and `party_id` to predict `voter_category`.
+
+```{r}
+#| label: voter-multinom-model 
+#| results: hide
+
+voter_model <- multinom(voter_category ~ age + party_id, 
+                        data = voters)
+```
+
+```{r}
+#| label: tbl-voter-model
+#| tbl-cap: Model of `voter_category` versus `age` and `party_id` with 95% confidence intervals for the coefficients
+
+tidy(voter_model, conf.int = TRUE) |>
+  kable(digits = 3)
+```
+
+The column `y.level` indicates the corresponding level for the given equation. The level of the response variable that is not listed is the baseline. In this case, the baseline level is `rarely/never`. Therefore, this model produces the log odds of being in the other categories versus rarely/ never.
+
+We can write the model in @tbl-voter-model as the following:
+
+$$
+\begin{aligned}
+\log\Big(\frac{\pi_{sporadic}}{\pi_{rarely/never}}\Big)  = -1.046 + 0.041 \times \text{age} -0.677 \times \text{No affiliation} -0.106 \times \text{Republican} \\
+\log\Big(\frac{\pi_{always}}{\pi_{rarely/never}}\Big)  = -1.983 + 0.052 \times \text{age} -0.872 \times \text{No affiliation}  -0.091 \times \text{Republican}
+\end{aligned}
+$$
+
+### Interpretation
+
+The interpretation for the coefficients of the multinomial logistic model are very similar to the interpretations for the logistic model in @sec-logistic-interpret-coef. Like logistic regression, the model coefficients represent the change in the log odds, but in practice want to write interpretations in terms of the odds. The primary difference in the interpretation is the explicit statement of the baseline level of the response variable.
+
+Let's interpret the coefficients in terms of having the voter frequency of `sporadic` versus `rarely/never`. The interpretation of `age` in terms of the log odds is as follows:
+
+> *For each additional year older, the log odds of an individual voting sporadically versus rarely/never are expected to increase by 0.041, holding political affiliation constant.*
+
+The interpretation in terms of the odds is the following:
+
+> **For each additional year older, the** <b>odds</b> of an individual voting sporadically versus rarely/never are expected to multiply by `r round(exp(0.041), 3)` $(e^{0.041})$, holding political affiliation constant.
+
+Next, we interpret the effect of political affiliation on the voting frequency. As with other models, we write the interpretation in reference to the baseline level of the categorical predictor. The interpretation of the coefficients for `party_id` in terms of the log odds are the following:
+
+> *The log odds an individual who has no political affiliation votes sporadically versus rarely/never are 0.677 less than the log odds of an individual whose party affiliation is Democrat, holding age constant.*
+
+> *The log odds an individual whose political affiliation is Republican votes sporadically versus rarely/never are 0.106 less than the log odds of an individual whose party affiliation is Democrat, holding age constant.*
+
+The interpretations in terms of the odds are as follows:
+
+> *The* <b>odds</b> an individual who has no political affiliation votes sporadically versus rarely/never are `r round(exp(-0.677), 3)` $(e^{-0.872})$ times the odds of an individual whose party affiliation is Democrat, holding age constant.
+
+> *The* <b>odds</b> an individual whose political affiliation is Republican votes sporadically versus rarely/never are `r round(exp(-0.106), 3)` $(e^{-0.106})$ times the odds of an individual whose party affiliation is Democrat, holding age constant.
+
+Along with the coefficients in @tbl-voter-model are 95% confidence intervals for the population coefficients. These confidence intervals are estimated in a similar way as those for logistic regression in @sec-logistic-inf. As with previous models, we look to see whether the confidence interval contains 0 to determine whether it is a useful predictor in explaining variability in voting frequency after adjusting for the other predictors. In both equations in @tbl-voter-model, none of the confidence intervals for `age` and `party_idNoaffiliation` include 0. Thus, both of these indicators are helpful in understanding voting frequency. In contrast, the confidence intervals for `party_idRepublican` do contain 0, so the voting behavior for Republicans does not differ significantly from Democrats, after adjusting for age. This is consistent with the observations from @fig-voting-bivar-eda-2.
+
+::: {.analysis_in_practice latex=""}
+In @tbl-voter-model, the inferential conclusions for each predictor are the same for both equations in the multinomial logistic model. This is not a requirement for multinomial logistic regression and is not always the case. It could be possible for a predictor to be useful in differentiating `always` versus `rarely/never`, but not useful in differentiating `sporadic` versus `rarely/never`.
+:::
+
+### Prediction and classification
+
+We often want to use multinomial logistic regression models for prediction, and more specifically classifying observations into the groups defined by the response variable. We can use the log odds produced by the multinomial logistic model to compute probabilities, then use those probabilities for classification.
+
+Let's go back to the general form of the model in @eq-multinom-general. The predicted probability an observation is in category $B$ is computed as
+
+$$
+\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}
+$$ {#eq-multinom-pred-prob}
+
+<!--# do i want to do the subscript i?-->
+
+The numerator of @eq-multinom-pred-prob are the odds of an observation being in category $B$ versus the baseline $A$. The denominator is the sum of the odds for every possible level. In this example, it is the sum of the odds an observation is in category $A$ versus $A$ (that's the "1" in the denominator), the odds an observation is in category $B$ versus $A$, and the odds an observation is in category $C$ versus $A$. A similar formula is used to compute $\hat{p}_c$, the predicted probability of being in category $C$. The difference is the numerator, which would be the odds of being in category $C$ versus $A$.
+
+The predicted probability an observation is in the baseline category $A$ is computed as
+
+$$
+\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)
+$$ {#eq-multinom-pred-baseline}
+
+@eq-multinom-pred-baseline utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all $K - 1$ equations as part of the multinomial logistic when there are $K$ categories of the response variable.
+
+@tbl-voter-model-pred shows the predicted probabilities based on @tbl-voter-model for ten observations in the data.
+
+```{r}
+#| label: tbl-voter-model-pred
+#| tbl-cap: Predictions from voter frequency model for ten observations
+
+voter_pred_prob <- predict(voter_model, type = "probs")
+
+voters <- voters |> 
+  bind_cols(voter_pred_prob) |>
+  mutate(pred_class = predict(voter_model, type = "class")) 
+
+voters |>
+  select(voter_category:pred_class, -party_id) |>
+  slice(1:10) |>
+  kable(digits = 3)
+```
+
+The predicted probabilities are then used to classify the observations based on the model. For each observation, the predicted class is the one with the highest predicted probability. For example, for the first observation in @tbl-voter-model-pred, $\hat{\pi}_{rarely/never} = 0.071$, $\hat{\pi}_{sporadic} = 0.484$, and $\hat{\pi}_{always} = 0.446$. Therefore, the predicted class for this observation is "sporadic".
+
+### Confusion matrix
+
+From @tbl-voter-model-pred, we see the predicted class is not always equal to the observed class. Therefore, we want to quantify the model performance, specifically how well the model classifies observations and how well it distinguishes observations from a specific class. A confusion matrix, introduced in @sec-classification, is used to compare the observed versus predicted classes. @fig-confmat-voters-model is the confusion matrix for the model in @tbl-voter-model. Because the predicted class is always the category with the highest predicted probability, we do not need to specify a threshold as in logistic regression.
+
+```{r}
+#| label: fig-confmat-voters-model
+#| fig-cap: Confusion matrix for voters model
+
+voters |> 
+  conf_mat(voter_category, pred_class) |>
+  autoplot(type = "heatmap")
+```
+
+::: {.yourturn latex=""}
+Use @fig-confmat-voters-model to compute
+
+-   the accuracy.
+
+-   the misclassification rate[^13-special-topics-2]
+
+There are `r nrow(voters)` observations in the data.
+:::
+
+[^13-special-topics-2]: The accuracy is the `r (563 + 2219 + 94)/nrow(voters)` $(563 + 2219 + 94)/5836)$. The misclassification rate is `r 1 - (563 + 2219 + 94) / nrow(voters)` $(1 - 0.407)$.
+
+@fig-confmat-voters-model can also be used to compute more specific statistics about how well the model identifies observations from a particular class. For example, among those who are actually classified voting rarely/never, the model correctly identified `r 563/ (563 + 884 + 4) * 100` % of them.
+
+Conversely, among those who were classified by the model as rarely/never, `r 563 / (563 + 293 + 285) * 100`% of them actually vote rarely/never.
+
+### ROC Curves and AUC
+
+Receiver Operating Characteristic (ROC) curves, introduced in @sec-roc, can be used to evaluate how well the model distinguishes observations from a particular category. To do so, we create **multiclass ROC curves** using a "one versus all" approach that evaluates how well the model distinguishes one category versus all the others. For example, one curve represents how well the model distinguishes "always" voters versus all the others ("rarely/never" and "sporadic"). Essentially, we compute a logistic regression ROC curve for each possible class of the response.
+
+```{r}
+#| label: fig-voters-roc-curve
+#| fig-cap: Multiclass ROC curves for the voter frequency model in @tbl-voter-model
+
+voters |> 
+  roc_curve(
+    truth = voter_category, 
+    `rarely/never`:always
+  ) |> 
+  autoplot()
+```
+
+@fig-voters-roc-curve shows the multiclass ROC curve for the model in @tbl-voter-model. We interpret this curve similarly to the ROC curve for logistic regression. Curves close to the upper-left portion of the graph indicate good model distinguishing, but curves close to the diagonal line indicate poor model distinguishing. Based on this, the model performs best in identifying "rarely/never" voters versus the others and does the worst in identifying sporadic voters.
+
+```{r}
+#| label: avg-auc-voters-model
+
+avg_auc <- voters |> 
+  roc_auc(
+    truth = voter_category, 
+    `rarely/never`:always
+  ) 
+
+weighted_auc <- voters |> 
+  roc_auc(
+    truth = voter_category, 
+    `rarely/never`:always,
+    estimator = "macro_weighted"
+  ) 
+```
+
+The overall model performance is quantified using the **average area under the curve (AUC)**. The average AUC is computed in two ways. The first by computing the AUC for each class, then taking the average across all values of AUC. The average AUC for @fig-voters-roc-curve is `r round(avg_auc |> pull(.estimate), 3)` . The second approach is to weight the AUC by the number of observations actually in each class. Therefore, larger classes have more influence on the measure of model performance. Using this approach, the average AUC for @fig-voters-roc-curve is `r round(weighted_auc |> pull(.estimate), 3)`.
+
+### Multinomial logistic regression in R
+
+Multinomial logistic models are fit using `multinom()` from the **nnet** R package [@nnet].
+
+```{r}
+#| echo: true
+
+# library(nnet) 
+
+voter_fit <- multinom(voter_category ~ age + party_id,
+                      data = voters)
+```
+
+The model output can be tidied and neatly displayed using `tidy()` from the **broom** package [@broom] and `kable()` from the **knitR** package [@knitr].
+
+```{r}
+#| echo: true
+
+
+tidy(voter_fit) |>
+  kable(digits = 3)
+```
+
+::: {.analysis_in_practice latex=""}
+**Suppress model fit messages**
+
+The coefficients are estimated using numerical approximation methods to find the values that maximize the likelihood function. The `mulitnom` function will produce a message summarizing the optimization iterations. This information is generally not necessary in practice, so include the code chunk option `#| results:  hide` in Quarto documents to suppress the message.
+:::
+
+Predictions from the multinomial model are computed using the `predict()` function. The argument `type = "probs"` produces a matrix of the predicted probabilities and `type = "class"` produces a vector of the predicted classes.
+
+We add these to the original tibble for additional analysis.
+
+```{r}
+#| echo: true
+#| eval: false
+
+# compute predicted probabilities
+voter_pred_prob <- predict(voter_fit, type = "probs")
+
+# compute predicted class
+voter_pred_class <- predict(voter_fit, type = "class")
+
+# add predictions to original tibble
+voters <- voters |> 
+  bind_cols(voter_pred_prob) |>
+  mutate(pred_class = voter_pred_class)
+```
+
+The syntax for the confusion matrix, ROC curves, and AUC are similar to logistic regression in @sec-logistic-prediction-R.
+
+The confusion matrix is produced using `conf_mat()` from the **yardstick** R package [@yardstick]. We use `autoplot()` to format the confusion matrix such that the cells are shaded by the number of observations.
+
+```{r}
+#| echo: true
+
+
+voters |> 
+  conf_mat(voter_category, pred_class) |>
+  autoplot(type = "heatmap")
+```
+
+The multiclass ROC curves are produced using `roc_curve()` in the **yardstick** R package [@yardstick]. The argument `truth =` specifies the columns with the observed classes, and the next line of code indicates the columns that contain the predicted probabilities. The `roc_curve()` function produces the data underlying the curves, and `autoplot()` produces the curves.
+
+```{r}
+#| echo: true
+
+voters |> 
+  roc_curve(
+    truth = voter_category, 
+    `rarely/never`:always
+  ) |> 
+  autoplot()
+```
+
+Lastly, the AUC is computed using `roc_auc()` from the **yardstick** R package. The the weighted average AUC is computed using the argument `estimator = "macro_weighted"`. The unweighted average AUC is computed by default.
+
+```{r}
+#| echo: true
+
+# compute unweighted average AUC
+voters |> 
+  roc_auc(
+    truth = voter_category, 
+    `rarely/never`:always
+  ) 
+
+# compute weighted average AUC
+voters |> 
+  roc_auc(
+    truth = voter_category, 
+    `rarely/never`:always,
+    estimator = "macro_weighted"
+  ) 
+```
+
+### Generalized linear models
+
+## Random intercepts model {#sec-random-intercepts}
+
+One of the key assumptions we've made throughout this book is that the observations in the sample data are independent of each other. Often in practice, however, there is an underlying grouping structure in the data, and the observations are not completely independent of one another. For example, the data may contain multiple measurements from each individual (call repeated measures) as in @fig-repeated-measures.
+
+![Repeated measures data structure](images/13-repeated-measures-structure.png){#fig-repeated-measures fig-align="center" width="100%"}
+
+Another common grouping structure is having multiple observations from within a single group, such that we expect the observations within the group to be more similar than observations from different groups, as in @fig-grouped-data-structure.
+
+![Grouped data structure](images/13-grouped-data-structure.png){#fig-grouped-data-structure fig-align="center" width="100%"}
+
+Data that contain a grouping structure are called **multilevel data**. The individual observations are at the first level of the data, and the groups are at the second level. We use **generalized linear mixed models** (GLMM), also called *multilevel models* or *hierarchical models*, to account for the grouping structure when we fit the model and conduct statistical inference. There are many types of generalized linear mixed models; in fact, there are often entire undergraduate-level courses dedicated to these models. In this section, we will introduce one of the most widely used GLMMs in practice, the random intercepts model.
+
+### Data: Lemurs
+
+```{r}
+#| label: lemurs-data-repeated-measures
+#| eval: false
+
+lemurs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-24/lemur_data.csv') |>
+  filter(taxon %in% c("PCOQ", "ERUF",  "VRUB"), sex != "ND", age_at_wt_mo >=1, !is.na(litter_size), age_at_wt_mo <= 24) |>
+  rename(age = age_at_wt_mo, 
+         weight = weight_g) |>
+  select(dlc_id, name, taxon, sex, litter_size, age, weight)
+
+lemurs |> 
+  write_csv("data/lemurs-repeated-measures.csv")
+```
+
+In @sec-ch-mlr, we introduced a data set containing the weight, age, and other characteristics of lemurs living at the Duke Lemur Center. The data used in that chapter contained observations from a single weigh-in for each lemur between 0 and 24 months old. The lemurs were, in fact, weighed regularly, so the original data from @tidytuesday <!--# more specific citation?--> includes multiple measures for each lemur. The data in this section includes all the measurements for each lemur when they were 1 to 24 months old.
+
+The data are in `lemurs-repeated-measures.csv`. We will use the following variables:
+
+-   `weight`: Weight of the lemur (in grams)
+-   `taxon` : Code made as a combination of the lemur's genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxon:
+    -   `ERUF`: Eulemur rufus, commonly known as Red-fronted brown lemur
+
+    -   `PCOQ`: Propithecus coquereli, commonly known as Coquerel's sifaka
+
+    -   `VRUB`: Varecia rubra, commonly known as Red ruffed lemur
+-   `sex` : Sex of lemur (`M`: Male, `F`: Female)
+-   `age`: Age of lemur when weight was recorded (in months)
+-   `litter_size`: Total number of infants in the litter the lemur was born into (this includes the observed lemur)
+
+See @tidytuesday for the full codebook. <!--# more specific reference?-->
+
+The goal of the analysis is to understand a lemur's growth rate (relationship between age and weight) after adjusting for other characteristics.
+
+![Structure of lemur data](images/13-lemurs-data-structure.png){#fig-lemur-structure fig-align="center" width="100%"}
+
+The lemurs data set is an example of repeated measures, where the data are grouped by lemur as shown in @fig-lemur-structure. These data violate the independence assumption of linear regression models ([@sec-mlr-conditions-diagnositics]) and logistic regression models ([@sec-logistic-conditions]), because we expected observations from a single lemur to be correlated with one another. Some factors (e.g., `taxon` ) will remain constant for all observations from an individual lemur. @tbl-individual-lemur shows the data for an individual lemur.
+
+```{r}
+#| label: tbl-individual-lemur
+#| tbl-cap: All observations from an individual lemur
+
+set.seed(1234)
+
+dlc_id_indiv <- lemurs |> 
+  count(dlc_id) |> 
+  filter(n <= 10, n >= 5) |> 
+  sample_n(1) |>
+  pull(dlc_id)
+
+lemurs |> 
+  filter(dlc_id == dlc_id_indiv) |>
+  select(dlc_id, name, taxon, sex, litter_size, age, weight) |>
+  kable(digits = 3)
+```
+
+In this data, the lemur's `dlc_id`, `name`, `sex`, `taxon`, and `litter_size` remain the same for its observations. These variables are at level two of the data, i.e., they differ between lemurs but are the same for all observations from an individual lemur. The `age` and `weight` are different across observations. These are variables at level one, because they change each time data are collected.
+
+```{r}
+#| label: count-obs 
+
+count_endpoints <- lemurs |>
+  count(dlc_id) |> 
+  arrange(n) |>
+  slice(1, n()) 
+```
+
+The data set contains seven observations for the lemur Mirfak in @tbl-individual-lemur , but there are not necessarily seven observations for every lemur in the data. The number of observations for each lemur range from as few as `r count_endpoints$n[1]` to as many as `r count_endpoints$n[2]`. The GLMMs can account for the different number of observations from each individual. When we fit the model, lemurs with more observations will be weighted more heavily when estimating the coefficients.
+
+```{r}
+#| label: fig-lemurs-weight
+#| fig-cap: "`weight` versus `age` for nine lemurs"
+
+set.seed(12345)
+
+dlc_id_sample <- lemurs |>
+  distinct(dlc_id) |>
+  sample_n(9) |>
+  pull(dlc_id)
+
+lemurs_samp <- lemurs |>
+  filter(dlc_id %in% dlc_id_sample)
+
+ggplot(data = lemurs_samp, aes(x = age, y = weight)) + 
+  geom_point() +
+  geom_line() + 
+  labs(x = "Age at weight (in months)", 
+       y = "Weight (in grams)") + 
+  facet_wrap(vars(dlc_id), ncol = 3) +
+  theme_bw()
+```
+
+Now let's take a look at the relationship between `weight` and `age` for the lemurs in the data. @fig-lemurs-weight shows the relationship between these variables for a sample of nine lemurs. The figure illustrates how the number of observations differ for each lemur. We can also begin to see how the weight changes with age for the lemurs. The visualizations of these 9 lemurs give us an idea of the variation in the data, but we would like to visualize the relationship for all the lemurs in the data. To do so, we use a **spaghetti plot**, shown in @fig-lemurs-spaghetti-plot.
+
+```{r}
+#| label: fig-lemurs-spaghetti-plot
+#| fig-label: Spaghetti plot of lemurs weight versus age
+
+ggplot(lemurs, aes(x = age, y = weight)) +
+  geom_line(aes(group = dlc_id), color = "grey70", alpha = 0.7) + 
+    geom_smooth(color = "steelblue", linewidth = 1) +
+  labs(
+    x = "Age at weight (in months)",
+    y = "Weight (in grams)"
+  ) + 
+  theme_bw()
+```
+
+The gray lines in @fig-lemurs-spaghetti-plot are the relationships between age and weight for each of the `r nrow(lemurs |> distinct(dlc_id))` lemurs in the data set. The blue line is the average trajectory across all the lemurs. From this plot, we more easily see the difference in the growth rate for the lemurs by the different slopes of the relationship between age and weight. We can also see the general differences in weight across the lemurs at each age.
+
+The linear regression (and logistic regression) models we've seen thus have a single intercept for all observations. In other words, if we fit a model using age to predict weight, there would be a single intercept for the expected weight for new born lemurs. From @fig-lemurs-spaghetti-plot, we see that the lemurs are generally different weights (even lemurs with the same age and taxon), so a single intercept may not best represent the trend in the data We will use a random intercepts model to account for this additional variability.[^13-special-topics-3]
+
+[^13-special-topics-3]: We can also specify the GLMMs to account for the different slopes of age across the lemurs. That is beyond the scope of this text, but we provide resources at the end of the section for readers interested in learning more.
+
+### Model fit and interpretation
+
+GLMMs differ from the GLMs we've studied thus far, because they include both fixed and random effects. The **fixed effects** are the variables we are interested in studying or explicitly adjusting for in the model. These are the variables for which we want to obtain an estimated coefficient. In the lemurs analysis, the fixed effects are `age`, `taxon`, `sex`, and `litter_size`. The **random effects** are those we don't want to estimate explicitly but whose variability we want to understand. These are generally defined by the grouping variable in the data. In this analysis, the random effect is the individual lemur, captured by the variable `dlc_id`.
+
+The **random intercepts model** includes fixed and random effects, such that the random effects account for random variability in the intercept. The general form of the model is <!--# think about how to write this./ do i need it?-->
+
+Let $\text{weight}_{ij}$ be the weight in the $j^{th}$ observation for lemur $i$. Then, the random intercepts model for the lemurs analysis is
+
+$$
+\begin{aligned}
+\text{weight}_{ij} = \beta_0 &+ \beta_1 ~ \text{taxonPCOQ}_{i} + \beta_2 ~ \text{taxonVRUB}_i \\
+& +\beta_3 ~ \text{sexM}_{i}  + \beta_4 ~ \text{litter\_size}_{i} + \beta_5 ~ \text{age}_{ij}\\
+& + u_i + \epsilon_{ij} \\
+&u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})
+\end{aligned}
+$$ {#eq-lemurs-random-int}
+
+Let's break down the components of @eq-lemurs-random-int. The subscript indicate whether the variable is at the first or second level of the data. The variable `age` is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur $i$ at the $j^{th}$ observation. The other predictors are measured at the second level of the data, so the subscript $i$ indicates that we plug in the same value for lemur $i$ across all its observations. The term $\beta_0$ is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.
+
+The error term $\epsilon_{ij}$ is like the error term previously introduced for linear models. It is the difference between the observed and expected value of the weight for the $j^{th}$ observation from lemur $i$. As in linear regression, these error terms follow a normal distribution with mean of 0 and variance of $\sigma^2_{\epsilon}$. This $\sigma^2_{\epsilon}$ is a measure of the variability in the weights (response variable) within an individual lemur (group).
+
+The term $u_{i}$ is the random effect that makes this the "random intercepts model". We don't estimate $u_i$ directly, but its distribution tells us about the variability in the average weights between lemurs. The $u_{i}$ are normally distributed with a mean of 0 and variance of $\sigma^2_{u}$. This $\sigma^2_{u}$ is the measure of between lemur variability. From this model, the intercept of an individual lemur $i$ is $\beta_0 + u_i$ where, $u_i$ is drawn from $N(0,\sigma^2_{u})$.
+
+The coefficients $\beta_0, \beta_1, \ldots, \beta_5$ and the variance components $\sigma_u$ and $\sigma_{\epsilon}$ are estimated using maximum likelihood estimation. The output for the lemurs random intercepts model is in @tbl-lemurs-model-random-int.
+
+```{r}
+#| label: tbl-lemurs-model-random-int
+#| tbl-cap: Random intercepts model for lemurs data
+lemurs_fit <- lmer(weight ~ taxon + sex + litter_size + age + 
+                     (1|dlc_id), 
+                   data = lemurs)
+
+tidy(lemurs_fit) |>
+  kable(digits = 3)
+```
+
+The equation of the fitted model is
+
+$$
+\begin{aligned}
+\widehat{\text{weight}}_{ij} = 15.969 &+  449.932 ~ \text{taxonPOQ} +  1021.387 ~ \text{taxonVRUB} \\
+&  -27.073 ~ \text{sexM} - 66.771 ~ \text{litter\_size} + 147.719 ~ \text{age} \\
+&\hat{\sigma}_u = 311.504 \hspace{5mm} \hat{\sigma}_\epsilon = 356.275
+\end{aligned}
+$$
+
+::: {.yourturn latex=""}
+Use the model in @tbl-lemurs-model-random-int.
+
+-   Interpret the coefficient of `age` in the context of the data.
+
+-   Explain what $\hat{\sigma}_u = 311.504$ means in the context of the data.[^13-special-topics-4]
+:::
+
+[^13-special-topics-4]: `age:` As a lemur gets one month older, its weight is expected to increase by 147.719 grams, on average, after adjusting for taxon, sex, and litter size.
+
+    $\hat{\sigma}_u = 311.504$: The variability in the average weights between lemurs is 311.504. On average, the mean weight of an individual lemur is 311.504 grams away from the overall mean weight of all lemurs.\
+
+### Random intercepts model in R
+
+Random intercepts models are fit using the `lmer` function in the `lme4` R package [@lme4]. The syntax for the response and predictor variables is the same as in `lm()`. The grouping variable is specified using the syntax `(1|grouping_var)`. This specifies that the random intercepts are based on `grouping_var`. The syntax for the model in @tbl-lemurs-model-random-int is below.
+
+```{r}
+#| echo: true
+lemurs_fit <- lmer(weight ~ taxon + sex + litter_size + age + 
+                     (1|dlc_id), 
+                   data = lemurs)
+
+lemurs_fit
+```
+
+The results can be displayed in a tidy format using `tidy` function in the **broom.mixed** R package [@broom.mixed]. The results below are neatly displayed using `kable()`.
+
+```{r}
+#| echo: true
+
+tidy(lemurs_fit) |>
+  kable()
+```
+
+### Further reading
+
+We have just scratched the surface in this section, but there are many resources for readers interested in learning more about random intercepts models and other types of GLMMs. See *Beyond Multiple Linear Regression* [@roback2021beyond] and *Data Analysis Using Regression and Multilevel/Hierarchical Models* [@gelman2007data] for an in-depth introduction to these topics.
+
+## Decision trees {#sec-decision-trees}
+
+The models presented in this book thus far have been parametric methods, in which we specify a form of the model then estimate the parameters of that model ([@sec-what-is-regression]). An alternative to this approach are tree-based models, a set of non-parametric methods that split the data based on a series of decision points. These methods are particularly useful if a precise interpretation of the relationship between the response and predictor variables is not needed, but rather a general understanding how to use the predictors to estimate the response is sufficient.
+
+In the book *Introduction to Statistical Learning 2nd edition, @james2021introduction* \[pp. 339\] lists advantages of tree-based models compared to GLMs.
+
+> -   They are easier for others to understand;
+> -   They are believed to better mirror the human decision-making process;
+> -   They can more easily represented visually, making it easier for non-experts to understand them;
+> -   They can use categorical predictors without creating indicator variables.
+
+This list could be summarized as "The key advantage to tree-based models is that they are easy for others, especially non-experts, to understand." Here we introduce two tree-based models: regression trees for quantitative response variables and classification trees for categorical response variables.
+
+### Regression trees {#sec-regression-trees}
+
+Regression trees are decision trees to model data with quantitative response variables, so they are often an alternative to linear regression. The general idea is to use the predictor variables to split the data into groups of similar observations. For each observation, the predicted value of the response is computed as the mean response among the observations in its group. To illustrate this, let's go back to the total expenditure on basketball programs for Division I NCAA institutions introduced in @sec-ch-transformations. We will use a regression tree to predict `expenditure_m` (total expenditure in millions of dollars) using `type` (private or public institution), `region` (North Central, Northeast, South, West), and `enrollment_th` (total student enrollment in thousands).
+
+```{r}
+ncaa_basketball <- read_csv("data/ncaa-basketball-DI-2023-2024.csv")
+```
+
+```{r}
+#| label: fig-ncaa-expenditure
+#| fig-cap: "Distribution of original and log-transformed `expenditure_m`"
+#| fig-subcap:
+#|   - "Original `expenditure_m`"
+#|   - "Log-transformed `expenditure_m`"
+#| layout-ncol: 2
+
+#original 
+ggplot(data = ncaa_basketball, aes(x = expenditure_m)) +
+  geom_histogram(fill = "steelblue", color = "black") +
+  labs(x = "Expenditure in millions of dollars",
+       y = "Count")
+
+ggplot(data = ncaa_basketball, aes(x = log(expenditure_m))) + 
+  geom_histogram(fill = "steelblue", color = "black") +
+  labs(x = "Log-transformed expenditure",
+       y = "Count")
+```
+
+The distribution of `expenditure_m` is heavily right-skewed [@fig-ncaa-expenditure-1], so we will use the log-transformed variable `log(expenditure_m)` in the model [@fig-ncaa-expenditure-2].
+
+::: {.analysis_in_practice latex=""}
+When the response variable is strongly skewed, it is good practice to use the transformed version in the regression tree. Though regression trees do not rely on the same assumptions as linear regression, their results can be strongly influenced by extreme observations when the distribution of the response variable is heavily skewed. Predictor variables do not need to be transformed for regression trees, because the tree does not depend on a linear relationship between the response and predictor variables.
+:::
+
+A regression tree is made up of a series of nodes (also called *leaves*) and branches. The **nodes** are the decision-making points at each split (e.g., `enrollment_th < 10?`). The **branches** connect two nodes (e.g, `enrollment_th < 10 = TRUE` and `enrollment_th < 10 = FALSE`). The **terminal nodes** are the points at the end of the tree where the data are no longer split and the predictions are made. The prediction is the mean value of the response variable for the observations in that node.
+
+At each step, the model searches to find the variable and associated cut point that minimizes the sum of squares residual (SSR) in [@eq-tree-ssr]. This is the same SSR introduced in @sec-slr-sum-sq. Minimizing SSR maximizes the similarity of observations within a node. This process continues until making a new split no longer minimizes the SSR.
+
+$$
+SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2
+$$ {#eq-tree-ssr}
+
+Now let's fit the regression tree to predict `expenditure_m` using `enrollment_th`, `region`, and `type`. Because the primary objective for the tree is prediction, we split the data into training (80%) and testing (20%) sets ([@sec-training-testing]). This will give us an assessment on how well the model performs on new data.
+
+```{r}
+#| label: split-ncaa-data
+
+ncaa_split <- initial_split(ncaa_basketball, prop = 0.8)
+ncaa_train <- training(ncaa_split)
+ncaa_test <- testing(ncaa_split)
+```
+
+```{r}
+#| label: fig-ncaa-tree
+#| fig-cap: Regression tree predicting NCAA basketball expenditure
+
+ncaa_tree <- rpart(log(expenditure_m) ~ enrollment_th + type + region, 
+                   data = ncaa_train, method = "anova")
+
+rpart.plot(ncaa_tree)
+```
+
+@fig-ncaa-tree is the output of the regression tree. In this output, we see the variables and associated cutpoint used to make the split at each step, along with the percentage of observations in each subsequent node. This output also shows the predicted `expenditure_m` in each node.
+
+For example, the first split is whether `enrollment_th < 12`. About 62% of the observations in the training data have `enrollment_th < 12`, and the mean log(expenditure) for those observations is 1.5 million. In contrast, about 38% of the observations have `enrollment_th >= 12`, and the mean log(expenditure) for those observations is about 2.4 million. If we were to stop there, then 1.5 million would be the predicted log(expenditure) for all observations with `enrollment < 12` and 2.4 million would be the predicted log(expenditure) for all other observations.
+
+Let's use the tree to find the predicted expenditure for a private institution in the South region that has enrollment of 6,000 students. At the first step, we go down the "Yes" branch for `enrollment_th < 12`. Next, we go down the "No" branch for `type = Public`. Next, we go down the "No" branch for `enrollment_th < 4.1`. Next, we go down the branch, "No" for `region = Northeast`. Lastly, we go down the "Yes" branch for `enrollment_th < 6.3`. This branch leads to the terminal node of $\widehat{\log(\text{expenditure\_m})} = 2.2$, which is equal to a predicted expenditure of `r round(exp(2.2), 3)` ($e^{2.2}$) million dollars.
+
+::: {.yourturn latex=""}
+What is the predicted expenditure for a public institution in the West region with enrollment of 20,000 students.[^13-special-topics-5]
+:::
+
+[^13-special-topics-5]: The predicted expenditure is 2.1 million. Note that the fact that it was a public institution was not used based on its path in the decision tree.
+
+We evaluate the model's performance using the testing data. We compute the predicted expenditures for the observations in the testing data the root mean square error (RSME), introduced in @sec-model-assessment, as a measure of the model performance.
+
+```{r}
+#| label: ncaa-test-predictions 
+
+ncaa_test <- ncaa_test |>
+  mutate(predict_expend = predict(ncaa_tree, ncaa_test))
+
+ncaa_train <- ncaa_train |>
+  mutate(predict_expend = predict(ncaa_tree, ncaa_train))
+```
+
+```{r}
+#| label: ncaa-test-performance
+
+#add log expenditure
+ncaa_test <- ncaa_test |>
+  mutate(log_expend = log(expenditure_m))
+
+rmse_test <- rmse(ncaa_test, truth = log_expend, estimate = predict_expend) |> pull(.estimate)
+
+#rmse(ncaa_train, truth = expenditure_m, estimate = predict_expend)
+```
+
+The RMSE for the testing data is `r round(rmse_test, 3)`. This is the terms of the response variable, `log(expenditure_m)`, so the error in terms of the original variable is `r round(exp(rmse_test), 3)`. This means that the average difference between the observed expenditure and predicted is `r round(exp(rmse_test), 3)` million dollars.
+
+### Classification trees {#sec-classification-trees}
+
+Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression [@sec-ch-logistic] or multinomial logistic regression [@sec-multinomial]. They are very similar to regression trees with two primary differences. The first is that predictions in the **terminal nodes** are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the **Gini Index** shown in [@eq-gini-index]
+
+$$
+\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2
+$$ {#eq-gini-index}
+
+where $p_{mk}$ is the proportion of observations in the $m^{th}$ node that belong to class $k$. Similar to RSS, the model selects the variable and cutoff that minimizes the Gini index at each step. Low values of the Gini index indicate a large proportion of observations in a given node are from the same class.
+
+Let's go back to the voter frequency data introduced in @sec-voters-data. We'll use a classification tree to predict the `voter_category` (`rarely/never`, `sporadic`, `always`) using `age`, `party_id`, and an additional variable `income_cat`. We split the data into training (80%) and testing sets (20%), so we can evaluate the model's performance on new data.
+
+```{r}
+#| label: fig-voters-tree
+#| fig-cap: Classification tree voter frequency
+
+set.seed(12345)
+
+voters_split <- initial_split(voters, prop = 0.8)
+voters_train <- training(voters_split)
+voters_test <- testing(voters_split)
+
+voters_tree <- rpart(voter_category ~ age + party_id + income_cat + educ, 
+                   data = voters_train, method = "class")
+
+rpart.plot(voters_tree)
+```
+
+@fig-voters-tree is the output from the classification tree. Something that may stand out is that the predictor `party_id` is not used in the tree. This means there was never a point where using `party_id` was more useful in classifying observations compared to the other predictors.
+
+The first split in @fig-voters-tree is at `age < 34`. About 21% of the observations have `age < 34`, and this group leads to a terminal node. Among those with `age < 34`, 34% of them are classified as `rarely/never`, 21% are classified as `sporadic`, and 30% are classified as `always` in the data. Therefore, if `age < 34`, the predicted class is `rarely/never` based on the classification tree. There is a bit more work among those with `age >= 34`. The next split is `age < 61`. If `age < 61`, then there is a terminal node with the predicted class `sporadic`. Otherwise, `income_cat` is taken into account, with a split at `income_cat = Less than $40k`. If yes, then the predicted class is `sporadic`; if no, the predicted class is `always`.
+
+::: {.yourturn latex=""}
+Based on @fig-voters-tree, what is the predicted voting frequency for an a 40 year old individual whose party affiliation is Democrat and annual income is \$70,000?[^13-special-topics-6]
+:::
+
+[^13-special-topics-6]: The predicted voting frequency is sporadic.
+
+### Decision trees in R
+
+We fit decision trees using the `rpart()` function in the **rpart** R package [@rpart]. The argument `method =` is used to specify the type of decision tree.
+
+Below is the code for the regression tree fit in @sec-regression-trees. The argument `method = "anova"` specifies that we are fitting a regression tree. If we type the name of the tree, we see a summary of the nodes and branches
+
+```{r}
+#| echo: true
+
+ncaa_tree <- rpart(log(expenditure_m) ~ enrollment_th + 
+                     type + region,
+                   data = ncaa_train,
+                   method = "anova")
+
+ncaa_tree
+```
+
+The code below is the classification tree from @sec-classification-trees. We use the argument `method = "class"` to specify the classification tree. Similar to regression trees, we can type the name of the tree to see a summary of the nodes and branches.
+
+```{r}
+#| echo: true
+
+voters_tree <- rpart(voter_category ~ age + party_id +
+                       income_cat + educ, 
+                   data = voters_train, 
+                   method = "class")
+
+voters_tree
+```
+
+The summaries produced by `rpart()` are challenging to read, so we use the `rpart.plot()` from the **rpart.plot** R package [@rpart.plot] to create a visual representation of the tree. The code below produces the visualization of the regression tree for NCAA basketball expenditures.
+
+```{r}
+#| echo: true
+
+rpart.plot(ncaa_tree)
+```
+
+Predictions are produced using `predict()`. This will produce a vector of predictions that can be added to the original data frame to evaluate model performance.
+
+The code below produces the predictions for the testing data from the regression tree predicting NCAA basketball expenditures and saves the predictions as a column in the testing data. The same code is used to produce predictions from the classification tree.
+
+```{r}
+#| echo: true
+ncaa_test <- ncaa_test |>
+  mutate(predict_expend = predict(ncaa_tree, ncaa_test))
+```
+
+The predictions are in the same units as the response variable, so in this case, the predicted values are the predicted `log(expenditure_m)`.
+
+### Further reading
+
+Overall, decision trees can be a nice alternative to linear and logistic regression. Their greatest advantage is that they can be easily represented visually and thus easier for non-experts to understand. The two greatest disadvantages to these models, however, are the inferior predictive accuracy compared to other modeling approaches and their sensitivity to small changes in the data [@james2021introduction, pp.340]. In this section, we introduced decision trees, but there is extensive work in tuning (customizing) these models along with more advanced models that take into account multiple trees (e.g., random forest). We refer the reader to Chapter 8 @james2021introduction for an in-depth discussion on the tree-based models.
+
+## Causal inference {#sec-causal}
+
+Throughout this text, we have interpreted the coefficients of regression models to describe the *association* between the response and predictor variables and the "expected" change in the response variable based on the model. In other words, we have been bound by the common phrase in statistics "correlation does not equal causation." There are many situations in practice, however, in which we want to make a stronger claim and conclude that "X causes Y." For example, medical researchers developing a new treatment want to know if the treatment causes improved health outcomes. In social sciences, researchers may want to know if a particular social program improves outcomes for individuals living in poverty. Economists want to know the impact of changing economic measures, such as interest rates, on the economy overall. Each of these scenarios requires an analysis that can more thoroughly account for **confounding variables**, underlying variables that impact both the response and predictor variables, so that the impact of the medical treatment, social program, or economic measure can be quantified. We will refer to all of these as *treatment* or *intervention* throughout the rest of the section.
+
+The ability to make causal claims start with the data. There are two types of data: experimental and observational data. **Experimental data** are data obtained from a randomized-control experiment <!--# is this the correct term--> in which individuals were randomly assigned to the treatment group that receives the intervention or control group that does not receive the intervention. Because individuals are randomly assigned groups, we can assume the only difference between the treatment and control groups is the intervention itself. Therefore, as we interpret the model coefficients associated with the treatment, we can interpret it in terms of how a change in the treatment [**causes**]{.underline} in a change in the response.
+
+The ideal randomized experiment is often not feasible in practice due to a variety of factors. For example, it may be unethical to assign individuals to a control group and withhold beneficial treatment, or it is not feasible to restrict the behavior of individuals to implement experimental conditions. Therefore, researchers often rely on observational data, even when they want to draw conclusions stronger than a "correlation" or "association" between some treatment or intervention (predictor) and an outcome (response). To make such causal claims, we use statistical methods to make the observational data "look" more like data from a randomized experiment. These methods make up the branch of statistics called *causal inference*.
+
+### Propensity score matching
+
+```{r}
+#| label: load-ace-data
+
+#Data: https://osf.io/hvxp3/overview 
+
+ace <- read_csv("data/project-ace-data.csv")
+
+ace <- ace |>
+  mutate(Tracking.Pathway = factor(if_else(is.na(Tracking.Pathway), "Control", "Treatment")), 
+         Grade = factor(Grade))
+```
+
+In **propensity score matching**, we compute the probability (propensity) an observation is assigned to the treatment group based on a set of confounding variables that directly impact both the response and the likelihood an individual is in the treatment group. We then match individuals in the treatment and control groups who have the same or similar propensities to create a new data set in which the control and treatment groups have similar characteristics. The matched data set is used to estimate the effect of the treatment. <!--# use exchangeability here?-->
+
+Let's apply propensity score matching to evaluate the effect of an educational program, Project ACE: Action for Equity. Project ACE was a "five year interdisciplinary program aimed to get more underrepresented high school students from disadvantaged backgrounds to get interested in college degrees in engineering as well as biomedical and behavioral sciences" [@ProjectACE_UTEP]. We will analyze data from @evans2025testing who use propensity score matching to analyze outcomes of high school students. The data are available in `project-ace-data.csv`. We will follow their analysis closely with some modifications, so we refer readers to their article for the full analysis.
+
+We will use the variables below. The definitions are adapted from @evans2025testing.
+
+-   `Grade`: Grade level (9, 10, 11, 12)
+-   `Gender`: Gender (F, M)
+-   `Ethnicity`: Ethnicity (Hispanic, Non-Hispanic)
+-   `ELL`: Whether student is an English language learner (N, Y)
+-   `Sped`: Whether student is in a special education program (N, Y)
+-   `Homeless`: Whether student is homeless (N, Y)
+-   `Tracking.Pathway`: Whether student was in Project ACE (Treatment) or not (Control)
+-   `Current.GPA`: Grade Point Average (GPA) ranging 0 to 5.0
+
+```{r}
+#| label: fig-response-gpa
+#| fig-cap: Distribution of GPA for treatment and control groups 
+
+ggplot(data = ace, aes(x = Current.GPA, y = Tracking.Pathway, fill = Tracking.Pathway)) + 
+  geom_density_ridges() + 
+  labs(x = "Grade Point Average (GPA)", 
+       y = "Treatment/ Control") +
+  theme_bw() + 
+  theme(legend.position = "none") + 
+  scale_fill_manual(values = sunset2)
+```
+
+@fig-response-gpa shows the distribution of the response variable `Current.GPA` for the treatment and control groups. There is a lot of overlap in the distributions, but there does appear to be a higher proportion of students in the treatment group who have higher GPAs. The goal of this analysis is to measure if there is a difference in the GPAs between students in Project ACE versus those not in the program, and if so, the effect of the Project ACE on GPA.
+
+Some variables are associated with both the response and the chance to receiving the treatment. For example, research shows that demographic and socioeconomic variables are associated with academic performance [@evans2025testing]. Because Project ACE is aimed at students who are "underrepresented" and from "disadvantaged backgrounds", demographic and socioeconomic factors are also associated with the probability of being in the program. We see examples of this in @fig-compare-distributions, where the distributions of three potential covariates differ between control and treatment groups.
+
+```{r}
+#| label: fig-compare-distributions
+#| fig-cap: Distribution of Subset of confounding variables for treatment and control groups.
+#| fig-subcap: 
+#|  - "`Grade`"
+#|  - "`Gender`"
+#|  - "`ELL`"
+#| layout-ncol: 2
+
+
+# grade level 
+
+ggplot(data = ace, aes(x = Tracking.Pathway, fill = Grade)) + 
+  geom_bar(position = "fill", color = "black") +
+  labs(x = "", 
+       y = "Proportion", 
+       fill = "Grade") +
+  theme_bw() + 
+  theme(legend.position = "bottom") +
+  scale_fill_manual(values = sunset4)
+
+# gender
+
+ggplot(data = ace, aes(x = Tracking.Pathway, fill = Gender)) + 
+  geom_bar(position = "fill", color = "black") +
+  labs(x = "", 
+       y = "Proportion") +
+  theme_bw() + 
+  theme(legend.position = "bottom") +
+  scale_fill_manual(values = sunset2)
+
+# ELL
+
+ggplot(data = ace, aes(x = Tracking.Pathway, fill = ELL)) + 
+  geom_bar(position = "fill", color = "black") +
+  labs(x = "", 
+       y = "Proportion") +
+   theme_bw() + 
+  theme(legend.position = "bottom") +
+  scale_fill_manual(values = sunset2)
+```
+
+In a standard regression model, these variables and the other demographic and socioeconomic variables would be confounders that limit the strength of the claim we can make about the effect of the treatment, even if these variables are included as predictors in the model. Therefore, we will match the data in a way such that the distributions of these factors are similar between the treatment and control groups.
+
+::: {.analysis_in_practice latex=""}
+Choosing the variables to include in the propensity score model can be challenging. We often choose these variables based on previous research and collaboration with individuals who are domain experts. Deciding up front which variables are important helps strengthen the analysis conclusions, as there is less potential there are confounding variables impacting the model of the treatment effect.
+:::
+
+<!--# We will just look at a few characteristics here, but will use many more in the PSM-->
+
+<!--# We will not use Free.Lunch bc it is coded as Y for all observations in the available data.-->
+
+The propensity score model is a logistic regression model where the response variable is the binary indicator for Treatment vs. Control. As shown in @eq-propensity-score-model, we use this model to compute the probability that an individual is in the treatment group. The form of the propensity score model for this analysis is as follows:
+
+$$
+\begin{aligned}
+\log\Big(\frac{\pi}{1-\pi}\Big) = \beta_0 &+ \beta_1 ~ \text{Grade10} + \beta_2 ~ \text{Grade11} + \beta_3 ~ \text{Grade12}  \\
+& + \beta_4 ~ \text{GenderM} + \beta_5 ~ \text{EthnicityNon-Hispanic} \\
+&+ \beta_6 ~ \text{ELL} + \beta_7 ~ \text{Sped} + \beta_8 ~ \text{Homeless} 
+\end{aligned}
+$$ {#eq-propensity-score-model} where $\pi$ is the propensity, the probability of being in the treatment group (participating in Project ACE). @tbl-propensity-score-model is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.-->
+
+```{r}
+#| label: tbl-propensity-score-model
+
+propensity_score_model <- glm(Tracking.Pathway ~ Grade + Gender + Ethnicity.Hispanic.Y.N + ELL + Sped + Homeless,
+                        data = ace, 
+                        family = "binomial")
+
+tidy(propensity_score_model) |> 
+  kable(digits = 3)
+```
+
+In general, we are not interested in interpreting the coefficients of the propensity score model but rather using it to compute the propensity for each observation. Before using the propensity scores to match, let's take a look at the distribution of propensity scores for the treatment and control group in @fig-propensity-scores.
+
+```{r}
+#| label: compute-propensity-scores
+
+ace <- ace |>
+  mutate(propensity_score = predict(propensity_score_model, type = "response"))
+```
+
+```{r}
+#| label: fig-propensity-scores
+#| fig-cap: Distribution of propensity scores for treatment and control groups 
+
+ggplot(data = ace, aes(x = propensity_score, y = Tracking.Pathway, fill = Tracking.Pathway)) + 
+  geom_density_ridges() +
+  labs(x = "Propensity score",
+       y = "Treatment/ Control") +
+  theme_bw() + 
+  theme(legend.position = "none") + 
+  scale_fill_manual(values = sunset2)
+```
+
+In @fig-propensity-scores, we see that the center of the distribution of propensity scores for individuals in the treatment group is higher than the center for the control group. This is what we might expect, because the individuals in the treatment group are more likely to have the characteristics of eligibility to participate in Project ACE.
+
+The other important feature from this graph is the large overlap between the two distributions. This indicates **common support**, in which individuals in both the treatment and control groups have a nonzero probability of receiving the treatment. In the context of this analysis, this means every student had a non-zero chance of participating in Project ACE. Practically speaking, we use the propensity scores to match observations in the treatment group with an observation in the control group, so there needs to be overlap in the distributions.
+
+```{r}
+#| label: match-scores-nearest-neighbor
+library(MatchIt)
+
+ace_psm <- matchit(Tracking.Pathway ~ Grade + Gender + Ethnicity.Hispanic.Y.N +
+                          Race + ELL + Sped + Homeless,
+                 data = ace,
+                 method = "nearest",   
+                 distance = "logit")
+
+ace_matched <- match.data(ace_psm)
+```
+
+Now let's use the propensity scores to match observations. The number of observations in the treatment group is often equal to or less than the number of observations in the control group. Therefore, the matching is done such that each observation in the treatment group is matched to an observation in the control group. Then, the observations in the control group that are not matched are discarded. In the Project ACE analysis, there are `r ace |> filter(Tracking.Pathway == "Treatment") |> nrow()` observations in the treatment group and `r ace |> filter(Tracking.Pathway == "Control") |> nrow()` observations in the control group. Therefore, the final matched data set will contain `r ace |> filter(Tracking.Pathway == "Treatment") |> nrow()` observations in the treatment group and `r ace |> filter(Tracking.Pathway == "Treatment") |> nrow()` observations in the control group. The unmatched `r ace |> filter(Tracking.Pathway == "Control") |> nrow() - ace |> filter(Tracking.Pathway == "Treatment") |> nrow()` observations in the control group are discarded.
+
+One of the most widely used matching approaches is **nearest-neighbor matching**, in which each observation in the treatment group is matched with an observation in the control group with the closest propensity score. @tbl-sample-matches shows three treatment/control pairs in the matched data for the Project ACE analysis.
+
+```{r}
+#| label: tbl-sample-matches
+#| tbl-cap: "Three pairs of matched observations based on the model in @tbl-propensity-score-model. The column `subclass` identifies the matches."
+set.seed(123)
+
+groups <- sample(1:148, 3, replace = FALSE)
+
+ace_matched |> 
+  filter(subclass %in% groups) |>
+  arrange(subclass, Tracking.Pathway) |>
+  select(subclass, Tracking.Pathway, propensity_score) |>
+  kable()
+```
+
+Sometimes there are **exact matches**, where an observation in the treatment group is matched with an observation in the control group with an equal propensity score. Matches 50 and 118 in the table are examples of this. This generally indicates that the two observations are the same in terms of the characteristics included in the propensity score model [@eq-propensity-score-model]. In other cases, such as Match 14, the scores are close but not exact.
+
+```{r}
+#| label: tbl-match-14
+#| tbl-cap: Features for observations in Match 14
+ace_matched |>
+  filter(subclass == 14) |>
+  select(Tracking.Pathway, Grade, Gender, Ethnicity.Hispanic.Y.N, ELL, Sped, Homeless, 
+         propensity_score) |>
+  kable(digits = 3)
+```
+
+From @tbl-match-14, we see that the two observations that make up the 14th match are the same in all characteristics except grade. The student in the treatment group is in grade 12, and the student in the control group is in grade 9.
+
+<!--# to add - analysis in practice - what about the nonmatched observations? Do ratios-->
+
+Before fitting the model to estimate the effect of the treatment, let's take a look at the distributions of the variables we examined in @fig-compare-distributions, and see how the distributions compare between the treatment and control group for the `r nrow(ace_matched)` observations in the matched data.
+
+```{r}
+#| label: fig-compare-distributions-matched
+#| fig-cap: Distribution of subset of confounding variables for treatment versus control groups in the matched data.
+#| fig-subcap: 
+#|  - "`Grade`"
+#|  - "`Gender`"
+#|  - "`ELL`"
+#| layout-ncol: 2
+
+
+# grade level 
+
+ggplot(data = ace_matched, aes(x = Tracking.Pathway, fill = Grade)) + 
+  geom_bar(position = "fill", color = "black") +
+  labs(x = "", 
+       y = "Proportion", 
+       fill = "Grade") +
+  theme_bw() + 
+  theme(legend.position = "bottom") +
+  scale_fill_manual(values = sunset4)
+
+# gender
+
+ggplot(data = ace_matched, aes(x = Tracking.Pathway, fill = Gender)) + 
+  geom_bar(position = "fill", color = "black") +
+  labs(x = "", 
+       y = "Proportion") +
+  theme_bw() + 
+  theme(legend.position = "bottom") +
+  scale_fill_manual(values = sunset2)
+
+# ELL
+
+ggplot(data = ace_matched, aes(x = Tracking.Pathway, fill = ELL)) + 
+  geom_bar(position = "fill", color = "black") +
+  labs(x = "", 
+       y = "Proportion") +
+   theme_bw() + 
+  theme(legend.position = "bottom") +
+  scale_fill_manual(values = sunset2)
+```
+
+In @fig-compare-distributions-matched, the distributions of these student characteristics are now the same for the treatment and control groups (compare to @fig-compare-distributions). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model [@eq-propensity-score-model]. Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere-->
+
+Once we have the matched data set, it's time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.
+
+$$
+\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
+$$ {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in @eq-treatment-model. The fitted model is in @tbl-model-treatment-effect.
+
+```{r}
+#| label: tbl-model-treatment-effect
+#| tbl-cap: Model of treatment effect with 95% confidence intervals for coefficients
+
+treatment_model_tidy <- lm(Current.GPA ~ Tracking.Pathway, data = ace_matched) |>
+  tidy(conf.int = TRUE, conf.level = 0.95) 
+
+treatment_model_tidy |> 
+  kable(digits = 3)
+
+treat_effect <- treatment_model_tidy |>
+  filter(term == "Tracking.PathwayTreatment") |>
+  pull(estimate)
+
+treat_conf_low <- treatment_model_tidy |>
+  filter(term == "Tracking.PathwayTreatment") |> pull(conf.low)
+
+treat_conf_high <- treatment_model_tidy |>
+  filter(term == "Tracking.PathwayTreatment") |> pull(conf.high)
+```
+
+We interpret the model just as we interpret other linear regression models (see [@sec-ch-slr] and [@sec-ch-mlr]). In @tbl-model-treatment-effect, the estimated effect of the treatment, participating in Project ACE is `r round(treat_effect, 3)` and the 95% confidence interval is `r round(treat_conf_low, 3)` to `r round(treat_conf_high, 3)`. This estimate `r round(treat_effect, 3)` is the **average treatment effect (ATE)**, the difference in the expected response between the treatment and control group. Therefore, based on this analysis, we can make a causal relationship between participating in Project ACE and higher GPA, on average. The 95% confidence interval gives a plausible range for the effect in the population.
+
+::: {.yourturn latex=""}
+Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.[^13-special-topics-7]
+:::
+
+[^13-special-topics-7]: We are 95% confident that improvement in GPA from participating in Project ACE is between 0.003 and 0.39 points.
+
+As we use these results to inform decision-making, one thing to keep in mind is that this is the average treatment effect in the matched population. Therefore, the results may not generalize to the entire population if the discarded individuals in the control group are significantly different from the individuals in the matched group. One way to mitigate this is to include more observations from the control group. Strategies for this are available in the resources at the end of this section.
+
+### Causal inference in R
+
+Much of the code for causal inference is the code for linear `lm()` and logistic `glm()` models that we've seen in previous chapters. The primarily new code is for creating the matched data set using the propensity scores.
+
+We compute the propensity scores "manually" by fitting a logistic regression model using `glm()`.
+
+```{r}
+#| echo: true
+
+propensity_score_model <- glm(Tracking.Pathway ~ Grade + Gender + 
+                                Ethnicity.Hispanic.Y.N + ELL + 
+                                Sped + Homeless,
+                        data = ace, 
+                        family = "binomial")
+```
+
+The assigned matches are done using the `matchit()` function from the **MatchIt** R package [@MatchIt]. The code below shows the propensity score matching for the Project Ace data.
+
+The argument `method = "nearest"` species to conduct nearest-neighbor matching (the default method), and `distance = "logit"` indicates to compute the propensity scores using a logistic regression model. The `matchit()` function will refit the model with propensity scores.
+
+```{r}
+#| echo: true
+ace_psm <- matchit(Tracking.Pathway ~ Grade + Gender + Ethnicity.Hispanic.Y.N +
+                          Race + ELL + Sped + Homeless,
+                 data = ace,
+                 method = "nearest",   
+                 distance = "logit")
+
+ace_psm
+```
+
+This code creates a `matchit` object called `ace_psm` that contains information about the propensity score matching. We retrieve the matched data using the `match.data()` function as shown below.
+
+```{r}
+#| echo: true
+ace_matched <- match.data(ace_psm)
+```
+
+We use `glimpse()` to see what is in the new matched data set.
+
+```{r}
+glimpse(ace_matched)
+```
+
+There are some new columns in addition to the columns in the original `ace` tibble. The column `distance` contains the propensity scores. The column `sub.class` identifies the matches. The column `weights` contains sample weights. All observations are equally weighted using the methods introduced in this section. See the resources in @sec-causal-further-reading to learn about propensity score matching that incorporates weighting.
+
+The `lm` function is used to fit the linear regression model for the treatment effect.
+
+```{r}
+#| echo: true
+
+treatment_effect <- lm(Current.GPA ~ Tracking.Pathway, data = ace_matched)
+```
+
+### Further reading {#sec-causal-further-reading}
+
+Given the plethora of data available today, it is no surprise that causal inference is a rich and growing field in statistics and data science. We refer interested readers to *The effect: An introduction to research design and causality* [@huntington2021effect] and *Causal Inference: The Mixtape* [@cunningham2021causal] for an introduction to causal inference on observational data and *Design and Analysis of Experiments* [@montgomery2017design] for an introduction to experimental design.
+
+## Summary
+
+In this chapter, we introduced models that are extensions of linear and logistic regression. Specifically, we introduced the multinomial logistic regression model for categorical response variables with at least three levels, the random intercepts model for data with correlated observations, decision trees for prediction, and propensity scores models for causal inference. The goal of this book is to introduce readers to regression analysis, so this chapter is a springboard for readers interested in learning more about modeling. All the resources mentioned throughout the chapter are a nice followup to this text for readers interested in a deeper dive into the special topics introduced here and much more.

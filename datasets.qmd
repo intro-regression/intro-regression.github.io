@@ -1,0 +1,55 @@
+# Data sets {#sec-appendix-datasets}
+
+The data sets used in this book are listed below in alphabetical order.
+
+-   [coffee-ratings.csv](data/coffee-ratings.csv): Aroma and flavor grades for 1338 coffees rated in 2018. These data are originally from the [Coffee Quality Database](https://database.coffeeinstitute.org/) and was featured as part of the TidyTuesday data visualization challenge in July 2020.
+
+    -   This data set is analyzed in @sec-ch-slr-conditions.
+
+-   [fivethirtyeight-voters-data.csv](data/fivethirtyeight-voters-data.csv): Voting frequency, political party affiliation, and demographic information for 5836 adults in the United States. The data were collected through an online poll conducted by Ipsos and was analyzed in the FiveThirtyEight article "Why Many Americans Don't Vote" [@ThomsonDeVeaux_et_al_2020]. The final sample only includes adults who were eligible to vote for at least four election cycles at time the data were collected in 2020.
+
+    -   This data set is analyzed @sec-multinomial and @sec-decision-trees.
+
+-   [gss24-ai.csv](data/gss24-ai.csv): Demographic information, political leanings, and comfort with driverless vehicles for 1521 adults in the United States. The data were collected in the 2024 General Social Survey administered by National Science Foundation and is administered by National Opinion Research Center (NORC) at the University of Chicago. The data were collected through a combination of online surveys and in-person interviews.
+
+    -   This data set is analyzed in @sec-ch-logistic and @sec-ch-logistic-prediction.
+
+-   [lemurs-repeated-measures.csv](data/lemurs-repeated-measures.csv): Weight, age, and other characteristics for 248 lemurs living at the Duke Lemur Center at the time the data were collected. The data were originally analyzed in @zehrlife and featured as part of the TidyTuesday data visualization challenge in August 2021. The data set includes the lemurs' measurements from ages 1 to 24, so there can be multiple measurements for an individual lemur. There are 3715 total observations in the data.
+
+    -   This data set is analyzed in @sec-random-intercepts.
+
+-   [lemurs-sample-young.csv](data/lemurs-sample-young.csv): Weight, age, and other characteristics for 252 lemurs age 24 months or younger living at the Duke Lemur Center at the time the data were collected. The data were originally analyzed in @zehrlife and featured as part of the TidyTuesday data visualization challenge in August 2021. There is one observation for each lemur.
+
+    -   This data set is analyzed in @sec-ch-mlr and @sec-ch-mlr-inf.
+
+-   [life-expectancy-data.csv](data/life-expectancy-data.csv): Information about life expectancy, healthcare, and other societal factors for 140 countries. The data set was obtained from @zarulli2021health and includes data from the Human Development Database and the World Health Organization.
+
+    -   This data set is analyzed in @sec-ch-intro.
+
+-   [movie-scores.csv](data/movie-scores.csv): Critics and audience scores on [Rotten Tomatoes](#0) for 146 movies released 2014 - 2015. This data set is adapted from the `fandango` data frame in the fivethirtyeight R package [@fivethirtyeight].
+
+    -   This data set is analyzed in @sec-ch-slr.
+
+-   [ncaa-basketball-DI-2023-2024.csv](data/ncaa-basketball-DI-2023-2024.csv): Total expenditure on basketball programs and other features of 355 Division I NCAA colleges and universities in the 2023 - 2024 academic year. The data were collected from the Equity in Athletics Data Analysis (EADA) tool from the Office of Postsecondary Education in the United States Department of Education ([ope.ed.gov/athletics](https://ope.ed.gov/athletics/#/)).
+
+    -   This data set is analyzed in @sec-ch-transformations and @sec-decision-trees.
+
+-   [parks.csv](data/parks.csv): Total expenditure per resident and number of playgrounds per 10,000 residents in 97 of the most populated cities in the United States in 2020. These data were originally analyzed in the 2021 report *Parks and an Equitable Recovery* [@publicland] from the Trust for Public Land. It was featured as part of the TidyTuesday data visualization challenge in June 2021.
+
+    -   This data set is analyzed in @sec-ch-slr-inf.
+
+-   [penguins](https://allisonhorst.github.io/palmerpenguins/reference/penguins.html): Measurements and other features of 344 penguins at Palmer Station in Antarctica. The data were collected by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program. It is available in the **palmerpenguins** R package [@palmerpenguins-2].
+
+    -   This data set is analyzed in @sec-ch-computing.
+
+-   [project-ace-data.csv](data/project-ace-data.csv): Demographic information, Project ACE (Action for Equity) participation, and educational outcomes for 1300 high school students in the United States. The data were obtained from @evans2025testing.
+
+    -   This data set is analyzed in @sec-causal.
+
+-   [recipes.csv](data/recipes.csv): Author, cook time, serving size, and other features of 2218 recipes published on Allrecipes.com between 2009 and 2025. The data is modified from the `cuisines` data frame in the **tastyR** R package [@tastyR]. The data were originally scraped from Allrecipes.com by Brian Mubia.
+
+    -   This data set is analyzed in @sec-ch-eda.
+
+-   [spotify-songs-sample.csv](data/spotify-songs-sample.csv): Music features of 3000 songs on Spotify, a music streaming platform. The data are a subset of data originally analyzed in @pavlik2019classifying. It was featured as part of the TidyTuesday data visualization challenge [@tidytuesday] in January 2020.
+
+    -   This data set is analyzed in @sec-ch-model-eval.
