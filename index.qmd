@@ -1,9 +1,15 @@
-# Preface {.unnumbered}
+# Welcome {.unnumbered}
 
-This is a Quarto book.
+Welcome to forthcoming textbook *Introduction to Regression Analysis: A Data Science Approach* from CRC Press.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+::: callout-caution
+## Work in progress
 
-```{r}
-1 + 1
-```
+This book is a work in progress. If you have questions, comments, or feedback, please email Maria Tackett at [maria.tackett\@duke.edu](mailto:maria.tackett@duke.edu).
+:::
+
+### License
+
+[![](https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png){fig-alt="Creative Commons License"}](http://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License](http://creativecommons.org/licenses/by-nc-nd/4.0/).
