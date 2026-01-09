@@ -858,7 +858,7 @@ Consider the outlier observation. The residual for this observation is `r round(
 
 We did not have any influential points in this analysis, but there will be times when do have such points in modeling. @sec-outliers-impact discuses strategies for handling influential points in modeling.
 
-## Multicollinearity {#sec-mlr-multicollinearity}
+### Multicollinearity {#sec-mlr-multicollinearity}
 
 Ideally the predictors in a multiple linear regression model would be completely independent of one another, so knowing something about one predictor would not provide information other predictors. In practice, however, there is often some correlation between a subset of the predictors. This is why some data scientists prefer to interpret coefficients using the language "after adjusting for all other predictors" rather than "holding all else constant" (see @sec-mlr-interpret). This is typically not an issue for the model, but issues may arise if two or more predictors are too highly correlated. High correlation among predictors is called **multicollinearity**. More specifically, multicollinearity means there is near-linear dependencies between the predictors. More details of the mathematics behind multicollinearity are in @sec-multicollinearity-matrix.
 

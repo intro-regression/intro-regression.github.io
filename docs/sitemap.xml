@@ -6,7 +6,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/00-preface.html</loc>
-    <lastmod>2026-01-06T21:39:06.732Z</lastmod>
+    <lastmod>2026-01-09T17:02:29.732Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/01-intro.html</loc>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/08-mlr-inference.html</loc>
-    <lastmod>2026-01-09T16:59:47.949Z</lastmod>
+    <lastmod>2026-01-09T17:01:31.644Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/09-mlr-transformations.html</loc>
@@ -75,5 +75,9 @@
   <url>
     <loc>https://introregressio.netlify.app/references.html</loc>
     <lastmod>2025-09-18T13:35:16.670Z</lastmod>
+  </url>
+  <url>
+    <loc>https://introregressio.netlify.app/Introduction-to-Regression-Analysis.pdf</loc>
+    <lastmod>2026-01-09T17:05:20.124Z</lastmod>
   </url>
 </urlset>

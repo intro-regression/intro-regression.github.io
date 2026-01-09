@@ -388,18 +388,18 @@ window.Quarto = {
   <ul class="collapse">
 <li><a href="#model-conditions" id="toc-model-conditions" class="nav-link" data-scroll-target="#model-conditions"><span class="header-section-number">8.5.1</span> Model conditions</a></li>
   <li><a href="#model-diagnostics" id="toc-model-diagnostics" class="nav-link" data-scroll-target="#model-diagnostics"><span class="header-section-number">8.5.2</span> Model diagnostics</a></li>
+  <li><a href="#sec-mlr-multicollinearity" id="toc-sec-mlr-multicollinearity" class="nav-link" data-scroll-target="#sec-mlr-multicollinearity"><span class="header-section-number">8.5.3</span> Multicollinearity</a></li>
   </ul>
 </li>
-  <li><a href="#sec-mlr-multicollinearity" id="toc-sec-mlr-multicollinearity" class="nav-link" data-scroll-target="#sec-mlr-multicollinearity"><span class="header-section-number">8.6</span> Multicollinearity</a></li>
   <li>
-<a href="#inference-for-multiple-linear-regression-in-r" id="toc-inference-for-multiple-linear-regression-in-r" class="nav-link" data-scroll-target="#inference-for-multiple-linear-regression-in-r"><span class="header-section-number">8.7</span> Inference for multiple linear regression in R</a>
+<a href="#inference-for-multiple-linear-regression-in-r" id="toc-inference-for-multiple-linear-regression-in-r" class="nav-link" data-scroll-target="#inference-for-multiple-linear-regression-in-r"><span class="header-section-number">8.6</span> Inference for multiple linear regression in R</a>
   <ul class="collapse">
-<li><a href="#sec-mlr-sim-inf-R" id="toc-sec-mlr-sim-inf-R" class="nav-link" data-scroll-target="#sec-mlr-sim-inf-R"><span class="header-section-number">8.7.1</span> Simulation-based inference in R</a></li>
-  <li><a href="#theory-based-inference-in-r" id="toc-theory-based-inference-in-r" class="nav-link" data-scroll-target="#theory-based-inference-in-r"><span class="header-section-number">8.7.2</span> Theory-based inference in R</a></li>
-  <li><a href="#model-conditions-and-diagnostics" id="toc-model-conditions-and-diagnostics" class="nav-link" data-scroll-target="#model-conditions-and-diagnostics"><span class="header-section-number">8.7.3</span> Model conditions and diagnostics</a></li>
+<li><a href="#sec-mlr-sim-inf-R" id="toc-sec-mlr-sim-inf-R" class="nav-link" data-scroll-target="#sec-mlr-sim-inf-R"><span class="header-section-number">8.6.1</span> Simulation-based inference in R</a></li>
+  <li><a href="#theory-based-inference-in-r" id="toc-theory-based-inference-in-r" class="nav-link" data-scroll-target="#theory-based-inference-in-r"><span class="header-section-number">8.6.2</span> Theory-based inference in R</a></li>
+  <li><a href="#model-conditions-and-diagnostics" id="toc-model-conditions-and-diagnostics" class="nav-link" data-scroll-target="#model-conditions-and-diagnostics"><span class="header-section-number">8.6.3</span> Model conditions and diagnostics</a></li>
   </ul>
 </li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">8.8</span> Summary</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">8.7</span> Summary</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
@@ -1337,8 +1337,8 @@ Figure&nbsp;8.10: Standardized residuals versus predicted values for lemur model
 </ul>
 </div>
 <p>We did not have any influential points in this analysis, but there will be times when do have such points in modeling. <a href="06-slr-conditions.html#sec-outliers-impact" class="quarto-xref"><span>Section 6.4.5</span></a> discuses strategies for handling influential points in modeling.</p>
-</section></section></section><section id="sec-mlr-multicollinearity" class="level2" data-number="8.6"><h2 data-number="8.6" class="anchored" data-anchor-id="sec-mlr-multicollinearity">
-<span class="header-section-number">8.6</span> Multicollinearity</h2>
+</section></section><section id="sec-mlr-multicollinearity" class="level3" data-number="8.5.3"><h3 data-number="8.5.3" class="anchored" data-anchor-id="sec-mlr-multicollinearity">
+<span class="header-section-number">8.5.3</span> Multicollinearity</h3>
 <p>Ideally the predictors in a multiple linear regression model would be completely independent of one another, so knowing something about one predictor would not provide information other predictors. In practice, however, there is often some correlation between a subset of the predictors. This is why some data scientists prefer to interpret coefficients using the language “after adjusting for all other predictors” rather than “holding all else constant” (see <a href="07-mlr.html#sec-mlr-interpret" class="quarto-xref"><span>Section 7.4</span></a>). This is typically not an issue for the model, but issues may arise if two or more predictors are too highly correlated. High correlation among predictors is called <strong>multicollinearity</strong>. More specifically, multicollinearity means there is near-linear dependencies between the predictors. More details of the mathematics behind multicollinearity are in <a href="appendix-linear.html#sec-multicollinearity-matrix" class="quarto-xref"><span>Section A.7</span></a>.</p>
 <p>If two or more predictors are exactly correlated, then we are unable to compute estimates for some of the model coefficients. This will often show up as <code>NA</code> in the model output where the estimated coefficient should be, so software provides a clear signal when this is the case. The more challenging issue, then, is when predictors are strongly correlated, i.e., when there is multicollinearity. Though we are still able to obtain estimates for the model coefficients, there are other concerns with the associated inferential statistics.</p>
 <p>When multicollinearity is present, the standard errors for correlated predictors <span class="math inline">\((SE_{\hat{\beta}_j})\)</span> are very large (see <a href="appendix-linear.html#sec-multicollinearity-matrix" class="quarto-xref"><span>Section A.7</span></a> for mathematical details). This is because when there is multicollinearity, different combinations of the coefficient estimates produce equally good model fits. Therefore, it becomes less clear what combination of coefficient estimates result in the “best fit” model. This ultimately leads to unreliable inferential conclusions, because the confidence intervals and hypothesis tests in <a href="#sec-mlr-theory-inf" class="quarto-xref"><span>Section 8.4</span></a> rely on <span class="math inline">\(SE_{\hat{\beta}_j}\)</span>. Because the standard errors are inflated, we may conclude there is no statistically significant relationship between the response and a predictor, when, in fact, there is (i.e., make a Type 1 error).</p>
@@ -1389,10 +1389,10 @@ Table&nbsp;8.6: VIF for predictors in <a href="#tbl-lemur-vif" class="quarto-xre
 </div>
 <p>Because all the VIFs are less than 10, there are no concerns with multicollinearity in this model. Thus, we can proceed with the analysis.</p>
 <p>If there is concerning multicollinearity, there are some strategies to deal with it. The first is to remove one of the predictors that is part of the correlated set. We can use model performance statistics, such as those in <a href="04-slr.html#sec-model-assessment" class="quarto-xref"><span>Section 4.7</span></a> and <a href="10-model-eval.html#sec-model-compare-stats" class="quarto-xref"><span>Section 10.2</span></a> to determine which predictor we’d like to remove from the model. If there is multicollinearity between indicators for a categorical predictor, this is generally an indication that there are too few observations in the baseline level. Therefore changing the baseline level will reduce issues with multicollinearity among the indicators. These are just two of the many creative ways the data scientist can deal with multicollinearity.</p>
-</section><section id="inference-for-multiple-linear-regression-in-r" class="level2" data-number="8.7"><h2 data-number="8.7" class="anchored" data-anchor-id="inference-for-multiple-linear-regression-in-r">
-<span class="header-section-number">8.7</span> Inference for multiple linear regression in R</h2>
-<section id="sec-mlr-sim-inf-R" class="level3" data-number="8.7.1"><h3 data-number="8.7.1" class="anchored" data-anchor-id="sec-mlr-sim-inf-R">
-<span class="header-section-number">8.7.1</span> Simulation-based inference in R</h3>
+</section></section><section id="inference-for-multiple-linear-regression-in-r" class="level2" data-number="8.6"><h2 data-number="8.6" class="anchored" data-anchor-id="inference-for-multiple-linear-regression-in-r">
+<span class="header-section-number">8.6</span> Inference for multiple linear regression in R</h2>
+<section id="sec-mlr-sim-inf-R" class="level3" data-number="8.6.1"><h3 data-number="8.6.1" class="anchored" data-anchor-id="sec-mlr-sim-inf-R">
+<span class="header-section-number">8.6.1</span> Simulation-based inference in R</h3>
 <p>As with simulation-based inference for simple linear regression, we use the <strong>infer</strong> R package <span class="citation" data-cites="infer">(<a href="references.html#ref-infer" role="doc-biblioref">Couch et al. 2021</a>)</span> for bootstrap confidence intervals and permutation tests. The code is shown below with brief explanations in the comments. It is described in <a href="05-slr-inference.html#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.9.1</span></a> and <a href="05-slr-inference.html#sec-slr-permutation-r" class="quarto-xref"><span>Section 5.9.2</span></a>.</p>
 <p>The code to construct the 95% bootstrap confidence interval for the coefficient of <code>age</code> is shown below.</p>
 <div class="cell">
@@ -1449,8 +1449,8 @@ based on the number of `reps` chosen in the `generate()` step.
 1       0</code></pre>
 </div>
 </div>
-</section><section id="theory-based-inference-in-r" class="level3" data-number="8.7.2"><h3 data-number="8.7.2" class="anchored" data-anchor-id="theory-based-inference-in-r">
-<span class="header-section-number">8.7.2</span> Theory-based inference in R</h3>
+</section><section id="theory-based-inference-in-r" class="level3" data-number="8.6.2"><h3 data-number="8.6.2" class="anchored" data-anchor-id="theory-based-inference-in-r">
+<span class="header-section-number">8.6.2</span> Theory-based inference in R</h3>
 <p>The statistics associated with the hypothesis test for each coefficient are produced by default when printing the output using <code>tidy()</code>. We can add the arguments <code>conf.int =</code> and <code>conf.level =</code> to the tidy function to output the confidence interval for each model coefficient.</p>
 <p>Below is the code to fit and output the model from <a href="#sec-mlr-inf-intro" class="quarto-xref"><span>Section 8.1</span></a> with the 95% confidence interval for the model coefficients. The <code>kable</code> function is used to display the results in a neatly formatted table rounding all values to three digits.</p>
 <div class="cell">
@@ -1539,8 +1539,8 @@ based on the number of `reps` chosen in the `generate()` step.
 </table>
 </div>
 </div>
-</section><section id="model-conditions-and-diagnostics" class="level3" data-number="8.7.3"><h3 data-number="8.7.3" class="anchored" data-anchor-id="model-conditions-and-diagnostics">
-<span class="header-section-number">8.7.3</span> Model conditions and diagnostics</h3>
+</section><section id="model-conditions-and-diagnostics" class="level3" data-number="8.6.3"><h3 data-number="8.6.3" class="anchored" data-anchor-id="model-conditions-and-diagnostics">
+<span class="header-section-number">8.6.3</span> Model conditions and diagnostics</h3>
 <p>We use the <code>augment</code> function to produce a tibble of the statistics used for model conditions and diagnostics as with simple linear regression. See <a href="06-slr-conditions.html#sec-conditions-in-r" class="quarto-xref"><span>Section 6.6</span></a> for a description of the output produced by <code>augment()</code> and how these values are used to check model conditions and diagnostics.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemur_aug</span> <span class="op">&lt;-</span> <span class="fu">augment</span><span class="op">(</span><span class="va">lemurs_model</span><span class="op">)</span></span>
@@ -1567,8 +1567,8 @@ based on the number of `reps` chosen in the `generate()` step.
        1.03        1.02        1.88        3.92        3.27 </code></pre>
 </div>
 </div>
-</section></section><section id="summary" class="level2" data-number="8.8"><h2 data-number="8.8" class="anchored" data-anchor-id="summary">
-<span class="header-section-number">8.8</span> Summary</h2>
+</section></section><section id="summary" class="level2" data-number="8.7"><h2 data-number="8.7" class="anchored" data-anchor-id="summary">
+<span class="header-section-number">8.7</span> Summary</h2>
 <p>In this chapter, we built upon inference for simple linear regression introduced <a href="05-slr-inference.html" class="quarto-xref"><span>Chapter 5</span></a> and showed how inference can be used to draw conclusions about model coefficients in multiple linear regression models. We showed how to conduct simulation-based inference using bootstrapping for confidence intervals and permutation tests for hypothesis testing. Then, we showed how to compute the values shown the regression output by conducting inference using mathematical models based on the Central Limit Theorem. Lastly, we showed how to check model conditions and diagnostics for multiple linear regression, building off of the introduction to these topics in <a href="06-slr-conditions.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
 <p>Sometimes the data shows violations in the model conditions that need to be addressed to make reliable conclusions and predictions from the model. In the next chapter, we will introduce variable transformations that can be used to address violations in the model conditions, particularly in the linearity and equal variance conditions.</p>
 

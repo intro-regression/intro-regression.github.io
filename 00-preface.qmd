@@ -96,7 +96,7 @@ Inspired by the structure of An *Introduction to Statistical Learning* [@james20
 
 ## Supplemental materials
 
-The companion website (<https://introregression-resources.netlify.app>) contains homework assignments, computing labs, and other resources that accompany the text. These are based on a workflow using R and Quarto and have been used in undergraduate regression analysis courses at Duke University. Many of these assignments have also been adapted and used by instructors at other institutions.
+The companion website (URL TBD) contains homework assignments, computing labs, and other resources that accompany the text. These are based on a workflow using R and Quarto and have been used in undergraduate regression analysis courses at Duke University. Many of these assignments have also been adapted and used by instructors at other institutions.
 
 ## About the author
 
