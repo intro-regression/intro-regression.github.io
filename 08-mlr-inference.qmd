@@ -35,6 +35,7 @@ source("_common.R")
 library(tidyverse)
 library(tidymodels)
 library(knitr)
+library(rms)
 
 lemurs_sample_young <- read_csv("data/lemurs-sample-young.csv") |>
   mutate(litter_size = litter_size - 1)
@@ -859,6 +860,34 @@ We did not have any influential points in this analysis, but there will be times
 
 ## Multicollinearity {#sec-mlr-multicollinearity}
 
+Ideally the predictors in a multiple linear regression model would be completely independent of one another. For example, ideally there would be no dependency or correlation between `taxon`, `sex`, `age`, and `litter_size`, so knowing something about one predictor does not provide information about the another. In practice, however, there is often some correlation between at least a subset of the predictors. This is why some data scientists prefer to interpret coefficients using language "after adjusting for all other predictors" rather than "holding all else constant" (see @sec-mlr-interpret). This is typically not an issue for the model, but issues may arise if two or more predictors are too highly correlated with another. We call high correlation among predictors **multicollinearity**. More specifically, multicollinearity means there is near-linear dependencies between the predictors. More details of the mathematics behind multicollinearity are in @sec-multicollinearity-matrix.
+
+If two or more predictors are exactly correlated, then we are unable to compute estimates for some of the model coefficients. This will often show up as `NA` in the model output where the estimated coefficient should be, so software provides a clear signal that some of the predictors are exactly correlated. The more challenging issue, then, is when predictors are strongly correlated, i.e., when there is multicollinearity. Though we are still able to obtain estimates for the model coefficients, there are other concerns with the associated inferential statistics.
+
+When multicollinearity is present, the standard errors for correlated predictors $(SE_{\hat{\beta}_j})$ are very large(see @sec-multicollinearity-matrix for mathematical details). This is because when there is multicollinearity, different combinations of the coefficient estimates actually produce equally good model fits. Therefore, it becomes less clear what coefficient estimates result in the "best fit" model. This ultimately leads to unreliable inferential conclusions, because the confidence intervals and hypothesis tests in @sec-mlr-theory-inf rely on $SE_{\hat{\beta}_j}$. Because the standard errors are inflated, we may conclude there is no statistically significant relationship between the response and some predictors, when, in fact, there is (i.e., make a Type 1 error).
+
+We detect multicollinearity using the **variance inflation factor (VIF)**. This is a measure of how much the $SE_{\hat{\beta}_j}$ for a predictor is inflated due to its correlation with other predictors. @eq-vif is the VIF for the $j^{th}$ predictor.
+
+$$
+VIF_j = \frac{1}{1 - R^2_j}
+$${#eq-vif}
+
+where $R^2_j$ is the proportion of variation in predictor $X_j$ that is explained by the other predictors. In other words, VIF considers not only if predictor $X_j$ is correlated with one other predictor, but also if it can explained as a linear combination of two or more other predictors.
+
+Because we expect at least some correlation between the predictors, the determine that concerning multicollinearity exists if VIF is 10 or greater. @tbl-lemur-vif are the VIF for the predictors in @tbl-lemur-model-inf.
+
+```{r}
+#| label: tbl-lemur-vif
+#| tbl-cap: VIF for predictors in @tbl-lemur-vif
+
+vif(lemurs_model) |>
+  kable(digits = 1)
+```
+
+Because all the VIF are less than 10, there are no concerns with multicollinearity in this model, so we can proceed with the analysis.
+
+There is concerning multicollinearity, here are some strategies to deal with it. The first is to remove one of the predictors that is part of the correlated set. We can use model performance statistics, such as those in @sec-model-assessment and @sec-model-compare-stats to determine which predictor we'd like to remove from the model. If there is multicollinearity between indicators for a categorical predictor, this is generally an indication that there are too few observations in the baseline level. Therefore changing the baseline level will reduce issues with multicollinearity among the indicators.
+
 ## Inference for multiple linear regression in R
 
 ### Simulation-based inference in R {#sec-mlr-sim-inf-R}
@@ -945,6 +974,15 @@ lemur_aug <- augment(lemurs_model)
 
 lemur_aug |>
   slice(1:5)
+
+```
+
+The variance inflation factors for the predictors in the model can be computed using `vif()` in the **rms** R package [@rms].
+
+```{r}
+#| echo: true
+
+vif(lemurs_model)
 
 ```
 

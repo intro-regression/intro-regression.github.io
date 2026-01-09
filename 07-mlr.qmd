@@ -406,7 +406,7 @@ age_coef <- tidy(lemurs_model) |>
   pull(estimate)
 ```
 
-The interpretation for coefficients of quantitative predictors is similar to the interpretation in simple linear regression in @sec-slr-interpret-coef. Given a quantitative predictor $x_j$, its model coefficient $\beta_j$ is the slope describing the relationship between $x_j$ and the response variable, *after accounting for the other predictors in the model*. For example, the coefficient for `age` in @tbl-lemurs-model is `r round(age_coef, 3)`. Let's compare this to the coefficient from a simple linear regression model using age shown in @tbl-lemurs-age-model-slr.
+The interpretation for coefficients of quantitative predictors is similar to the interpretation in simple linear regression in @sec-slr-interpret-coef. Given a quantitative predictor $x_j$, its model coefficient $\beta_j$ is the slope describing the relationship between $x_j$ and the response variable, *after adjusting for the other predictors in the model*. For example, the coefficient for `age` in @tbl-lemurs-model is `r round(age_coef, 3)`. Let's compare this to the coefficient from a simple linear regression model using age shown in @tbl-lemurs-age-model-slr.
 
 ```{r}
 #| label: tbl-lemurs-age-model-slr
