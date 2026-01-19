@@ -595,20 +595,20 @@ y_n
 <p>In matrix notation, the error terms can be written as <span id="eq-errors-matrix"><span class="math display">\[
 \boldsymbol{\epsilon} = \mathbf{y} - \mathbf{X}\boldsymbol{\beta}
 \tag{A.14}\]</span></span></p>
-<p>As with simple linear regression in <a href="#sec-least-sq-math" class="quarto-xref"><span>Section A.1</span></a>, the least-squares estimator of the vector of coefficients, <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, is the vector that minimizes the sum of squared residuals in <a href="#eq-sum-sq-matrix" class="quarto-xref">Equation&nbsp;<span>A.15</span></a>. <span id="eq-sum-sq-matrix"><span class="math display">\[
-SSR = \sum\limits_{i=1}^{n} \epsilon_{i}^2 = \boldsymbol{\epsilon}^\mathsf{T}\boldsymbol{\epsilon} = (\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})
+<p>As with simple linear regression in <a href="#sec-least-sq-math" class="quarto-xref"><span>Section A.1</span></a>, the least-squares estimator of the vector of coefficients, <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, is the vector that minimizes the sum of squares in <a href="#eq-sum-sq-matrix" class="quarto-xref">Equation&nbsp;<span>A.15</span></a>. <span id="eq-sum-sq-matrix"><span class="math display">\[
+\sum\limits_{i=1}^{n} \epsilon_{i}^2 = \boldsymbol{\epsilon}^\mathsf{T}\boldsymbol{\epsilon} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
 \tag{A.15}\]</span></span></p>
 <p>where <span class="math inline">\(\boldsymbol{\epsilon}^\mathsf{T}\)</span>, the transpose of the vector <span class="math inline">\(\boldsymbol{\epsilon}\)</span>.</p>
 <p>Let’s walk through the steps to minimize <a href="#eq-sum-sq-matrix" class="quarto-xref">Equation&nbsp;<span>A.15</span></a>. We start by expanding the equation.</p>
 <p><span id="eq-ssr-matrix-expand"><span class="math display">\[
 \begin{aligned}
-SSR &amp;= (\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})\\[10pt]
-&amp; = (\mathbf{Y}^\mathsf{T}\mathbf{Y} - \mathbf{Y}^\mathsf{T} \mathbf{X}\boldsymbol{\beta} - \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y} +\boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})
+SSR &amp;= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\\[10pt]
+&amp; = (\mathbf{y}^\mathsf{T}\mathbf{y} - \mathbf{y}^\mathsf{T} \mathbf{X}\boldsymbol{\beta} - \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y} +\boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})
 \end{aligned}
 \tag{A.16}\]</span></span></p>
-<p>Note that <span class="math inline">\((\mathbf{Y^\mathsf{T}}\mathbf{X}\boldsymbol{\beta})^\mathsf{T} = \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y}\)</span>. These are both constants (i.e.&nbsp;<span class="math inline">\(1\times 1\)</span> vectors), so we have<span class="math inline">\(\mathbf{Y^\mathsf{T}}\mathbf{X}\boldsymbol{\beta} = (\mathbf{Y^\mathsf{T}}\mathbf{X}\boldsymbol{\beta})^\mathsf{T}=  \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y}\)</span>. Plugging this equality into <a href="#eq-ssr-matrix-expand" class="quarto-xref">Equation&nbsp;<span>A.16</span></a>, we have</p>
+<p>Note that <span class="math inline">\((\mathbf{y}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})^\mathsf{T} = \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y}\)</span>. These are both constants (i.e.&nbsp;<span class="math inline">\(1\times 1\)</span> vectors), so we have <span class="math inline">\(\mathbf{y}^\mathsf{T}\mathbf{X}\boldsymbol{\beta} = (\mathbf{y}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})^\mathsf{T}=  \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y}\)</span>. Plugging this equality into <a href="#eq-ssr-matrix-expand" class="quarto-xref">Equation&nbsp;<span>A.16</span></a>, we have</p>
 <p><span id="eq-ssr-matrix-expand-2"><span class="math display">\[
-SSR = \mathbf{Y}^\mathsf{T}\mathbf{Y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
+SSR = \mathbf{y}^\mathsf{T}\mathbf{y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
 \tag{A.17}\]</span></span></p>
 <p>Next, we find the partial derivative of <a href="#eq-ssr-matrix-expand-2" class="quarto-xref">Equation&nbsp;<span>A.17</span></a> with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
 <div id="matrix-calculus" class="math_rules">
@@ -616,6 +616,7 @@ SSR = \mathbf{Y}^\mathsf{T}\mathbf{Y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X
 <p>Then <span class="math inline">\(\nabla_\mathbf{x}f\)</span>, the <strong>gradient</strong> of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(\mathbf{x}\)</span> is</p>
 <p><span class="math display">\[\nabla_\mathbf{x}f = \begin{bmatrix}\frac{\partial f}{\partial x_1} &amp; \frac{\partial f}{\partial x_2} &amp; \dots &amp; \frac{\partial f}{\partial x_p}\end{bmatrix}^\mathsf{T}
 \]</span></p>
+<p>This is also denoted as <span class="math inline">\(\frac{\partial f}{\partial \mathbf{x}}\)</span>.</p>
 <p><br></p>
 <p><strong>Property 1</strong></p>
 <p>Let <span class="math inline">\(\mathbf{x}\)</span> be a <span class="math inline">\(k \times 1\)</span> vector and <span class="math inline">\(\mathbf{z}\)</span> be a <span class="math inline">\(k \times 1\)</span> vector, such that <span class="math inline">\(\mathbf{z}\)</span> is not a function of <span class="math inline">\(\mathbf{x}\)</span> . The gradient of <span class="math inline">\(\mathbf{x}^\mathsf{T}\mathbf{z}\)</span> with respect to <span class="math inline">\(\mathbf{x}\)</span> is</p>
@@ -630,19 +631,19 @@ SSR = \mathbf{Y}^\mathsf{T}\mathbf{Y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X
 <p>Using the matrix calculus, the partial derivative of <a href="#eq-ssr-matrix-expand-2" class="quarto-xref">Equation&nbsp;<span>A.17</span></a> with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> is</p>
 <p><span id="eq-ssr-deriv"><span class="math display">\[
 \begin{aligned}
-\frac{\partial SSR}{\partial \boldsymbol{\beta}} &amp;= \frac{\partial}{\partial \boldsymbol\beta}(\mathbf{Y}^\mathsf{T}\mathbf{Y} - 2\boldsymbol{\beta}^\mathsf{T} \mathbf{X}^\mathsf{T}\mathbf{Y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})\\[10pt]
-&amp; = -2\mathbf{X}^\mathsf{T}\mathbf{Y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
+\frac{\partial SSR}{\partial \boldsymbol{\beta}} &amp;= \frac{\partial}{\partial \boldsymbol\beta}(\mathbf{y}^\mathsf{T}\mathbf{y} - 2\boldsymbol{\beta}^\mathsf{T} \mathbf{X}^\mathsf{T}\mathbf{y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})\\[10pt]
+&amp; = -2\mathbf{X}^\mathsf{T}\mathbf{y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
 \end{aligned}
 \tag{A.18}\]</span></span></p>
 <p>Note that <span class="math inline">\(\mathbf{X}^\mathsf{T}\mathbf{X}\)</span> is symmetric.</p>
 <p>Thus, the least-squares estimator is the <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> that satisfies</p>
 <p><span id="eq-ssr-deriv-2"><span class="math display">\[
--2\mathbf{X}^\mathsf{T}\mathbf{Y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{0}
+-2\mathbf{X}^\mathsf{T}\mathbf{y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{0}
 \tag{A.19}\]</span></span></p>
 <p>The steps to find this <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> are below. <span id="eq-ssr-deriv-3"><span class="math display">\[
 \begin{aligned}
-&amp;- 2 \mathbf{X}^\mathsf{T}\mathbf{Y} + 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = 0 \\[10pt]
-&amp; \Rightarrow 2 \mathbf{X}^\mathsf{T}\mathbf{Y} = 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]&amp; \Rightarrow \mathbf{X}^\mathsf{T}\mathbf{Y} = \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]&amp; \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{Y} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]&amp; \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{Y} = \hat{\boldsymbol{\beta}}\end{aligned}
+&amp;- 2 \mathbf{X}^\mathsf{T}\mathbf{y} + 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = 0 \\[10pt]
+&amp; \Rightarrow 2 \mathbf{X}^\mathsf{T}\mathbf{y} = 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]&amp; \Rightarrow \mathbf{X}^\mathsf{T}\mathbf{y} = \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]&amp; \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]&amp; \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y} = \hat{\boldsymbol{\beta}}\end{aligned}
 \tag{A.20}\]</span></span><!--# is it correct to call it the second derivative here?--></p>
 <p>Similar to <a href="#sec-least-sq-math" class="quarto-xref"><span>Section A.1</span></a>, we check the second derivative to confirm that we have found a minimum. In matrix representation, the second derivative is the <strong>Hessian matrix</strong>.</p>
 <div class="math_rules">
@@ -653,6 +654,7 @@ SSR = \mathbf{Y}^\mathsf{T}\mathbf{Y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
 \frac{\partial^2f}{\partial x_p\partial x_1} &amp; \frac{\partial^2f}{\partial x_p\partial x_2} &amp; \dots &amp; \frac{\partial^2f}{\partial x_p^2} \end{bmatrix}
 \]</span></p>
+<p>This is also denoted as <span class="math inline">\(\frac{\partial^2f}{\partial \mathbf{x}^2}\)</span></p>
 <p>If the Hessian matrix is…</p>
 <ul>
 <li><p>positive definite, then we found a minimum.</p></li>
@@ -663,7 +665,7 @@ SSR = \mathbf{Y}^\mathsf{T}\mathbf{Y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X
 <p>Thus, the Hessian of <a href="#eq-sum-sq-matrix" class="quarto-xref">Equation&nbsp;<span>A.15</span></a> is</p>
 <p><span id="eq-sum-sq-hessian"><span class="math display">\[
 \begin{aligned}
-\frac{\partial^2 SSR}{\partial \boldsymbol{\beta}^2} &amp;= \frac{\partial}{\partial \boldsymbol{\beta}}(-2\mathbf{X}^\mathsf{T}\mathbf{Y} + 2\mathbf{X}^\mathbf{T}\mathbf{X}\boldsymbol{\beta}) \\[10pt]
+\frac{\partial^2 SSR}{\partial \boldsymbol{\beta}^2} &amp;= \frac{\partial}{\partial \boldsymbol{\beta}}(-2\mathbf{X}^\mathsf{T}\mathbf{y} + 2\mathbf{X}^\mathbf{T}\mathbf{X}\boldsymbol{\beta}) \\[10pt]
 &amp; = 2\mathbf{X}^\mathsf{T}\mathbf{X}
 \end{aligned}
 \tag{A.21}\]</span></span></p>
@@ -671,7 +673,7 @@ SSR = \mathbf{Y}^\mathsf{T}\mathbf{Y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X
 <div class="results">
 <p>The least-squares estimator in matrix notation is</p>
 <p><span class="math display">\[
-\hat{\boldsymbol{\beta}} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{Y}
+\hat{\boldsymbol{\beta}} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y}
 \]</span></p>
 </div>
 </section><section id="sec-geometry" class="level3" data-number="A.3.2"><h3 data-number="A.3.2" class="anchored" data-anchor-id="sec-geometry">

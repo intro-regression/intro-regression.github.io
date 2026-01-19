@@ -275,8 +275,8 @@ In matrix notation, the error terms can be written as $$
 \boldsymbol{\epsilon} = \mathbf{y} - \mathbf{X}\boldsymbol{\beta}
 $$ {#eq-errors-matrix}
 
-As with simple linear regression in @sec-least-sq-math, the least-squares estimator of the vector of coefficients, $\hat{\boldsymbol{\beta}}$, is the vector that minimizes the sum of squared residuals in @eq-sum-sq-matrix. $$
-SSR = \sum\limits_{i=1}^{n} \epsilon_{i}^2 = \boldsymbol{\epsilon}^\mathsf{T}\boldsymbol{\epsilon} = (\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})
+As with simple linear regression in @sec-least-sq-math, the least-squares estimator of the vector of coefficients, $\hat{\boldsymbol{\beta}}$, is the vector that minimizes the sum of squares in @eq-sum-sq-matrix. $$
+\sum\limits_{i=1}^{n} \epsilon_{i}^2 = \boldsymbol{\epsilon}^\mathsf{T}\boldsymbol{\epsilon} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
 $$ {#eq-sum-sq-matrix}
 
 where $\boldsymbol{\epsilon}^\mathsf{T}$, the transpose of the vector $\boldsymbol{\epsilon}$.
@@ -285,15 +285,15 @@ Let's walk through the steps to minimize @eq-sum-sq-matrix. We start by expandin
 
 $$
 \begin{aligned}
-SSR &= (\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})\\[10pt]
-& = (\mathbf{Y}^\mathsf{T}\mathbf{Y} - \mathbf{Y}^\mathsf{T} \mathbf{X}\boldsymbol{\beta} - \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y} +\boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}) 
+SSR &= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\\[10pt]
+& = (\mathbf{y}^\mathsf{T}\mathbf{y} - \mathbf{y}^\mathsf{T} \mathbf{X}\boldsymbol{\beta} - \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y} +\boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}) 
 \end{aligned}
 $$ {#eq-ssr-matrix-expand}
 
-Note that $(\mathbf{Y^\mathsf{T}}\mathbf{X}\boldsymbol{\beta})^\mathsf{T} = \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y}$. These are both constants (i.e. $1\times 1$ vectors), so we have$\mathbf{Y^\mathsf{T}}\mathbf{X}\boldsymbol{\beta} = (\mathbf{Y^\mathsf{T}}\mathbf{X}\boldsymbol{\beta})^\mathsf{T}=  \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y}$. Plugging this equality into @eq-ssr-matrix-expand, we have
+Note that $(\mathbf{y}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})^\mathsf{T} = \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y}$. These are both constants (i.e. $1\times 1$ vectors), so we have $\mathbf{y}^\mathsf{T}\mathbf{X}\boldsymbol{\beta} = (\mathbf{y}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})^\mathsf{T}=  \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y}$. Plugging this equality into @eq-ssr-matrix-expand, we have
 
 $$
-SSR = \mathbf{Y}^\mathsf{T}\mathbf{Y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{Y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
+SSR = \mathbf{y}^\mathsf{T}\mathbf{y} - 2 \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
 $$ {#eq-ssr-matrix-expand-2}
 
 Next, we find the partial derivative of @eq-ssr-matrix-expand-2 with respect to $\boldsymbol{\beta}$.
@@ -305,6 +305,8 @@ Then $\nabla_\mathbf{x}f$, the **gradient** of $f$ with respect to $\mathbf{x}$ 
 
 $$\nabla_\mathbf{x}f = \begin{bmatrix}\frac{\partial f}{\partial x_1} & \frac{\partial f}{\partial x_2} & \dots & \frac{\partial f}{\partial x_p}\end{bmatrix}^\mathsf{T}
 $$
+
+This is also denoted as $\frac{\partial f}{\partial \mathbf{x}}$.
 
 <br>
 
@@ -329,8 +331,8 @@ Using the matrix calculus, the partial derivative of @eq-ssr-matrix-expand-2 wit
 
 $$
 \begin{aligned}
-\frac{\partial SSR}{\partial \boldsymbol{\beta}} &= \frac{\partial}{\partial \boldsymbol\beta}(\mathbf{Y}^\mathsf{T}\mathbf{Y} - 2\boldsymbol{\beta}^\mathsf{T} \mathbf{X}^\mathsf{T}\mathbf{Y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})\\[10pt]
-& = -2\mathbf{X}^\mathsf{T}\mathbf{Y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
+\frac{\partial SSR}{\partial \boldsymbol{\beta}} &= \frac{\partial}{\partial \boldsymbol\beta}(\mathbf{y}^\mathsf{T}\mathbf{y} - 2\boldsymbol{\beta}^\mathsf{T} \mathbf{X}^\mathsf{T}\mathbf{y} + \boldsymbol{\beta}^\mathsf{T}\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta})\\[10pt]
+& = -2\mathbf{X}^\mathsf{T}\mathbf{y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\boldsymbol{\beta}
 \end{aligned}
 $$ {#eq-ssr-deriv}
 
@@ -339,13 +341,13 @@ Note that $\mathbf{X}^\mathsf{T}\mathbf{X}$ is symmetric.
 Thus, the least-squares estimator is the $\hat{\boldsymbol{\beta}}$ that satisfies
 
 $$
--2\mathbf{X}^\mathsf{T}\mathbf{Y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{0}
+-2\mathbf{X}^\mathsf{T}\mathbf{y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{0}
 $$ {#eq-ssr-deriv-2}
 
 The steps to find this $\hat{\boldsymbol{\beta}}$ are below. $$
 \begin{aligned}
-&- 2 \mathbf{X}^\mathsf{T}\mathbf{Y} + 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = 0 \\[10pt]
-& \Rightarrow 2 \mathbf{X}^\mathsf{T}\mathbf{Y} = 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow \mathbf{X}^\mathsf{T}\mathbf{Y} = \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{Y} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{Y} = \hat{\boldsymbol{\beta}}\end{aligned}
+&- 2 \mathbf{X}^\mathsf{T}\mathbf{y} + 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = 0 \\[10pt]
+& \Rightarrow 2 \mathbf{X}^\mathsf{T}\mathbf{y} = 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow \mathbf{X}^\mathsf{T}\mathbf{y} = \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y} = \hat{\boldsymbol{\beta}}\end{aligned}
 $$ {#eq-ssr-deriv-3}<!--# is it correct to call it the second derivative here?-->
 
 Similar to @sec-least-sq-math, we check the second derivative to confirm that we have found a minimum. In matrix representation, the second derivative is the **Hessian matrix**.
@@ -360,6 +362,8 @@ $$
 \frac{\partial^2f}{\partial x_p\partial x_1} & \frac{\partial^2f}{\partial x_p\partial x_2} & \dots & \frac{\partial^2f}{\partial x_p^2} \end{bmatrix}
 $$
 
+This is also denoted as $\frac{\partial^2f}{\partial \mathbf{x}^2}$
+
 If the Hessian matrix is...
 
 -   positive definite, then we found a minimum.
@@ -373,7 +377,7 @@ Thus, the Hessian of @eq-sum-sq-matrix is
 
 $$
 \begin{aligned}
-\frac{\partial^2 SSR}{\partial \boldsymbol{\beta}^2} &= \frac{\partial}{\partial \boldsymbol{\beta}}(-2\mathbf{X}^\mathsf{T}\mathbf{Y} + 2\mathbf{X}^\mathbf{T}\mathbf{X}\boldsymbol{\beta}) \\[10pt]
+\frac{\partial^2 SSR}{\partial \boldsymbol{\beta}^2} &= \frac{\partial}{\partial \boldsymbol{\beta}}(-2\mathbf{X}^\mathsf{T}\mathbf{y} + 2\mathbf{X}^\mathbf{T}\mathbf{X}\boldsymbol{\beta}) \\[10pt]
 & = 2\mathbf{X}^\mathsf{T}\mathbf{X}
 \end{aligned}
 $$ {#eq-sum-sq-hessian}
@@ -384,7 +388,7 @@ $$ {#eq-sum-sq-hessian}
 The least-squares estimator in matrix notation is
 
 $$
-\hat{\boldsymbol{\beta}} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{Y}
+\hat{\boldsymbol{\beta}} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y}
 $$
 :::
 
