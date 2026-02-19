@@ -461,7 +461,7 @@ Thus, there are 246 degrees of freedom, i.e., observations available to understa
 The goal is to conduct inference for a model coefficient $\beta_j$, so we ultimately need to estimate the sampling variability in the estimated coefficients $\hat{\beta}_j$. This variability is measured by $SE_{\hat{\beta}_j}$, the standard error of $\hat{\beta}_j$. The formula to compute $SE_{\hat{\beta}_j}$ in @eq-mlr-se-beta is more complex than in the case of simple linear regression, because we need to understand the sampling variability of $\hat{\beta}_j$ in the context of a regression model that includes other predictors.
 
 $$
-SE_{\hat{\beta}_j} = j^{th} \text{diagonal element of }\hat{\sigma}_{\epsilon}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}
+Var_{\hat{\beta}_j} = j^{th} \text{diagonal element of }\hspace{2mm} \hat{\sigma}^2_{\epsilon}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}
 $$ {#eq-mlr-se-beta}
 
 Mathematical details for @eq-mlr-se-beta are in @sec-beta-dist-matrix. For now, we'll focus on a conceptual understanding about why the standard error computed here may be different than the standard error for the same predictor variable in the case of simple linear regression. To illustrate this, let's look at the standard error for `age` in a simple linear regression model and in the model in @tbl-lemur-model-inf. The coefficient estimates and standard errors are printed side-by-side in @tbl-mlr-age-compare.
@@ -870,7 +870,7 @@ We detect multicollinearity using the **variance inflation factor (VIF)**. This 
 
 $$
 VIF_j = \frac{1}{1 - R^2_j}
-$${#eq-vif}
+$$ {#eq-vif}
 
 where $R^2_j$ is the proportion of variation in predictor $X_j$ that is explained by the other predictors. In other words, VIF considers not only if predictor $X_j$ is correlated with one other predictor, but also if it can explained as a linear combination of two or more other predictors.
 
