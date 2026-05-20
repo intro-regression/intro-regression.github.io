@@ -1,0 +1,71 @@
+## Notes
+
+## Learner persona: Mia
+
+### General Background
+
+-   Is a sophomore in college
+-   Still trying to get "reacquainted" with good study skills after having most of her high school career impacted by the pandemic
+-   Generally enjoys her math and statistics classes, but she wants to be a sociology major
+-   Needs the statistics course to fulfill major requirements but thinks knowing statistics will be helpful for research
+
+### Starting Point
+
+-   Took an "modernized" introductory statistics course that used R for computing
+-   Is used to copying / filling in R code provided by instructor, so is unsure about skills to write code independently
+-   Intro class focused on simulation-based inference, so is not familiar with the central limit theorem / using a lot of equations.
+
+### Needs
+
+-   She needs the text for her regression course to fulfill a major requirement
+-   She needs to understand regression, because she is interested in an internship that will require some data analysis
+
+### Special Considerations
+
+-   She needs a text that is straightforward and easy to read, since she has to juggle work from multiple classes
+
+# Feedback from reviews
+
+-   Reviewer III: Add tree-based models and consider more predictive analytics
+    -   See https://mdsr-book.github.io/mdsr2e/ch-modeling.html
+
+# Chapter notes
+
+## Chapter 3: EDA
+
+Katherine Dunham dance data. Here is the description from the August 23 Data Is Plural email\
+\
+***Katherine Dunham.**[Dunham's Data](https://urldefense.com/v3/__https://dunhamsdata.org/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZplwuRNJQ$), a project led by [Kate Elswit](https://urldefense.com/v3/__https://www.kateelswit.org/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqguWsqOw$) and [Harmony Bench](https://urldefense.com/v3/__https://dance.osu.edu/people/bench.9__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqS2H48_w$), "explores the kinds of questions and problems that make the analysis and visualization of data meaningful for dance history, through the case study of 20th century African American choreographer Katherine Dunham" ([1909--2006](https://urldefense.com/v3/__https://en.wikipedia.org/wiki/Katherine_Dunham__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZpWlbolWw$)). Drawing on materials "held by seven archives across the United States," the team has built [three core datasets](https://urldefense.com/v3/__https://dunhamsdata.org/portfolio/datasets__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZq6eOSqxg$), accompanied by [essays](https://urldefense.com/v3/__https://dunhamsdata.org/index.php/portfolio/essays__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZpVD9wgvQ$), [visualizations](https://urldefense.com/v3/__https://dunhamsdata.org/index.php/portfolio/visualizations__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZrlDROe4A$), and [code repositories](https://urldefense.com/v3/__https://dunhamsdata.org/blog/code-tutorial-release__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZo43HrkLg$). They "document the daily itinerary of Dunham's touring and travel from the 1930s-60s; the over 300 dancers, drummers, and singers who appeared with her; and the shifting configurations of the nearly 300 repertory entities they performed." \[h/t [Selena Chau](https://urldefense.com/v3/__https://www.linkedin.com/in/selenachau/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqERnu8Ww$)\]*
+
+-   Show different types of plots (e.g., histogram vs. density plot vs. map). What do you learn from each one? What are advantages / disadvantages of each?
+-   Add something about data types when loading a data set - is the data type what you expect
+
+## Chapter 4: Simple Linear Regression
+
+-   Stick with "predictor" or use another term?
+
+    -   The concern is that it creates a disconnect with the purpose of $X$ when doing inference.
+
+    -   What other books use:
+
+        -   IMS: predictor
+
+        -   Modern Dive: explanatory
+
+        -   Modern Data Science with R: inputs (calls it "predictive modeling"), not focused on regression
+
+        -   Telling Stories with Data: predictor
+
+        -   Stat2: ??
+
+-   Stick with the movies data example? Concern is that these data are percentages, so there is an obvious upper and lower bound.
+
+    -   the parks data may be a good alternative?
+
+-   Move the partitioning variability + $R^2$ + model evaluation to the end of this chapter.
+
+-   Reference notes:
+
+    -   Fall 2021: https://sta210-fa21.netlify.app/slides/03-slr-intro.html
+
+    -   Fall 2022: https://sta210-fa22.netlify.app/slides/02-slr-intro.html#/title-slide

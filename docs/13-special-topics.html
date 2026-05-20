@@ -367,45 +367,54 @@ window.Quarto = {
   <ul>
 <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
   <li>
-<a href="#sec-multinomial" id="toc-sec-multinomial" class="nav-link" data-scroll-target="#sec-multinomial"><span class="header-section-number">13.1</span> Multinomial logistic regression</a>
+<a href="#missing-data" id="toc-missing-data" class="nav-link" data-scroll-target="#missing-data"><span class="header-section-number">13.1</span> Missing data</a>
   <ul class="collapse">
-<li><a href="#sec-voters-data" id="toc-sec-voters-data" class="nav-link" data-scroll-target="#sec-voters-data"><span class="header-section-number">13.1.1</span> Data: Voting frequency</a></li>
-  <li><a href="#multinomial-logistic-model" id="toc-multinomial-logistic-model" class="nav-link" data-scroll-target="#multinomial-logistic-model"><span class="header-section-number">13.1.2</span> Multinomial logistic model</a></li>
-  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">13.1.3</span> Interpretation</a></li>
-  <li><a href="#prediction-and-classification" id="toc-prediction-and-classification" class="nav-link" data-scroll-target="#prediction-and-classification"><span class="header-section-number">13.1.4</span> Prediction and classification</a></li>
-  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix"><span class="header-section-number">13.1.5</span> Confusion matrix</a></li>
-  <li><a href="#roc-curves-and-auc" id="toc-roc-curves-and-auc" class="nav-link" data-scroll-target="#roc-curves-and-auc"><span class="header-section-number">13.1.6</span> ROC Curves and AUC</a></li>
-  <li><a href="#multinomial-logistic-regression-in-r" id="toc-multinomial-logistic-regression-in-r" class="nav-link" data-scroll-target="#multinomial-logistic-regression-in-r"><span class="header-section-number">13.1.7</span> Multinomial logistic regression in R</a></li>
-  <li><a href="#generalized-linear-models" id="toc-generalized-linear-models" class="nav-link" data-scroll-target="#generalized-linear-models"><span class="header-section-number">13.1.8</span> Generalized linear models</a></li>
+<li><a href="#types-of-missigness" id="toc-types-of-missigness" class="nav-link" data-scroll-target="#types-of-missigness"><span class="header-section-number">13.1.1</span> Types of missigness</a></li>
+  <li><a href="#strategies-for-handling-missing-data" id="toc-strategies-for-handling-missing-data" class="nav-link" data-scroll-target="#strategies-for-handling-missing-data"><span class="header-section-number">13.1.2</span> Strategies for handling missing data</a></li>
+  <li><a href="#imputation-in-r" id="toc-imputation-in-r" class="nav-link" data-scroll-target="#imputation-in-r"><span class="header-section-number">13.1.3</span> Imputation in R</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">13.1.4</span> Further reading</a></li>
   </ul>
 </li>
   <li>
-<a href="#sec-random-intercepts" id="toc-sec-random-intercepts" class="nav-link" data-scroll-target="#sec-random-intercepts"><span class="header-section-number">13.2</span> Random intercepts model</a>
+<a href="#sec-multinomial" id="toc-sec-multinomial" class="nav-link" data-scroll-target="#sec-multinomial"><span class="header-section-number">13.2</span> Multinomial logistic regression</a>
   <ul class="collapse">
-<li><a href="#data-lemurs" id="toc-data-lemurs" class="nav-link" data-scroll-target="#data-lemurs"><span class="header-section-number">13.2.1</span> Data: Lemurs</a></li>
-  <li><a href="#model-fit-and-interpretation" id="toc-model-fit-and-interpretation" class="nav-link" data-scroll-target="#model-fit-and-interpretation"><span class="header-section-number">13.2.2</span> Model fit and interpretation</a></li>
-  <li><a href="#random-intercepts-model-in-r" id="toc-random-intercepts-model-in-r" class="nav-link" data-scroll-target="#random-intercepts-model-in-r"><span class="header-section-number">13.2.3</span> Random intercepts model in R</a></li>
-  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">13.2.4</span> Further reading</a></li>
+<li><a href="#sec-voters-data" id="toc-sec-voters-data" class="nav-link" data-scroll-target="#sec-voters-data"><span class="header-section-number">13.2.1</span> Data: Voting frequency</a></li>
+  <li><a href="#multinomial-logistic-model" id="toc-multinomial-logistic-model" class="nav-link" data-scroll-target="#multinomial-logistic-model"><span class="header-section-number">13.2.2</span> Multinomial logistic model</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">13.2.3</span> Interpretation</a></li>
+  <li><a href="#prediction-and-classification" id="toc-prediction-and-classification" class="nav-link" data-scroll-target="#prediction-and-classification"><span class="header-section-number">13.2.4</span> Prediction and classification</a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix"><span class="header-section-number">13.2.5</span> Confusion matrix</a></li>
+  <li><a href="#roc-curves-and-auc" id="toc-roc-curves-and-auc" class="nav-link" data-scroll-target="#roc-curves-and-auc"><span class="header-section-number">13.2.6</span> ROC Curves and AUC</a></li>
+  <li><a href="#multinomial-logistic-regression-in-r" id="toc-multinomial-logistic-regression-in-r" class="nav-link" data-scroll-target="#multinomial-logistic-regression-in-r"><span class="header-section-number">13.2.7</span> Multinomial logistic regression in R</a></li>
+  <li><a href="#generalized-linear-models" id="toc-generalized-linear-models" class="nav-link" data-scroll-target="#generalized-linear-models"><span class="header-section-number">13.2.8</span> Generalized linear models</a></li>
   </ul>
 </li>
   <li>
-<a href="#sec-decision-trees" id="toc-sec-decision-trees" class="nav-link" data-scroll-target="#sec-decision-trees"><span class="header-section-number">13.3</span> Decision trees</a>
+<a href="#sec-random-intercepts" id="toc-sec-random-intercepts" class="nav-link" data-scroll-target="#sec-random-intercepts"><span class="header-section-number">13.3</span> Random intercepts model</a>
   <ul class="collapse">
-<li><a href="#sec-regression-trees" id="toc-sec-regression-trees" class="nav-link" data-scroll-target="#sec-regression-trees"><span class="header-section-number">13.3.1</span> Regression trees</a></li>
-  <li><a href="#sec-classification-trees" id="toc-sec-classification-trees" class="nav-link" data-scroll-target="#sec-classification-trees"><span class="header-section-number">13.3.2</span> Classification trees</a></li>
-  <li><a href="#decision-trees-in-r" id="toc-decision-trees-in-r" class="nav-link" data-scroll-target="#decision-trees-in-r"><span class="header-section-number">13.3.3</span> Decision trees in R</a></li>
+<li><a href="#data-lemurs" id="toc-data-lemurs" class="nav-link" data-scroll-target="#data-lemurs"><span class="header-section-number">13.3.1</span> Data: Lemurs</a></li>
+  <li><a href="#model-fit-and-interpretation" id="toc-model-fit-and-interpretation" class="nav-link" data-scroll-target="#model-fit-and-interpretation"><span class="header-section-number">13.3.2</span> Model fit and interpretation</a></li>
+  <li><a href="#random-intercepts-model-in-r" id="toc-random-intercepts-model-in-r" class="nav-link" data-scroll-target="#random-intercepts-model-in-r"><span class="header-section-number">13.3.3</span> Random intercepts model in R</a></li>
   <li><a href="#further-reading-1" id="toc-further-reading-1" class="nav-link" data-scroll-target="#further-reading-1"><span class="header-section-number">13.3.4</span> Further reading</a></li>
   </ul>
 </li>
   <li>
-<a href="#sec-causal" id="toc-sec-causal" class="nav-link" data-scroll-target="#sec-causal"><span class="header-section-number">13.4</span> Causal inference</a>
+<a href="#sec-decision-trees" id="toc-sec-decision-trees" class="nav-link" data-scroll-target="#sec-decision-trees"><span class="header-section-number">13.4</span> Decision trees</a>
   <ul class="collapse">
-<li><a href="#propensity-score-matching" id="toc-propensity-score-matching" class="nav-link" data-scroll-target="#propensity-score-matching"><span class="header-section-number">13.4.1</span> Propensity score matching</a></li>
-  <li><a href="#causal-inference-in-r" id="toc-causal-inference-in-r" class="nav-link" data-scroll-target="#causal-inference-in-r"><span class="header-section-number">13.4.2</span> Causal inference in R</a></li>
-  <li><a href="#sec-causal-further-reading" id="toc-sec-causal-further-reading" class="nav-link" data-scroll-target="#sec-causal-further-reading"><span class="header-section-number">13.4.3</span> Further reading</a></li>
+<li><a href="#sec-regression-trees" id="toc-sec-regression-trees" class="nav-link" data-scroll-target="#sec-regression-trees"><span class="header-section-number">13.4.1</span> Regression trees</a></li>
+  <li><a href="#sec-classification-trees" id="toc-sec-classification-trees" class="nav-link" data-scroll-target="#sec-classification-trees"><span class="header-section-number">13.4.2</span> Classification trees</a></li>
+  <li><a href="#decision-trees-in-r" id="toc-decision-trees-in-r" class="nav-link" data-scroll-target="#decision-trees-in-r"><span class="header-section-number">13.4.3</span> Decision trees in R</a></li>
+  <li><a href="#further-reading-2" id="toc-further-reading-2" class="nav-link" data-scroll-target="#further-reading-2"><span class="header-section-number">13.4.4</span> Further reading</a></li>
   </ul>
 </li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">13.5</span> Summary</a></li>
+  <li>
+<a href="#sec-causal" id="toc-sec-causal" class="nav-link" data-scroll-target="#sec-causal"><span class="header-section-number">13.5</span> Causal inference</a>
+  <ul class="collapse">
+<li><a href="#propensity-score-matching" id="toc-propensity-score-matching" class="nav-link" data-scroll-target="#propensity-score-matching"><span class="header-section-number">13.5.1</span> Propensity score matching</a></li>
+  <li><a href="#causal-inference-in-r" id="toc-causal-inference-in-r" class="nav-link" data-scroll-target="#causal-inference-in-r"><span class="header-section-number">13.5.2</span> Causal inference in R</a></li>
+  <li><a href="#sec-causal-further-reading" id="toc-sec-causal-further-reading" class="nav-link" data-scroll-target="#sec-causal-further-reading"><span class="header-section-number">13.5.3</span> Further reading</a></li>
+  </ul>
+</li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">13.6</span> Summary</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
@@ -425,17 +434,130 @@ window.Quarto = {
 
 
 </header><section id="learning-goals" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="learning-goals">Learning goals</h2>
+<!--# update this to include missing data -->
 <p>This chapter introduces readers to a collection to models that are extensions of linear and logistic regression. The goal is to provide an introduction to the topic along with resources for those interested in learning more. The following topics are introduced:</p>
 <ul>
 <li>Multinomial logistic regression</li>
 <li>Random intercepts models</li>
 <li>Decision trees for regression and classification</li>
 <li>Causal inference using propensity score models</li>
-</ul></section><section id="sec-multinomial" class="level2" data-number="13.1"><h2 data-number="13.1" class="anchored" data-anchor-id="sec-multinomial">
-<span class="header-section-number">13.1</span> Multinomial logistic regression</h2>
+</ul></section><section id="missing-data" class="level2" data-number="13.1"><h2 data-number="13.1" class="anchored" data-anchor-id="missing-data">
+<span class="header-section-number">13.1</span> Missing data</h2>
+<!--# notes for reference: https://www2.stat.duke.edu/courses/Fall19/sta210.001/slides/lec-slides/23-model-val-missing.html#31-->
+<!--# Link to Gelman book - See Chapter 25-->
+<ul>
+<li><p>Introduce data set (maybe go back to recipes data set from Chapter 30).</p></li>
+<li>
+<p>How does missingness appear in the data set.</p>
+<ul>
+<li><p>Generally NAs</p></li>
+<li><p>Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.</p></li>
+</ul>
+</li>
+</ul>
+<section id="types-of-missigness" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="types-of-missigness">
+<span class="header-section-number">13.1.1</span> Types of missigness</h3>
+<ul>
+<li>
+<p>Missingness may occur in data in multiple ways for a given observation</p>
+<ul>
+<li><p>Item non-response in an observation has missing values for a subset of the variables</p></li>
+<li>
+<p>Unit non-response in which an observation has no available data, or not enough to be useful.</p>
+<ul>
+<li>Can use the penguins data set for an example of this.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>There are three types of missingness</p>
+<ul>
+<li><p>Missing completely at random</p></li>
+<li><p>Missing at random</p></li>
+<li><p>Missing not at random</p></li>
+</ul>
+</li>
+<li><p>Why is it important to understand the type of missingness</p></li>
+</ul></section><section id="strategies-for-handling-missing-data" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="strategies-for-handling-missing-data">
+<span class="header-section-number">13.1.2</span> Strategies for handling missing data</h3>
+<ul>
+<li>
+<p>Approaches for dealing with missingness - remove the missingness or impute missing values - Illustrate what all these mean in the context of the recipes data</p>
+<ul>
+<li>
+<p>Complete case analysis - only use the observations that have complete data.</p>
+<ul>
+<li><p>This is primarily what we have done in this text in order to focus on the regression methods</p></li>
+<li><p>Note - R does this automatically when fitting models. If you have observations with missing values for the response or one or more predictors, R will quietly drop these observations. Thus, it is even more important to understand the missingness in the data at the beginning of the analysis.</p></li>
+</ul>
+</li>
+<li>
+<p>Create missing indicator for categorical variable</p>
+<ul>
+<li>enables you to analyze whether the observations with missing values have a different relationship with the response variable than other variables in the model.</li>
+</ul>
+</li>
+<li>
+<p>Mean / median imputation for a quantitative variable</p>
+<ul>
+<li><p>Impute missing values with the mean (or median) of that variable among the remaining observations</p></li>
+<li><p>This method is nice, because it is very easy to execute and understand</p></li>
+<li>
+<p>Disadvantages</p>
+<ul>
+<li><p>Can distort the distribution of the variable <!--# need different phrasing, this phrasing is used in gelman and hill-->, since there are an artificially high proportion of observations at the mean, thus underestimating the standard deviation of that variable.</p></li>
+<li><p>can distort relationship between the predictor and response and result in inaccurate regression coefficient estimates and inference results</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Nearest neighbor imputation</p>
+<ul>
+<li>
+<p>Fill in missing data using neighboring observations that are similar to the observation with missing data.</p>
+<ul>
+<li><p>Hot deck imputation - use observation in the same data set (paper: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/" class="uri">https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/</a>)</p></li>
+<li><p>Cold deck imputation - use observation from a different data set (for example, if you are analyzing data from 2025, find a “neighbor” observation from a data set collected in previous year)</p></li>
+<li>
+<p>Can still have under estimated standard deviation for the variable with missingness, but generally the regression coefficients and subsequent inference is fairly accurate</p>
+<ul>
+<li>Potential to expand effects of any measurement error in the observations used for imputation</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>As one can imagine, biases can result from imputation methods, particularly if the missingness is missing at random or missing not at random</p></li>
+</ul>
+</li>
+<li>
+<p>Logical rule - perhaps there is some logic that could be applied to filling in the missing data.</p>
+<ul>
+<li>Find exmaple from the recipes data.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Multiple imputation</p>
+<ul>
+<li>create multiple data sets using differet imputation methods, then average the analysis results.</li>
+</ul>
+</li>
+<li><p>Call out box about variables that have a lot of missing values.</p></li>
+</ul></section><section id="imputation-in-r" class="level3" data-number="13.1.3"><h3 data-number="13.1.3" class="anchored" data-anchor-id="imputation-in-r">
+<span class="header-section-number">13.1.3</span> Imputation in R</h3>
+<ul>
+<li>Use the MICE package</li>
+</ul></section><section id="further-reading" class="level3" data-number="13.1.4"><h3 data-number="13.1.4" class="anchored" data-anchor-id="further-reading">
+<span class="header-section-number">13.1.4</span> Further reading</h3>
+<p>Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.</p>
+</section></section><section id="sec-multinomial" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="sec-multinomial">
+<span class="header-section-number">13.2</span> Multinomial logistic regression</h2>
 <p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced logistic regression models for binary response variables. In this section, we introduce multinomial logistic regression, models for categorical response variables with three or more levels.</p>
-<section id="sec-voters-data" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="sec-voters-data">
-<span class="header-section-number">13.1.1</span> Data: Voting frequency</h3>
+<section id="sec-voters-data" class="level3" data-number="13.2.1"><h3 data-number="13.2.1" class="anchored" data-anchor-id="sec-voters-data">
+<span class="header-section-number">13.2.1</span> Data: Voting frequency</h3>
 <p>In the 2020 article “Why Many Americans Don’t Vote” <span class="citation" data-cites="ThomsonDeVeaux_et_al_2020">(<a href="references.html#ref-ThomsonDeVeaux_et_al_2020" role="doc-biblioref">Thomson-DeVeaux, Mithani, and Bronner 2020</a>)</span> on the now defunct data journalism website FiveThirtyEight, journalists explored the voting behavior of eligible voters in the United States. <!--# maybe add something else here about the article--> As indicated by the article’s title, their primary objective was to understand why many eligible voters choose not to vote at all or only vote sporadically. <!--# include something here about the data collection--> They considered numerous factors in their analysis, but we will focus on a few, age and political affiliation, for this analysis. <!--# need to include somewhere that this is includes people who were eligible in the last four elections--></p>
 <p>The data were obtained from the FiveThirtyEight data website (<a href="https://data.fivethirtyeight.com/">https://data.fivethirtyeight.com</a>) and is available in <code>fivethirtyeight-voters-data.csv</code>. It contains survey responses <!--# is survey correct?--> from 5836 respondents. All survey participants had been eligible to vote in at least four prior elections. The variables used in this analysis are below. The definitions are adapted from the data documentation (<a href="https://github.com/fivethirtyeight/data/tree/master/non-voters" class="uri">https://github.com/fivethirtyeight/data/tree/master/non-voters</a>)</p>
 <ul>
@@ -579,8 +701,8 @@ Figure&nbsp;13.2: Bivariate EDA for voting frequency data. Blue: rarely/never, R
 <p>The bivariate exploratory data analysis is in <a href="#fig-voting-bivar-eda" class="quarto-xref">Figure&nbsp;<span>13.2</span></a>. From <a href="#fig-voting-bivar-eda-1" class="quarto-xref">Figure&nbsp;<span>13.2 (a)</span></a>, the distribution of <code>age</code> among voters categorized as “always” is bimodal with a peak around 25 years old and another around 60 years old. In contrast, the distribution of <code>age</code> among voters categorized as “rarely/never” is unimodal and skewed towards younger voters. This suggest there may be a relationship between age and voting frequency.</p>
 <p>From <a href="#fig-voting-bivar-eda-2" class="quarto-xref">Figure&nbsp;<span>13.2 (b)</span></a>, the voters who have no political party affiliation are the most likely to vote “rarely/never” and the least likely to vote “always”. The distribution of voting frequency appears to be similar between Democrats and Republicans. This indicates there may be some relationship between political party identification (or even whether or not someone identifies with a political party) and voting frequency.</p>
 <p>We have some initial insights from the data about overall voting frequency and potential relationships with age and political party affiliation, so we want to fit a model to summarize the relationship between these variables that we can use to draw robust conclusions and make predictions.</p>
-</section><section id="multinomial-logistic-model" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="multinomial-logistic-model">
-<span class="header-section-number">13.1.2</span> Multinomial logistic model</h3>
+</section><section id="multinomial-logistic-model" class="level3" data-number="13.2.2"><h3 data-number="13.2.2" class="anchored" data-anchor-id="multinomial-logistic-model">
+<span class="header-section-number">13.2.2</span> Multinomial logistic model</h3>
 <p>The response variable in this analysis has three levels, so we will use an extension of the logistic regression model. <strong>Multinomial logistic regression</strong> is part of the wider class of models called <em>generalized linear models</em>. It is a model for data with a categorical response variable that has three or more levels. Such response variables follow a multinomial distribution.</p>
 <div class="math_rules">
 <p><strong>Multinomial distribution</strong></p>
@@ -588,15 +710,14 @@ Figure&nbsp;13.2: Bivariate EDA for voting frequency data. Blue: rarely/never, R
 <p><span class="math display">\[P(Y = 1) = \pi_1, P(Y = 2) = \pi_2, \ldots, P(Y = K) = \pi_K\]</span> such that <span class="math inline">\(\sum_{k=1}^K \pi_K = 1\)</span></p>
 </div>
 <p>Let’s look at the general form of the multinomial logistic regression model, then apply it to model voting frequency. Suppose we have a categorical response variable that takes values <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span>. Let <span class="math inline">\(A\)</span> be the baseline level. Then, the general form of the multinomial logistic regression model is</p>
-<p><span id="eq-multinom-general"><span class="math display">\[\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 \log\Big(\frac{\pi_B}{\pi_A}\Big) = \beta_{0
 B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
 \log\Big(\frac{\pi_C}{\pi_A}\Big) = \beta_{0C} + \beta_{1C}X_1 +\beta_{2C}X_2 + \dots + \beta_{pC}X_p
-\end{aligned}
-\tag{13.1}\]</span></span></p>
-<p>From <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. WE saw this implicitly in logistic regression, where the response variable, <span class="math inline">\(\log(\frac{\pi}{1-\pi})\)</span>, is the “log odds of <span class="math inline">\(Y = 1\)</span> versus <span class="math inline">\(Y = 0\)</span>.”</p>
+\end{aligned}\]</span> {#eq-multinom-general}</p>
+<p>From <span class="quarto-unresolved-ref">?eq-multinom-general</span>, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. WE saw this implicitly in logistic regression, where the response variable, <span class="math inline">\(\log(\frac{\pi}{1-\pi})\)</span>, is the “log odds of <span class="math inline">\(Y = 1\)</span> versus <span class="math inline">\(Y = 0\)</span>.”</p>
 <p>The next feature of multinomial logistic regression is the multiple equations that comprise the model. More specifically, if the response variable has <span class="math inline">\(K\)</span> levels, then there will be <span class="math inline">\(K - 1\)</span> equations in the model. We will ultimately use the model to compute the predicted probabilities an observation takes each level of the response variable, so we need all <span class="math inline">\(K-1\)</span> equations in order to compute the predicted probabilities for every level of the response variable.</p>
-<p>The last feature is that each of the <span class="math inline">\(K -1\)</span> equations have the same form but different values of the coefficients. This is shown in <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> as the <span class="math inline">\(\beta's\)</span> have unique indices in each equation. As with logistic regression, the coefficients for multinomial logistic regression are estimated using maximum likelihood estimation (<a href="11-logistic.html#sec-logistic-interpret-coef" class="quarto-xref">see&nbsp;<span>11.4</span></a>).</p>
+<p>The last feature is that each of the <span class="math inline">\(K -1\)</span> equations have the same form but different values of the coefficients. This is shown in <span class="quarto-unresolved-ref">?eq-multinom-general</span> as the <span class="math inline">\(\beta's\)</span> have unique indices in each equation. As with logistic regression, the coefficients for multinomial logistic regression are estimated using maximum likelihood estimation (<a href="11-logistic.html#sec-logistic-interpret-coef" class="quarto-xref">see&nbsp;<span>11.4</span></a>).</p>
 <p><a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> is the multinomial logistic regression model using <code>age</code> and <code>party_id</code> to predict <code>voter_category</code>.</p>
 <div class="cell">
 <div id="tbl-voter-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -715,14 +836,12 @@ Table&nbsp;13.2: Model of <code>voter_category</code> versus <code>age</code> an
 </div>
 <p>The column <code>y.level</code> indicates the corresponding level for the given equation. The level of the response variable that is not listed is the baseline. In this case, the baseline level is <code>rarely/never</code>. Therefore, this model produces the log odds of being in the other categories versus rarely/ never.</p>
 <p>We can write the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> as the following:</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 \log\Big(\frac{\pi_{sporadic}}{\pi_{rarely/never}}\Big)  = -1.046 + 0.041 \times \text{age} -0.677 \times \text{No affiliation} -0.106 \times \text{Republican} \\
 \log\Big(\frac{\pi_{always}}{\pi_{rarely/never}}\Big)  = -1.983 + 0.052 \times \text{age} -0.872 \times \text{No affiliation}  -0.091 \times \text{Republican}
-\end{aligned}
-\]</span></p>
-</section><section id="interpretation" class="level3" data-number="13.1.3"><h3 data-number="13.1.3" class="anchored" data-anchor-id="interpretation">
-<span class="header-section-number">13.1.3</span> Interpretation</h3>
+\end{aligned}\]</span></p>
+</section><section id="interpretation" class="level3" data-number="13.2.3"><h3 data-number="13.2.3" class="anchored" data-anchor-id="interpretation">
+<span class="header-section-number">13.2.3</span> Interpretation</h3>
 <p>The interpretation for the coefficients of the multinomial logistic model are very similar to the interpretations for the logistic model in <a href="11-logistic.html#sec-logistic-interpret-coef" class="quarto-xref"><span>Section 11.4</span></a>. Like logistic regression, the model coefficients represent the change in the log odds, but in practice want to write interpretations in terms of the odds. The primary difference in the interpretation is the explicit statement of the baseline level of the response variable.</p>
 <p>Let’s interpret the coefficients in terms of having the voter frequency of <code>sporadic</code> versus <code>rarely/never</code>. The interpretation of <code>age</code> in terms of the log odds is as follows:</p>
 <blockquote class="blockquote">
@@ -750,20 +869,16 @@ Table&nbsp;13.2: Model of <code>voter_category</code> versus <code>age</code> an
 <div class="analysis_in_practice">
 <p>In <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>, the inferential conclusions for each predictor are the same for both equations in the multinomial logistic model. This is not a requirement for multinomial logistic regression and is not always the case. It could be possible for a predictor to be useful in differentiating <code>always</code> versus <code>rarely/never</code>, but not useful in differentiating <code>sporadic</code> versus <code>rarely/never</code>.</p>
 </div>
-</section><section id="prediction-and-classification" class="level3" data-number="13.1.4"><h3 data-number="13.1.4" class="anchored" data-anchor-id="prediction-and-classification">
-<span class="header-section-number">13.1.4</span> Prediction and classification</h3>
+</section><section id="prediction-and-classification" class="level3" data-number="13.2.4"><h3 data-number="13.2.4" class="anchored" data-anchor-id="prediction-and-classification">
+<span class="header-section-number">13.2.4</span> Prediction and classification</h3>
 <p>We often want to use multinomial logistic regression models for prediction, and more specifically classifying observations into the groups defined by the response variable. We can use the log odds produced by the multinomial logistic model to compute probabilities, then use those probabilities for classification.</p>
-<p>Let’s go back to the general form of the model in <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>. The predicted probability an observation is in category <span class="math inline">\(B\)</span> is computed as</p>
-<p><span id="eq-multinom-pred-prob"><span class="math display">\[
-\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}
-\tag{13.2}\]</span></span></p>
+<p>Let’s go back to the general form of the model in <span class="quarto-unresolved-ref">?eq-multinom-general</span>. The predicted probability an observation is in category <span class="math inline">\(B\)</span> is computed as</p>
+<p><span class="math display">\[\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}\]</span> {#eq-multinom-pred-prob}</p>
 <!--# do i want to do the subscript i?-->
-<p>The numerator of <a href="#eq-multinom-pred-prob" class="quarto-xref">Equation&nbsp;<span>13.2</span></a> are the odds of an observation being in category <span class="math inline">\(B\)</span> versus the baseline <span class="math inline">\(A\)</span>. The denominator is the sum of the odds for every possible level. In this example, it is the sum of the odds an observation is in category <span class="math inline">\(A\)</span> versus <span class="math inline">\(A\)</span> (that’s the “1” in the denominator), the odds an observation is in category <span class="math inline">\(B\)</span> versus <span class="math inline">\(A\)</span>, and the odds an observation is in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>. A similar formula is used to compute <span class="math inline">\(\hat{p}_c\)</span>, the predicted probability of being in category <span class="math inline">\(C\)</span>. The difference is the numerator, which would be the odds of being in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>.</p>
+<p>The numerator of <span class="quarto-unresolved-ref">?eq-multinom-pred-prob</span> are the odds of an observation being in category <span class="math inline">\(B\)</span> versus the baseline <span class="math inline">\(A\)</span>. The denominator is the sum of the odds for every possible level. In this example, it is the sum of the odds an observation is in category <span class="math inline">\(A\)</span> versus <span class="math inline">\(A\)</span> (that’s the “1” in the denominator), the odds an observation is in category <span class="math inline">\(B\)</span> versus <span class="math inline">\(A\)</span>, and the odds an observation is in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>. A similar formula is used to compute <span class="math inline">\(\hat{p}_c\)</span>, the predicted probability of being in category <span class="math inline">\(C\)</span>. The difference is the numerator, which would be the odds of being in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>.</p>
 <p>The predicted probability an observation is in the baseline category <span class="math inline">\(A\)</span> is computed as</p>
-<p><span id="eq-multinom-pred-baseline"><span class="math display">\[
-\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)
-\tag{13.3}\]</span></span></p>
-<p><a href="#eq-multinom-pred-baseline" class="quarto-xref">Equation&nbsp;<span>13.3</span></a> utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all <span class="math inline">\(K - 1\)</span> equations as part of the multinomial logistic when there are <span class="math inline">\(K\)</span> categories of the response variable.</p>
+<p><span class="math display">\[\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)\]</span> {#eq-multinom-pred-baseline}</p>
+<p><span class="quarto-unresolved-ref">?eq-multinom-pred-baseline</span> utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all <span class="math inline">\(K - 1\)</span> equations as part of the multinomial logistic when there are <span class="math inline">\(K\)</span> categories of the response variable.</p>
 <p><a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.3</span></a> shows the predicted probabilities based on <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> for ten observations in the data.</p>
 <div class="cell">
 <div id="tbl-voter-model-pred" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -858,8 +973,8 @@ Table&nbsp;13.3: Predictions from voter frequency model for ten observations
 </div>
 </div>
 <p>The predicted probabilities are then used to classify the observations based on the model. For each observation, the predicted class is the one with the highest predicted probability. For example, for the first observation in <a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.3</span></a>, <span class="math inline">\(\hat{\pi}_{rarely/never} = 0.071\)</span>, <span class="math inline">\(\hat{\pi}_{sporadic} = 0.484\)</span>, and <span class="math inline">\(\hat{\pi}_{always} = 0.446\)</span>. Therefore, the predicted class for this observation is “sporadic”.</p>
-</section><section id="confusion-matrix" class="level3" data-number="13.1.5"><h3 data-number="13.1.5" class="anchored" data-anchor-id="confusion-matrix">
-<span class="header-section-number">13.1.5</span> Confusion matrix</h3>
+</section><section id="confusion-matrix" class="level3" data-number="13.2.5"><h3 data-number="13.2.5" class="anchored" data-anchor-id="confusion-matrix">
+<span class="header-section-number">13.2.5</span> Confusion matrix</h3>
 <p>From <a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.3</span></a>, we see the predicted class is not always equal to the observed class. Therefore, we want to quantify the model performance, specifically how well the model classifies observations and how well it distinguishes observations from a specific class. A confusion matrix, introduced in <a href="12-logistic-prediction.html#sec-classification" class="quarto-xref"><span>Section 12.3.2</span></a>, is used to compare the observed versus predicted classes. <a href="#fig-confmat-voters-model" class="quarto-xref">Figure&nbsp;<span>13.3</span></a> is the confusion matrix for the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>. Because the predicted class is always the category with the highest predicted probability, we do not need to specify a threshold as in logistic regression.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -883,8 +998,8 @@ Figure&nbsp;13.3: Confusion matrix for voters model
 </div>
 <p><a href="#fig-confmat-voters-model" class="quarto-xref">Figure&nbsp;<span>13.3</span></a> can also be used to compute more specific statistics about how well the model identifies observations from a particular class. For example, among those who are actually classified voting rarely/never, the model correctly identified 38.801 % of them.</p>
 <p>Conversely, among those who were classified by the model as rarely/never, 49.343% of them actually vote rarely/never.</p>
-</section><section id="roc-curves-and-auc" class="level3" data-number="13.1.6"><h3 data-number="13.1.6" class="anchored" data-anchor-id="roc-curves-and-auc">
-<span class="header-section-number">13.1.6</span> ROC Curves and AUC</h3>
+</section><section id="roc-curves-and-auc" class="level3" data-number="13.2.6"><h3 data-number="13.2.6" class="anchored" data-anchor-id="roc-curves-and-auc">
+<span class="header-section-number">13.2.6</span> ROC Curves and AUC</h3>
 <p>Receiver Operating Characteristic (ROC) curves, introduced in <a href="12-logistic-prediction.html#sec-roc" class="quarto-xref"><span>Section 12.4</span></a>, can be used to evaluate how well the model distinguishes observations from a particular category. To do so, we create <strong>multiclass ROC curves</strong> using a “one versus all” approach that evaluates how well the model distinguishes one category versus all the others. For example, one curve represents how well the model distinguishes “always” voters versus all the others (“rarely/never” and “sporadic”). Essentially, we compute a logistic regression ROC curve for each possible class of the response.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -900,8 +1015,8 @@ Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in <a href
 </div>
 <p><a href="#fig-voters-roc-curve" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> shows the multiclass ROC curve for the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>. We interpret this curve similarly to the ROC curve for logistic regression. Curves close to the upper-left portion of the graph indicate good model distinguishing, but curves close to the diagonal line indicate poor model distinguishing. Based on this, the model performs best in identifying “rarely/never” voters versus the others and does the worst in identifying sporadic voters.</p>
 <p>The overall model performance is quantified using the <strong>average area under the curve (AUC)</strong>. The average AUC is computed in two ways. The first by computing the AUC for each class, then taking the average across all values of AUC. The average AUC for <a href="#fig-voters-roc-curve" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> is 0.656 . The second approach is to weight the AUC by the number of observations actually in each class. Therefore, larger classes have more influence on the measure of model performance. Using this approach, the average AUC for <a href="#fig-voters-roc-curve" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> is 0.627.</p>
-</section><section id="multinomial-logistic-regression-in-r" class="level3" data-number="13.1.7"><h3 data-number="13.1.7" class="anchored" data-anchor-id="multinomial-logistic-regression-in-r">
-<span class="header-section-number">13.1.7</span> Multinomial logistic regression in R</h3>
+</section><section id="multinomial-logistic-regression-in-r" class="level3" data-number="13.2.7"><h3 data-number="13.2.7" class="anchored" data-anchor-id="multinomial-logistic-regression-in-r">
+<span class="header-section-number">13.2.7</span> Multinomial logistic regression in R</h3>
 <p>Multinomial logistic models are fit using <code>multinom()</code> from the <strong>nnet</strong> R package <span class="citation" data-cites="nnet">(<a href="references.html#ref-nnet" role="doc-biblioref">Venables and Ripley 2002</a>)</span>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># library(nnet) </span></span>
@@ -1081,10 +1196,10 @@ converged</code></pre>
 1 roc_auc macro_weighted     0.627</code></pre>
 </div>
 </div>
-</section><section id="generalized-linear-models" class="level3" data-number="13.1.8"><h3 data-number="13.1.8" class="anchored" data-anchor-id="generalized-linear-models">
-<span class="header-section-number">13.1.8</span> Generalized linear models</h3>
-</section></section><section id="sec-random-intercepts" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="sec-random-intercepts">
-<span class="header-section-number">13.2</span> Random intercepts model</h2>
+</section><section id="generalized-linear-models" class="level3" data-number="13.2.8"><h3 data-number="13.2.8" class="anchored" data-anchor-id="generalized-linear-models">
+<span class="header-section-number">13.2.8</span> Generalized linear models</h3>
+</section></section><section id="sec-random-intercepts" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="sec-random-intercepts">
+<span class="header-section-number">13.3</span> Random intercepts model</h2>
 <p>One of the key assumptions we’ve made throughout this book is that the observations in the sample data are independent of each other. Often in practice, however, there is an underlying grouping structure in the data, and the observations are not completely independent of one another. For example, the data may contain multiple measurements from each individual (call repeated measures) as in <a href="#fig-repeated-measures" class="quarto-xref">Figure&nbsp;<span>13.5</span></a>.</p>
 <div id="fig-repeated-measures" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-repeated-measures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1104,8 +1219,8 @@ Figure&nbsp;13.6: Grouped data structure
 </figcaption></figure>
 </div>
 <p>Data that contain a grouping structure are called <strong>multilevel data</strong>. The individual observations are at the first level of the data, and the groups are at the second level. We use <strong>generalized linear mixed models</strong> (GLMM), also called <em>multilevel models</em> or <em>hierarchical models</em>, to account for the grouping structure when we fit the model and conduct statistical inference. There are many types of generalized linear mixed models; in fact, there are often entire undergraduate-level courses dedicated to these models. In this section, we will introduce one of the most widely used GLMMs in practice, the random intercepts model.</p>
-<section id="data-lemurs" class="level3" data-number="13.2.1"><h3 data-number="13.2.1" class="anchored" data-anchor-id="data-lemurs">
-<span class="header-section-number">13.2.1</span> Data: Lemurs</h3>
+<section id="data-lemurs" class="level3" data-number="13.3.1"><h3 data-number="13.3.1" class="anchored" data-anchor-id="data-lemurs">
+<span class="header-section-number">13.3.1</span> Data: Lemurs</h3>
 <p>In <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>, we introduced a data set containing the weight, age, and other characteristics of lemurs living at the Duke Lemur Center. The data used in that chapter contained observations from a single weigh-in for each lemur between 0 and 24 months old. The lemurs were, in fact, weighed regularly, so the original data from <span class="citation" data-cites="tidytuesday">Community (<a href="references.html#ref-tidytuesday" role="doc-biblioref">2024</a>)</span> <!--# more specific citation?--> includes multiple measures for each lemur. The data in this section includes all the measurements for each lemur when they were 1 to 24 months old.</p>
 <p>The data are in <code>lemurs-repeated-measures.csv</code>. We will use the following variables:</p>
 <ul>
@@ -1253,20 +1368,18 @@ Figure&nbsp;13.9
 </div>
 <p>The gray lines in <a href="#fig-lemurs-spaghetti-plot" class="quarto-xref">Figure&nbsp;<span>13.9</span></a> are the relationships between age and weight for each of the 248 lemurs in the data set. The blue line is the average trajectory across all the lemurs. From this plot, we more easily see the difference in the growth rate for the lemurs by the different slopes of the relationship between age and weight. We can also see the general differences in weight across the lemurs at each age.</p>
 <p>The linear regression (and logistic regression) models we’ve seen thus have a single intercept for all observations. In other words, if we fit a model using age to predict weight, there would be a single intercept for the expected weight for new born lemurs. From <a href="#fig-lemurs-spaghetti-plot" class="quarto-xref">Figure&nbsp;<span>13.9</span></a>, we see that the lemurs are generally different weights (even lemurs with the same age and taxon), so a single intercept may not best represent the trend in the data We will use a random intercepts model to account for this additional variability.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-</section><section id="model-fit-and-interpretation" class="level3" data-number="13.2.2"><h3 data-number="13.2.2" class="anchored" data-anchor-id="model-fit-and-interpretation">
-<span class="header-section-number">13.2.2</span> Model fit and interpretation</h3>
+</section><section id="model-fit-and-interpretation" class="level3" data-number="13.3.2"><h3 data-number="13.3.2" class="anchored" data-anchor-id="model-fit-and-interpretation">
+<span class="header-section-number">13.3.2</span> Model fit and interpretation</h3>
 <p>GLMMs differ from the GLMs we’ve studied thus far, because they include both fixed and random effects. The <strong>fixed effects</strong> are the variables we are interested in studying or explicitly adjusting for in the model. These are the variables for which we want to obtain an estimated coefficient. In the lemurs analysis, the fixed effects are <code>age</code>, <code>taxon</code>, <code>sex</code>, and <code>litter_size</code>. The <strong>random effects</strong> are those we don’t want to estimate explicitly but whose variability we want to understand. These are generally defined by the grouping variable in the data. In this analysis, the random effect is the individual lemur, captured by the variable <code>dlc_id</code>.</p>
 <p>The <strong>random intercepts model</strong> includes fixed and random effects, such that the random effects account for random variability in the intercept. The general form of the model is <!--# think about how to write this./ do i need it?--></p>
 <p>Let <span class="math inline">\(\text{weight}_{ij}\)</span> be the weight in the <span class="math inline">\(j^{th}\)</span> observation for lemur <span class="math inline">\(i\)</span>. Then, the random intercepts model for the lemurs analysis is</p>
-<p><span id="eq-lemurs-random-int"><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 \text{weight}_{ij} = \beta_0 &amp;+ \beta_1 ~ \text{taxonPCOQ}_{i} + \beta_2 ~ \text{taxonVRUB}_i \\
 &amp; +\beta_3 ~ \text{sexM}_{i}  + \beta_4 ~ \text{litter\_size}_{i} + \beta_5 ~ \text{age}_{ij}\\
 &amp; + u_i + \epsilon_{ij} \\
 &amp;u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}
-\tag{13.4}\]</span></span></p>
-<p>Let’s break down the components of <a href="#eq-lemurs-random-int" class="quarto-xref">Equation&nbsp;<span>13.4</span></a>. The subscript indicate whether the variable is at the first or second level of the data. The variable <code>age</code> is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur <span class="math inline">\(i\)</span> at the <span class="math inline">\(j^{th}\)</span> observation. The other predictors are measured at the second level of the data, so the subscript <span class="math inline">\(i\)</span> indicates that we plug in the same value for lemur <span class="math inline">\(i\)</span> across all its observations. The term <span class="math inline">\(\beta_0\)</span> is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.</p>
+\end{aligned}\]</span> {#eq-lemurs-random-int}</p>
+<p>Let’s break down the components of <span class="quarto-unresolved-ref">?eq-lemurs-random-int</span>. The subscript indicate whether the variable is at the first or second level of the data. The variable <code>age</code> is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur <span class="math inline">\(i\)</span> at the <span class="math inline">\(j^{th}\)</span> observation. The other predictors are measured at the second level of the data, so the subscript <span class="math inline">\(i\)</span> indicates that we plug in the same value for lemur <span class="math inline">\(i\)</span> across all its observations. The term <span class="math inline">\(\beta_0\)</span> is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.</p>
 <p>The error term <span class="math inline">\(\epsilon_{ij}\)</span> is like the error term previously introduced for linear models. It is the difference between the observed and expected value of the weight for the <span class="math inline">\(j^{th}\)</span> observation from lemur <span class="math inline">\(i\)</span>. As in linear regression, these error terms follow a normal distribution with mean of 0 and variance of <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. This <span class="math inline">\(\sigma^2_{\epsilon}\)</span> is a measure of the variability in the weights (response variable) within an individual lemur (group).</p>
 <p>The term <span class="math inline">\(u_{i}\)</span> is the random effect that makes this the “random intercepts model”. We don’t estimate <span class="math inline">\(u_i\)</span> directly, but its distribution tells us about the variability in the average weights between lemurs. The <span class="math inline">\(u_{i}\)</span> are normally distributed with a mean of 0 and variance of <span class="math inline">\(\sigma^2_{u}\)</span>. This <span class="math inline">\(\sigma^2_{u}\)</span> is the measure of between lemur variability. From this model, the intercept of an individual lemur <span class="math inline">\(i\)</span> is <span class="math inline">\(\beta_0 + u_i\)</span> where, <span class="math inline">\(u_i\)</span> is drawn from <span class="math inline">\(N(0,\sigma^2_{u})\)</span>.</p>
 <p>The coefficients <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_5\)</span> and the variance components <span class="math inline">\(\sigma_u\)</span> and <span class="math inline">\(\sigma_{\epsilon}\)</span> are estimated using maximum likelihood estimation. The output for the lemurs random intercepts model is in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a>.</p>
@@ -1358,13 +1471,11 @@ Table&nbsp;13.5: Random intercepts model for lemurs data
 </div>
 </div>
 <p>The equation of the fitted model is</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 \widehat{\text{weight}}_{ij} = 15.969 &amp;+  449.932 ~ \text{taxonPOQ} +  1021.387 ~ \text{taxonVRUB} \\
 &amp;  -27.073 ~ \text{sexM} - 66.771 ~ \text{litter\_size} + 147.719 ~ \text{age} \\
 &amp;\hat{\sigma}_u = 311.504 \hspace{5mm} \hat{\sigma}_\epsilon = 356.275
-\end{aligned}
-\]</span></p>
+\end{aligned}\]</span></p>
 <div class="yourturn">
 <p>Use the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a>.</p>
 <ul>
@@ -1372,8 +1483,8 @@ Table&nbsp;13.5: Random intercepts model for lemurs data
 <li><p>Explain what <span class="math inline">\(\hat{\sigma}_u = 311.504\)</span> means in the context of the data.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p></li>
 </ul>
 </div>
-</section><section id="random-intercepts-model-in-r" class="level3" data-number="13.2.3"><h3 data-number="13.2.3" class="anchored" data-anchor-id="random-intercepts-model-in-r">
-<span class="header-section-number">13.2.3</span> Random intercepts model in R</h3>
+</section><section id="random-intercepts-model-in-r" class="level3" data-number="13.3.3"><h3 data-number="13.3.3" class="anchored" data-anchor-id="random-intercepts-model-in-r">
+<span class="header-section-number">13.3.3</span> Random intercepts model in R</h3>
 <p>Random intercepts models are fit using the <code>lmer</code> function in the <code>lme4</code> R package <span class="citation" data-cites="lme4">(<a href="references.html#ref-lme4" role="doc-biblioref">Bates et al. 2015</a>)</span>. The syntax for the response and predictor variables is the same as in <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. The grouping variable is specified using the syntax <code>(1|grouping_var)</code>. This specifies that the random intercepts are based on <code>grouping_var</code>. The syntax for the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a> is below.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_fit</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">taxon</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">litter_size</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> </span>
@@ -1479,11 +1590,11 @@ Fixed Effects:
 </table>
 </div>
 </div>
-</section><section id="further-reading" class="level3" data-number="13.2.4"><h3 data-number="13.2.4" class="anchored" data-anchor-id="further-reading">
-<span class="header-section-number">13.2.4</span> Further reading</h3>
+</section><section id="further-reading-1" class="level3" data-number="13.3.4"><h3 data-number="13.3.4" class="anchored" data-anchor-id="further-reading-1">
+<span class="header-section-number">13.3.4</span> Further reading</h3>
 <p>We have just scratched the surface in this section, but there are many resources for readers interested in learning more about random intercepts models and other types of GLMMs. See <em>Beyond Multiple Linear Regression</em> <span class="citation" data-cites="roback2021beyond">(<a href="references.html#ref-roback2021beyond" role="doc-biblioref">Roback and Legler 2021</a>)</span> and <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em> <span class="citation" data-cites="gelman2007data">(<a href="references.html#ref-gelman2007data" role="doc-biblioref">Gelman and Hill 2007</a>)</span> for an in-depth introduction to these topics.</p>
-</section></section><section id="sec-decision-trees" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="sec-decision-trees">
-<span class="header-section-number">13.3</span> Decision trees</h2>
+</section></section><section id="sec-decision-trees" class="level2" data-number="13.4"><h2 data-number="13.4" class="anchored" data-anchor-id="sec-decision-trees">
+<span class="header-section-number">13.4</span> Decision trees</h2>
 <p>The models presented in this book thus far have been parametric methods, in which we specify a form of the model then estimate the parameters of that model (<a href="01-intro.html#sec-what-is-regression" class="quarto-xref"><span>Section 1.1.1</span></a>). An alternative to this approach are tree-based models, a set of non-parametric methods that split the data based on a series of decision points. These methods are particularly useful if a precise interpretation of the relationship between the response and predictor variables is not needed, but rather a general understanding how to use the predictors to estimate the response is sufficient.</p>
 <p>In the book <em>Introduction to Statistical Learning 2nd edition, <span class="citation" data-cites="james2021introduction">James et al. (<a href="references.html#ref-james2021introduction" role="doc-biblioref">2021</a>)</span></em> [pp.&nbsp;339] lists advantages of tree-based models compared to GLMs.</p>
 <blockquote class="blockquote">
@@ -1495,8 +1606,8 @@ Fixed Effects:
 </ul>
 </blockquote>
 <p>This list could be summarized as “The key advantage to tree-based models is that they are easy for others, especially non-experts, to understand.” Here we introduce two tree-based models: regression trees for quantitative response variables and classification trees for categorical response variables.</p>
-<section id="sec-regression-trees" class="level3" data-number="13.3.1"><h3 data-number="13.3.1" class="anchored" data-anchor-id="sec-regression-trees">
-<span class="header-section-number">13.3.1</span> Regression trees</h3>
+<section id="sec-regression-trees" class="level3" data-number="13.4.1"><h3 data-number="13.4.1" class="anchored" data-anchor-id="sec-regression-trees">
+<span class="header-section-number">13.4.1</span> Regression trees</h3>
 <p>Regression trees are decision trees to model data with quantitative response variables, so they are often an alternative to linear regression. The general idea is to use the predictor variables to split the data into groups of similar observations. For each observation, the predicted value of the response is computed as the mean response among the observations in its group. To illustrate this, let’s go back to the total expenditure on basketball programs for Division I NCAA institutions introduced in <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>. We will use a regression tree to predict <code>expenditure_m</code> (total expenditure in millions of dollars) using <code>type</code> (private or public institution), <code>region</code> (North Central, Northeast, South, West), and <code>enrollment_th</code> (total student enrollment in thousands).</p>
 <div id="fig-ncaa-expenditure" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-expenditure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1532,10 +1643,8 @@ Figure&nbsp;13.10: Distribution of original and log-transformed <code>expenditur
 <p>When the response variable is strongly skewed, it is good practice to use the transformed version in the regression tree. Though regression trees do not rely on the same assumptions as linear regression, their results can be strongly influenced by extreme observations when the distribution of the response variable is heavily skewed. Predictor variables do not need to be transformed for regression trees, because the tree does not depend on a linear relationship between the response and predictor variables.</p>
 </div>
 <p>A regression tree is made up of a series of nodes (also called <em>leaves</em>) and branches. The <strong>nodes</strong> are the decision-making points at each split (e.g., <code>enrollment_th &lt; 10?</code>). The <strong>branches</strong> connect two nodes (e.g, <code>enrollment_th &lt; 10 = TRUE</code> and <code>enrollment_th &lt; 10 = FALSE</code>). The <strong>terminal nodes</strong> are the points at the end of the tree where the data are no longer split and the predictions are made. The prediction is the mean value of the response variable for the observations in that node.</p>
-<p>At each step, the model searches to find the variable and associated cut point that minimizes the sum of squares residual (SSR) in <a href="#eq-tree-ssr" class="quarto-xref">Equation&nbsp;<span>13.5</span></a>. This is the same SSR introduced in <a href="04-slr.html#sec-slr-sum-sq" class="quarto-xref"><span>Section 4.7.2</span></a>. Minimizing SSR maximizes the similarity of observations within a node. This process continues until making a new split no longer minimizes the SSR.</p>
-<p><span id="eq-tree-ssr"><span class="math display">\[
-SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2
-\tag{13.5}\]</span></span></p>
+<p>At each step, the model searches to find the variable and associated cut point that minimizes the sum of squares residual (SSR) in <span class="quarto-unresolved-ref">?eq-tree-ssr</span>. This is the same SSR introduced in <a href="04-slr.html#sec-slr-sum-sq" class="quarto-xref"><span>Section 4.7.2</span></a>. Minimizing SSR maximizes the similarity of observations within a node. This process continues until making a new split no longer minimizes the SSR.</p>
+<p><span class="math display">\[SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2\]</span> {#eq-tree-ssr}</p>
 <p>Now let’s fit the regression tree to predict <code>expenditure_m</code> using <code>enrollment_th</code>, <code>region</code>, and <code>type</code>. Because the primary objective for the tree is prediction, we split the data into training (80%) and testing (20%) sets (<a href="10-model-eval.html#sec-training-testing" class="quarto-xref"><span>Section 10.4</span></a>). This will give us an assessment on how well the model performs on new data.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1557,14 +1666,12 @@ Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure
 </div>
 <p>We evaluate the model’s performance using the testing data. We compute the predicted expenditures for the observations in the testing data the root mean square error (RSME), introduced in <a href="04-slr.html#sec-model-assessment" class="quarto-xref"><span>Section 4.7</span></a>, as a measure of the model performance.</p>
 <p>The RMSE for the testing data is 0.506. This is the terms of the response variable, <code>log(expenditure_m)</code>, so the error in terms of the original variable is 1.659. This means that the average difference between the observed expenditure and predicted is 1.659 million dollars.</p>
-</section><section id="sec-classification-trees" class="level3" data-number="13.3.2"><h3 data-number="13.3.2" class="anchored" data-anchor-id="sec-classification-trees">
-<span class="header-section-number">13.3.2</span> Classification trees</h3>
-<p>Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a> or multinomial logistic regression <a href="#sec-multinomial" class="quarto-xref"><span>Section 13.1</span></a>. They are very similar to regression trees with two primary differences. The first is that predictions in the <strong>terminal nodes</strong> are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the <strong>Gini Index</strong> shown in <a href="#eq-gini-index" class="quarto-xref">Equation&nbsp;<span>13.6</span></a></p>
-<p><span id="eq-gini-index"><span class="math display">\[
-\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2
-\tag{13.6}\]</span></span></p>
+</section><section id="sec-classification-trees" class="level3" data-number="13.4.2"><h3 data-number="13.4.2" class="anchored" data-anchor-id="sec-classification-trees">
+<span class="header-section-number">13.4.2</span> Classification trees</h3>
+<p>Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a> or multinomial logistic regression <a href="#sec-multinomial" class="quarto-xref"><span>Section 13.2</span></a>. They are very similar to regression trees with two primary differences. The first is that predictions in the <strong>terminal nodes</strong> are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the <strong>Gini Index</strong> shown in <span class="quarto-unresolved-ref">?eq-gini-index</span></p>
+<p><span class="math display">\[\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2\]</span> {#eq-gini-index}</p>
 <p>where <span class="math inline">\(p_{mk}\)</span> is the proportion of observations in the <span class="math inline">\(m^{th}\)</span> node that belong to class <span class="math inline">\(k\)</span>. Similar to RSS, the model selects the variable and cutoff that minimizes the Gini index at each step. Low values of the Gini index indicate a large proportion of observations in a given node are from the same class.</p>
-<p>Let’s go back to the voter frequency data introduced in <a href="#sec-voters-data" class="quarto-xref"><span>Section 13.1.1</span></a>. We’ll use a classification tree to predict the <code>voter_category</code> (<code>rarely/never</code>, <code>sporadic</code>, <code>always</code>) using <code>age</code>, <code>party_id</code>, and an additional variable <code>income_cat</code>. We split the data into training (80%) and testing sets (20%), so we can evaluate the model’s performance on new data.</p>
+<p>Let’s go back to the voter frequency data introduced in <a href="#sec-voters-data" class="quarto-xref"><span>Section 13.2.1</span></a>. We’ll use a classification tree to predict the <code>voter_category</code> (<code>rarely/never</code>, <code>sporadic</code>, <code>always</code>) using <code>age</code>, <code>party_id</code>, and an additional variable <code>income_cat</code>. We split the data into training (80%) and testing sets (20%), so we can evaluate the model’s performance on new data.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-voters-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1582,10 +1689,10 @@ Figure&nbsp;13.12: Classification tree voter frequency
 <div class="yourturn">
 <p>Based on <a href="#fig-voters-tree" class="quarto-xref">Figure&nbsp;<span>13.12</span></a>, what is the predicted voting frequency for an a 40 year old individual whose party affiliation is Democrat and annual income is $70,000?<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 </div>
-</section><section id="decision-trees-in-r" class="level3" data-number="13.3.3"><h3 data-number="13.3.3" class="anchored" data-anchor-id="decision-trees-in-r">
-<span class="header-section-number">13.3.3</span> Decision trees in R</h3>
+</section><section id="decision-trees-in-r" class="level3" data-number="13.4.3"><h3 data-number="13.4.3" class="anchored" data-anchor-id="decision-trees-in-r">
+<span class="header-section-number">13.4.3</span> Decision trees in R</h3>
 <p>We fit decision trees using the <code>rpart()</code> function in the <strong>rpart</strong> R package <span class="citation" data-cites="rpart">(<a href="references.html#ref-rpart" role="doc-biblioref">Therneau and Atkinson 2025</a>)</span>. The argument <code>method =</code> is used to specify the type of decision tree.</p>
-<p>Below is the code for the regression tree fit in <a href="#sec-regression-trees" class="quarto-xref"><span>Section 13.3.1</span></a>. The argument <code>method = "anova"</code> specifies that we are fitting a regression tree. If we type the name of the tree, we see a summary of the nodes and branches</p>
+<p>Below is the code for the regression tree fit in <a href="#sec-regression-trees" class="quarto-xref"><span>Section 13.4.1</span></a>. The argument <code>method = "anova"</code> specifies that we are fitting a regression tree. If we type the name of the tree, we see a summary of the nodes and branches</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">expenditure_m</span><span class="op">)</span> <span class="op">~</span> <span class="va">enrollment_th</span> <span class="op">+</span> </span>
 <span>                     <span class="va">type</span> <span class="op">+</span> <span class="va">region</span>,</span>
@@ -1622,7 +1729,7 @@ node), split, n, deviance, yval
      7) enrollment_th&gt;=31.5 12   1.09 3.010 *</code></pre>
 </div>
 </div>
-<p>The code below is the classification tree from <a href="#sec-classification-trees" class="quarto-xref"><span>Section 13.3.2</span></a>. We use the argument <code>method = "class"</code> to specify the classification tree. Similar to regression trees, we can type the name of the tree to see a summary of the nodes and branches.</p>
+<p>The code below is the classification tree from <a href="#sec-classification-trees" class="quarto-xref"><span>Section 13.4.2</span></a>. We use the argument <code>method = "class"</code> to specify the classification tree. Similar to regression trees, we can type the name of the tree to see a summary of the nodes and branches.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span> <span class="op">+</span></span>
 <span>                       <span class="va">income_cat</span> <span class="op">+</span> <span class="va">educ</span>, </span>
@@ -1662,16 +1769,16 @@ node), split, n, loss, yval, (yprob)
 <span>  <span class="fu">mutate</span><span class="op">(</span>predict_expend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ncaa_tree</span>, <span class="va">ncaa_test</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The predictions are in the same units as the response variable, so in this case, the predicted values are the predicted <code>log(expenditure_m)</code>.</p>
-</section><section id="further-reading-1" class="level3" data-number="13.3.4"><h3 data-number="13.3.4" class="anchored" data-anchor-id="further-reading-1">
-<span class="header-section-number">13.3.4</span> Further reading</h3>
+</section><section id="further-reading-2" class="level3" data-number="13.4.4"><h3 data-number="13.4.4" class="anchored" data-anchor-id="further-reading-2">
+<span class="header-section-number">13.4.4</span> Further reading</h3>
 <p>Overall, decision trees can be a nice alternative to linear and logistic regression. Their greatest advantage is that they can be easily represented visually and thus easier for non-experts to understand. The two greatest disadvantages to these models, however, are the inferior predictive accuracy compared to other modeling approaches and their sensitivity to small changes in the data <span class="citation" data-cites="james2021introduction">(<a href="references.html#ref-james2021introduction" role="doc-biblioref">James et al. 2021, 340</a>)</span>. In this section, we introduced decision trees, but there is extensive work in tuning (customizing) these models along with more advanced models that take into account multiple trees (e.g., random forest). We refer the reader to Chapter 8 <span class="citation" data-cites="james2021introduction">James et al. (<a href="references.html#ref-james2021introduction" role="doc-biblioref">2021</a>)</span> for an in-depth discussion on the tree-based models.</p>
-</section></section><section id="sec-causal" class="level2" data-number="13.4"><h2 data-number="13.4" class="anchored" data-anchor-id="sec-causal">
-<span class="header-section-number">13.4</span> Causal inference</h2>
+</section></section><section id="sec-causal" class="level2" data-number="13.5"><h2 data-number="13.5" class="anchored" data-anchor-id="sec-causal">
+<span class="header-section-number">13.5</span> Causal inference</h2>
 <p>Throughout this text, we have interpreted the coefficients of regression models to describe the <em>association</em> between the response and predictor variables and the “expected” change in the response variable based on the model. In other words, we have been bound by the common phrase in statistics “correlation does not equal causation.” There are many situations in practice, however, in which we want to make a stronger claim and conclude that “X causes Y.” For example, medical researchers developing a new treatment want to know if the treatment causes improved health outcomes. In social sciences, researchers may want to know if a particular social program improves outcomes for individuals living in poverty. Economists want to know the impact of changing economic measures, such as interest rates, on the economy overall. Each of these scenarios requires an analysis that can more thoroughly account for <strong>confounding variables</strong>, underlying variables that impact both the response and predictor variables, so that the impact of the medical treatment, social program, or economic measure can be quantified. We will refer to all of these as <em>treatment</em> or <em>intervention</em> throughout the rest of the section.</p>
 <p>The ability to make causal claims start with the data. There are two types of data: experimental and observational data. <strong>Experimental data</strong> are data obtained from a randomized-control experiment <!--# is this the correct term--> in which individuals were randomly assigned to the treatment group that receives the intervention or control group that does not receive the intervention. Because individuals are randomly assigned groups, we can assume the only difference between the treatment and control groups is the intervention itself. Therefore, as we interpret the model coefficients associated with the treatment, we can interpret it in terms of how a change in the treatment <u><strong>causes</strong></u> in a change in the response.</p>
 <p>The ideal randomized experiment is often not feasible in practice due to a variety of factors. For example, it may be unethical to assign individuals to a control group and withhold beneficial treatment, or it is not feasible to restrict the behavior of individuals to implement experimental conditions. Therefore, researchers often rely on observational data, even when they want to draw conclusions stronger than a “correlation” or “association” between some treatment or intervention (predictor) and an outcome (response). To make such causal claims, we use statistical methods to make the observational data “look” more like data from a randomized experiment. These methods make up the branch of statistics called <em>causal inference</em>.</p>
-<section id="propensity-score-matching" class="level3" data-number="13.4.1"><h3 data-number="13.4.1" class="anchored" data-anchor-id="propensity-score-matching">
-<span class="header-section-number">13.4.1</span> Propensity score matching</h3>
+<section id="propensity-score-matching" class="level3" data-number="13.5.1"><h3 data-number="13.5.1" class="anchored" data-anchor-id="propensity-score-matching">
+<span class="header-section-number">13.5.1</span> Propensity score matching</h3>
 <p>In <strong>propensity score matching</strong>, we compute the probability (propensity) an observation is assigned to the treatment group based on a set of confounding variables that directly impact both the response and the likelihood an individual is in the treatment group. We then match individuals in the treatment and control groups who have the same or similar propensities to create a new data set in which the control and treatment groups have similar characteristics. The matched data set is used to estimate the effect of the treatment. <!--# use exchangeability here?--></p>
 <p>Let’s apply propensity score matching to evaluate the effect of an educational program, Project ACE: Action for Equity. Project ACE was a “five year interdisciplinary program aimed to get more underrepresented high school students from disadvantaged backgrounds to get interested in college degrees in engineering as well as biomedical and behavioral sciences” <span class="citation" data-cites="ProjectACE_UTEP">(<a href="references.html#ref-ProjectACE_UTEP" role="doc-biblioref">Texas at El Paso College of Liberal Arts n.d.</a>)</span>. We will analyze data from <span class="citation" data-cites="evans2025testing">Evans, Perez, and Morera (<a href="references.html#ref-evans2025testing" role="doc-biblioref">2025</a>)</span> who use propensity score matching to analyze outcomes of high school students. The data are available in <code>project-ace-data.csv</code>. We will follow their analysis closely with some modifications, so we refer readers to their article for the full analysis.</p>
 <p>We will use the variables below. The definitions are adapted from <span class="citation" data-cites="evans2025testing">Evans, Perez, and Morera (<a href="references.html#ref-evans2025testing" role="doc-biblioref">2025</a>)</span>.</p>
@@ -1754,14 +1861,12 @@ Figure&nbsp;13.14: Distribution of Subset of confounding variables for treatment
 </div>
 <!--# We will just look at a few characteristics here, but will use many more in the PSM-->
 <!--# We will not use Free.Lunch bc it is coded as Y for all observations in the available data.-->
-<p>The propensity score model is a logistic regression model where the response variable is the binary indicator for Treatment vs.&nbsp;Control. As shown in <a href="#eq-propensity-score-model" class="quarto-xref">Equation&nbsp;<span>13.7</span></a>, we use this model to compute the probability that an individual is in the treatment group. The form of the propensity score model for this analysis is as follows:</p>
-<p><span id="eq-propensity-score-model"><span class="math display">\[
-\begin{aligned}
+<p>The propensity score model is a logistic regression model where the response variable is the binary indicator for Treatment vs.&nbsp;Control. As shown in <span class="quarto-unresolved-ref">?eq-propensity-score-model</span>, we use this model to compute the probability that an individual is in the treatment group. The form of the propensity score model for this analysis is as follows:</p>
+<p><span class="math display">\[\begin{aligned}
 \log\Big(\frac{\pi}{1-\pi}\Big) = \beta_0 &amp;+ \beta_1 ~ \text{Grade10} + \beta_2 ~ \text{Grade11} + \beta_3 ~ \text{Grade12}  \\
 &amp; + \beta_4 ~ \text{GenderM} + \beta_5 ~ \text{EthnicityNon-Hispanic} \\
 &amp;+ \beta_6 ~ \text{ELL} + \beta_7 ~ \text{Sped} + \beta_8 ~ \text{Homeless}
-\end{aligned}
-\tag{13.7}\]</span></span> where <span class="math inline">\(\pi\)</span> is the propensity, the probability of being in the treatment group (participating in Project ACE). <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.6</span></a> is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.--></p>
+\end{aligned}\]</span> {#eq-propensity-score-model} where <span class="math inline">\(\pi\)</span> is the propensity, the probability of being in the treatment group (participating in Project ACE). <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.6</span></a> is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.--></p>
 <div class="cell">
 <div id="tbl-propensity-score-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-propensity-score-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1921,7 +2026,7 @@ Table&nbsp;13.7: Three pairs of matched observations based on the model in <a hr
 </figure>
 </div>
 </div>
-<p>Sometimes there are <strong>exact matches</strong>, where an observation in the treatment group is matched with an observation in the control group with an equal propensity score. Matches 50 and 118 in the table are examples of this. This generally indicates that the two observations are the same in terms of the characteristics included in the propensity score model <a href="#eq-propensity-score-model" class="quarto-xref">Equation&nbsp;<span>13.7</span></a>. In other cases, such as Match 14, the scores are close but not exact.</p>
+<p>Sometimes there are <strong>exact matches</strong>, where an observation in the treatment group is matched with an observation in the control group with an equal propensity score. Matches 50 and 118 in the table are examples of this. This generally indicates that the two observations are the same in terms of the characteristics included in the propensity score model <span class="quarto-unresolved-ref">?eq-propensity-score-model</span>. In other cases, such as Match 14, the scores are close but not exact.</p>
 <div class="cell">
 <div id="tbl-match-14" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-match-14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -2021,11 +2126,9 @@ Table&nbsp;13.8: Features for observations in Match 14
 Figure&nbsp;13.16: Distribution of subset of confounding variables for treatment versus control groups in the matched data.
 </figcaption></figure>
 </div>
-<p>In <a href="#fig-compare-distributions-matched" class="quarto-xref">Figure&nbsp;<span>13.16</span></a>, the distributions of these student characteristics are now the same for the treatment and control groups (compare to <a href="#fig-compare-distributions" class="quarto-xref">Figure&nbsp;<span>13.14</span></a>). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model <a href="#eq-propensity-score-model" class="quarto-xref">Equation&nbsp;<span>13.7</span></a>. Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere--></p>
+<p>In <a href="#fig-compare-distributions-matched" class="quarto-xref">Figure&nbsp;<span>13.16</span></a>, the distributions of these student characteristics are now the same for the treatment and control groups (compare to <a href="#fig-compare-distributions" class="quarto-xref">Figure&nbsp;<span>13.14</span></a>). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model <span class="quarto-unresolved-ref">?eq-propensity-score-model</span>. Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere--></p>
 <p>Once we have the matched data set, it’s time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.</p>
-<p><span id="eq-treatment-model"><span class="math display">\[
-\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-\tag{13.8}\]</span></span> For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in <a href="#eq-treatment-model" class="quarto-xref">Equation&nbsp;<span>13.8</span></a>. The fitted model is in <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>.</p>
+<p><span class="math display">\[\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in <span class="quarto-unresolved-ref">?eq-treatment-model</span>. The fitted model is in <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>.</p>
 <div class="cell">
 <div id="tbl-model-treatment-effect" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-model-treatment-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -2054,21 +2157,21 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">2.430</td>
+<td style="text-align: right;">2.418</td>
 <td style="text-align: right;">0.069</td>
-<td style="text-align: right;">35</td>
+<td style="text-align: right;">35.04</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">2.294</td>
-<td style="text-align: right;">2.57</td>
+<td style="text-align: right;">2.282</td>
+<td style="text-align: right;">2.554</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Tracking.PathwayTreatment</td>
-<td style="text-align: right;">0.196</td>
+<td style="text-align: right;">0.209</td>
 <td style="text-align: right;">0.098</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0.046</td>
-<td style="text-align: right;">0.003</td>
-<td style="text-align: right;">0.39</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: right;">0.033</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.401</td>
 </tr>
 </tbody>
 </table>
@@ -2077,13 +2180,13 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 </figure>
 </div>
 </div>
-<p>We interpret the model just as we interpret other linear regression models (see <a href="04-slr.html" class="quarto-xref"><span>Chapter 4</span></a> and <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>). In <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>, the estimated effect of the treatment, participating in Project ACE is 0.196 and the 95% confidence interval is 0.003 to 0.39. This estimate 0.196 is the <strong>average treatment effect (ATE)</strong>, the difference in the expected response between the treatment and control group. Therefore, based on this analysis, we can make a causal relationship between participating in Project ACE and higher GPA, on average. The 95% confidence interval gives a plausible range for the effect in the population.</p>
+<p>We interpret the model just as we interpret other linear regression models (see <a href="04-slr.html" class="quarto-xref"><span>Chapter 4</span></a> and <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>). In <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>, the estimated effect of the treatment, participating in Project ACE is 0.209 and the 95% confidence interval is 0.017 to 0.401. This estimate 0.209 is the <strong>average treatment effect (ATE)</strong>, the difference in the expected response between the treatment and control group. Therefore, based on this analysis, we can make a causal relationship between participating in Project ACE and higher GPA, on average. The 95% confidence interval gives a plausible range for the effect in the population.</p>
 <div class="yourturn">
 <p>Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 </div>
 <p>As we use these results to inform decision-making, one thing to keep in mind is that this is the average treatment effect in the matched population. Therefore, the results may not generalize to the entire population if the discarded individuals in the control group are significantly different from the individuals in the matched group. One way to mitigate this is to include more observations from the control group. Strategies for this are available in the resources at the end of this section.</p>
-</section><section id="causal-inference-in-r" class="level3" data-number="13.4.2"><h3 data-number="13.4.2" class="anchored" data-anchor-id="causal-inference-in-r">
-<span class="header-section-number">13.4.2</span> Causal inference in R</h3>
+</section><section id="causal-inference-in-r" class="level3" data-number="13.5.2"><h3 data-number="13.5.2" class="anchored" data-anchor-id="causal-inference-in-r">
+<span class="header-section-number">13.5.2</span> Causal inference in R</h3>
 <p>Much of the code for causal inference is the code for linear <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and logistic <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> models that we’ve seen in previous chapters. The primarily new code is for creating the matched data set using the propensity scores.</p>
 <p>We compute the propensity scores “manually” by fitting a logistic regression model using <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>.</p>
 <div class="cell">
@@ -2141,16 +2244,16 @@ $ weights                                           &lt;dbl&gt; 1, 1, 1, 1, 1, 1
 $ subclass                                          &lt;fct&gt; 1, 1, 42, 3, 2, 2, 4…</code></pre>
 </div>
 </div>
-<p>There are some new columns in addition to the columns in the original <code>ace</code> tibble. The column <code>distance</code> contains the propensity scores. The column <code>sub.class</code> identifies the matches. The column <code>weights</code> contains sample weights. All observations are equally weighted using the methods introduced in this section. See the resources in <a href="#sec-causal-further-reading" class="quarto-xref"><span>Section 13.4.3</span></a> to learn about propensity score matching that incorporates weighting.</p>
+<p>There are some new columns in addition to the columns in the original <code>ace</code> tibble. The column <code>distance</code> contains the propensity scores. The column <code>sub.class</code> identifies the matches. The column <code>weights</code> contains sample weights. All observations are equally weighted using the methods introduced in this section. See the resources in <a href="#sec-causal-further-reading" class="quarto-xref"><span>Section 13.5.3</span></a> to learn about propensity score matching that incorporates weighting.</p>
 <p>The <code>lm</code> function is used to fit the linear regression model for the treatment effect.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treatment_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Current.GPA</span> <span class="op">~</span> <span class="va">Tracking.Pathway</span>, data <span class="op">=</span> <span class="va">ace_matched</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="sec-causal-further-reading" class="level3" data-number="13.4.3"><h3 data-number="13.4.3" class="anchored" data-anchor-id="sec-causal-further-reading">
-<span class="header-section-number">13.4.3</span> Further reading</h3>
+</section><section id="sec-causal-further-reading" class="level3" data-number="13.5.3"><h3 data-number="13.5.3" class="anchored" data-anchor-id="sec-causal-further-reading">
+<span class="header-section-number">13.5.3</span> Further reading</h3>
 <p>Given the plethora of data available today, it is no surprise that causal inference is a rich and growing field in statistics and data science. We refer interested readers to <em>The effect: An introduction to research design and causality</em> <span class="citation" data-cites="huntington2021effect">(<a href="references.html#ref-huntington2021effect" role="doc-biblioref">Huntington-Klein 2021</a>)</span> and <em>Causal Inference: The Mixtape</em> <span class="citation" data-cites="cunningham2021causal">(<a href="references.html#ref-cunningham2021causal" role="doc-biblioref">Cunningham 2021</a>)</span> for an introduction to causal inference on observational data and <em>Design and Analysis of Experiments</em> <span class="citation" data-cites="montgomery2017design">(<a href="references.html#ref-montgomery2017design" role="doc-biblioref">Montgomery 2017</a>)</span> for an introduction to experimental design.</p>
-</section></section><section id="summary" class="level2" data-number="13.5"><h2 data-number="13.5" class="anchored" data-anchor-id="summary">
-<span class="header-section-number">13.5</span> Summary</h2>
+</section></section><section id="summary" class="level2" data-number="13.6"><h2 data-number="13.6" class="anchored" data-anchor-id="summary">
+<span class="header-section-number">13.6</span> Summary</h2>
 <p>In this chapter, we introduced models that are extensions of linear and logistic regression. Specifically, we introduced the multinomial logistic regression model for categorical response variables with at least three levels, the random intercepts model for data with correlated observations, decision trees for prediction, and propensity scores models for causal inference. The goal of this book is to introduce readers to regression analysis, so this chapter is a springboard for readers interested in learning more about modeling. All the resources mentioned throughout the chapter are a nice followup to this text for readers interested in a deeper dive into the special topics introduced here and much more.</p>
 
 

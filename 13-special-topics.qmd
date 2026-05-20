@@ -39,12 +39,106 @@ sunset4 <- PNWColors::pnw_palette("Sunset2",4)
 
 ## Learning goals {.unnumbered}
 
+<!--# update this to include missing data -->
+
 This chapter introduces readers to a collection to models that are extensions of linear and logistic regression. The goal is to provide an introduction to the topic along with resources for those interested in learning more. The following topics are introduced:
 
--   Multinomial logistic regression
--   Random intercepts models
--   Decision trees for regression and classification
--   Causal inference using propensity score models
+- Multinomial logistic regression
+- Random intercepts models
+- Decision trees for regression and classification
+- Causal inference using propensity score models
+
+## Missing data 
+
+<!--# notes for reference: https://www2.stat.duke.edu/courses/Fall19/sta210.001/slides/lec-slides/23-model-val-missing.html#31-->
+
+<!--# Link to Gelman book - See Chapter 25-->
+
+- Introduce data set (maybe go back to recipes data set from Chapter 30).
+
+- How does missingness appear in the data set.
+
+  - Generally NAs
+
+  - Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.
+
+### Types of missigness
+
+- Missingness may occur in data in multiple ways for a given observation
+
+  - Item non-response in an observation has missing values for a subset of the variables
+
+  - Unit non-response in which an observation has no available data, or not enough to be useful.
+
+    - Can use the penguins data set for an example of this.
+
+- There are three types of missingness
+
+  - Missing completely at random
+
+  - Missing at random
+
+  - Missing not at random
+
+- Why is it important to understand the type of missingness
+
+### Strategies for handling missing data
+
+- Approaches for dealing with missingness - remove the missingness or impute missing values - Illustrate what all these mean in the context of the recipes data
+
+  - Complete case analysis - only use the observations that have complete data.
+
+    - This is primarily what we have done in this text in order to focus on the regression methods
+
+    - Note - R does this automatically when fitting models. If you have observations with missing values for the response or one or more predictors, R will quietly drop these observations. Thus, it is even more important to understand the missingness in the data at the beginning of the analysis.
+
+  - Create missing indicator for categorical variable
+
+    - enables you to analyze whether the observations with missing values have a different relationship with the response variable than other variables in the model.
+
+  - Mean / median imputation for a quantitative variable
+
+    - Impute missing values with the mean (or median) of that variable among the remaining observations
+
+    - This method is nice, because it is very easy to execute and understand
+
+    - Disadvantages
+
+      - Can distort the distribution of the variable <!--# need different phrasing, this phrasing is used in gelman and hill-->, since there are an artificially high proportion of observations at the mean, thus underestimating the standard deviation of that variable.
+
+      - can distort relationship between the predictor and response and result in inaccurate regression coefficient estimates and inference results
+
+  - Nearest neighbor imputation
+
+    - Fill in missing data using neighboring observations that are similar to the observation with missing data.
+
+      - Hot deck imputation - use observation in the same data set (paper: <https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/>)
+
+      - Cold deck imputation - use observation from a different data set (for example, if you are analyzing data from 2025, find a "neighbor" observation from a data set collected in previous year)
+
+      - Can still have under estimated standard deviation for the variable with missingness, but generally the regression coefficients and subsequent inference is fairly accurate
+
+        - Potential to expand effects of any measurement error in the observations used for imputation
+
+    - As one can imagine, biases can result from imputation methods, particularly if the missingness is missing at random or missing not at random
+
+  - Logical rule - perhaps there is some logic that could be applied to filling in the missing data.
+
+    - Find exmaple from the recipes data.
+
+- Multiple imputation
+
+  - create multiple data sets using differet imputation methods, then average the analysis results.
+
+- Call out box about variables that have a lot of missing values.
+
+### Imputation in R
+
+- Use the MICE package
+
+### Further reading
+
+Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.
 
 ## Multinomial logistic regression {#sec-multinomial}
 
@@ -56,35 +150,35 @@ In the 2020 article “Why Many Americans Don’t Vote” [@ThomsonDeVeaux_et_al
 
 The data were obtained from the FiveThirtyEight data website ([https://data.fivethirtyeight.com](https://data.fivethirtyeight.com/)) and is available in `fivethirtyeight-voters-data.csv`. It contains survey responses <!--# is survey correct?--> from `r nrow(voters)` respondents. All survey participants had been eligible to vote in at least four prior elections. The variables used in this analysis are below. The definitions are adapted from the data documentation (<https://github.com/fivethirtyeight/data/tree/master/non-voters>)
 
--   `voter_category`: An respondent's past voting behavior, categorized as
+- `voter_category`: An respondent's past voting behavior, categorized as
 
-    -   `always`: respondent voted in all or all-but-one of the elections they were eligible in
+  - `always`: respondent voted in all or all-but-one of the elections they were eligible in
 
-    -   `sporadic`: respondent voted in at least two, but fewer than all-but-one of the elections they were eligible in
+  - `sporadic`: respondent voted in at least two, but fewer than all-but-one of the elections they were eligible in
 
-    -   `rarely/never`: respondent voted in 0 or 1 of the elections they were eligible in
+  - `rarely/never`: respondent voted in 0 or 1 of the elections they were eligible in
 
--   `age`: Respondent's age in years (called `ppage` in original data set)
+- `age`: Respondent's age in years (called `ppage` in original data set)
 
--   `party_id`: Respondent's political affiliation categorized as `Democrat`, `Republican` , `No affiliation`. This variable was derived from the variable `Q30` in the original data set, defined as the following:
+- `party_id`: Respondent's political affiliation categorized as `Democrat`, `Republican` , `No affiliation`. This variable was derived from the variable `Q30` in the original data set, defined as the following:
 
-    -   *Response to the question “Generally speaking, do you think of yourself as a…”*
+  - *Response to the question “Generally speaking, do you think of yourself as a…”*
 
-        -   *1:Republican*
+    - *1:Republican*
 
-        -   *2: Democrat*
+    - *2: Democrat*
 
-        -   *3: Independent*
+    - *3: Independent*
 
-        -   *4: Another party, please specify*
+    - *4: Another party, please specify*
 
-        -   *5: No preference*
+    - *5: No preference*
 
-        -   *-1: No response*
+    - *-1: No response*
 
-    -   Responses `3, 4, 5,-1` are classified as "No affiliation" in this analysis.
+  - Responses `3, 4, 5,-1` are classified as "No affiliation" in this analysis.
 
--   `income_cat`: Respondent's annual income (`Less than $40k`, `$40-75k`, `$75-125k`, `$125k or more`)
+- `income_cat`: Respondent's annual income (`Less than $40k`, `$40-75k`, `$75-125k`, `$125k or more`)
 
 The goal of this analysis is to use `age` and `party_id` to predict `voting_id` and describe factors associated with variability in voting behavior. The univariate exploratory data analysis is in @fig-voting-univar-eda and @tbl-voting-univar-eda.
 
@@ -211,8 +305,8 @@ $$\begin{aligned}
 \log\Big(\frac{\pi_B}{\pi_A}\Big) = \beta_{0
 B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
 \log\Big(\frac{\pi_C}{\pi_A}\Big) = \beta_{0C} + \beta_{1C}X_1 +\beta_{2C}X_2 + \dots + \beta_{pC}X_p 
-\end{aligned}
-$$ {#eq-multinom-general}
+\end{aligned}$$
+ {#eq-multinom-general}
 
 From @eq-multinom-general, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline[^13-special-topics-1]. WE saw this implicitly in logistic regression, where the response variable, $\log(\frac{\pi}{1-\pi})$, is the "log odds of $Y = 1$ versus $Y = 0$."
 
@@ -244,12 +338,10 @@ The column `y.level` indicates the corresponding level for the given equation. T
 
 We can write the model in @tbl-voter-model as the following:
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \log\Big(\frac{\pi_{sporadic}}{\pi_{rarely/never}}\Big)  = -1.046 + 0.041 \times \text{age} -0.677 \times \text{No affiliation} -0.106 \times \text{Republican} \\
 \log\Big(\frac{\pi_{always}}{\pi_{rarely/never}}\Big)  = -1.983 + 0.052 \times \text{age} -0.872 \times \text{No affiliation}  -0.091 \times \text{Republican}
-\end{aligned}
-$$
+\end{aligned}$$
 
 ### Interpretation
 
@@ -287,9 +379,8 @@ We often want to use multinomial logistic regression models for prediction, and 
 
 Let's go back to the general form of the model in @eq-multinom-general. The predicted probability an observation is in category $B$ is computed as
 
-$$
-\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}
-$$ {#eq-multinom-pred-prob}
+$$\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}$$
+ {#eq-multinom-pred-prob}
 
 <!--# do i want to do the subscript i?-->
 
@@ -297,9 +388,8 @@ The numerator of @eq-multinom-pred-prob are the odds of an observation being in 
 
 The predicted probability an observation is in the baseline category $A$ is computed as
 
-$$
-\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)
-$$ {#eq-multinom-pred-baseline}
+$$\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)$$
+ {#eq-multinom-pred-baseline}
 
 @eq-multinom-pred-baseline utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all $K - 1$ equations as part of the multinomial logistic when there are $K$ categories of the response variable.
 
@@ -339,9 +429,9 @@ voters |>
 ::: {.yourturn latex=""}
 Use @fig-confmat-voters-model to compute
 
--   the accuracy.
+- the accuracy.
 
--   the misclassification rate[^13-special-topics-2]
+- the misclassification rate[^13-special-topics-2]
 
 There are `r nrow(voters)` observations in the data.
 :::
@@ -519,16 +609,16 @@ In @sec-ch-mlr, we introduced a data set containing the weight, age, and other c
 
 The data are in `lemurs-repeated-measures.csv`. We will use the following variables:
 
--   `weight`: Weight of the lemur (in grams)
--   `taxon` : Code made as a combination of the lemur's genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxon:
-    -   `ERUF`: Eulemur rufus, commonly known as Red-fronted brown lemur
+- `weight`: Weight of the lemur (in grams)
+- `taxon` : Code made as a combination of the lemur's genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxon:
+  - `ERUF`: Eulemur rufus, commonly known as Red-fronted brown lemur
 
-    -   `PCOQ`: Propithecus coquereli, commonly known as Coquerel's sifaka
+  - `PCOQ`: Propithecus coquereli, commonly known as Coquerel's sifaka
 
-    -   `VRUB`: Varecia rubra, commonly known as Red ruffed lemur
--   `sex` : Sex of lemur (`M`: Male, `F`: Female)
--   `age`: Age of lemur when weight was recorded (in months)
--   `litter_size`: Total number of infants in the litter the lemur was born into (this includes the observed lemur)
+  - `VRUB`: Varecia rubra, commonly known as Red ruffed lemur
+- `sex` : Sex of lemur (`M`: Male, `F`: Female)
+- `age`: Age of lemur when weight was recorded (in months)
+- `litter_size`: Total number of infants in the litter the lemur was born into (this includes the observed lemur)
 
 See @tidytuesday for the full codebook. <!--# more specific reference?-->
 
@@ -622,14 +712,13 @@ The **random intercepts model** includes fixed and random effects, such that the
 
 Let $\text{weight}_{ij}$ be the weight in the $j^{th}$ observation for lemur $i$. Then, the random intercepts model for the lemurs analysis is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \text{weight}_{ij} = \beta_0 &+ \beta_1 ~ \text{taxonPCOQ}_{i} + \beta_2 ~ \text{taxonVRUB}_i \\
 & +\beta_3 ~ \text{sexM}_{i}  + \beta_4 ~ \text{litter\_size}_{i} + \beta_5 ~ \text{age}_{ij}\\
 & + u_i + \epsilon_{ij} \\
 &u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}
-$$ {#eq-lemurs-random-int}
+\end{aligned}$$
+ {#eq-lemurs-random-int}
 
 Let's break down the components of @eq-lemurs-random-int. The subscript indicate whether the variable is at the first or second level of the data. The variable `age` is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur $i$ at the $j^{th}$ observation. The other predictors are measured at the second level of the data, so the subscript $i$ indicates that we plug in the same value for lemur $i$ across all its observations. The term $\beta_0$ is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.
 
@@ -652,20 +741,18 @@ tidy(lemurs_fit) |>
 
 The equation of the fitted model is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \widehat{\text{weight}}_{ij} = 15.969 &+  449.932 ~ \text{taxonPOQ} +  1021.387 ~ \text{taxonVRUB} \\
 &  -27.073 ~ \text{sexM} - 66.771 ~ \text{litter\_size} + 147.719 ~ \text{age} \\
 &\hat{\sigma}_u = 311.504 \hspace{5mm} \hat{\sigma}_\epsilon = 356.275
-\end{aligned}
-$$
+\end{aligned}$$
 
 ::: {.yourturn latex=""}
 Use the model in @tbl-lemurs-model-random-int.
 
--   Interpret the coefficient of `age` in the context of the data.
+- Interpret the coefficient of `age` in the context of the data.
 
--   Explain what $\hat{\sigma}_u = 311.504$ means in the context of the data.[^13-special-topics-4]
+- Explain what $\hat{\sigma}_u = 311.504$ means in the context of the data.[^13-special-topics-4]
 :::
 
 [^13-special-topics-4]: `age:` As a lemur gets one month older, its weight is expected to increase by 147.719 grams, on average, after adjusting for taxon, sex, and litter size.
@@ -704,10 +791,10 @@ The models presented in this book thus far have been parametric methods, in whic
 
 In the book *Introduction to Statistical Learning 2nd edition, @james2021introduction* \[pp. 339\] lists advantages of tree-based models compared to GLMs.
 
-> -   They are easier for others to understand;
-> -   They are believed to better mirror the human decision-making process;
-> -   They can more easily represented visually, making it easier for non-experts to understand them;
-> -   They can use categorical predictors without creating indicator variables.
+> - They are easier for others to understand;
+> - They are believed to better mirror the human decision-making process;
+> - They can more easily represented visually, making it easier for non-experts to understand them;
+> - They can use categorical predictors without creating indicator variables.
 
 This list could be summarized as "The key advantage to tree-based models is that they are easy for others, especially non-experts, to understand." Here we introduce two tree-based models: regression trees for quantitative response variables and classification trees for categorical response variables.
 
@@ -749,9 +836,8 @@ A regression tree is made up of a series of nodes (also called *leaves*) and bra
 
 At each step, the model searches to find the variable and associated cut point that minimizes the sum of squares residual (SSR) in [@eq-tree-ssr]. This is the same SSR introduced in @sec-slr-sum-sq. Minimizing SSR maximizes the similarity of observations within a node. This process continues until making a new split no longer minimizes the SSR.
 
-$$
-SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2
-$$ {#eq-tree-ssr}
+$$SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2$$
+ {#eq-tree-ssr}
 
 Now let's fit the regression tree to predict `expenditure_m` using `enrollment_th`, `region`, and `type`. Because the primary objective for the tree is prediction, we split the data into training (80%) and testing (20%) sets ([@sec-training-testing]). This will give us an assessment on how well the model performs on new data.
 
@@ -815,9 +901,8 @@ The RMSE for the testing data is `r round(rmse_test, 3)`. This is the terms of t
 
 Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression [@sec-ch-logistic] or multinomial logistic regression [@sec-multinomial]. They are very similar to regression trees with two primary differences. The first is that predictions in the **terminal nodes** are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the **Gini Index** shown in [@eq-gini-index]
 
-$$
-\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2
-$$ {#eq-gini-index}
+$$\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2$$
+ {#eq-gini-index}
 
 where $p_{mk}$ is the proportion of observations in the $m^{th}$ node that belong to class $k$. Similar to RSS, the model selects the variable and cutoff that minimizes the Gini index at each step. Low values of the Gini index indicate a large proportion of observations in a given node are from the same class.
 
@@ -931,14 +1016,14 @@ Let's apply propensity score matching to evaluate the effect of an educational p
 
 We will use the variables below. The definitions are adapted from @evans2025testing.
 
--   `Grade`: Grade level (9, 10, 11, 12)
--   `Gender`: Gender (F, M)
--   `Ethnicity`: Ethnicity (Hispanic, Non-Hispanic)
--   `ELL`: Whether student is an English language learner (N, Y)
--   `Sped`: Whether student is in a special education program (N, Y)
--   `Homeless`: Whether student is homeless (N, Y)
--   `Tracking.Pathway`: Whether student was in Project ACE (Treatment) or not (Control)
--   `Current.GPA`: Grade Point Average (GPA) ranging 0 to 5.0
+- `Grade`: Grade level (9, 10, 11, 12)
+- `Gender`: Gender (F, M)
+- `Ethnicity`: Ethnicity (Hispanic, Non-Hispanic)
+- `ELL`: Whether student is an English language learner (N, Y)
+- `Sped`: Whether student is in a special education program (N, Y)
+- `Homeless`: Whether student is homeless (N, Y)
+- `Tracking.Pathway`: Whether student was in Project ACE (Treatment) or not (Control)
+- `Current.GPA`: Grade Point Average (GPA) ranging 0 to 5.0
 
 ```{r}
 #| label: fig-response-gpa
@@ -1011,13 +1096,12 @@ Choosing the variables to include in the propensity score model can be challengi
 
 The propensity score model is a logistic regression model where the response variable is the binary indicator for Treatment vs. Control. As shown in @eq-propensity-score-model, we use this model to compute the probability that an individual is in the treatment group. The form of the propensity score model for this analysis is as follows:
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \log\Big(\frac{\pi}{1-\pi}\Big) = \beta_0 &+ \beta_1 ~ \text{Grade10} + \beta_2 ~ \text{Grade11} + \beta_3 ~ \text{Grade12}  \\
 & + \beta_4 ~ \text{GenderM} + \beta_5 ~ \text{EthnicityNon-Hispanic} \\
 &+ \beta_6 ~ \text{ELL} + \beta_7 ~ \text{Sped} + \beta_8 ~ \text{Homeless} 
-\end{aligned}
-$$ {#eq-propensity-score-model} where $\pi$ is the propensity, the probability of being in the treatment group (participating in Project ACE). @tbl-propensity-score-model is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.-->
+\end{aligned}$$
+ {#eq-propensity-score-model} where $\pi$ is the propensity, the probability of being in the treatment group (participating in Project ACE). @tbl-propensity-score-model is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.-->
 
 ```{r}
 #| label: tbl-propensity-score-model
@@ -1151,9 +1235,8 @@ In @fig-compare-distributions-matched, the distributions of these student charac
 
 Once we have the matched data set, it's time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.
 
-$$
-\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in @eq-treatment-model. The fitted model is in @tbl-model-treatment-effect.
+$$\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in @eq-treatment-model. The fitted model is in @tbl-model-treatment-effect.
 
 ```{r}
 #| label: tbl-model-treatment-effect
