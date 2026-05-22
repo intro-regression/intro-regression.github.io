@@ -444,16 +444,37 @@ window.Quarto = {
 </ul></section><section id="missing-data" class="level2" data-number="13.1"><h2 data-number="13.1" class="anchored" data-anchor-id="missing-data">
 <span class="header-section-number">13.1</span> Missing data</h2>
 <!--# notes for reference: https://www2.stat.duke.edu/courses/Fall19/sta210.001/slides/lec-slides/23-model-val-missing.html#31-->
+<!--# reference for MICE package: https://amices.org/mice/-->
 <!--# Link to Gelman book - See Chapter 25-->
 <ul>
 <li><p>Introduce data set (maybe go back to recipes data set from Chapter 30).</p></li>
 <li>
 <p>How does missingness appear in the data set.</p>
 <ul>
-<li><p>Generally NAs</p></li>
-<li><p>Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.</p></li>
+<li>Showing example - some columns of data.</li>
 </ul>
 </li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 8
+  name             calories   fat carbs protein avg_rating total_ratings reviews
+  &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+1 Danish Butter C…       90     5    10       1       NA              NA      NA
+2 Brazilian Quent…       NA    NA    NA      NA        4               2       2
+3 Chef John's Nas…     1115    66    75      54        4.5            96      84
+4 Rose Water Turk…       70    NA    17       1        2.2             5       4
+5 Chicken Adobo T…       NA    NA    NA      NA       NA              NA      NA</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Chef John’s Nashville Hot Chicken - complete case</p></li>
+<li><p>Brazilian Quentao - missing nutrition information. Upon further reserach, find that this is a type of mulled wine, so it is logical that these values would be missing.</p></li>
+<li><p>Chicken Adobo Tacos - Missing a lot of data so, perhaps this observation is not useable</p></li>
+<li><p>Rose Water Turkish Delight - missing 1 of the nutrition variables, so a type of imputation could be helpful.</p></li>
+<li><p>Danish Butter Cookies - missing data about reviews and ratings which is the primary response of interest.</p></li>
+<li><p>Generally NAs</p></li>
+<li><p>Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.</p></li>
 </ul>
 <section id="types-of-missigness" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="types-of-missigness">
 <span class="header-section-number">13.1.1</span> Types of missigness</h3>
@@ -710,14 +731,14 @@ Figure&nbsp;13.2: Bivariate EDA for voting frequency data. Blue: rarely/never, R
 <p><span class="math display">\[P(Y = 1) = \pi_1, P(Y = 2) = \pi_2, \ldots, P(Y = K) = \pi_K\]</span> such that <span class="math inline">\(\sum_{k=1}^K \pi_K = 1\)</span></p>
 </div>
 <p>Let’s look at the general form of the multinomial logistic regression model, then apply it to model voting frequency. Suppose we have a categorical response variable that takes values <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span>. Let <span class="math inline">\(A\)</span> be the baseline level. Then, the general form of the multinomial logistic regression model is</p>
-<p><span class="math display">\[\begin{aligned}
+<p><span id="eq-multinom-general"><span class="math display">\[\begin{aligned}
 \log\Big(\frac{\pi_B}{\pi_A}\Big) = \beta_{0
 B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
 \log\Big(\frac{\pi_C}{\pi_A}\Big) = \beta_{0C} + \beta_{1C}X_1 +\beta_{2C}X_2 + \dots + \beta_{pC}X_p
-\end{aligned}\]</span> {#eq-multinom-general}</p>
-<p>From <span class="quarto-unresolved-ref">?eq-multinom-general</span>, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. WE saw this implicitly in logistic regression, where the response variable, <span class="math inline">\(\log(\frac{\pi}{1-\pi})\)</span>, is the “log odds of <span class="math inline">\(Y = 1\)</span> versus <span class="math inline">\(Y = 0\)</span>.”</p>
+\end{aligned} \tag{13.1}\]</span></span></p>
+<p>From <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. WE saw this implicitly in logistic regression, where the response variable, <span class="math inline">\(\log(\frac{\pi}{1-\pi})\)</span>, is the “log odds of <span class="math inline">\(Y = 1\)</span> versus <span class="math inline">\(Y = 0\)</span>.”</p>
 <p>The next feature of multinomial logistic regression is the multiple equations that comprise the model. More specifically, if the response variable has <span class="math inline">\(K\)</span> levels, then there will be <span class="math inline">\(K - 1\)</span> equations in the model. We will ultimately use the model to compute the predicted probabilities an observation takes each level of the response variable, so we need all <span class="math inline">\(K-1\)</span> equations in order to compute the predicted probabilities for every level of the response variable.</p>
-<p>The last feature is that each of the <span class="math inline">\(K -1\)</span> equations have the same form but different values of the coefficients. This is shown in <span class="quarto-unresolved-ref">?eq-multinom-general</span> as the <span class="math inline">\(\beta's\)</span> have unique indices in each equation. As with logistic regression, the coefficients for multinomial logistic regression are estimated using maximum likelihood estimation (<a href="11-logistic.html#sec-logistic-interpret-coef" class="quarto-xref">see&nbsp;<span>11.4</span></a>).</p>
+<p>The last feature is that each of the <span class="math inline">\(K -1\)</span> equations have the same form but different values of the coefficients. This is shown in <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> as the <span class="math inline">\(\beta's\)</span> have unique indices in each equation. As with logistic regression, the coefficients for multinomial logistic regression are estimated using maximum likelihood estimation (<a href="11-logistic.html#sec-logistic-interpret-coef" class="quarto-xref">see&nbsp;<span>11.4</span></a>).</p>
 <p><a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> is the multinomial logistic regression model using <code>age</code> and <code>party_id</code> to predict <code>voter_category</code>.</p>
 <div class="cell">
 <div id="tbl-voter-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -872,13 +893,13 @@ Table&nbsp;13.2: Model of <code>voter_category</code> versus <code>age</code> an
 </section><section id="prediction-and-classification" class="level3" data-number="13.2.4"><h3 data-number="13.2.4" class="anchored" data-anchor-id="prediction-and-classification">
 <span class="header-section-number">13.2.4</span> Prediction and classification</h3>
 <p>We often want to use multinomial logistic regression models for prediction, and more specifically classifying observations into the groups defined by the response variable. We can use the log odds produced by the multinomial logistic model to compute probabilities, then use those probabilities for classification.</p>
-<p>Let’s go back to the general form of the model in <span class="quarto-unresolved-ref">?eq-multinom-general</span>. The predicted probability an observation is in category <span class="math inline">\(B\)</span> is computed as</p>
-<p><span class="math display">\[\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}\]</span> {#eq-multinom-pred-prob}</p>
+<p>Let’s go back to the general form of the model in <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>. The predicted probability an observation is in category <span class="math inline">\(B\)</span> is computed as</p>
+<p><span id="eq-multinom-pred-prob"><span class="math display">\[\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}} \tag{13.2}\]</span></span></p>
 <!--# do i want to do the subscript i?-->
-<p>The numerator of <span class="quarto-unresolved-ref">?eq-multinom-pred-prob</span> are the odds of an observation being in category <span class="math inline">\(B\)</span> versus the baseline <span class="math inline">\(A\)</span>. The denominator is the sum of the odds for every possible level. In this example, it is the sum of the odds an observation is in category <span class="math inline">\(A\)</span> versus <span class="math inline">\(A\)</span> (that’s the “1” in the denominator), the odds an observation is in category <span class="math inline">\(B\)</span> versus <span class="math inline">\(A\)</span>, and the odds an observation is in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>. A similar formula is used to compute <span class="math inline">\(\hat{p}_c\)</span>, the predicted probability of being in category <span class="math inline">\(C\)</span>. The difference is the numerator, which would be the odds of being in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>.</p>
+<p>The numerator of <a href="#eq-multinom-pred-prob" class="quarto-xref">Equation&nbsp;<span>13.2</span></a> are the odds of an observation being in category <span class="math inline">\(B\)</span> versus the baseline <span class="math inline">\(A\)</span>. The denominator is the sum of the odds for every possible level. In this example, it is the sum of the odds an observation is in category <span class="math inline">\(A\)</span> versus <span class="math inline">\(A\)</span> (that’s the “1” in the denominator), the odds an observation is in category <span class="math inline">\(B\)</span> versus <span class="math inline">\(A\)</span>, and the odds an observation is in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>. A similar formula is used to compute <span class="math inline">\(\hat{p}_c\)</span>, the predicted probability of being in category <span class="math inline">\(C\)</span>. The difference is the numerator, which would be the odds of being in category <span class="math inline">\(C\)</span> versus <span class="math inline">\(A\)</span>.</p>
 <p>The predicted probability an observation is in the baseline category <span class="math inline">\(A\)</span> is computed as</p>
-<p><span class="math display">\[\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)\]</span> {#eq-multinom-pred-baseline}</p>
-<p><span class="quarto-unresolved-ref">?eq-multinom-pred-baseline</span> utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all <span class="math inline">\(K - 1\)</span> equations as part of the multinomial logistic when there are <span class="math inline">\(K\)</span> categories of the response variable.</p>
+<p><span id="eq-multinom-pred-baseline"><span class="math display">\[\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C) \tag{13.3}\]</span></span></p>
+<p><a href="#eq-multinom-pred-baseline" class="quarto-xref">Equation&nbsp;<span>13.3</span></a> utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all <span class="math inline">\(K - 1\)</span> equations as part of the multinomial logistic when there are <span class="math inline">\(K\)</span> categories of the response variable.</p>
 <p><a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.3</span></a> shows the predicted probabilities based on <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> for ten observations in the data.</p>
 <div class="cell">
 <div id="tbl-voter-model-pred" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -1019,7 +1040,7 @@ Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in <a href
 <span class="header-section-number">13.2.7</span> Multinomial logistic regression in R</h3>
 <p>Multinomial logistic models are fit using <code>multinom()</code> from the <strong>nnet</strong> R package <span class="citation" data-cites="nnet">(<a href="references.html#ref-nnet" role="doc-biblioref">Venables and Ripley 2002</a>)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># library(nnet) </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># library(nnet) </span></span>
 <span></span>
 <span><span class="va">voter_fit</span> <span class="op">&lt;-</span> <span class="fu">multinom</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span>,</span>
 <span>                      data <span class="op">=</span> <span class="va">voters</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1033,7 +1054,7 @@ converged</code></pre>
 </div>
 <p>The model output can be tidied and neatly displayed using <code>tidy()</code> from the <strong>broom</strong> package <span class="citation" data-cites="broom">(<a href="references.html#ref-broom" role="doc-biblioref">Robinson, Hayes, and Couch 2023</a>)</span> and <code>kable()</code> from the <strong>knitR</strong> package <span class="citation" data-cites="knitr">(<a href="references.html#ref-knitr" role="doc-biblioref">Xie 2024</a>)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">voter_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">voter_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1129,7 +1150,7 @@ converged</code></pre>
 <p>Predictions from the multinomial model are computed using the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function. The argument <code>type = "probs"</code> produces a matrix of the predicted probabilities and <code>type = "class"</code> produces a vector of the predicted classes.</p>
 <p>We add these to the original tibble for additional analysis.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute predicted probabilities</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute predicted probabilities</span></span>
 <span><span class="va">voter_pred_prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">voter_fit</span>, type <span class="op">=</span> <span class="st">"probs"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># compute predicted class</span></span>
@@ -1143,19 +1164,19 @@ converged</code></pre>
 <p>The syntax for the confusion matrix, ROC curves, and AUC are similar to logistic regression in <a href="12-logistic-prediction.html#sec-logistic-prediction-R" class="quarto-xref"><span>Section 12.6</span></a>.</p>
 <p>The confusion matrix is produced using <code>conf_mat()</code> from the <strong>yardstick</strong> R package <span class="citation" data-cites="yardstick">(<a href="references.html#ref-yardstick" role="doc-biblioref">Kuhn, Vaughan, and Hvitfeldt 2025</a>)</span>. We use <code>autoplot()</code> to format the confusion matrix such that the cells are shaded by the number of observations.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">conf_mat</span><span class="op">(</span><span class="va">voter_category</span>, <span class="va">pred_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">autoplot</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="13-special-topics_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The multiclass ROC curves are produced using <code>roc_curve()</code> in the <strong>yardstick</strong> R package <span class="citation" data-cites="yardstick">(<a href="references.html#ref-yardstick" role="doc-biblioref">Kuhn, Vaughan, and Hvitfeldt 2025</a>)</span>. The argument <code>truth =</code> specifies the columns with the observed classes, and the next line of code indicates the columns that contain the predicted probabilities. The <code>roc_curve()</code> function produces the data underlying the curves, and <code>autoplot()</code> produces the curves.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_curve</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
 <span>    <span class="va">`rarely/never`</span><span class="op">:</span><span class="va">always</span></span>
@@ -1163,14 +1184,14 @@ converged</code></pre>
 <span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="13-special-topics_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Lastly, the AUC is computed using <code>roc_auc()</code> from the <strong>yardstick</strong> R package. The the weighted average AUC is computed using the argument <code>estimator = "macro_weighted"</code>. The unweighted average AUC is computed by default.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute unweighted average AUC</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute unweighted average AUC</span></span>
 <span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_auc</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
@@ -1182,7 +1203,7 @@ converged</code></pre>
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 1 roc_auc hand_till      0.656</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute weighted average AUC</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute weighted average AUC</span></span>
 <span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_auc</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
@@ -1373,13 +1394,13 @@ Figure&nbsp;13.9
 <p>GLMMs differ from the GLMs we’ve studied thus far, because they include both fixed and random effects. The <strong>fixed effects</strong> are the variables we are interested in studying or explicitly adjusting for in the model. These are the variables for which we want to obtain an estimated coefficient. In the lemurs analysis, the fixed effects are <code>age</code>, <code>taxon</code>, <code>sex</code>, and <code>litter_size</code>. The <strong>random effects</strong> are those we don’t want to estimate explicitly but whose variability we want to understand. These are generally defined by the grouping variable in the data. In this analysis, the random effect is the individual lemur, captured by the variable <code>dlc_id</code>.</p>
 <p>The <strong>random intercepts model</strong> includes fixed and random effects, such that the random effects account for random variability in the intercept. The general form of the model is <!--# think about how to write this./ do i need it?--></p>
 <p>Let <span class="math inline">\(\text{weight}_{ij}\)</span> be the weight in the <span class="math inline">\(j^{th}\)</span> observation for lemur <span class="math inline">\(i\)</span>. Then, the random intercepts model for the lemurs analysis is</p>
-<p><span class="math display">\[\begin{aligned}
+<p><span id="eq-lemurs-random-int"><span class="math display">\[\begin{aligned}
 \text{weight}_{ij} = \beta_0 &amp;+ \beta_1 ~ \text{taxonPCOQ}_{i} + \beta_2 ~ \text{taxonVRUB}_i \\
 &amp; +\beta_3 ~ \text{sexM}_{i}  + \beta_4 ~ \text{litter\_size}_{i} + \beta_5 ~ \text{age}_{ij}\\
 &amp; + u_i + \epsilon_{ij} \\
 &amp;u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}\]</span> {#eq-lemurs-random-int}</p>
-<p>Let’s break down the components of <span class="quarto-unresolved-ref">?eq-lemurs-random-int</span>. The subscript indicate whether the variable is at the first or second level of the data. The variable <code>age</code> is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur <span class="math inline">\(i\)</span> at the <span class="math inline">\(j^{th}\)</span> observation. The other predictors are measured at the second level of the data, so the subscript <span class="math inline">\(i\)</span> indicates that we plug in the same value for lemur <span class="math inline">\(i\)</span> across all its observations. The term <span class="math inline">\(\beta_0\)</span> is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.</p>
+\end{aligned} \tag{13.4}\]</span></span></p>
+<p>Let’s break down the components of <a href="#eq-lemurs-random-int" class="quarto-xref">Equation&nbsp;<span>13.4</span></a>. The subscript indicate whether the variable is at the first or second level of the data. The variable <code>age</code> is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur <span class="math inline">\(i\)</span> at the <span class="math inline">\(j^{th}\)</span> observation. The other predictors are measured at the second level of the data, so the subscript <span class="math inline">\(i\)</span> indicates that we plug in the same value for lemur <span class="math inline">\(i\)</span> across all its observations. The term <span class="math inline">\(\beta_0\)</span> is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.</p>
 <p>The error term <span class="math inline">\(\epsilon_{ij}\)</span> is like the error term previously introduced for linear models. It is the difference between the observed and expected value of the weight for the <span class="math inline">\(j^{th}\)</span> observation from lemur <span class="math inline">\(i\)</span>. As in linear regression, these error terms follow a normal distribution with mean of 0 and variance of <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. This <span class="math inline">\(\sigma^2_{\epsilon}\)</span> is a measure of the variability in the weights (response variable) within an individual lemur (group).</p>
 <p>The term <span class="math inline">\(u_{i}\)</span> is the random effect that makes this the “random intercepts model”. We don’t estimate <span class="math inline">\(u_i\)</span> directly, but its distribution tells us about the variability in the average weights between lemurs. The <span class="math inline">\(u_{i}\)</span> are normally distributed with a mean of 0 and variance of <span class="math inline">\(\sigma^2_{u}\)</span>. This <span class="math inline">\(\sigma^2_{u}\)</span> is the measure of between lemur variability. From this model, the intercept of an individual lemur <span class="math inline">\(i\)</span> is <span class="math inline">\(\beta_0 + u_i\)</span> where, <span class="math inline">\(u_i\)</span> is drawn from <span class="math inline">\(N(0,\sigma^2_{u})\)</span>.</p>
 <p>The coefficients <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_5\)</span> and the variance components <span class="math inline">\(\sigma_u\)</span> and <span class="math inline">\(\sigma_{\epsilon}\)</span> are estimated using maximum likelihood estimation. The output for the lemurs random intercepts model is in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a>.</p>
@@ -1487,7 +1508,7 @@ Table&nbsp;13.5: Random intercepts model for lemurs data
 <span class="header-section-number">13.3.3</span> Random intercepts model in R</h3>
 <p>Random intercepts models are fit using the <code>lmer</code> function in the <code>lme4</code> R package <span class="citation" data-cites="lme4">(<a href="references.html#ref-lme4" role="doc-biblioref">Bates et al. 2015</a>)</span>. The syntax for the response and predictor variables is the same as in <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. The grouping variable is specified using the syntax <code>(1|grouping_var)</code>. This specifies that the random intercepts are based on <code>grouping_var</code>. The syntax for the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a> is below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_fit</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">taxon</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">litter_size</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_fit</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">taxon</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">litter_size</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> </span>
 <span>                     <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">dlc_id</span><span class="op">)</span>, </span>
 <span>                   data <span class="op">=</span> <span class="va">lemurs</span><span class="op">)</span></span>
 <span></span>
@@ -1509,7 +1530,7 @@ Fixed Effects:
 </div>
 <p>The results can be displayed in a tidy format using <code>tidy</code> function in the <strong>broom.mixed</strong> R package <span class="citation" data-cites="broom.mixed">(<a href="references.html#ref-broom.mixed" role="doc-biblioref">Bolker and Robinson 2024</a>)</span>. The results below are neatly displayed using <code>kable()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lemurs_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lemurs_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1643,8 +1664,8 @@ Figure&nbsp;13.10: Distribution of original and log-transformed <code>expenditur
 <p>When the response variable is strongly skewed, it is good practice to use the transformed version in the regression tree. Though regression trees do not rely on the same assumptions as linear regression, their results can be strongly influenced by extreme observations when the distribution of the response variable is heavily skewed. Predictor variables do not need to be transformed for regression trees, because the tree does not depend on a linear relationship between the response and predictor variables.</p>
 </div>
 <p>A regression tree is made up of a series of nodes (also called <em>leaves</em>) and branches. The <strong>nodes</strong> are the decision-making points at each split (e.g., <code>enrollment_th &lt; 10?</code>). The <strong>branches</strong> connect two nodes (e.g, <code>enrollment_th &lt; 10 = TRUE</code> and <code>enrollment_th &lt; 10 = FALSE</code>). The <strong>terminal nodes</strong> are the points at the end of the tree where the data are no longer split and the predictions are made. The prediction is the mean value of the response variable for the observations in that node.</p>
-<p>At each step, the model searches to find the variable and associated cut point that minimizes the sum of squares residual (SSR) in <span class="quarto-unresolved-ref">?eq-tree-ssr</span>. This is the same SSR introduced in <a href="04-slr.html#sec-slr-sum-sq" class="quarto-xref"><span>Section 4.7.2</span></a>. Minimizing SSR maximizes the similarity of observations within a node. This process continues until making a new split no longer minimizes the SSR.</p>
-<p><span class="math display">\[SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2\]</span> {#eq-tree-ssr}</p>
+<p>At each step, the model searches to find the variable and associated cut point that minimizes the sum of squares residual (SSR) in <a href="#eq-tree-ssr" class="quarto-xref">Equation&nbsp;<span>13.5</span></a>. This is the same SSR introduced in <a href="04-slr.html#sec-slr-sum-sq" class="quarto-xref"><span>Section 4.7.2</span></a>. Minimizing SSR maximizes the similarity of observations within a node. This process continues until making a new split no longer minimizes the SSR.</p>
+<p><span id="eq-tree-ssr"><span class="math display">\[SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2 \tag{13.5}\]</span></span></p>
 <p>Now let’s fit the regression tree to predict <code>expenditure_m</code> using <code>enrollment_th</code>, <code>region</code>, and <code>type</code>. Because the primary objective for the tree is prediction, we split the data into training (80%) and testing (20%) sets (<a href="10-model-eval.html#sec-training-testing" class="quarto-xref"><span>Section 10.4</span></a>). This will give us an assessment on how well the model performs on new data.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1668,8 +1689,8 @@ Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure
 <p>The RMSE for the testing data is 0.506. This is the terms of the response variable, <code>log(expenditure_m)</code>, so the error in terms of the original variable is 1.659. This means that the average difference between the observed expenditure and predicted is 1.659 million dollars.</p>
 </section><section id="sec-classification-trees" class="level3" data-number="13.4.2"><h3 data-number="13.4.2" class="anchored" data-anchor-id="sec-classification-trees">
 <span class="header-section-number">13.4.2</span> Classification trees</h3>
-<p>Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a> or multinomial logistic regression <a href="#sec-multinomial" class="quarto-xref"><span>Section 13.2</span></a>. They are very similar to regression trees with two primary differences. The first is that predictions in the <strong>terminal nodes</strong> are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the <strong>Gini Index</strong> shown in <span class="quarto-unresolved-ref">?eq-gini-index</span></p>
-<p><span class="math display">\[\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2\]</span> {#eq-gini-index}</p>
+<p>Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a> or multinomial logistic regression <a href="#sec-multinomial" class="quarto-xref"><span>Section 13.2</span></a>. They are very similar to regression trees with two primary differences. The first is that predictions in the <strong>terminal nodes</strong> are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the <strong>Gini Index</strong> shown in <a href="#eq-gini-index" class="quarto-xref">Equation&nbsp;<span>13.6</span></a></p>
+<p><span id="eq-gini-index"><span class="math display">\[\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2 \tag{13.6}\]</span></span></p>
 <p>where <span class="math inline">\(p_{mk}\)</span> is the proportion of observations in the <span class="math inline">\(m^{th}\)</span> node that belong to class <span class="math inline">\(k\)</span>. Similar to RSS, the model selects the variable and cutoff that minimizes the Gini index at each step. Low values of the Gini index indicate a large proportion of observations in a given node are from the same class.</p>
 <p>Let’s go back to the voter frequency data introduced in <a href="#sec-voters-data" class="quarto-xref"><span>Section 13.2.1</span></a>. We’ll use a classification tree to predict the <code>voter_category</code> (<code>rarely/never</code>, <code>sporadic</code>, <code>always</code>) using <code>age</code>, <code>party_id</code>, and an additional variable <code>income_cat</code>. We split the data into training (80%) and testing sets (20%), so we can evaluate the model’s performance on new data.</p>
 <div class="cell">
@@ -1694,7 +1715,7 @@ Figure&nbsp;13.12: Classification tree voter frequency
 <p>We fit decision trees using the <code>rpart()</code> function in the <strong>rpart</strong> R package <span class="citation" data-cites="rpart">(<a href="references.html#ref-rpart" role="doc-biblioref">Therneau and Atkinson 2025</a>)</span>. The argument <code>method =</code> is used to specify the type of decision tree.</p>
 <p>Below is the code for the regression tree fit in <a href="#sec-regression-trees" class="quarto-xref"><span>Section 13.4.1</span></a>. The argument <code>method = "anova"</code> specifies that we are fitting a regression tree. If we type the name of the tree, we see a summary of the nodes and branches</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">expenditure_m</span><span class="op">)</span> <span class="op">~</span> <span class="va">enrollment_th</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">expenditure_m</span><span class="op">)</span> <span class="op">~</span> <span class="va">enrollment_th</span> <span class="op">+</span> </span>
 <span>                     <span class="va">type</span> <span class="op">+</span> <span class="va">region</span>,</span>
 <span>                   data <span class="op">=</span> <span class="va">ncaa_train</span>,</span>
 <span>                   method <span class="op">=</span> <span class="st">"anova"</span><span class="op">)</span></span>
@@ -1731,7 +1752,7 @@ node), split, n, deviance, yval
 </div>
 <p>The code below is the classification tree from <a href="#sec-classification-trees" class="quarto-xref"><span>Section 13.4.2</span></a>. We use the argument <code>method = "class"</code> to specify the classification tree. Similar to regression trees, we can type the name of the tree to see a summary of the nodes and branches.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span> <span class="op">+</span></span>
 <span>                       <span class="va">income_cat</span> <span class="op">+</span> <span class="va">educ</span>, </span>
 <span>                   data <span class="op">=</span> <span class="va">voters_train</span>, </span>
 <span>                   method <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span>
@@ -1754,10 +1775,10 @@ node), split, n, loss, yval, (yprob)
 </div>
 <p>The summaries produced by <code>rpart()</code> are challenging to read, so we use the <code>rpart.plot()</code> from the <strong>rpart.plot</strong> R package <span class="citation" data-cites="rpart.plot">(<a href="references.html#ref-rpart.plot" role="doc-biblioref">Milborrow 2025</a>)</span> to create a visual representation of the tree. The code below produces the visualization of the regression tree for NCAA basketball expenditures.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rpart.plot</span><span class="op">(</span><span class="va">ncaa_tree</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rpart.plot</span><span class="op">(</span><span class="va">ncaa_tree</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="13-special-topics_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="13-special-topics_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1765,7 +1786,7 @@ node), split, n, loss, yval, (yprob)
 <p>Predictions are produced using <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>. This will produce a vector of predictions that can be added to the original data frame to evaluate model performance.</p>
 <p>The code below produces the predictions for the testing data from the regression tree predicting NCAA basketball expenditures and saves the predictions as a column in the testing data. The same code is used to produce predictions from the classification tree.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_test</span> <span class="op">&lt;-</span> <span class="va">ncaa_test</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_test</span> <span class="op">&lt;-</span> <span class="va">ncaa_test</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>predict_expend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ncaa_tree</span>, <span class="va">ncaa_test</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The predictions are in the same units as the response variable, so in this case, the predicted values are the predicted <code>log(expenditure_m)</code>.</p>
@@ -1861,12 +1882,12 @@ Figure&nbsp;13.14: Distribution of Subset of confounding variables for treatment
 </div>
 <!--# We will just look at a few characteristics here, but will use many more in the PSM-->
 <!--# We will not use Free.Lunch bc it is coded as Y for all observations in the available data.-->
-<p>The propensity score model is a logistic regression model where the response variable is the binary indicator for Treatment vs.&nbsp;Control. As shown in <span class="quarto-unresolved-ref">?eq-propensity-score-model</span>, we use this model to compute the probability that an individual is in the treatment group. The form of the propensity score model for this analysis is as follows:</p>
-<p><span class="math display">\[\begin{aligned}
+<p>The propensity score model is a logistic regression model where the response variable is the binary indicator for Treatment vs.&nbsp;Control. As shown in <a href="#eq-propensity-score-model" class="quarto-xref">Equation&nbsp;<span>13.7</span></a>, we use this model to compute the probability that an individual is in the treatment group. The form of the propensity score model for this analysis is as follows:</p>
+<p><span id="eq-propensity-score-model"><span class="math display">\[\begin{aligned}
 \log\Big(\frac{\pi}{1-\pi}\Big) = \beta_0 &amp;+ \beta_1 ~ \text{Grade10} + \beta_2 ~ \text{Grade11} + \beta_3 ~ \text{Grade12}  \\
 &amp; + \beta_4 ~ \text{GenderM} + \beta_5 ~ \text{EthnicityNon-Hispanic} \\
 &amp;+ \beta_6 ~ \text{ELL} + \beta_7 ~ \text{Sped} + \beta_8 ~ \text{Homeless}
-\end{aligned}\]</span> {#eq-propensity-score-model} where <span class="math inline">\(\pi\)</span> is the propensity, the probability of being in the treatment group (participating in Project ACE). <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.6</span></a> is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.--></p>
+\end{aligned} \tag{13.7}\]</span></span> where <span class="math inline">\(\pi\)</span> is the propensity, the probability of being in the treatment group (participating in Project ACE). <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.6</span></a> is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.--></p>
 <div class="cell">
 <div id="tbl-propensity-score-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-propensity-score-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -2026,7 +2047,7 @@ Table&nbsp;13.7: Three pairs of matched observations based on the model in <a hr
 </figure>
 </div>
 </div>
-<p>Sometimes there are <strong>exact matches</strong>, where an observation in the treatment group is matched with an observation in the control group with an equal propensity score. Matches 50 and 118 in the table are examples of this. This generally indicates that the two observations are the same in terms of the characteristics included in the propensity score model <span class="quarto-unresolved-ref">?eq-propensity-score-model</span>. In other cases, such as Match 14, the scores are close but not exact.</p>
+<p>Sometimes there are <strong>exact matches</strong>, where an observation in the treatment group is matched with an observation in the control group with an equal propensity score. Matches 50 and 118 in the table are examples of this. This generally indicates that the two observations are the same in terms of the characteristics included in the propensity score model <a href="#eq-propensity-score-model" class="quarto-xref">Equation&nbsp;<span>13.7</span></a>. In other cases, such as Match 14, the scores are close but not exact.</p>
 <div class="cell">
 <div id="tbl-match-14" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-match-14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -2126,9 +2147,9 @@ Table&nbsp;13.8: Features for observations in Match 14
 Figure&nbsp;13.16: Distribution of subset of confounding variables for treatment versus control groups in the matched data.
 </figcaption></figure>
 </div>
-<p>In <a href="#fig-compare-distributions-matched" class="quarto-xref">Figure&nbsp;<span>13.16</span></a>, the distributions of these student characteristics are now the same for the treatment and control groups (compare to <a href="#fig-compare-distributions" class="quarto-xref">Figure&nbsp;<span>13.14</span></a>). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model <span class="quarto-unresolved-ref">?eq-propensity-score-model</span>. Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere--></p>
+<p>In <a href="#fig-compare-distributions-matched" class="quarto-xref">Figure&nbsp;<span>13.16</span></a>, the distributions of these student characteristics are now the same for the treatment and control groups (compare to <a href="#fig-compare-distributions" class="quarto-xref">Figure&nbsp;<span>13.14</span></a>). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model <a href="#eq-propensity-score-model" class="quarto-xref">Equation&nbsp;<span>13.7</span></a>. Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere--></p>
 <p>Once we have the matched data set, it’s time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.</p>
-<p><span class="math display">\[\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in <span class="quarto-unresolved-ref">?eq-treatment-model</span>. The fitted model is in <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>.</p>
+<p><span id="eq-treatment-model"><span class="math display">\[\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon}) \tag{13.8}\]</span></span> For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in <a href="#eq-treatment-model" class="quarto-xref">Equation&nbsp;<span>13.8</span></a>. The fitted model is in <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>.</p>
 <div class="cell">
 <div id="tbl-model-treatment-effect" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-model-treatment-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -2190,7 +2211,7 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 <p>Much of the code for causal inference is the code for linear <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and logistic <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> models that we’ve seen in previous chapters. The primarily new code is for creating the matched data set using the propensity scores.</p>
 <p>We compute the propensity scores “manually” by fitting a logistic regression model using <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">propensity_score_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">propensity_score_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> </span>
 <span>                                <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span> <span class="va">ELL</span> <span class="op">+</span> </span>
 <span>                                <span class="va">Sped</span> <span class="op">+</span> <span class="va">Homeless</span>,</span>
 <span>                        data <span class="op">=</span> <span class="va">ace</span>, </span>
@@ -2199,7 +2220,7 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 <p>The assigned matches are done using the <code>matchit()</code> function from the <strong>MatchIt</strong> R package <span class="citation" data-cites="MatchIt">(<a href="references.html#ref-MatchIt" role="doc-biblioref">Ho et al. 2011</a>)</span>. The code below shows the propensity score matching for the Project Ace data.</p>
 <p>The argument <code>method = "nearest"</code> species to conduct nearest-neighbor matching (the default method), and <code>distance = "logit"</code> indicates to compute the propensity scores using a logistic regression model. The <code>matchit()</code> function will refit the model with propensity scores.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_psm</span> <span class="op">&lt;-</span> <span class="fu">matchit</span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_psm</span> <span class="op">&lt;-</span> <span class="fu">matchit</span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span></span>
 <span>                          <span class="va">Race</span> <span class="op">+</span> <span class="va">ELL</span> <span class="op">+</span> <span class="va">Sped</span> <span class="op">+</span> <span class="va">Homeless</span>,</span>
 <span>                 data <span class="op">=</span> <span class="va">ace</span>,</span>
 <span>                 method <span class="op">=</span> <span class="st">"nearest"</span>,   </span>
@@ -2218,7 +2239,7 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 </div>
 <p>This code creates a <code>matchit</code> object called <code>ace_psm</code> that contains information about the propensity score matching. We retrieve the matched data using the <code>match.data()</code> function as shown below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_matched</span> <span class="op">&lt;-</span> <span class="fu">match.data</span><span class="op">(</span><span class="va">ace_psm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_matched</span> <span class="op">&lt;-</span> <span class="fu">match.data</span><span class="op">(</span><span class="va">ace_psm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We use <code>glimpse()</code> to see what is in the new matched data set.</p>
 <div class="cell">
@@ -2247,7 +2268,7 @@ $ subclass                                          &lt;fct&gt; 1, 1, 42, 3, 2, 
 <p>There are some new columns in addition to the columns in the original <code>ace</code> tibble. The column <code>distance</code> contains the propensity scores. The column <code>sub.class</code> identifies the matches. The column <code>weights</code> contains sample weights. All observations are equally weighted using the methods introduced in this section. See the resources in <a href="#sec-causal-further-reading" class="quarto-xref"><span>Section 13.5.3</span></a> to learn about propensity score matching that incorporates weighting.</p>
 <p>The <code>lm</code> function is used to fit the linear regression model for the treatment effect.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treatment_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Current.GPA</span> <span class="op">~</span> <span class="va">Tracking.Pathway</span>, data <span class="op">=</span> <span class="va">ace_matched</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treatment_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Current.GPA</span> <span class="op">~</span> <span class="va">Tracking.Pathway</span>, data <span class="op">=</span> <span class="va">ace_matched</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="sec-causal-further-reading" class="level3" data-number="13.5.3"><h3 data-number="13.5.3" class="anchored" data-anchor-id="sec-causal-further-reading">
 <span class="header-section-number">13.5.3</span> Further reading</h3>

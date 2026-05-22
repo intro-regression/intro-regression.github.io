@@ -18,6 +18,9 @@ library(broom.mixed)
 library(rpart.plot)
 library(ggridges)
 library(skimr)
+library(mice)
+
+## voters data
 
 voters <- read_csv("data/fivethirtyeight-voters-data.csv") |>
   mutate(party_id = case_when(Q30 == 1 ~ "Republican", 
@@ -30,6 +33,9 @@ voters <- read_csv("data/fivethirtyeight-voters-data.csv") |>
 
 ## lemurs repeated measures data
 lemurs <- read_csv("data/lemurs-repeated-measures.csv")
+
+## recipes data
+recipes <- read_csv("data/recipes.csv")
 
 # color palette
 sunset2 <- PNWColors::pnw_palette("Sunset2",2)
@@ -48,9 +54,11 @@ This chapter introduces readers to a collection to models that are extensions of
 - Decision trees for regression and classification
 - Causal inference using propensity score models
 
-## Missing data 
+## Missing data
 
 <!--# notes for reference: https://www2.stat.duke.edu/courses/Fall19/sta210.001/slides/lec-slides/23-model-val-missing.html#31-->
+
+<!--# reference for MICE package: https://amices.org/mice/-->
 
 <!--# Link to Gelman book - See Chapter 25-->
 
@@ -58,9 +66,33 @@ This chapter introduces readers to a collection to models that are extensions of
 
 - How does missingness appear in the data set.
 
-  - Generally NAs
+  - Showing example - some columns of data.
 
-  - Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.
+```{r}
+
+recipes_use <- c("Danish Butter Cookies", 
+                 "Brazilian Quentao",
+                 "Rose Water Turkish Delight", 
+                 "Chicken Adobo Tacos",
+                 "Chef John's Nashville Hot Chicken")
+recipes |> 
+  select(name, calories, fat, carbs, protein, avg_rating, total_ratings, reviews) |> 
+  filter(name %in% recipes_use)
+```
+
+- Chef John's Nashville Hot Chicken - complete case
+
+- Brazilian Quentao - missing nutrition information. Upon further reserach, find that this is a type of mulled wine, so it is logical that these values would be missing.
+
+- Chicken Adobo Tacos - Missing a lot of data so, perhaps this observation is not useable
+
+- Rose Water Turkish Delight - missing 1 of the nutrition variables, so a type of imputation could be helpful.
+
+- Danish Butter Cookies - missing data about reviews and ratings which is the primary response of interest.
+
+- Generally NAs
+
+- Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.
 
 ### Types of missigness
 
@@ -305,8 +337,7 @@ $$\begin{aligned}
 \log\Big(\frac{\pi_B}{\pi_A}\Big) = \beta_{0
 B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
 \log\Big(\frac{\pi_C}{\pi_A}\Big) = \beta_{0C} + \beta_{1C}X_1 +\beta_{2C}X_2 + \dots + \beta_{pC}X_p 
-\end{aligned}$$
- {#eq-multinom-general}
+\end{aligned}$$ {#eq-multinom-general}
 
 From @eq-multinom-general, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline[^13-special-topics-1]. WE saw this implicitly in logistic regression, where the response variable, $\log(\frac{\pi}{1-\pi})$, is the "log odds of $Y = 1$ versus $Y = 0$."
 
@@ -379,8 +410,7 @@ We often want to use multinomial logistic regression models for prediction, and 
 
 Let's go back to the general form of the model in @eq-multinom-general. The predicted probability an observation is in category $B$ is computed as
 
-$$\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}$$
- {#eq-multinom-pred-prob}
+$$\hat{\pi}_B = \frac{e^{\beta_{0B} + \beta_{1B}X_1 + \beta_{2B}X_2 + \dots + \beta_{pB}X_p}}{1 + \sum_{k \in (B,C)}e^{\beta_{0k} + \beta_{1k}X_1 + \beta_{2k}X_2 + \dots + \beta_{pk}X_p}}$$ {#eq-multinom-pred-prob}
 
 <!--# do i want to do the subscript i?-->
 
@@ -388,8 +418,7 @@ The numerator of @eq-multinom-pred-prob are the odds of an observation being in 
 
 The predicted probability an observation is in the baseline category $A$ is computed as
 
-$$\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)$$
- {#eq-multinom-pred-baseline}
+$$\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C)$$ {#eq-multinom-pred-baseline}
 
 @eq-multinom-pred-baseline utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all $K - 1$ equations as part of the multinomial logistic when there are $K$ categories of the response variable.
 
@@ -717,8 +746,7 @@ $$\begin{aligned}
 & +\beta_3 ~ \text{sexM}_{i}  + \beta_4 ~ \text{litter\_size}_{i} + \beta_5 ~ \text{age}_{ij}\\
 & + u_i + \epsilon_{ij} \\
 &u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}$$
- {#eq-lemurs-random-int}
+\end{aligned}$$ {#eq-lemurs-random-int}
 
 Let's break down the components of @eq-lemurs-random-int. The subscript indicate whether the variable is at the first or second level of the data. The variable `age` is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur $i$ at the $j^{th}$ observation. The other predictors are measured at the second level of the data, so the subscript $i$ indicates that we plug in the same value for lemur $i$ across all its observations. The term $\beta_0$ is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.
 
@@ -836,8 +864,7 @@ A regression tree is made up of a series of nodes (also called *leaves*) and bra
 
 At each step, the model searches to find the variable and associated cut point that minimizes the sum of squares residual (SSR) in [@eq-tree-ssr]. This is the same SSR introduced in @sec-slr-sum-sq. Minimizing SSR maximizes the similarity of observations within a node. This process continues until making a new split no longer minimizes the SSR.
 
-$$SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2$$
- {#eq-tree-ssr}
+$$SSR = \sum_{i = 1}^n(y_i - \hat{y}_i)^2$$ {#eq-tree-ssr}
 
 Now let's fit the regression tree to predict `expenditure_m` using `enrollment_th`, `region`, and `type`. Because the primary objective for the tree is prediction, we split the data into training (80%) and testing (20%) sets ([@sec-training-testing]). This will give us an assessment on how well the model performs on new data.
 
@@ -901,8 +928,7 @@ The RMSE for the testing data is `r round(rmse_test, 3)`. This is the terms of t
 
 Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression [@sec-ch-logistic] or multinomial logistic regression [@sec-multinomial]. They are very similar to regression trees with two primary differences. The first is that predictions in the **terminal nodes** are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the **Gini Index** shown in [@eq-gini-index]
 
-$$\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2$$
- {#eq-gini-index}
+$$\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2$$ {#eq-gini-index}
 
 where $p_{mk}$ is the proportion of observations in the $m^{th}$ node that belong to class $k$. Similar to RSS, the model selects the variable and cutoff that minimizes the Gini index at each step. Low values of the Gini index indicate a large proportion of observations in a given node are from the same class.
 
@@ -1100,8 +1126,7 @@ $$\begin{aligned}
 \log\Big(\frac{\pi}{1-\pi}\Big) = \beta_0 &+ \beta_1 ~ \text{Grade10} + \beta_2 ~ \text{Grade11} + \beta_3 ~ \text{Grade12}  \\
 & + \beta_4 ~ \text{GenderM} + \beta_5 ~ \text{EthnicityNon-Hispanic} \\
 &+ \beta_6 ~ \text{ELL} + \beta_7 ~ \text{Sped} + \beta_8 ~ \text{Homeless} 
-\end{aligned}$$
- {#eq-propensity-score-model} where $\pi$ is the propensity, the probability of being in the treatment group (participating in Project ACE). @tbl-propensity-score-model is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.-->
+\end{aligned}$$ {#eq-propensity-score-model} where $\pi$ is the propensity, the probability of being in the treatment group (participating in Project ACE). @tbl-propensity-score-model is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.-->
 
 ```{r}
 #| label: tbl-propensity-score-model
@@ -1235,8 +1260,7 @@ In @fig-compare-distributions-matched, the distributions of these student charac
 
 Once we have the matched data set, it's time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.
 
-$$\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
- {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in @eq-treatment-model. The fitted model is in @tbl-model-treatment-effect.
+$$\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in @eq-treatment-model. The fitted model is in @tbl-model-treatment-effect.
 
 ```{r}
 #| label: tbl-model-treatment-effect

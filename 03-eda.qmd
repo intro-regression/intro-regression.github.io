@@ -17,13 +17,13 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Describe the distribution of an individual variable using visualizations and summary statistics
+- Describe the distribution of an individual variable using visualizations and summary statistics
 
--   Describe the relationship between two or more variables using visualizations and summary statistics
+- Describe the relationship between two or more variables using visualizations and summary statistics
 
--   Identify outliers and other interesting features in the data
+- Identify outliers and other interesting features in the data
 
--   Explain how outliers and other unusual features may impact analysis results <!--# I'd like another word besides unusual or interesting-->
+- Explain how outliers and other unusual features may impact analysis results <!--# I'd like another word besides unusual or interesting-->
 
 <!--# learning goal?  Conduct exploratory data analysis in R ?-->
 
@@ -106,43 +106,43 @@ The analysis in this chapter will focus on `r nrow(recipes)` recipes that were p
 
 The data are in `recipes.csv`. We will use the following variables: <!--# remove all the variables I don't end up using-->
 
--   `country`: The country / region the cuisine is from (`Brazilian`, `Filipino`, `French`, `Italian`, `Other`). This is a simplified version of the `country` variable in the `cuisines` data frame.
+- `country`: The country / region the cuisine is from (`Brazilian`, `Filipino`, `French`, `Italian`, `Other`). This is a simplified version of the `country` variable in the `cuisines` data frame.
 
--   `author`: User who posted the recipe
+- `author`: User who posted the recipe
 
--   `chef_john`: Indicator of whether recipe was posted by American Chef John Mitzewich (known as Chef John), derived from the variable `author`. (`1`: Posted by Chef John, `0`: Not posted by Chef John)
+- `chef_john`: Indicator of whether recipe was posted by American Chef John Mitzewich (known as Chef John), derived from the variable `author`. (`1`: Posted by Chef John, `0`: Not posted by Chef John)
 
--   `month`: Month in which the recipe posted, derived from the variable `date_published` in the `cuisines` data frame. (`1`: January, `2`: February, `3`: March, . . ., `12`: December).
+- `month`: Month in which the recipe posted, derived from the variable `date_published` in the `cuisines` data frame. (`1`: January, `2`: February, `3`: March, . . ., `12`: December).
 
--   `season`: Season in which the recipe was posted, derived from variable `date_published` and based on the definition of seasons in @ncei.)
+- `season`: Season in which the recipe was posted, derived from variable `date_published` and based on the definition of seasons in @ncei.)
 
-    -   `Spring`: Months 3, 4, 5
+  - `Spring`: Months 3, 4, 5
 
-    -   `Summer`: Months 6, 7, 8
+  - `Summer`: Months 6, 7, 8
 
-    -   `Fall`: Months 9, 10, 11
+  - `Fall`: Months 9, 10, 11
 
-    -   `Winter`: Months 12, 1, 2
+  - `Winter`: Months 12, 1, 2
 
--   `calories`: Number of calories per serving
+- `calories`: Number of calories per serving
 
--   `protein`: Amount of protein per serving (in grams)
+- `protein`: Amount of protein per serving (in grams)
 
--   `avg_rating`: Average rating (`1`: worst to `5`: best)
+- `avg_rating`: Average rating (`1`: worst to `5`: best)
 
--   `total_ratings`: Number of ratings
+- `total_ratings`: Number of ratings
 
--   `reviews`: Number of reviews
+- `reviews`: Number of reviews
 
--   `prep_time`: Preparation time (in minutes)
+- `prep_time`: Preparation time (in minutes)
 
--   `cook_time`: Cooking time (in minutes)
+- `cook_time`: Cooking time (in minutes)
 
--   `total_time`: Total time to make dish (in minutes).
+- `total_time`: Total time to make dish (in minutes).
 
-    -   Note this is often `prep_time` + `cook_time` but not always. This could include other factors such as marination time or additional waiting periods.
+  - Note this is often `prep_time` + `cook_time` but not always. This could include other factors such as marination time or additional waiting periods.
 
--   `servings`: Number of servings
+- `servings`: Number of servings
 
 See the **tastyR** documentation [@tastyR] for the full codebook.
 
@@ -168,10 +168,10 @@ In his 1977 book *Exploratory Data Analysis* , Statistician John Tukey described
 
 @fig-eda-workflow shows the workflow for exploratory data analysis. We typically start by getting a general sense of the data, then explore more detailed relationships in the data. <!--# maybe make this a diagram? Maybe something like a pyramid and then add outliers and such alongside it-->
 
--   Clean data
--   Explore individual variables
--   Explore relationships between two variables
--   Explore relationships between three or more variables
+- Clean data
+- Explore individual variables
+- Explore relationships between two variables
+- Explore relationships between three or more variables
 
 In each step of the workflow, we will also make note of **outliers**, observations that are far from the majority of the data. The remainder of this chapter follows the progression outlined above, but the workflow may not be as linear in practice. In fact, some data cleaning may occur based on what is learned at each subsequent step. The goal is to *explore*, and thus use judgment and creativity to move around the data and guide the exploration.
 
@@ -195,9 +195,9 @@ Once we understand the structure of the data, we look at the individual variable
 There are three types of variables: quantitative variables, categorical variables, and identifier variables. We typically assign the variable type based on the description and how the observations appear in the data. For example, we typically think of a variable such as *age*, an individual's age in years, as quantitative. This is the case if the values are numeric values such as `18, 24, 35,...`. However, *age* is a categorical variable if is defined as age ranges, such as `18-25, 26-30, 31-35,...`. It is important to know the variable type, because that informs how the variable is handled in the regression analysis.
 
 ::: {.yourturn latex=""}
--   What type of variable is `month`?
+- What type of variable is `month`?
 
--   What is the more reliable identifier variable - `name` or `url`?[^03-eda-1]
+- What is the more reliable identifier variable - `name` or `url`?[^03-eda-1]
 :::
 
 [^03-eda-1]: Month is a categorical variable, because each number represents a specific month. The more reliable identifier variable is `url`. There is one recipe per page, and multiple pages cannot have the same URL. Therefore, the URL uniquely identifies the recipe. Though unlikely, it is possible for multiple recipes to have the same name. This actually occurs for two names in the data "Cajun Chicken and Sausage Gumbo" and "Chicharrones de Pollo".
@@ -670,9 +670,9 @@ The **range** $(\text{max} - \text{min})$ should be used with caution and not re
 ::: {.analysis_in_practice latex=""}
 To describe the center and spread of a distribution, use
 
--   the mean and standard deviation if there is no extreme skewness or outliers, or
+- the mean and standard deviation if there is no extreme skewness or outliers, or
 
--   the median and IQR if skewness or outliers are present
+- the median and IQR if skewness or outliers are present
 :::
 
 From @tbl-univar-eda-rating, the standard deviation of `avg_rating` is `r round(sd(recipes$avg_rating, na.rm = TRUE), 3)`, so the average rating for each recipe is about `r round(sd(recipes$avg_rating, na.rm = TRUE), 3)` points from the mean rating of `r round(mean(recipes$avg_rating, na.rm = TRUE), 3)`, on average. The IQR is `r IQR(recipes$avg_rating,na.rm = TRUE)`. This means the spread of the middle 50% of the distribution, $Q_3 - Q_1$ is about `r IQR(recipes$avg_rating, na.rm = TRUE)` points. Lastly, the range, the distance between the minimum and maximum values, is `r max(recipes$avg_rating, na.rm = TRUE) - min(recipes$avg_rating, na.rm = TRUE)` .
@@ -696,13 +696,13 @@ If there are outliers due to data entry errors, we need to input the correct val
 ::: {.analysis_in_practice latex=""}
 The description of the distribution of a quantitative variable includes the following:
 
--   **Shape**: Skewness and modality of distribution
+- **Shape**: Skewness and modality of distribution
 
--   **Center**: Middle of the distribution (measured by mean or median)
+- **Center**: Middle of the distribution (measured by mean or median)
 
--   **Spread**: How far apart the observations are (measured by standard deviation or IQR)
+- **Spread**: How far apart the observations are (measured by standard deviation or IQR)
 
--   **Outliers**: Observations that are far from the rest of the data
+- **Outliers**: Observations that are far from the rest of the data
 :::
 
 #### Example: Distribution of `cook_time` {.unnumbered}
@@ -1042,15 +1042,15 @@ In addition to identifying outliers, we want to make note of other interesting f
 ::: {.analysis_in_practice latex=""}
 The description of the relationship between two quantitative variables includes the following:
 
--   **Shape**: Overall pattern or trend in the data (e.g., linear, quadratic, etc.)
+- **Shape**: Overall pattern or trend in the data (e.g., linear, quadratic, etc.)
 
--   **Direction:** For a monotonic relationship, description of whether variables move together (positive), move opposite of one another (negative), or have no clear direction (none)
+- **Direction:** For a monotonic relationship, description of whether variables move together (positive), move opposite of one another (negative), or have no clear direction (none)
 
--   **Strength**: How clustered or spread out the observations are
+- **Strength**: How clustered or spread out the observations are
 
--   **Outliers**: Observations that do not follow general trend of the data
+- **Outliers**: Observations that do not follow general trend of the data
 
--   **Interesting features**: Other interesting features, such as increased variability in one variable as the other increases
+- **Interesting features**: Other interesting features, such as increased variability in one variable as the other increases
 :::
 
 #### Example: Relationship between `prep_time` and `avg_rating` {.unnumbered}
@@ -1440,10 +1440,10 @@ ggplot(data = recipes) +
 ::: {.analysis_in_practice latex=""}
 **Exploratory data analysis workflow:**
 
--   Clean data
--   Explore individual variables
--   Explore relationships between two variables
--   Explore relationships between three or more variables
+- Clean data
+- Explore individual variables
+- Explore relationships between two variables
+- Explore relationships between three or more variables
 :::
 
 In this chapter we introduced the exploratory data analysis, the step in the data science workflow when we begin to clean and explore the data. This is an important step in a regression analysis, because having a clear understanding of the data helps inform the decisions we make throughout the analysis process. It is also the point at which we may identify errors or missing values in the data. We conduct EDA by using visualizations and summary statistics to get an overview of the data, explore the distributions of individual variables, explore the relationships between two variables, and explore the relationships between three or more variables.
