@@ -374,7 +374,7 @@ window.Quarto = {
   <li><a href="#types-of-missingness" id="toc-types-of-missingness" class="nav-link" data-scroll-target="#types-of-missingness"><span class="header-section-number">13.1.3</span> Types of missingness</a></li>
   <li><a href="#sec-missing-data-strategies" id="toc-sec-missing-data-strategies" class="nav-link" data-scroll-target="#sec-missing-data-strategies"><span class="header-section-number">13.1.4</span> Strategies for handling missing data</a></li>
   <li><a href="#imputation-in-r" id="toc-imputation-in-r" class="nav-link" data-scroll-target="#imputation-in-r"><span class="header-section-number">13.1.5</span> Imputation in R</a></li>
-  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">13.1.6</span> Further reading</a></li>
+  <li><a href="#sec-missing-data-further-reading" id="toc-sec-missing-data-further-reading" class="nav-link" data-scroll-target="#sec-missing-data-further-reading"><span class="header-section-number">13.1.6</span> Further reading</a></li>
   </ul>
 </li>
   <li>
@@ -396,7 +396,7 @@ window.Quarto = {
 <li><a href="#data-lemurs" id="toc-data-lemurs" class="nav-link" data-scroll-target="#data-lemurs"><span class="header-section-number">13.3.1</span> Data: Lemurs</a></li>
   <li><a href="#model-fit-and-interpretation" id="toc-model-fit-and-interpretation" class="nav-link" data-scroll-target="#model-fit-and-interpretation"><span class="header-section-number">13.3.2</span> Model fit and interpretation</a></li>
   <li><a href="#random-intercepts-model-in-r" id="toc-random-intercepts-model-in-r" class="nav-link" data-scroll-target="#random-intercepts-model-in-r"><span class="header-section-number">13.3.3</span> Random intercepts model in R</a></li>
-  <li><a href="#further-reading-1" id="toc-further-reading-1" class="nav-link" data-scroll-target="#further-reading-1"><span class="header-section-number">13.3.4</span> Further reading</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">13.3.4</span> Further reading</a></li>
   </ul>
 </li>
   <li>
@@ -405,7 +405,7 @@ window.Quarto = {
 <li><a href="#sec-regression-trees" id="toc-sec-regression-trees" class="nav-link" data-scroll-target="#sec-regression-trees"><span class="header-section-number">13.4.1</span> Regression trees</a></li>
   <li><a href="#sec-classification-trees" id="toc-sec-classification-trees" class="nav-link" data-scroll-target="#sec-classification-trees"><span class="header-section-number">13.4.2</span> Classification trees</a></li>
   <li><a href="#decision-trees-in-r" id="toc-decision-trees-in-r" class="nav-link" data-scroll-target="#decision-trees-in-r"><span class="header-section-number">13.4.3</span> Decision trees in R</a></li>
-  <li><a href="#further-reading-2" id="toc-further-reading-2" class="nav-link" data-scroll-target="#further-reading-2"><span class="header-section-number">13.4.4</span> Further reading</a></li>
+  <li><a href="#further-reading-1" id="toc-further-reading-1" class="nav-link" data-scroll-target="#further-reading-1"><span class="header-section-number">13.4.4</span> Further reading</a></li>
   </ul>
 </li>
   <li>
@@ -496,17 +496,12 @@ Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
 <p>It is important to understand the pattern of missingness, because it helps us understand the potential impact of the strategy we use to deal with the missingness in terms of potential bias to the analysis. We’ll briefly discuss these impacts as we introduce strategies for handling missing data in <a href="#sec-missing-data-strategies" class="quarto-xref"><span>Section 13.1.4</span></a></p>
 </section><section id="sec-missing-data-strategies" class="level3" data-number="13.1.4"><h3 data-number="13.1.4" class="anchored" data-anchor-id="sec-missing-data-strategies">
 <span class="header-section-number">13.1.4</span> Strategies for handling missing data</h3>
+<p>Now that we understand how to identify missingness in the data and patterns of missingness, let’s discuss some strategies for handling missing values. We introduce some basic strategies here and direct the reader to the texts in <a href="#sec-missing-data-further-reading" class="quarto-xref"><span>Section 13.1.6</span></a> for a more in-depth discussion about missing data.</p>
+<p>Perhaps the easiest way to deal with missingness is to do a <strong>complete case analysis</strong> in which we remove observations that have any missing values for the variables of interest.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> This is the approach used in many R functions. For example, when creating visualizations using <strong>ggplot2</strong> <span class="citation" data-cites="ggplot2">(<a href="references.html#ref-ggplot2" role="doc-biblioref">Wickham 2016</a>)</span>, the visualization only includes observations that have observed values for all the variables in the visualization. There is a warning produced that indicates how many observations were excluded from the visualization. The regression functions <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> also excluded observations that have missing values for the response variable or any of the predictor variables. Unlike <strong>ggplot2</strong>, however, there is no warning produced. Therefore, it is imperative to conduct exploratory data analysis to identify and handle the missingness before any modeling.</p>
+<p>Complete case analysis provides a good example of the importance of understanding the pattern of missingness. If the missingness is MCAR, then we could reasonably assume removing observations with missingness does not systematically bias the data since the missingness is random. If the missingness is MAR or MNAR, however, simply removing observations with missingness could potentially bias the data. For example, if we removed observations with missing values for <code>avg_rating</code> from an analysis of the <code>recipes</code> data, we would be systematically excluding recipes with no ratings. These could be newer recipes that haven’t been on the site for long or recipes that are generally not popular. It could be fine to narrow the scope of the analysis to exclude new and unpopular recipes, but it is important that we are aware of this limitation and clearly communicate it as we interpret results from the analysis.</p>
+<!--# start here-->
 <ul>
-<li>
-<p>Approaches for dealing with missingness - remove the missingness or impute missing values - Illustrate what all these mean in the context of the recipes data</p>
-<ul>
-<li>
-<p>Complete case analysis - only use the observations that have complete data.</p>
-<ul>
-<li><p>This is primarily what we have done in this text in order to focus on the regression methods</p></li>
-<li><p>Note - R does this automatically when fitting models. If you have observations with missing values for the response or one or more predictors, R will quietly drop these observations. Thus, it is even more important to understand the missingness in the data at the beginning of the analysis.</p></li>
-</ul>
-</li>
+<li><ul>
 <li>
 <p>Create missing indicator for categorical variable</p>
 <ul>
@@ -552,8 +547,7 @@ Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
 <li>Find exmaple from the recipes data.</li>
 </ul>
 </li>
-</ul>
-</li>
+</ul></li>
 <li>
 <p>Multiple imputation</p>
 <ul>
@@ -576,7 +570,7 @@ Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
 </div>
 <pre><code></code></pre>
 <p>Use the MICE package</p>
-</section><section id="further-reading" class="level3" data-number="13.1.6"><h3 data-number="13.1.6" class="anchored" data-anchor-id="further-reading">
+</section><section id="sec-missing-data-further-reading" class="level3" data-number="13.1.6"><h3 data-number="13.1.6" class="anchored" data-anchor-id="sec-missing-data-further-reading">
 <span class="header-section-number">13.1.6</span> Further reading</h3>
 <p>Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.</p>
 <ul>
@@ -584,6 +578,7 @@ Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
 <li>
 </li></ul></section></section><section id="sec-multinomial" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="sec-multinomial">
 <span class="header-section-number">13.2</span> Multinomial logistic regression</h2>
+<!--# need further reading section.-->
 <p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced logistic regression models for binary response variables. In this section, we introduce multinomial logistic regression, models for categorical response variables with three or more levels.</p>
 <section id="sec-voters-data" class="level3" data-number="13.2.1"><h3 data-number="13.2.1" class="anchored" data-anchor-id="sec-voters-data">
 <span class="header-section-number">13.2.1</span> Data: Voting frequency</h3>
@@ -744,7 +739,7 @@ Figure&nbsp;13.2: Bivariate EDA for voting frequency data. Blue: rarely/never, R
 B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
 \log\Big(\frac{\pi_C}{\pi_A}\Big) = \beta_{0C} + \beta_{1C}X_1 +\beta_{2C}X_2 + \dots + \beta_{pC}X_p
 \end{aligned} \tag{13.1}\]</span></span></p>
-<p>From <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. WE saw this implicitly in logistic regression, where the response variable, <span class="math inline">\(\log(\frac{\pi}{1-\pi})\)</span>, is the “log odds of <span class="math inline">\(Y = 1\)</span> versus <span class="math inline">\(Y = 0\)</span>.”</p>
+<p>From <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. WE saw this implicitly in logistic regression, where the response variable, <span class="math inline">\(\log(\frac{\pi}{1-\pi})\)</span>, is the “log odds of <span class="math inline">\(Y = 1\)</span> versus <span class="math inline">\(Y = 0\)</span>.”</p>
 <p>The next feature of multinomial logistic regression is the multiple equations that comprise the model. More specifically, if the response variable has <span class="math inline">\(K\)</span> levels, then there will be <span class="math inline">\(K - 1\)</span> equations in the model. We will ultimately use the model to compute the predicted probabilities an observation takes each level of the response variable, so we need all <span class="math inline">\(K-1\)</span> equations in order to compute the predicted probabilities for every level of the response variable.</p>
 <p>The last feature is that each of the <span class="math inline">\(K -1\)</span> equations have the same form but different values of the coefficients. This is shown in <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> as the <span class="math inline">\(\beta's\)</span> have unique indices in each equation. As with logistic regression, the coefficients for multinomial logistic regression are estimated using maximum likelihood estimation (<a href="11-logistic.html#sec-logistic-interpret-coef" class="quarto-xref">see&nbsp;<span>11.4</span></a>).</p>
 <p><a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a> is the multinomial logistic regression model using <code>age</code> and <code>party_id</code> to predict <code>voter_category</code>.</p>
@@ -1021,7 +1016,7 @@ Figure&nbsp;13.3: Confusion matrix for voters model
 <p>Use <a href="#fig-confmat-voters-model" class="quarto-xref">Figure&nbsp;<span>13.3</span></a> to compute</p>
 <ul>
 <li><p>the accuracy.</p></li>
-<li><p>the misclassification rate<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p></li>
+<li><p>the misclassification rate<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p></li>
 </ul>
 <p>There are 5836 observations in the data.</p>
 </div>
@@ -1396,7 +1391,7 @@ Figure&nbsp;13.9
 </div>
 </div>
 <p>The gray lines in <a href="#fig-lemurs-spaghetti-plot" class="quarto-xref">Figure&nbsp;<span>13.9</span></a> are the relationships between age and weight for each of the 248 lemurs in the data set. The blue line is the average trajectory across all the lemurs. From this plot, we more easily see the difference in the growth rate for the lemurs by the different slopes of the relationship between age and weight. We can also see the general differences in weight across the lemurs at each age.</p>
-<p>The linear regression (and logistic regression) models we’ve seen thus have a single intercept for all observations. In other words, if we fit a model using age to predict weight, there would be a single intercept for the expected weight for new born lemurs. From <a href="#fig-lemurs-spaghetti-plot" class="quarto-xref">Figure&nbsp;<span>13.9</span></a>, we see that the lemurs are generally different weights (even lemurs with the same age and taxon), so a single intercept may not best represent the trend in the data We will use a random intercepts model to account for this additional variability.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>The linear regression (and logistic regression) models we’ve seen thus have a single intercept for all observations. In other words, if we fit a model using age to predict weight, there would be a single intercept for the expected weight for new born lemurs. From <a href="#fig-lemurs-spaghetti-plot" class="quarto-xref">Figure&nbsp;<span>13.9</span></a>, we see that the lemurs are generally different weights (even lemurs with the same age and taxon), so a single intercept may not best represent the trend in the data We will use a random intercepts model to account for this additional variability.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </section><section id="model-fit-and-interpretation" class="level3" data-number="13.3.2"><h3 data-number="13.3.2" class="anchored" data-anchor-id="model-fit-and-interpretation">
 <span class="header-section-number">13.3.2</span> Model fit and interpretation</h3>
 <p>GLMMs differ from the GLMs we’ve studied thus far, because they include both fixed and random effects. The <strong>fixed effects</strong> are the variables we are interested in studying or explicitly adjusting for in the model. These are the variables for which we want to obtain an estimated coefficient. In the lemurs analysis, the fixed effects are <code>age</code>, <code>taxon</code>, <code>sex</code>, and <code>litter_size</code>. The <strong>random effects</strong> are those we don’t want to estimate explicitly but whose variability we want to understand. These are generally defined by the grouping variable in the data. In this analysis, the random effect is the individual lemur, captured by the variable <code>dlc_id</code>.</p>
@@ -1509,7 +1504,7 @@ Table&nbsp;13.6: Random intercepts model for lemurs data
 <p>Use the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.6</span></a>.</p>
 <ul>
 <li><p>Interpret the coefficient of <code>age</code> in the context of the data.</p></li>
-<li><p>Explain what <span class="math inline">\(\hat{\sigma}_u = 311.504\)</span> means in the context of the data.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p></li>
+<li><p>Explain what <span class="math inline">\(\hat{\sigma}_u = 311.504\)</span> means in the context of the data.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p></li>
 </ul>
 </div>
 </section><section id="random-intercepts-model-in-r" class="level3" data-number="13.3.3"><h3 data-number="13.3.3" class="anchored" data-anchor-id="random-intercepts-model-in-r">
@@ -1619,7 +1614,7 @@ Fixed Effects:
 </table>
 </div>
 </div>
-</section><section id="further-reading-1" class="level3" data-number="13.3.4"><h3 data-number="13.3.4" class="anchored" data-anchor-id="further-reading-1">
+</section><section id="further-reading" class="level3" data-number="13.3.4"><h3 data-number="13.3.4" class="anchored" data-anchor-id="further-reading">
 <span class="header-section-number">13.3.4</span> Further reading</h3>
 <p>We have just scratched the surface in this section, but there are many resources for readers interested in learning more about random intercepts models and other types of GLMMs. See <em>Beyond Multiple Linear Regression</em> <span class="citation" data-cites="roback2021beyond">(<a href="references.html#ref-roback2021beyond" role="doc-biblioref">Roback and Legler 2021</a>)</span> and <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em> <span class="citation" data-cites="gelman2007data">(<a href="references.html#ref-gelman2007data" role="doc-biblioref">Gelman and Hill 2007</a>)</span> for an in-depth introduction to these topics.</p>
 </section></section><section id="sec-decision-trees" class="level2" data-number="13.4"><h2 data-number="13.4" class="anchored" data-anchor-id="sec-decision-trees">
@@ -1691,7 +1686,7 @@ Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure
 <p>For example, the first split is whether <code>enrollment_th &lt; 12</code>. About 62% of the observations in the training data have <code>enrollment_th &lt; 12</code>, and the mean log(expenditure) for those observations is 1.5 million. In contrast, about 38% of the observations have <code>enrollment_th &gt;= 12</code>, and the mean log(expenditure) for those observations is about 2.4 million. If we were to stop there, then 1.5 million would be the predicted log(expenditure) for all observations with <code>enrollment &lt; 12</code> and 2.4 million would be the predicted log(expenditure) for all other observations.</p>
 <p>Let’s use the tree to find the predicted expenditure for a private institution in the South region that has enrollment of 6,000 students. At the first step, we go down the “Yes” branch for <code>enrollment_th &lt; 12</code>. Next, we go down the “No” branch for <code>type = Public</code>. Next, we go down the “No” branch for <code>enrollment_th &lt; 4.1</code>. Next, we go down the branch, “No” for <code>region = Northeast</code>. Lastly, we go down the “Yes” branch for <code>enrollment_th &lt; 6.3</code>. This branch leads to the terminal node of <span class="math inline">\(\widehat{\log(\text{expenditure\_m})} = 2.2\)</span>, which is equal to a predicted expenditure of 9.025 (<span class="math inline">\(e^{2.2}\)</span>) million dollars.</p>
 <div class="yourturn">
-<p>What is the predicted expenditure for a public institution in the West region with enrollment of 20,000 students.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>What is the predicted expenditure for a public institution in the West region with enrollment of 20,000 students.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 </div>
 <p>We evaluate the model’s performance using the testing data. We compute the predicted expenditures for the observations in the testing data the root mean square error (RSME), introduced in <a href="04-slr.html#sec-model-assessment" class="quarto-xref"><span>Section 4.7</span></a>, as a measure of the model performance.</p>
 <p>The RMSE for the testing data is 0.506. This is the terms of the response variable, <code>log(expenditure_m)</code>, so the error in terms of the original variable is 1.659. This means that the average difference between the observed expenditure and predicted is 1.659 million dollars.</p>
@@ -1716,7 +1711,7 @@ Figure&nbsp;13.12: Classification tree voter frequency
 <p><a href="#fig-voters-tree" class="quarto-xref">Figure&nbsp;<span>13.12</span></a> is the output from the classification tree. Something that may stand out is that the predictor <code>party_id</code> is not used in the tree. This means there was never a point where using <code>party_id</code> was more useful in classifying observations compared to the other predictors.</p>
 <p>The first split in <a href="#fig-voters-tree" class="quarto-xref">Figure&nbsp;<span>13.12</span></a> is at <code>age &lt; 34</code>. About 21% of the observations have <code>age &lt; 34</code>, and this group leads to a terminal node. Among those with <code>age &lt; 34</code>, 34% of them are classified as <code>rarely/never</code>, 21% are classified as <code>sporadic</code>, and 30% are classified as <code>always</code> in the data. Therefore, if <code>age &lt; 34</code>, the predicted class is <code>rarely/never</code> based on the classification tree. There is a bit more work among those with <code>age &gt;= 34</code>. The next split is <code>age &lt; 61</code>. If <code>age &lt; 61</code>, then there is a terminal node with the predicted class <code>sporadic</code>. Otherwise, <code>income_cat</code> is taken into account, with a split at <code>income_cat = Less than $40k</code>. If yes, then the predicted class is <code>sporadic</code>; if no, the predicted class is <code>always</code>.</p>
 <div class="yourturn">
-<p>Based on <a href="#fig-voters-tree" class="quarto-xref">Figure&nbsp;<span>13.12</span></a>, what is the predicted voting frequency for an a 40 year old individual whose party affiliation is Democrat and annual income is $70,000?<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>Based on <a href="#fig-voters-tree" class="quarto-xref">Figure&nbsp;<span>13.12</span></a>, what is the predicted voting frequency for an a 40 year old individual whose party affiliation is Democrat and annual income is $70,000?<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 </div>
 </section><section id="decision-trees-in-r" class="level3" data-number="13.4.3"><h3 data-number="13.4.3" class="anchored" data-anchor-id="decision-trees-in-r">
 <span class="header-section-number">13.4.3</span> Decision trees in R</h3>
@@ -1798,7 +1793,7 @@ node), split, n, loss, yval, (yprob)
 <span>  <span class="fu">mutate</span><span class="op">(</span>predict_expend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ncaa_tree</span>, <span class="va">ncaa_test</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The predictions are in the same units as the response variable, so in this case, the predicted values are the predicted <code>log(expenditure_m)</code>.</p>
-</section><section id="further-reading-2" class="level3" data-number="13.4.4"><h3 data-number="13.4.4" class="anchored" data-anchor-id="further-reading-2">
+</section><section id="further-reading-1" class="level3" data-number="13.4.4"><h3 data-number="13.4.4" class="anchored" data-anchor-id="further-reading-1">
 <span class="header-section-number">13.4.4</span> Further reading</h3>
 <p>Overall, decision trees can be a nice alternative to linear and logistic regression. Their greatest advantage is that they can be easily represented visually and thus easier for non-experts to understand. The two greatest disadvantages to these models, however, are the inferior predictive accuracy compared to other modeling approaches and their sensitivity to small changes in the data <span class="citation" data-cites="james2021introduction">(<a href="references.html#ref-james2021introduction" role="doc-biblioref">James et al. 2021, 340</a>)</span>. In this section, we introduced decision trees, but there is extensive work in tuning (customizing) these models along with more advanced models that take into account multiple trees (e.g., random forest). We refer the reader to Chapter 8 <span class="citation" data-cites="james2021introduction">James et al. (<a href="references.html#ref-james2021introduction" role="doc-biblioref">2021</a>)</span> for an in-depth discussion on the tree-based models.</p>
 </section></section><section id="sec-causal" class="level2" data-number="13.5"><h2 data-number="13.5" class="anchored" data-anchor-id="sec-causal">
@@ -2211,7 +2206,7 @@ Table&nbsp;13.10: Model of treatment effect with 95% confidence intervals for co
 </div>
 <p>We interpret the model just as we interpret other linear regression models (see <a href="04-slr.html" class="quarto-xref"><span>Chapter 4</span></a> and <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>). In <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.10</span></a>, the estimated effect of the treatment, participating in Project ACE is 0.209 and the 95% confidence interval is 0.017 to 0.401. This estimate 0.209 is the <strong>average treatment effect (ATE)</strong>, the difference in the expected response between the treatment and control group. Therefore, based on this analysis, we can make a causal relationship between participating in Project ACE and higher GPA, on average. The 95% confidence interval gives a plausible range for the effect in the population.</p>
 <div class="yourturn">
-<p>Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 </div>
 <p>As we use these results to inform decision-making, one thing to keep in mind is that this is the average treatment effect in the matched population. Therefore, the results may not generalize to the entire population if the discarded individuals in the control group are significantly different from the individuals in the matched group. One way to mitigate this is to include more observations from the control group. Strategies for this are available in the resources at the end of this section.</p>
 </section><section id="causal-inference-in-r" class="level3" data-number="13.5.2"><h3 data-number="13.5.2" class="anchored" data-anchor-id="causal-inference-in-r">
@@ -2344,22 +2339,26 @@ Thomson-DeVeaux, Amelia, Jasmine Mithani, and Laura Bronner. 2020. <span>“Why 
 <div id="ref-nnet" class="csl-entry" role="listitem">
 Venables, W. N., and B. D. Ripley. 2002. <span>“Modern Applied Statistics with s.”</span> <a href="https://www.stats.ox.ac.uk/pub/MASS4/">https://www.stats.ox.ac.uk/pub/MASS4/</a>.
 </div>
+<div id="ref-ggplot2" class="csl-entry" role="listitem">
+Wickham, Hadley. 2016. <span>“Ggplot2: Elegant Graphics for Data Analysis.”</span> <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
 <div id="ref-knitr" class="csl-entry" role="listitem">
 Xie, Yihui. 2024. <span>“Knitr: A General-Purpose Package for Dynamic Report Generation in r.”</span> <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>.
 </div>
 </div>
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
-<li id="fn1"><p>Similar to how categorical predictors are interpreted as one level versus the baseline (<a href="07-mlr.html#sec-mlr-interpret-categorical" class="quarto-xref">see&nbsp;<span>7.4.2</span></a>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>The accuracy is the 0.493 <span class="math inline">\((563 + 2219 + 94)/5836)\)</span>. The misclassification rate is 0.507 <span class="math inline">\((1 - 0.407)\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>We can also specify the GLMMs to account for the different slopes of age across the lemurs. That is beyond the scope of this text, but we provide resources at the end of the section for readers interested in learning more.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4">
+<li id="fn1"><p>This has been the primary approach used in the book, since our focus has been on introducing regression methods.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Similar to how categorical predictors are interpreted as one level versus the baseline (<a href="07-mlr.html#sec-mlr-interpret-categorical" class="quarto-xref">see&nbsp;<span>7.4.2</span></a>).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The accuracy is the 0.493 <span class="math inline">\((563 + 2219 + 94)/5836)\)</span>. The misclassification rate is 0.507 <span class="math inline">\((1 - 0.407)\)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>We can also specify the GLMMs to account for the different slopes of age across the lemurs. That is beyond the scope of this text, but we provide resources at the end of the section for readers interested in learning more.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5">
 <p><code>age:</code> As a lemur gets one month older, its weight is expected to increase by 147.719 grams, on average, after adjusting for taxon, sex, and litter size.</p>
-<p><span class="math inline">\(\hat{\sigma}_u = 311.504\)</span>: The variability in the average weights between lemurs is 311.504. On average, the mean weight of an individual lemur is 311.504 grams away from the overall mean weight of all lemurs.<br><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p>
+<p><span class="math inline">\(\hat{\sigma}_u = 311.504\)</span>: The variability in the average weights between lemurs is 311.504. On average, the mean weight of an individual lemur is 311.504 grams away from the overall mean weight of all lemurs.<br><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p>
 </li>
-<li id="fn5"><p>The predicted expenditure is 2.1 million. Note that the fact that it was a public institution was not used based on its path in the decision tree.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>The predicted voting frequency is sporadic.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>We are 95% confident that improvement in GPA from participating in Project ACE is between 0.003 and 0.39 points.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>The predicted expenditure is 2.1 million. Note that the fact that it was a public institution was not used based on its path in the decision tree.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>The predicted voting frequency is sporadic.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>We are 95% confident that improvement in GPA from participating in Project ACE is between 0.003 and 0.39 points.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

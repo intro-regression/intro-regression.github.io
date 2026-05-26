@@ -127,13 +127,17 @@ It is important to understand the pattern of missingness, because it helps us un
 
 ### Strategies for handling missing data  {#sec-missing-data-strategies}
 
-- Approaches for dealing with missingness - remove the missingness or impute missing values - Illustrate what all these mean in the context of the recipes data
+Now that we understand how to identify missingness in the data and patterns of missingness, let's discuss some strategies for handling missing values. We introduce some basic strategies here and direct the reader to the texts in @sec-missing-data-further-reading for a more in-depth discussion about missing data.
 
-  - Complete case analysis - only use the observations that have complete data.
+Perhaps the easiest way to deal with missingness is to do a **complete case analysis** in which we remove observations that have any missing values for the variables of interest.[^13-special-topics-1] This is the approach used in many R functions. For example, when creating visualizations using **ggplot2** [@ggplot2], the visualization only includes observations that have observed values for all the variables in the visualization. There is a warning produced that indicates how many observations were excluded from the visualization. The regression functions `lm()` and `glm()` also excluded observations that have missing values for the response variable or any of the predictor variables. Unlike **ggplot2**, however, there is no warning produced. Therefore, it is imperative to conduct exploratory data analysis to identify and handle the missingness before any modeling.
 
-    - This is primarily what we have done in this text in order to focus on the regression methods
+[^13-special-topics-1]: This has been the primary approach used in the book, since our focus has been on introducing regression methods.
 
-    - Note - R does this automatically when fitting models. If you have observations with missing values for the response or one or more predictors, R will quietly drop these observations. Thus, it is even more important to understand the missingness in the data at the beginning of the analysis.
+Complete case analysis provides a good example of the importance of understanding the pattern of missingness. If the missingness is MCAR, then we could reasonably assume removing observations with missingness does not systematically bias the data since the missingness is random. If the missingness is MAR or MNAR, however, simply removing observations with missingness could potentially bias the data. For example, if we removed observations with missing values for `avg_rating` from an analysis of the `recipes` data, we would be systematically excluding recipes with no ratings. These could be newer recipes that haven't been on the site for long or recipes that are generally not popular. It could be fine to narrow the scope of the analysis to exclude new and unpopular recipes, but it is important that we are aware of this limitation and clearly communicate it as we interpret results from the analysis.
+
+<!--# start here-->
+
+- 
 
   - Create missing indicator for categorical variable
 
@@ -206,7 +210,7 @@ ggplot(data = recipes) +
 
 Use the MICE package
 
-### Further reading
+### Further reading {#sec-missing-data-further-reading}
 
 Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.
 
@@ -215,6 +219,8 @@ Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) bo
 - 
 
 ## Multinomial logistic regression {#sec-multinomial}
+
+<!--# need further reading section.-->
 
 In @sec-ch-logistic, we introduced logistic regression models for binary response variables. In this section, we introduce multinomial logistic regression, models for categorical response variables with three or more levels.
 
@@ -381,9 +387,9 @@ B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
 \log\Big(\frac{\pi_C}{\pi_A}\Big) = \beta_{0C} + \beta_{1C}X_1 +\beta_{2C}X_2 + \dots + \beta_{pC}X_p 
 \end{aligned}$$ {#eq-multinom-general}
 
-From @eq-multinom-general, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline[^13-special-topics-1]. WE saw this implicitly in logistic regression, where the response variable, $\log(\frac{\pi}{1-\pi})$, is the "log odds of $Y = 1$ versus $Y = 0$."
+From @eq-multinom-general, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline[^13-special-topics-2]. WE saw this implicitly in logistic regression, where the response variable, $\log(\frac{\pi}{1-\pi})$, is the "log odds of $Y = 1$ versus $Y = 0$."
 
-[^13-special-topics-1]: Similar to how categorical predictors are interpreted as one level versus the baseline ([see @sec-mlr-interpret-categorical]).
+[^13-special-topics-2]: Similar to how categorical predictors are interpreted as one level versus the baseline ([see @sec-mlr-interpret-categorical]).
 
 The next feature of multinomial logistic regression is the multiple equations that comprise the model. More specifically, if the response variable has $K$ levels, then there will be $K - 1$ equations in the model. We will ultimately use the model to compute the predicted probabilities an observation takes each level of the response variable, so we need all $K-1$ equations in order to compute the predicted probabilities for every level of the response variable.
 
@@ -502,12 +508,12 @@ Use @fig-confmat-voters-model to compute
 
 - the accuracy.
 
-- the misclassification rate[^13-special-topics-2]
+- the misclassification rate[^13-special-topics-3]
 
 There are `r nrow(voters)` observations in the data.
 :::
 
-[^13-special-topics-2]: The accuracy is the `r (563 + 2219 + 94)/nrow(voters)` $(563 + 2219 + 94)/5836)$. The misclassification rate is `r 1 - (563 + 2219 + 94) / nrow(voters)` $(1 - 0.407)$.
+[^13-special-topics-3]: The accuracy is the `r (563 + 2219 + 94)/nrow(voters)` $(563 + 2219 + 94)/5836)$. The misclassification rate is `r 1 - (563 + 2219 + 94) / nrow(voters)` $(1 - 0.407)$.
 
 @fig-confmat-voters-model can also be used to compute more specific statistics about how well the model identifies observations from a particular class. For example, among those who are actually classified voting rarely/never, the model correctly identified `r 563/ (563 + 884 + 4) * 100` % of them.
 
@@ -771,9 +777,9 @@ ggplot(lemurs, aes(x = age, y = weight)) +
 
 The gray lines in @fig-lemurs-spaghetti-plot are the relationships between age and weight for each of the `r nrow(lemurs |> distinct(dlc_id))` lemurs in the data set. The blue line is the average trajectory across all the lemurs. From this plot, we more easily see the difference in the growth rate for the lemurs by the different slopes of the relationship between age and weight. We can also see the general differences in weight across the lemurs at each age.
 
-The linear regression (and logistic regression) models we've seen thus have a single intercept for all observations. In other words, if we fit a model using age to predict weight, there would be a single intercept for the expected weight for new born lemurs. From @fig-lemurs-spaghetti-plot, we see that the lemurs are generally different weights (even lemurs with the same age and taxon), so a single intercept may not best represent the trend in the data We will use a random intercepts model to account for this additional variability.[^13-special-topics-3]
+The linear regression (and logistic regression) models we've seen thus have a single intercept for all observations. In other words, if we fit a model using age to predict weight, there would be a single intercept for the expected weight for new born lemurs. From @fig-lemurs-spaghetti-plot, we see that the lemurs are generally different weights (even lemurs with the same age and taxon), so a single intercept may not best represent the trend in the data We will use a random intercepts model to account for this additional variability.[^13-special-topics-4]
 
-[^13-special-topics-3]: We can also specify the GLMMs to account for the different slopes of age across the lemurs. That is beyond the scope of this text, but we provide resources at the end of the section for readers interested in learning more.
+[^13-special-topics-4]: We can also specify the GLMMs to account for the different slopes of age across the lemurs. That is beyond the scope of this text, but we provide resources at the end of the section for readers interested in learning more.
 
 ### Model fit and interpretation
 
@@ -822,10 +828,10 @@ Use the model in @tbl-lemurs-model-random-int.
 
 - Interpret the coefficient of `age` in the context of the data.
 
-- Explain what $\hat{\sigma}_u = 311.504$ means in the context of the data.[^13-special-topics-4]
+- Explain what $\hat{\sigma}_u = 311.504$ means in the context of the data.[^13-special-topics-5]
 :::
 
-[^13-special-topics-4]: `age:` As a lemur gets one month older, its weight is expected to increase by 147.719 grams, on average, after adjusting for taxon, sex, and litter size.
+[^13-special-topics-5]: `age:` As a lemur gets one month older, its weight is expected to increase by 147.719 grams, on average, after adjusting for taxon, sex, and litter size.
 
     $\hat{\sigma}_u = 311.504$: The variability in the average weights between lemurs is 311.504. On average, the mean weight of an individual lemur is 311.504 grams away from the overall mean weight of all lemurs.\
 
@@ -935,10 +941,10 @@ For example, the first split is whether `enrollment_th < 12`. About 62% of the o
 Let's use the tree to find the predicted expenditure for a private institution in the South region that has enrollment of 6,000 students. At the first step, we go down the "Yes" branch for `enrollment_th < 12`. Next, we go down the "No" branch for `type = Public`. Next, we go down the "No" branch for `enrollment_th < 4.1`. Next, we go down the branch, "No" for `region = Northeast`. Lastly, we go down the "Yes" branch for `enrollment_th < 6.3`. This branch leads to the terminal node of $\widehat{\log(\text{expenditure\_m})} = 2.2$, which is equal to a predicted expenditure of `r round(exp(2.2), 3)` ($e^{2.2}$) million dollars.
 
 ::: {.yourturn latex=""}
-What is the predicted expenditure for a public institution in the West region with enrollment of 20,000 students.[^13-special-topics-5]
+What is the predicted expenditure for a public institution in the West region with enrollment of 20,000 students.[^13-special-topics-6]
 :::
 
-[^13-special-topics-5]: The predicted expenditure is 2.1 million. Note that the fact that it was a public institution was not used based on its path in the decision tree.
+[^13-special-topics-6]: The predicted expenditure is 2.1 million. Note that the fact that it was a public institution was not used based on its path in the decision tree.
 
 We evaluate the model's performance using the testing data. We compute the predicted expenditures for the observations in the testing data the root mean square error (RSME), introduced in @sec-model-assessment, as a measure of the model performance.
 
@@ -997,10 +1003,10 @@ rpart.plot(voters_tree)
 The first split in @fig-voters-tree is at `age < 34`. About 21% of the observations have `age < 34`, and this group leads to a terminal node. Among those with `age < 34`, 34% of them are classified as `rarely/never`, 21% are classified as `sporadic`, and 30% are classified as `always` in the data. Therefore, if `age < 34`, the predicted class is `rarely/never` based on the classification tree. There is a bit more work among those with `age >= 34`. The next split is `age < 61`. If `age < 61`, then there is a terminal node with the predicted class `sporadic`. Otherwise, `income_cat` is taken into account, with a split at `income_cat = Less than $40k`. If yes, then the predicted class is `sporadic`; if no, the predicted class is `always`.
 
 ::: {.yourturn latex=""}
-Based on @fig-voters-tree, what is the predicted voting frequency for an a 40 year old individual whose party affiliation is Democrat and annual income is \$70,000?[^13-special-topics-6]
+Based on @fig-voters-tree, what is the predicted voting frequency for an a 40 year old individual whose party affiliation is Democrat and annual income is \$70,000?[^13-special-topics-7]
 :::
 
-[^13-special-topics-6]: The predicted voting frequency is sporadic.
+[^13-special-topics-7]: The predicted voting frequency is sporadic.
 
 ### Decision trees in R
 
@@ -1328,10 +1334,10 @@ treat_conf_high <- treatment_model_tidy |>
 We interpret the model just as we interpret other linear regression models (see [@sec-ch-slr] and [@sec-ch-mlr]). In @tbl-model-treatment-effect, the estimated effect of the treatment, participating in Project ACE is `r round(treat_effect, 3)` and the 95% confidence interval is `r round(treat_conf_low, 3)` to `r round(treat_conf_high, 3)`. This estimate `r round(treat_effect, 3)` is the **average treatment effect (ATE)**, the difference in the expected response between the treatment and control group. Therefore, based on this analysis, we can make a causal relationship between participating in Project ACE and higher GPA, on average. The 95% confidence interval gives a plausible range for the effect in the population.
 
 ::: {.yourturn latex=""}
-Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.[^13-special-topics-7]
+Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.[^13-special-topics-8]
 :::
 
-[^13-special-topics-7]: We are 95% confident that improvement in GPA from participating in Project ACE is between 0.003 and 0.39 points.
+[^13-special-topics-8]: We are 95% confident that improvement in GPA from participating in Project ACE is between 0.003 and 0.39 points.
 
 As we use these results to inform decision-making, one thing to keep in mind is that this is the average treatment effect in the matched population. Therefore, the results may not generalize to the entire population if the discarded individuals in the control group are significantly different from the individuals in the matched group. One way to mitigate this is to include more observations from the control group. Strategies for this are available in the resources at the end of this section.
 
