@@ -117,17 +117,13 @@ These recipes have illustrated the two ways missingness can occur in the data: i
 
 ### Types of missingness
 
+<!--# could this be combined with the previous section-->
+
 In @sec-missing-data-identify, we observed how missingness can appear in the data and provided some preliminary strategies for dealing with the missingness depending on what we knew about the observation. Now instead of looking at individual observations, let's look at the patterns of missingness within an individual variable. There are three patterns of missingness for a given variable: missing completely at random, missing at random, and missing not at random.
 
-- There are three types of missingness
+A variable is **missing completely at random (MCAR)** if the pattern of missingness is completely random. This means there is no explainable pattern to the missingness. A variable is **missing at random (MAR)** if the pattern of missingness depends on other variables, but not the variable itself. For example, in the `recipes` data, missingness for the `avg_rating` variable is due to a recipe having no ratings (`total_ratings = 0`), not due to something about a given average rating for the recipe. The last type of missing is **missing not at random (MNAR).** A variable is MNAR if the pattern of missingness depends on the variable itself. For example, in the recipes data `total_ratings` is MNAR, because a missing value for this variable means a recipe has 0 ratings.
 
-  - Missing completely at random
-
-  - Missing at random
-
-  - Missing not at random
-
-- Why is it important to understand the type of missingness
+It is important to understand the pattern of missingness, because it helps us understand the potential impact of the strategy we use to deal with the missingness in terms of potential bias to the analysis. We'll briefly discuss these impacts as we introduce strategies for handling missing data in @sec-missing-data-strategies
 
 ### Strategies for handling missing data  {#sec-missing-data-strategies}
 
