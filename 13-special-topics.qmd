@@ -62,13 +62,34 @@ This chapter introduces readers to a collection to models that are extensions of
 
 <!--# Link to Gelman book - See Chapter 25-->
 
-- Introduce data set (maybe go back to recipes data set from Chapter 30).
+### Data: Recipes
 
-- How does missingness appear in the data set.
+In @sec-ch-eda, we introduced a data set containing details about the nutrition, preparation and cooking time, and the reviews and ratings for recipes on the Allrecipes.com data set. As we conducted exploratory data analysis, we observed that some observations had missing values for one or more variables we were interested in analyzing. Here, we will look at the different types of missingness in the data and introduce some basic strategies for handling missing data.
 
-  - Showing example - some columns of data.
+The data was adapted from the `cuisines` data frame in the **tastyR** R package [@tastyR]. We will primarily focus on the nutrition and ratings information in this section. The variable definitions are below.
+
+- `names`: Recipe title
+
+- `calories`: Number of calories per serving
+
+- `protein`: Amount of protein per serving (in grams)
+
+- `avg_rating`: Average rating (`1`: worst to `5`: best)
+
+- `total_ratings`: Number of ratings
+
+- `reviews`: Number of reviews
+
+See the **tastyR** documentation [@tastyR] for the full codebook.
+
+### Identifying missingness 
+
+We begin by observing how missingness appears in the data set. @tbl-missing-example shows examples of five recipes from the `recipes` data frame, each of which have different types and levels of missingness. For the sake of illustration, we will only consider whether there is missingness for the subset of variables analyzed in this section, not the entire `recipes` data set.
 
 ```{r}
+#| label: tbl-missing-example
+#| tbl-cap: "Examples of missingness in the `recipes` data"
+
 
 recipes_use <- c("Danish Butter Cookies", 
                  "Brazilian Quentao",
@@ -80,19 +101,17 @@ recipes |>
   filter(name %in% recipes_use)
 ```
 
-- Chef John's Nashville Hot Chicken - complete case
+Let's take a look at each example and what we observe about the missingness.
 
-- Brazilian Quentao - missing nutrition information. Upon further reserach, find that this is a type of mulled wine, so it is logical that these values would be missing.
+Chef John's Nashville Hot Chicken is an example of acomplete case. A **complete case** is an observation that has values for all variables in the analysis. These types of observations have no missing values, so they are ready for analysis without applying the methods in this section.
 
-- Chicken Adobo Tacos - Missing a lot of data so, perhaps this observation is not useable
+Rose Water Turkish Delight only has a missing value for the variable `fat` but has data for all other variables. We impute the missing value by filling in the missing data using observed values of `fat` from other recipes. We discuss imputation strategies in @sec-missing-data-strategies.
 
-- Rose Water Turkish Delight - missing 1 of the nutrition variables, so a type of imputation could be helpful.
+The Brazilian Quentao recipe has missing values for all the variables related to nutrition information (`calories`, `fat`, `carbs`, and `protein`). This is a recipe for mulled wine, a type of drink; therefore, the missingness is logical in this case. These nutrition variables are most relevant to food dishes, so it is not surprising that such information is not available for this drink recipe. We can consider if there are logical values to impute for this missing data or exclude drink recipes from the analysis. We discuss these options further in @sec-missing-data-strategies.
 
-- Danish Butter Cookies - missing data about reviews and ratings which is the primary response of interest.
+The Danish Butter Cookies is missing data related to the user reviews (`avg_rating`, `total_ratings`, `reviews`). Upon looking at the webpage for this recipe, we observe that this recipe has no reviews. Thus, we could logically impute 0 for the `total_ratings` and `reviews`. It is less clear, however, how to impute the missing data for `avg_rating`. Depending on the analysis goals, we might narrow the scope of the analysis to recipes that have at least some minimum number of ratings or reviews.
 
-- Generally NAs
-
-- Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.
+Lastly, the Chicken Adobo recipe has missing values for all variables of interest. This observation is not currently usable for the analysis, because it does not have any observed values that can inform the data exploration and modeling. We could go to the recipe's page on Allrecipes.com and manually impute any values we see on the page now that weren't available when the data were originally collected. Depending the number of observations in the data that have such volume of missingness, this type of manual imputation could be unfeasible in practice.
 
 ### Types of missigness
 
@@ -114,7 +133,7 @@ recipes |>
 
 - Why is it important to understand the type of missingness
 
-### Strategies for handling missing data
+### Strategies for handling missing data  {#sec-missing-data-strategies}
 
 - Approaches for dealing with missingness - remove the missingness or impute missing values - Illustrate what all these mean in the context of the recipes data
 
@@ -166,11 +185,42 @@ recipes |>
 
 ### Imputation in R
 
-- Use the MICE package
+- Add something about skimr tog et a quick view (or call back if this is introduced in chapter 3)
+
+```{r}
+library(mice)
+
+# mean imputation for reviews
+
+# get mean of observed data
+mean_reviews <- mean(recipes$reviews, na.rm = TRUE)
+mean_ratings <- mean(recipes$avg_rating, na.rm = TRUE)
+
+# impute missing values with mean
+
+recipes <- recipes |>
+  mutate(reviews_imputed = if_else(is.na(reviews), mean_reviews, reviews), 
+         avg_rating_imputed = if_else(is.na(avg_rating), mean_ratings, avg_rating))
+
+# look at distribution of original vs. imputed
+
+ggplot(data = recipes) + 
+  geom_density(aes(x = reviews), color = "red") +
+  geom_density(aes(x =reviews_imputed), color = "blue")
+```
+
+```         
+```
+
+Use the MICE package
 
 ### Further reading
 
 Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.
+
+- mice documentation
+
+- 
 
 ## Multinomial logistic regression {#sec-multinomial}
 

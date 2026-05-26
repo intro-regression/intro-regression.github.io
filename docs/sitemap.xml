@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://introregressio.netlify.app/index.html</loc>
-    <lastmod>2026-01-06T16:06:38.710Z</lastmod>
+    <loc>https://introregressio.netlify.app/13-special-topics.html</loc>
+    <lastmod>2026-05-26T15:14:32.898Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/00-preface.html</loc>
-    <lastmod>2026-01-09T17:02:29.732Z</lastmod>
+    <lastmod>2026-05-20T18:25:53.781Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/01-intro.html</loc>
-    <lastmod>2026-01-09T15:42:39.062Z</lastmod>
+    <lastmod>2026-05-20T18:25:58.500Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/02-review-r.html</loc>
@@ -18,7 +18,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/03-eda.html</loc>
-    <lastmod>2026-05-22T11:44:30.606Z</lastmod>
+    <lastmod>2026-05-26T14:25:15.762Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/04-slr.html</loc>
@@ -57,10 +57,6 @@
     <lastmod>2026-01-06T03:06:59.953Z</lastmod>
   </url>
   <url>
-    <loc>https://introregressio.netlify.app/13-special-topics.html</loc>
-    <lastmod>2026-05-22T12:05:22.590Z</lastmod>
-  </url>
-  <url>
     <loc>https://introregressio.netlify.app/appendix-linear.html</loc>
     <lastmod>2026-01-19T15:09:03.311Z</lastmod>
   </url>
@@ -75,9 +71,5 @@
   <url>
     <loc>https://introregressio.netlify.app/references.html</loc>
     <lastmod>2025-09-18T13:35:16.670Z</lastmod>
-  </url>
-  <url>
-    <loc>https://introregressio.netlify.app/Introduction-to-Regression-Analysis.pdf</loc>
-    <lastmod>2026-05-20T17:26:59.460Z</lastmod>
   </url>
 </urlset>

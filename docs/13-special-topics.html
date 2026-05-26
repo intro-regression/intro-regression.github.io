@@ -369,10 +369,12 @@ window.Quarto = {
   <li>
 <a href="#missing-data" id="toc-missing-data" class="nav-link" data-scroll-target="#missing-data"><span class="header-section-number">13.1</span> Missing data</a>
   <ul class="collapse">
-<li><a href="#types-of-missigness" id="toc-types-of-missigness" class="nav-link" data-scroll-target="#types-of-missigness"><span class="header-section-number">13.1.1</span> Types of missigness</a></li>
-  <li><a href="#strategies-for-handling-missing-data" id="toc-strategies-for-handling-missing-data" class="nav-link" data-scroll-target="#strategies-for-handling-missing-data"><span class="header-section-number">13.1.2</span> Strategies for handling missing data</a></li>
-  <li><a href="#imputation-in-r" id="toc-imputation-in-r" class="nav-link" data-scroll-target="#imputation-in-r"><span class="header-section-number">13.1.3</span> Imputation in R</a></li>
-  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">13.1.4</span> Further reading</a></li>
+<li><a href="#data-recipes" id="toc-data-recipes" class="nav-link" data-scroll-target="#data-recipes"><span class="header-section-number">13.1.1</span> Data: Recipes</a></li>
+  <li><a href="#identifying-missingness" id="toc-identifying-missingness" class="nav-link" data-scroll-target="#identifying-missingness"><span class="header-section-number">13.1.2</span> Identifying missingness</a></li>
+  <li><a href="#types-of-missigness" id="toc-types-of-missigness" class="nav-link" data-scroll-target="#types-of-missigness"><span class="header-section-number">13.1.3</span> Types of missigness</a></li>
+  <li><a href="#sec-missing-data-strategies" id="toc-sec-missing-data-strategies" class="nav-link" data-scroll-target="#sec-missing-data-strategies"><span class="header-section-number">13.1.4</span> Strategies for handling missing data</a></li>
+  <li><a href="#imputation-in-r" id="toc-imputation-in-r" class="nav-link" data-scroll-target="#imputation-in-r"><span class="header-section-number">13.1.5</span> Imputation in R</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">13.1.6</span> Further reading</a></li>
   </ul>
 </li>
   <li>
@@ -446,16 +448,26 @@ window.Quarto = {
 <!--# notes for reference: https://www2.stat.duke.edu/courses/Fall19/sta210.001/slides/lec-slides/23-model-val-missing.html#31-->
 <!--# reference for MICE package: https://amices.org/mice/-->
 <!--# Link to Gelman book - See Chapter 25-->
+<section id="data-recipes" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="data-recipes">
+<span class="header-section-number">13.1.1</span> Data: Recipes</h3>
+<p>In <a href="03-eda.html" class="quarto-xref"><span>Chapter 3</span></a>, we introduced a data set containing details about the nutrition, preparation and cooking time, and the reviews and ratings for recipes on the Allrecipes.com data set. As we conducted exploratory data analysis, we observed that some observations had missing values for one or more variables we were interested in analyzing. Here, we will look at the different types of missingness in the data and introduce some basic strategies for handling missing data.</p>
+<p>The data was adapted from the <code>cuisines</code> data frame in the <strong>tastyR</strong> R package <span class="citation" data-cites="tastyR">(<a href="references.html#ref-tastyR" role="doc-biblioref">Mubia 2025</a>)</span>. We will primarily focus on the nutrition and ratings information in this section. The variable definitions are below.</p>
 <ul>
-<li><p>Introduce data set (maybe go back to recipes data set from Chapter 30).</p></li>
-<li>
-<p>How does missingness appear in the data set.</p>
-<ul>
-<li>Showing example - some columns of data.</li>
+<li><p><code>names</code>: Recipe title</p></li>
+<li><p><code>calories</code>: Number of calories per serving</p></li>
+<li><p><code>protein</code>: Amount of protein per serving (in grams)</p></li>
+<li><p><code>avg_rating</code>: Average rating (<code>1</code>: worst to <code>5</code>: best)</p></li>
+<li><p><code>total_ratings</code>: Number of ratings</p></li>
+<li><p><code>reviews</code>: Number of reviews</p></li>
 </ul>
-</li>
-</ul>
-<div class="cell">
+<p>See the <strong>tastyR</strong> documentation <span class="citation" data-cites="tastyR">(<a href="references.html#ref-tastyR" role="doc-biblioref">Mubia 2025</a>)</span> for the full codebook.</p>
+</section><section id="identifying-missingness" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="identifying-missingness">
+<span class="header-section-number">13.1.2</span> Identifying missingness</h3>
+<p>We begin by observing how missingness appears in the data set. <a href="#tbl-missing-example" class="quarto-xref">Table&nbsp;<span>13.1</span></a> shows examples of five recipes from the <code>recipes</code> data frame, each of which have different types and levels of missingness. For the sake of illustration, we will only consider whether there is missingness for the subset of variables analyzed in this section, not the entire <code>recipes</code> data set.</p>
+<div id="tbl-missing-example" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-missing-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
+</figcaption><div aria-describedby="tbl-missing-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 8
   name             calories   fat carbs protein avg_rating total_ratings reviews
@@ -467,17 +479,16 @@ window.Quarto = {
 5 Chicken Adobo T…       NA    NA    NA      NA       NA              NA      NA</code></pre>
 </div>
 </div>
-<ul>
-<li><p>Chef John’s Nashville Hot Chicken - complete case</p></li>
-<li><p>Brazilian Quentao - missing nutrition information. Upon further reserach, find that this is a type of mulled wine, so it is logical that these values would be missing.</p></li>
-<li><p>Chicken Adobo Tacos - Missing a lot of data so, perhaps this observation is not useable</p></li>
-<li><p>Rose Water Turkish Delight - missing 1 of the nutrition variables, so a type of imputation could be helpful.</p></li>
-<li><p>Danish Butter Cookies - missing data about reviews and ratings which is the primary response of interest.</p></li>
-<li><p>Generally NAs</p></li>
-<li><p>Sometimes in survey data, missignness can be non-response. Use data from Chapter 11 as an example of this.</p></li>
-</ul>
-<section id="types-of-missigness" class="level3" data-number="13.1.1"><h3 data-number="13.1.1" class="anchored" data-anchor-id="types-of-missigness">
-<span class="header-section-number">13.1.1</span> Types of missigness</h3>
+</figure>
+</div>
+<p>Let’s take a look at each example and what we observe about the missingness.</p>
+<p>Chef John’s Nashville Hot Chicken is an example of acomplete case. A <strong>complete case</strong> is an observation that has values for all variables in the analysis. These types of observations have no missing values, so they are ready for analysis without applying the methods in this section.</p>
+<p>Rose Water Turkish Delight only has a missing value for the variable <code>fat</code> but has data for all other variables. We impute the missing value by filling in the missing data using observed values of <code>fat</code> from other recipes. We discuss imputation strategies in <a href="#sec-missing-data-strategies" class="quarto-xref"><span>Section 13.1.4</span></a>.</p>
+<p>The Brazilian Quentao recipe has missing values for all the variables related to nutrition information (<code>calories</code>, <code>fat</code>, <code>carbs</code>, and <code>protein</code>). This is a recipe for mulled wine, a type of drink; therefore, the missingness is logical in this case. These nutrition variables are most relevant to food dishes, so it is not surprising that such information is not available for this drink recipe. We can consider if there are logical values to impute for this missing data or exclude drink recipes from the analysis. We discuss these options further in <a href="#sec-missing-data-strategies" class="quarto-xref"><span>Section 13.1.4</span></a>.</p>
+<p>The Danish Butter Cookies is missing data related to the user reviews (<code>avg_rating</code>, <code>total_ratings</code>, <code>reviews</code>). Upon looking at the webpage for this recipe, we observe that this recipe has no reviews. Thus, we could logically impute 0 for the <code>total_ratings</code> and <code>reviews</code>. It is less clear, however, how to impute the missing data for <code>avg_rating</code>. Depending on the analysis goals, we might narrow the scope of the analysis to recipes that have at least some minimum number of ratings or reviews.</p>
+<p>Lastly, the Chicken Adobo recipe has missing values for all variables of interest. This observation is not currently usable for the analysis, because it does not have any observed values that can inform the data exploration and modeling. We could go to the recipe’s page on Allrecipes.com and manually impute any values we see on the page now that weren’t available when the data were originally collected. Depending the number of observations in the data that have such volume of missingness, this type of manual imputation could be unfeasible in practice.</p>
+</section><section id="types-of-missigness" class="level3" data-number="13.1.3"><h3 data-number="13.1.3" class="anchored" data-anchor-id="types-of-missigness">
+<span class="header-section-number">13.1.3</span> Types of missigness</h3>
 <ul>
 <li>
 <p>Missingness may occur in data in multiple ways for a given observation</p>
@@ -500,8 +511,8 @@ window.Quarto = {
 </ul>
 </li>
 <li><p>Why is it important to understand the type of missingness</p></li>
-</ul></section><section id="strategies-for-handling-missing-data" class="level3" data-number="13.1.2"><h3 data-number="13.1.2" class="anchored" data-anchor-id="strategies-for-handling-missing-data">
-<span class="header-section-number">13.1.2</span> Strategies for handling missing data</h3>
+</ul></section><section id="sec-missing-data-strategies" class="level3" data-number="13.1.4"><h3 data-number="13.1.4" class="anchored" data-anchor-id="sec-missing-data-strategies">
+<span class="header-section-number">13.1.4</span> Strategies for handling missing data</h3>
 <ul>
 <li>
 <p>Approaches for dealing with missingness - remove the missingness or impute missing values - Illustrate what all these mean in the context of the recipes data</p>
@@ -567,14 +578,28 @@ window.Quarto = {
 </ul>
 </li>
 <li><p>Call out box about variables that have a lot of missing values.</p></li>
-</ul></section><section id="imputation-in-r" class="level3" data-number="13.1.3"><h3 data-number="13.1.3" class="anchored" data-anchor-id="imputation-in-r">
-<span class="header-section-number">13.1.3</span> Imputation in R</h3>
+</ul></section><section id="imputation-in-r" class="level3" data-number="13.1.5"><h3 data-number="13.1.5" class="anchored" data-anchor-id="imputation-in-r">
+<span class="header-section-number">13.1.5</span> Imputation in R</h3>
 <ul>
-<li>Use the MICE package</li>
-</ul></section><section id="further-reading" class="level3" data-number="13.1.4"><h3 data-number="13.1.4" class="anchored" data-anchor-id="further-reading">
-<span class="header-section-number">13.1.4</span> Further reading</h3>
+<li>Add something about skimr tog et a quick view (or call back if this is introduced in chapter 3)</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="13-special-topics_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<pre><code></code></pre>
+<p>Use the MICE package</p>
+</section><section id="further-reading" class="level3" data-number="13.1.6"><h3 data-number="13.1.6" class="anchored" data-anchor-id="further-reading">
+<span class="header-section-number">13.1.6</span> Further reading</h3>
 <p>Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.</p>
-</section></section><section id="sec-multinomial" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="sec-multinomial">
+<ul>
+<li><p>mice documentation</p></li>
+<li>
+</li></ul></section></section><section id="sec-multinomial" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="sec-multinomial">
 <span class="header-section-number">13.2</span> Multinomial logistic regression</h2>
 <p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced logistic regression models for binary response variables. In this section, we introduce multinomial logistic regression, models for categorical response variables with three or more levels.</p>
 <section id="sec-voters-data" class="level3" data-number="13.2.1"><h3 data-number="13.2.1" class="anchored" data-anchor-id="sec-voters-data">
@@ -610,7 +635,7 @@ window.Quarto = {
 </li>
 <li><p><code>income_cat</code>: Respondent’s annual income (<code>Less than $40k</code>, <code>$40-75k</code>, <code>$75-125k</code>, <code>$125k or more</code>)</p></li>
 </ul>
-<p>The goal of this analysis is to use <code>age</code> and <code>party_id</code> to predict <code>voting_id</code> and describe factors associated with variability in voting behavior. The univariate exploratory data analysis is in <a href="#fig-voting-univar-eda" class="quarto-xref">Figure&nbsp;<span>13.1</span></a> and <a href="#tbl-voting-univar-eda" class="quarto-xref">Table&nbsp;<span>13.1</span></a>.</p>
+<p>The goal of this analysis is to use <code>age</code> and <code>party_id</code> to predict <code>voting_id</code> and describe factors associated with variability in voting behavior. The univariate exploratory data analysis is in <a href="#fig-voting-univar-eda" class="quarto-xref">Figure&nbsp;<span>13.1</span></a> and <a href="#tbl-voting-univar-eda" class="quarto-xref">Table&nbsp;<span>13.2</span></a>.</p>
 <div class="cell" data-layout="[[1], [1,1]]">
 <div id="fig-voting-univar-eda" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-voting-univar-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -657,7 +682,7 @@ Figure&nbsp;13.1: Univariate EDA for voting frequency data
 <div class="cell">
 <div id="tbl-voting-univar-eda" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-voting-univar-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.1: Summary statistics for <code>age</code>
+Table&nbsp;13.2: Summary statistics for <code>age</code>
 </figcaption><div aria-describedby="tbl-voting-univar-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -739,11 +764,11 @@ B} + \beta_{1B}X_1 +\beta_{2B}X_2 + \dots + \beta_{pB}X_p \\
 <p>From <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>, we see a few features of the multinomial logistic model. We start by choosing a baseline level for the response variable. Each equation in the fitted model quantifies the log odds of being at another level of the response variable versus the baseline<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. WE saw this implicitly in logistic regression, where the response variable, <span class="math inline">\(\log(\frac{\pi}{1-\pi})\)</span>, is the “log odds of <span class="math inline">\(Y = 1\)</span> versus <span class="math inline">\(Y = 0\)</span>.”</p>
 <p>The next feature of multinomial logistic regression is the multiple equations that comprise the model. More specifically, if the response variable has <span class="math inline">\(K\)</span> levels, then there will be <span class="math inline">\(K - 1\)</span> equations in the model. We will ultimately use the model to compute the predicted probabilities an observation takes each level of the response variable, so we need all <span class="math inline">\(K-1\)</span> equations in order to compute the predicted probabilities for every level of the response variable.</p>
 <p>The last feature is that each of the <span class="math inline">\(K -1\)</span> equations have the same form but different values of the coefficients. This is shown in <a href="#eq-multinom-general" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> as the <span class="math inline">\(\beta's\)</span> have unique indices in each equation. As with logistic regression, the coefficients for multinomial logistic regression are estimated using maximum likelihood estimation (<a href="11-logistic.html#sec-logistic-interpret-coef" class="quarto-xref">see&nbsp;<span>11.4</span></a>).</p>
-<p><a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> is the multinomial logistic regression model using <code>age</code> and <code>party_id</code> to predict <code>voter_category</code>.</p>
+<p><a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a> is the multinomial logistic regression model using <code>age</code> and <code>party_id</code> to predict <code>voter_category</code>.</p>
 <div class="cell">
 <div id="tbl-voter-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-voter-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.2: Model of <code>voter_category</code> versus <code>age</code> and <code>party_id</code> with 95% confidence intervals for the coefficients
+Table&nbsp;13.3: Model of <code>voter_category</code> versus <code>age</code> and <code>party_id</code> with 95% confidence intervals for the coefficients
 </figcaption><div aria-describedby="tbl-voter-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -856,7 +881,7 @@ Table&nbsp;13.2: Model of <code>voter_category</code> versus <code>age</code> an
 </div>
 </div>
 <p>The column <code>y.level</code> indicates the corresponding level for the given equation. The level of the response variable that is not listed is the baseline. In this case, the baseline level is <code>rarely/never</code>. Therefore, this model produces the log odds of being in the other categories versus rarely/ never.</p>
-<p>We can write the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> as the following:</p>
+<p>We can write the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a> as the following:</p>
 <p><span class="math display">\[\begin{aligned}
 \log\Big(\frac{\pi_{sporadic}}{\pi_{rarely/never}}\Big)  = -1.046 + 0.041 \times \text{age} -0.677 \times \text{No affiliation} -0.106 \times \text{Republican} \\
 \log\Big(\frac{\pi_{always}}{\pi_{rarely/never}}\Big)  = -1.983 + 0.052 \times \text{age} -0.872 \times \text{No affiliation}  -0.091 \times \text{Republican}
@@ -886,9 +911,9 @@ Table&nbsp;13.2: Model of <code>voter_category</code> versus <code>age</code> an
 <blockquote class="blockquote">
 <p><em>The</em> <b>odds</b> an individual whose political affiliation is Republican votes sporadically versus rarely/never are 0.899 <span class="math inline">\((e^{-0.106})\)</span> times the odds of an individual whose party affiliation is Democrat, holding age constant.</p>
 </blockquote>
-<p>Along with the coefficients in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> are 95% confidence intervals for the population coefficients. These confidence intervals are estimated in a similar way as those for logistic regression in <a href="11-logistic.html#sec-logistic-inf" class="quarto-xref"><span>Section 11.5</span></a>. As with previous models, we look to see whether the confidence interval contains 0 to determine whether it is a useful predictor in explaining variability in voting frequency after adjusting for the other predictors. In both equations in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>, none of the confidence intervals for <code>age</code> and <code>party_idNoaffiliation</code> include 0. Thus, both of these indicators are helpful in understanding voting frequency. In contrast, the confidence intervals for <code>party_idRepublican</code> do contain 0, so the voting behavior for Republicans does not differ significantly from Democrats, after adjusting for age. This is consistent with the observations from <a href="#fig-voting-bivar-eda-2" class="quarto-xref">Figure&nbsp;<span>13.2 (b)</span></a>.</p>
+<p>Along with the coefficients in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a> are 95% confidence intervals for the population coefficients. These confidence intervals are estimated in a similar way as those for logistic regression in <a href="11-logistic.html#sec-logistic-inf" class="quarto-xref"><span>Section 11.5</span></a>. As with previous models, we look to see whether the confidence interval contains 0 to determine whether it is a useful predictor in explaining variability in voting frequency after adjusting for the other predictors. In both equations in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a>, none of the confidence intervals for <code>age</code> and <code>party_idNoaffiliation</code> include 0. Thus, both of these indicators are helpful in understanding voting frequency. In contrast, the confidence intervals for <code>party_idRepublican</code> do contain 0, so the voting behavior for Republicans does not differ significantly from Democrats, after adjusting for age. This is consistent with the observations from <a href="#fig-voting-bivar-eda-2" class="quarto-xref">Figure&nbsp;<span>13.2 (b)</span></a>.</p>
 <div class="analysis_in_practice">
-<p>In <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>, the inferential conclusions for each predictor are the same for both equations in the multinomial logistic model. This is not a requirement for multinomial logistic regression and is not always the case. It could be possible for a predictor to be useful in differentiating <code>always</code> versus <code>rarely/never</code>, but not useful in differentiating <code>sporadic</code> versus <code>rarely/never</code>.</p>
+<p>In <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a>, the inferential conclusions for each predictor are the same for both equations in the multinomial logistic model. This is not a requirement for multinomial logistic regression and is not always the case. It could be possible for a predictor to be useful in differentiating <code>always</code> versus <code>rarely/never</code>, but not useful in differentiating <code>sporadic</code> versus <code>rarely/never</code>.</p>
 </div>
 </section><section id="prediction-and-classification" class="level3" data-number="13.2.4"><h3 data-number="13.2.4" class="anchored" data-anchor-id="prediction-and-classification">
 <span class="header-section-number">13.2.4</span> Prediction and classification</h3>
@@ -900,11 +925,11 @@ Table&nbsp;13.2: Model of <code>voter_category</code> versus <code>age</code> an
 <p>The predicted probability an observation is in the baseline category <span class="math inline">\(A\)</span> is computed as</p>
 <p><span id="eq-multinom-pred-baseline"><span class="math display">\[\hat{\pi}_A = 1 - (\hat{\pi}_B + \hat{\pi}_C) \tag{13.3}\]</span></span></p>
 <p><a href="#eq-multinom-pred-baseline" class="quarto-xref">Equation&nbsp;<span>13.3</span></a> utilizes the fact that the sum of the probabilities across all possible categories equals 1. This is is also why we need all <span class="math inline">\(K - 1\)</span> equations as part of the multinomial logistic when there are <span class="math inline">\(K\)</span> categories of the response variable.</p>
-<p><a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.3</span></a> shows the predicted probabilities based on <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a> for ten observations in the data.</p>
+<p><a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.4</span></a> shows the predicted probabilities based on <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a> for ten observations in the data.</p>
 <div class="cell">
 <div id="tbl-voter-model-pred" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-voter-model-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.3: Predictions from voter frequency model for ten observations
+Table&nbsp;13.4: Predictions from voter frequency model for ten observations
 </figcaption><div aria-describedby="tbl-voter-model-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -993,15 +1018,15 @@ Table&nbsp;13.3: Predictions from voter frequency model for ten observations
 </figure>
 </div>
 </div>
-<p>The predicted probabilities are then used to classify the observations based on the model. For each observation, the predicted class is the one with the highest predicted probability. For example, for the first observation in <a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.3</span></a>, <span class="math inline">\(\hat{\pi}_{rarely/never} = 0.071\)</span>, <span class="math inline">\(\hat{\pi}_{sporadic} = 0.484\)</span>, and <span class="math inline">\(\hat{\pi}_{always} = 0.446\)</span>. Therefore, the predicted class for this observation is “sporadic”.</p>
+<p>The predicted probabilities are then used to classify the observations based on the model. For each observation, the predicted class is the one with the highest predicted probability. For example, for the first observation in <a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.4</span></a>, <span class="math inline">\(\hat{\pi}_{rarely/never} = 0.071\)</span>, <span class="math inline">\(\hat{\pi}_{sporadic} = 0.484\)</span>, and <span class="math inline">\(\hat{\pi}_{always} = 0.446\)</span>. Therefore, the predicted class for this observation is “sporadic”.</p>
 </section><section id="confusion-matrix" class="level3" data-number="13.2.5"><h3 data-number="13.2.5" class="anchored" data-anchor-id="confusion-matrix">
 <span class="header-section-number">13.2.5</span> Confusion matrix</h3>
-<p>From <a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.3</span></a>, we see the predicted class is not always equal to the observed class. Therefore, we want to quantify the model performance, specifically how well the model classifies observations and how well it distinguishes observations from a specific class. A confusion matrix, introduced in <a href="12-logistic-prediction.html#sec-classification" class="quarto-xref"><span>Section 12.3.2</span></a>, is used to compare the observed versus predicted classes. <a href="#fig-confmat-voters-model" class="quarto-xref">Figure&nbsp;<span>13.3</span></a> is the confusion matrix for the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>. Because the predicted class is always the category with the highest predicted probability, we do not need to specify a threshold as in logistic regression.</p>
+<p>From <a href="#tbl-voter-model-pred" class="quarto-xref">Table&nbsp;<span>13.4</span></a>, we see the predicted class is not always equal to the observed class. Therefore, we want to quantify the model performance, specifically how well the model classifies observations and how well it distinguishes observations from a specific class. A confusion matrix, introduced in <a href="12-logistic-prediction.html#sec-classification" class="quarto-xref"><span>Section 12.3.2</span></a>, is used to compare the observed versus predicted classes. <a href="#fig-confmat-voters-model" class="quarto-xref">Figure&nbsp;<span>13.3</span></a> is the confusion matrix for the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a>. Because the predicted class is always the category with the highest predicted probability, we do not need to specify a threshold as in logistic regression.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-confmat-voters-model" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-confmat-voters-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;13.3: Confusion matrix for voters model"><img src="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;13.3: Confusion matrix for voters model"><img src="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confmat-voters-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.3: Confusion matrix for voters model
@@ -1026,21 +1051,21 @@ Figure&nbsp;13.3: Confusion matrix for voters model
 <div class="cell-output-display">
 <div id="fig-voters-roc-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-voters-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in Table&nbsp;tbl-voter-model"><img src="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in Table&nbsp;tbl-voter-model"><img src="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-voters-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>
+Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a>
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-voters-roc-curve" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> shows the multiclass ROC curve for the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.2</span></a>. We interpret this curve similarly to the ROC curve for logistic regression. Curves close to the upper-left portion of the graph indicate good model distinguishing, but curves close to the diagonal line indicate poor model distinguishing. Based on this, the model performs best in identifying “rarely/never” voters versus the others and does the worst in identifying sporadic voters.</p>
+<p><a href="#fig-voters-roc-curve" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> shows the multiclass ROC curve for the model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a>. We interpret this curve similarly to the ROC curve for logistic regression. Curves close to the upper-left portion of the graph indicate good model distinguishing, but curves close to the diagonal line indicate poor model distinguishing. Based on this, the model performs best in identifying “rarely/never” voters versus the others and does the worst in identifying sporadic voters.</p>
 <p>The overall model performance is quantified using the <strong>average area under the curve (AUC)</strong>. The average AUC is computed in two ways. The first by computing the AUC for each class, then taking the average across all values of AUC. The average AUC for <a href="#fig-voters-roc-curve" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> is 0.656 . The second approach is to weight the AUC by the number of observations actually in each class. Therefore, larger classes have more influence on the measure of model performance. Using this approach, the average AUC for <a href="#fig-voters-roc-curve" class="quarto-xref">Figure&nbsp;<span>13.4</span></a> is 0.627.</p>
 </section><section id="multinomial-logistic-regression-in-r" class="level3" data-number="13.2.7"><h3 data-number="13.2.7" class="anchored" data-anchor-id="multinomial-logistic-regression-in-r">
 <span class="header-section-number">13.2.7</span> Multinomial logistic regression in R</h3>
 <p>Multinomial logistic models are fit using <code>multinom()</code> from the <strong>nnet</strong> R package <span class="citation" data-cites="nnet">(<a href="references.html#ref-nnet" role="doc-biblioref">Venables and Ripley 2002</a>)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># library(nnet) </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># library(nnet) </span></span>
 <span></span>
 <span><span class="va">voter_fit</span> <span class="op">&lt;-</span> <span class="fu">multinom</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span>,</span>
 <span>                      data <span class="op">=</span> <span class="va">voters</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1054,7 +1079,7 @@ converged</code></pre>
 </div>
 <p>The model output can be tidied and neatly displayed using <code>tidy()</code> from the <strong>broom</strong> package <span class="citation" data-cites="broom">(<a href="references.html#ref-broom" role="doc-biblioref">Robinson, Hayes, and Couch 2023</a>)</span> and <code>kable()</code> from the <strong>knitR</strong> package <span class="citation" data-cites="knitr">(<a href="references.html#ref-knitr" role="doc-biblioref">Xie 2024</a>)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">voter_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">voter_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1150,7 +1175,7 @@ converged</code></pre>
 <p>Predictions from the multinomial model are computed using the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function. The argument <code>type = "probs"</code> produces a matrix of the predicted probabilities and <code>type = "class"</code> produces a vector of the predicted classes.</p>
 <p>We add these to the original tibble for additional analysis.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute predicted probabilities</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute predicted probabilities</span></span>
 <span><span class="va">voter_pred_prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">voter_fit</span>, type <span class="op">=</span> <span class="st">"probs"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># compute predicted class</span></span>
@@ -1164,19 +1189,19 @@ converged</code></pre>
 <p>The syntax for the confusion matrix, ROC curves, and AUC are similar to logistic regression in <a href="12-logistic-prediction.html#sec-logistic-prediction-R" class="quarto-xref"><span>Section 12.6</span></a>.</p>
 <p>The confusion matrix is produced using <code>conf_mat()</code> from the <strong>yardstick</strong> R package <span class="citation" data-cites="yardstick">(<a href="references.html#ref-yardstick" role="doc-biblioref">Kuhn, Vaughan, and Hvitfeldt 2025</a>)</span>. We use <code>autoplot()</code> to format the confusion matrix such that the cells are shaded by the number of observations.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">conf_mat</span><span class="op">(</span><span class="va">voter_category</span>, <span class="va">pred_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">autoplot</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="13-special-topics_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The multiclass ROC curves are produced using <code>roc_curve()</code> in the <strong>yardstick</strong> R package <span class="citation" data-cites="yardstick">(<a href="references.html#ref-yardstick" role="doc-biblioref">Kuhn, Vaughan, and Hvitfeldt 2025</a>)</span>. The argument <code>truth =</code> specifies the columns with the observed classes, and the next line of code indicates the columns that contain the predicted probabilities. The <code>roc_curve()</code> function produces the data underlying the curves, and <code>autoplot()</code> produces the curves.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_curve</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
 <span>    <span class="va">`rarely/never`</span><span class="op">:</span><span class="va">always</span></span>
@@ -1184,14 +1209,14 @@ converged</code></pre>
 <span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="13-special-topics_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="13-special-topics_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Lastly, the AUC is computed using <code>roc_auc()</code> from the <strong>yardstick</strong> R package. The the weighted average AUC is computed using the argument <code>estimator = "macro_weighted"</code>. The unweighted average AUC is computed by default.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute unweighted average AUC</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute unweighted average AUC</span></span>
 <span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_auc</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
@@ -1203,7 +1228,7 @@ converged</code></pre>
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 1 roc_auc hand_till      0.656</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute weighted average AUC</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute weighted average AUC</span></span>
 <span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_auc</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
@@ -1224,7 +1249,7 @@ converged</code></pre>
 <p>One of the key assumptions we’ve made throughout this book is that the observations in the sample data are independent of each other. Often in practice, however, there is an underlying grouping structure in the data, and the observations are not completely independent of one another. For example, the data may contain multiple measurements from each individual (call repeated measures) as in <a href="#fig-repeated-measures" class="quarto-xref">Figure&nbsp;<span>13.5</span></a>.</p>
 <div id="fig-repeated-measures" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-repeated-measures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/13-repeated-measures-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;13.5: Repeated measures data structure"><img src="images/13-repeated-measures-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="images/13-repeated-measures-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;13.5: Repeated measures data structure"><img src="images/13-repeated-measures-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-repeated-measures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.5: Repeated measures data structure
@@ -1233,7 +1258,7 @@ Figure&nbsp;13.5: Repeated measures data structure
 <p>Another common grouping structure is having multiple observations from within a single group, such that we expect the observations within the group to be more similar than observations from different groups, as in <a href="#fig-grouped-data-structure" class="quarto-xref">Figure&nbsp;<span>13.6</span></a>.</p>
 <div id="fig-grouped-data-structure" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-grouped-data-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/13-grouped-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;13.6: Grouped data structure"><img src="images/13-grouped-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="images/13-grouped-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;13.6: Grouped data structure"><img src="images/13-grouped-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-grouped-data-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.6: Grouped data structure
@@ -1266,17 +1291,17 @@ Figure&nbsp;13.6: Grouped data structure
 <p>The goal of the analysis is to understand a lemur’s growth rate (relationship between age and weight) after adjusting for other characteristics.</p>
 <div id="fig-lemur-structure" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemur-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/13-lemurs-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;13.7: Structure of lemur data"><img src="images/13-lemurs-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="images/13-lemurs-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;13.7: Structure of lemur data"><img src="images/13-lemurs-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemur-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.7: Structure of lemur data
 </figcaption></figure>
 </div>
-<p>The lemurs data set is an example of repeated measures, where the data are grouped by lemur as shown in <a href="#fig-lemur-structure" class="quarto-xref">Figure&nbsp;<span>13.7</span></a>. These data violate the independence assumption of linear regression models (<a href="08-mlr-inference.html#sec-mlr-conditions-diagnositics" class="quarto-xref"><span>Section 8.5</span></a>) and logistic regression models (<a href="11-logistic.html#sec-logistic-conditions" class="quarto-xref"><span>Section 11.6</span></a>), because we expected observations from a single lemur to be correlated with one another. Some factors (e.g., <code>taxon</code> ) will remain constant for all observations from an individual lemur. <a href="#tbl-individual-lemur" class="quarto-xref">Table&nbsp;<span>13.4</span></a> shows the data for an individual lemur.</p>
+<p>The lemurs data set is an example of repeated measures, where the data are grouped by lemur as shown in <a href="#fig-lemur-structure" class="quarto-xref">Figure&nbsp;<span>13.7</span></a>. These data violate the independence assumption of linear regression models (<a href="08-mlr-inference.html#sec-mlr-conditions-diagnositics" class="quarto-xref"><span>Section 8.5</span></a>) and logistic regression models (<a href="11-logistic.html#sec-logistic-conditions" class="quarto-xref"><span>Section 11.6</span></a>), because we expected observations from a single lemur to be correlated with one another. Some factors (e.g., <code>taxon</code> ) will remain constant for all observations from an individual lemur. <a href="#tbl-individual-lemur" class="quarto-xref">Table&nbsp;<span>13.5</span></a> shows the data for an individual lemur.</p>
 <div class="cell">
 <div id="tbl-individual-lemur" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-individual-lemur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.4: All observations from an individual lemur
+Table&nbsp;13.5: All observations from an individual lemur
 </figcaption><div aria-describedby="tbl-individual-lemur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1361,12 +1386,12 @@ Table&nbsp;13.4: All observations from an individual lemur
 </div>
 </div>
 <p>In this data, the lemur’s <code>dlc_id</code>, <code>name</code>, <code>sex</code>, <code>taxon</code>, and <code>litter_size</code> remain the same for its observations. These variables are at level two of the data, i.e., they differ between lemurs but are the same for all observations from an individual lemur. The <code>age</code> and <code>weight</code> are different across observations. These are variables at level one, because they change each time data are collected.</p>
-<p>The data set contains seven observations for the lemur Mirfak in <a href="#tbl-individual-lemur" class="quarto-xref">Table&nbsp;<span>13.4</span></a> , but there are not necessarily seven observations for every lemur in the data. The number of observations for each lemur range from as few as 1 to as many as 120. The GLMMs can account for the different number of observations from each individual. When we fit the model, lemurs with more observations will be weighted more heavily when estimating the coefficients.</p>
+<p>The data set contains seven observations for the lemur Mirfak in <a href="#tbl-individual-lemur" class="quarto-xref">Table&nbsp;<span>13.5</span></a> , but there are not necessarily seven observations for every lemur in the data. The number of observations for each lemur range from as few as 1 to as many as 120. The GLMMs can account for the different number of observations from each individual. When we fit the model, lemurs with more observations will be weighted more heavily when estimating the coefficients.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-lemurs-weight" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;13.8: weight versus age for nine lemurs"><img src="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;13.8: weight versus age for nine lemurs"><img src="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.8: <code>weight</code> versus <code>age</code> for nine lemurs
@@ -1379,7 +1404,7 @@ Figure&nbsp;13.8: <code>weight</code> versus <code>age</code> for nine lemurs
 <div class="cell-output-display">
 <div id="fig-lemurs-spaghetti-plot" class="quarto-float quarto-figure quarto-figure-center anchored" width="100%">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-spaghetti-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;13.9: "><img src="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" id="fig-lemurs-spaghetti-plot" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;13.9: "><img src="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" id="fig-lemurs-spaghetti-plot" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-lemurs-spaghetti-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.9
@@ -1403,11 +1428,11 @@ Figure&nbsp;13.9
 <p>Let’s break down the components of <a href="#eq-lemurs-random-int" class="quarto-xref">Equation&nbsp;<span>13.4</span></a>. The subscript indicate whether the variable is at the first or second level of the data. The variable <code>age</code> is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur <span class="math inline">\(i\)</span> at the <span class="math inline">\(j^{th}\)</span> observation. The other predictors are measured at the second level of the data, so the subscript <span class="math inline">\(i\)</span> indicates that we plug in the same value for lemur <span class="math inline">\(i\)</span> across all its observations. The term <span class="math inline">\(\beta_0\)</span> is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.</p>
 <p>The error term <span class="math inline">\(\epsilon_{ij}\)</span> is like the error term previously introduced for linear models. It is the difference between the observed and expected value of the weight for the <span class="math inline">\(j^{th}\)</span> observation from lemur <span class="math inline">\(i\)</span>. As in linear regression, these error terms follow a normal distribution with mean of 0 and variance of <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. This <span class="math inline">\(\sigma^2_{\epsilon}\)</span> is a measure of the variability in the weights (response variable) within an individual lemur (group).</p>
 <p>The term <span class="math inline">\(u_{i}\)</span> is the random effect that makes this the “random intercepts model”. We don’t estimate <span class="math inline">\(u_i\)</span> directly, but its distribution tells us about the variability in the average weights between lemurs. The <span class="math inline">\(u_{i}\)</span> are normally distributed with a mean of 0 and variance of <span class="math inline">\(\sigma^2_{u}\)</span>. This <span class="math inline">\(\sigma^2_{u}\)</span> is the measure of between lemur variability. From this model, the intercept of an individual lemur <span class="math inline">\(i\)</span> is <span class="math inline">\(\beta_0 + u_i\)</span> where, <span class="math inline">\(u_i\)</span> is drawn from <span class="math inline">\(N(0,\sigma^2_{u})\)</span>.</p>
-<p>The coefficients <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_5\)</span> and the variance components <span class="math inline">\(\sigma_u\)</span> and <span class="math inline">\(\sigma_{\epsilon}\)</span> are estimated using maximum likelihood estimation. The output for the lemurs random intercepts model is in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a>.</p>
+<p>The coefficients <span class="math inline">\(\beta_0, \beta_1, \ldots, \beta_5\)</span> and the variance components <span class="math inline">\(\sigma_u\)</span> and <span class="math inline">\(\sigma_{\epsilon}\)</span> are estimated using maximum likelihood estimation. The output for the lemurs random intercepts model is in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.6</span></a>.</p>
 <div class="cell">
 <div id="tbl-lemurs-model-random-int" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-random-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.5: Random intercepts model for lemurs data
+Table&nbsp;13.6: Random intercepts model for lemurs data
 </figcaption><div aria-describedby="tbl-lemurs-model-random-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1498,7 +1523,7 @@ Table&nbsp;13.5: Random intercepts model for lemurs data
 &amp;\hat{\sigma}_u = 311.504 \hspace{5mm} \hat{\sigma}_\epsilon = 356.275
 \end{aligned}\]</span></p>
 <div class="yourturn">
-<p>Use the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a>.</p>
+<p>Use the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.6</span></a>.</p>
 <ul>
 <li><p>Interpret the coefficient of <code>age</code> in the context of the data.</p></li>
 <li><p>Explain what <span class="math inline">\(\hat{\sigma}_u = 311.504\)</span> means in the context of the data.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p></li>
@@ -1506,9 +1531,9 @@ Table&nbsp;13.5: Random intercepts model for lemurs data
 </div>
 </section><section id="random-intercepts-model-in-r" class="level3" data-number="13.3.3"><h3 data-number="13.3.3" class="anchored" data-anchor-id="random-intercepts-model-in-r">
 <span class="header-section-number">13.3.3</span> Random intercepts model in R</h3>
-<p>Random intercepts models are fit using the <code>lmer</code> function in the <code>lme4</code> R package <span class="citation" data-cites="lme4">(<a href="references.html#ref-lme4" role="doc-biblioref">Bates et al. 2015</a>)</span>. The syntax for the response and predictor variables is the same as in <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. The grouping variable is specified using the syntax <code>(1|grouping_var)</code>. This specifies that the random intercepts are based on <code>grouping_var</code>. The syntax for the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.5</span></a> is below.</p>
+<p>Random intercepts models are fit using the <code>lmer</code> function in the <code>lme4</code> R package <span class="citation" data-cites="lme4">(<a href="references.html#ref-lme4" role="doc-biblioref">Bates et al. 2015</a>)</span>. The syntax for the response and predictor variables is the same as in <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. The grouping variable is specified using the syntax <code>(1|grouping_var)</code>. This specifies that the random intercepts are based on <code>grouping_var</code>. The syntax for the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.6</span></a> is below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_fit</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">taxon</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">litter_size</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_fit</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">taxon</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">litter_size</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> </span>
 <span>                     <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">dlc_id</span><span class="op">)</span>, </span>
 <span>                   data <span class="op">=</span> <span class="va">lemurs</span><span class="op">)</span></span>
 <span></span>
@@ -1530,7 +1555,7 @@ Fixed Effects:
 </div>
 <p>The results can be displayed in a tidy format using <code>tidy</code> function in the <strong>broom.mixed</strong> R package <span class="citation" data-cites="broom.mixed">(<a href="references.html#ref-broom.mixed" role="doc-biblioref">Bolker and Robinson 2024</a>)</span>. The results below are neatly displayed using <code>kable()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lemurs_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lemurs_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1671,7 +1696,7 @@ Figure&nbsp;13.10: Distribution of original and log-transformed <code>expenditur
 <div class="cell-output-display">
 <div id="fig-ncaa-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure"><img src="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure"><img src="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure
@@ -1697,7 +1722,7 @@ Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure
 <div class="cell-output-display">
 <div id="fig-voters-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-voters-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="Figure&nbsp;13.12: Classification tree voter frequency"><img src="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19" title="Figure&nbsp;13.12: Classification tree voter frequency"><img src="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-voters-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.12: Classification tree voter frequency
@@ -1715,7 +1740,7 @@ Figure&nbsp;13.12: Classification tree voter frequency
 <p>We fit decision trees using the <code>rpart()</code> function in the <strong>rpart</strong> R package <span class="citation" data-cites="rpart">(<a href="references.html#ref-rpart" role="doc-biblioref">Therneau and Atkinson 2025</a>)</span>. The argument <code>method =</code> is used to specify the type of decision tree.</p>
 <p>Below is the code for the regression tree fit in <a href="#sec-regression-trees" class="quarto-xref"><span>Section 13.4.1</span></a>. The argument <code>method = "anova"</code> specifies that we are fitting a regression tree. If we type the name of the tree, we see a summary of the nodes and branches</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">expenditure_m</span><span class="op">)</span> <span class="op">~</span> <span class="va">enrollment_th</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">expenditure_m</span><span class="op">)</span> <span class="op">~</span> <span class="va">enrollment_th</span> <span class="op">+</span> </span>
 <span>                     <span class="va">type</span> <span class="op">+</span> <span class="va">region</span>,</span>
 <span>                   data <span class="op">=</span> <span class="va">ncaa_train</span>,</span>
 <span>                   method <span class="op">=</span> <span class="st">"anova"</span><span class="op">)</span></span>
@@ -1752,7 +1777,7 @@ node), split, n, deviance, yval
 </div>
 <p>The code below is the classification tree from <a href="#sec-classification-trees" class="quarto-xref"><span>Section 13.4.2</span></a>. We use the argument <code>method = "class"</code> to specify the classification tree. Similar to regression trees, we can type the name of the tree to see a summary of the nodes and branches.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span> <span class="op">+</span></span>
 <span>                       <span class="va">income_cat</span> <span class="op">+</span> <span class="va">educ</span>, </span>
 <span>                   data <span class="op">=</span> <span class="va">voters_train</span>, </span>
 <span>                   method <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span>
@@ -1775,10 +1800,10 @@ node), split, n, loss, yval, (yprob)
 </div>
 <p>The summaries produced by <code>rpart()</code> are challenging to read, so we use the <code>rpart.plot()</code> from the <strong>rpart.plot</strong> R package <span class="citation" data-cites="rpart.plot">(<a href="references.html#ref-rpart.plot" role="doc-biblioref">Milborrow 2025</a>)</span> to create a visual representation of the tree. The code below produces the visualization of the regression tree for NCAA basketball expenditures.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rpart.plot</span><span class="op">(</span><span class="va">ncaa_tree</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rpart.plot</span><span class="op">(</span><span class="va">ncaa_tree</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="13-special-topics_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img src="13-special-topics_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1786,7 +1811,7 @@ node), split, n, loss, yval, (yprob)
 <p>Predictions are produced using <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>. This will produce a vector of predictions that can be added to the original data frame to evaluate model performance.</p>
 <p>The code below produces the predictions for the testing data from the regression tree predicting NCAA basketball expenditures and saves the predictions as a column in the testing data. The same code is used to produce predictions from the classification tree.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_test</span> <span class="op">&lt;-</span> <span class="va">ncaa_test</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_test</span> <span class="op">&lt;-</span> <span class="va">ncaa_test</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>predict_expend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ncaa_tree</span>, <span class="va">ncaa_test</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The predictions are in the same units as the response variable, so in this case, the predicted values are the predicted <code>log(expenditure_m)</code>.</p>
@@ -1825,7 +1850,7 @@ node), split, n, loss, yval, (yprob)
 <div class="cell-output-display">
 <div id="fig-response-gpa" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-response-gpa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20" title="Figure&nbsp;13.13: Distribution of GPA for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" title="Figure&nbsp;13.13: Distribution of GPA for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-response-gpa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.13: Distribution of GPA for treatment and control groups
@@ -1887,11 +1912,11 @@ Figure&nbsp;13.14: Distribution of Subset of confounding variables for treatment
 \log\Big(\frac{\pi}{1-\pi}\Big) = \beta_0 &amp;+ \beta_1 ~ \text{Grade10} + \beta_2 ~ \text{Grade11} + \beta_3 ~ \text{Grade12}  \\
 &amp; + \beta_4 ~ \text{GenderM} + \beta_5 ~ \text{EthnicityNon-Hispanic} \\
 &amp;+ \beta_6 ~ \text{ELL} + \beta_7 ~ \text{Sped} + \beta_8 ~ \text{Homeless}
-\end{aligned} \tag{13.7}\]</span></span> where <span class="math inline">\(\pi\)</span> is the propensity, the probability of being in the treatment group (participating in Project ACE). <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.6</span></a> is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.--></p>
+\end{aligned} \tag{13.7}\]</span></span> where <span class="math inline">\(\pi\)</span> is the propensity, the probability of being in the treatment group (participating in Project ACE). <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.7</span></a> is the output of the fitted propensity score model. <!--# foot note: All the variables in this model happen to be categorical, but both quantitative and categorical variables can be used in the propensity score model.--></p>
 <div class="cell">
 <div id="tbl-propensity-score-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-propensity-score-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.6
+Table&nbsp;13.7
 </figcaption><div aria-describedby="tbl-propensity-score-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment caption-top table table-sm table-striped small">
@@ -1985,7 +2010,7 @@ Table&nbsp;13.6
 <div class="cell-output-display">
 <div id="fig-propensity-scores" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-propensity-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="Figure&nbsp;13.15: Distribution of propensity scores for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25" title="Figure&nbsp;13.15: Distribution of propensity scores for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-propensity-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.15: Distribution of propensity scores for treatment and control groups
@@ -1996,11 +2021,11 @@ Figure&nbsp;13.15: Distribution of propensity scores for treatment and control g
 <p>In <a href="#fig-propensity-scores" class="quarto-xref">Figure&nbsp;<span>13.15</span></a>, we see that the center of the distribution of propensity scores for individuals in the treatment group is higher than the center for the control group. This is what we might expect, because the individuals in the treatment group are more likely to have the characteristics of eligibility to participate in Project ACE.</p>
 <p>The other important feature from this graph is the large overlap between the two distributions. This indicates <strong>common support</strong>, in which individuals in both the treatment and control groups have a nonzero probability of receiving the treatment. In the context of this analysis, this means every student had a non-zero chance of participating in Project ACE. Practically speaking, we use the propensity scores to match observations in the treatment group with an observation in the control group, so there needs to be overlap in the distributions.</p>
 <p>Now let’s use the propensity scores to match observations. The number of observations in the treatment group is often equal to or less than the number of observations in the control group. Therefore, the matching is done such that each observation in the treatment group is matched to an observation in the control group. Then, the observations in the control group that are not matched are discarded. In the Project ACE analysis, there are 148 observations in the treatment group and 1152 observations in the control group. Therefore, the final matched data set will contain 148 observations in the treatment group and 148 observations in the control group. The unmatched 1004 observations in the control group are discarded.</p>
-<p>One of the most widely used matching approaches is <strong>nearest-neighbor matching</strong>, in which each observation in the treatment group is matched with an observation in the control group with the closest propensity score. <a href="#tbl-sample-matches" class="quarto-xref">Table&nbsp;<span>13.7</span></a> shows three treatment/control pairs in the matched data for the Project ACE analysis.</p>
+<p>One of the most widely used matching approaches is <strong>nearest-neighbor matching</strong>, in which each observation in the treatment group is matched with an observation in the control group with the closest propensity score. <a href="#tbl-sample-matches" class="quarto-xref">Table&nbsp;<span>13.8</span></a> shows three treatment/control pairs in the matched data for the Project ACE analysis.</p>
 <div class="cell">
 <div id="tbl-sample-matches" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sample-matches-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.7: Three pairs of matched observations based on the model in <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.6</span></a>. The column <code>subclass</code> identifies the matches.
+Table&nbsp;13.8: Three pairs of matched observations based on the model in <a href="#tbl-propensity-score-model" class="quarto-xref">Table&nbsp;<span>13.7</span></a>. The column <code>subclass</code> identifies the matches.
 </figcaption><div aria-describedby="tbl-sample-matches-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -2051,7 +2076,7 @@ Table&nbsp;13.7: Three pairs of matched observations based on the model in <a hr
 <div class="cell">
 <div id="tbl-match-14" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-match-14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.8: Features for observations in Match 14
+Table&nbsp;13.9: Features for observations in Match 14
 </figcaption><div aria-describedby="tbl-match-14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -2103,7 +2128,7 @@ Table&nbsp;13.8: Features for observations in Match 14
 </figure>
 </div>
 </div>
-<p>From <a href="#tbl-match-14" class="quarto-xref">Table&nbsp;<span>13.8</span></a>, we see that the two observations that make up the 14th match are the same in all characteristics except grade. The student in the treatment group is in grade 12, and the student in the control group is in grade 9.</p>
+<p>From <a href="#tbl-match-14" class="quarto-xref">Table&nbsp;<span>13.9</span></a>, we see that the two observations that make up the 14th match are the same in all characteristics except grade. The student in the treatment group is in grade 12, and the student in the control group is in grade 9.</p>
 <!--# to add - analysis in practice - what about the nonmatched observations? Do ratios-->
 <p>Before fitting the model to estimate the effect of the treatment, let’s take a look at the distributions of the variables we examined in <a href="#fig-compare-distributions" class="quarto-xref">Figure&nbsp;<span>13.14</span></a>, and see how the distributions compare between the treatment and control group for the 296 observations in the matched data.</p>
 <div id="fig-compare-distributions-matched" class="quarto-layout-panel">
@@ -2149,11 +2174,11 @@ Figure&nbsp;13.16: Distribution of subset of confounding variables for treatment
 </div>
 <p>In <a href="#fig-compare-distributions-matched" class="quarto-xref">Figure&nbsp;<span>13.16</span></a>, the distributions of these student characteristics are now the same for the treatment and control groups (compare to <a href="#fig-compare-distributions" class="quarto-xref">Figure&nbsp;<span>13.14</span></a>). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model <a href="#eq-propensity-score-model" class="quarto-xref">Equation&nbsp;<span>13.7</span></a>. Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere--></p>
 <p>Once we have the matched data set, it’s time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.</p>
-<p><span id="eq-treatment-model"><span class="math display">\[\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon}) \tag{13.8}\]</span></span> For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in <a href="#eq-treatment-model" class="quarto-xref">Equation&nbsp;<span>13.8</span></a>. The fitted model is in <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>.</p>
+<p><span id="eq-treatment-model"><span class="math display">\[\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon}) \tag{13.8}\]</span></span> For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in <a href="#eq-treatment-model" class="quarto-xref">Equation&nbsp;<span>13.8</span></a>. The fitted model is in <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.10</span></a>.</p>
 <div class="cell">
 <div id="tbl-model-treatment-effect" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-model-treatment-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coefficients
+Table&nbsp;13.10: Model of treatment effect with 95% confidence intervals for coefficients
 </figcaption><div aria-describedby="tbl-model-treatment-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -2201,7 +2226,7 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 </figure>
 </div>
 </div>
-<p>We interpret the model just as we interpret other linear regression models (see <a href="04-slr.html" class="quarto-xref"><span>Chapter 4</span></a> and <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>). In <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.9</span></a>, the estimated effect of the treatment, participating in Project ACE is 0.209 and the 95% confidence interval is 0.017 to 0.401. This estimate 0.209 is the <strong>average treatment effect (ATE)</strong>, the difference in the expected response between the treatment and control group. Therefore, based on this analysis, we can make a causal relationship between participating in Project ACE and higher GPA, on average. The 95% confidence interval gives a plausible range for the effect in the population.</p>
+<p>We interpret the model just as we interpret other linear regression models (see <a href="04-slr.html" class="quarto-xref"><span>Chapter 4</span></a> and <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>). In <a href="#tbl-model-treatment-effect" class="quarto-xref">Table&nbsp;<span>13.10</span></a>, the estimated effect of the treatment, participating in Project ACE is 0.209 and the 95% confidence interval is 0.017 to 0.401. This estimate 0.209 is the <strong>average treatment effect (ATE)</strong>, the difference in the expected response between the treatment and control group. Therefore, based on this analysis, we can make a causal relationship between participating in Project ACE and higher GPA, on average. The 95% confidence interval gives a plausible range for the effect in the population.</p>
 <div class="yourturn">
 <p>Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 </div>
@@ -2211,7 +2236,7 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 <p>Much of the code for causal inference is the code for linear <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and logistic <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> models that we’ve seen in previous chapters. The primarily new code is for creating the matched data set using the propensity scores.</p>
 <p>We compute the propensity scores “manually” by fitting a logistic regression model using <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">propensity_score_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">propensity_score_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> </span>
 <span>                                <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span> <span class="va">ELL</span> <span class="op">+</span> </span>
 <span>                                <span class="va">Sped</span> <span class="op">+</span> <span class="va">Homeless</span>,</span>
 <span>                        data <span class="op">=</span> <span class="va">ace</span>, </span>
@@ -2220,7 +2245,7 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 <p>The assigned matches are done using the <code>matchit()</code> function from the <strong>MatchIt</strong> R package <span class="citation" data-cites="MatchIt">(<a href="references.html#ref-MatchIt" role="doc-biblioref">Ho et al. 2011</a>)</span>. The code below shows the propensity score matching for the Project Ace data.</p>
 <p>The argument <code>method = "nearest"</code> species to conduct nearest-neighbor matching (the default method), and <code>distance = "logit"</code> indicates to compute the propensity scores using a logistic regression model. The <code>matchit()</code> function will refit the model with propensity scores.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_psm</span> <span class="op">&lt;-</span> <span class="fu">matchit</span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_psm</span> <span class="op">&lt;-</span> <span class="fu">matchit</span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span></span>
 <span>                          <span class="va">Race</span> <span class="op">+</span> <span class="va">ELL</span> <span class="op">+</span> <span class="va">Sped</span> <span class="op">+</span> <span class="va">Homeless</span>,</span>
 <span>                 data <span class="op">=</span> <span class="va">ace</span>,</span>
 <span>                 method <span class="op">=</span> <span class="st">"nearest"</span>,   </span>
@@ -2239,7 +2264,7 @@ Table&nbsp;13.9: Model of treatment effect with 95% confidence intervals for coe
 </div>
 <p>This code creates a <code>matchit</code> object called <code>ace_psm</code> that contains information about the propensity score matching. We retrieve the matched data using the <code>match.data()</code> function as shown below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_matched</span> <span class="op">&lt;-</span> <span class="fu">match.data</span><span class="op">(</span><span class="va">ace_psm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_matched</span> <span class="op">&lt;-</span> <span class="fu">match.data</span><span class="op">(</span><span class="va">ace_psm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We use <code>glimpse()</code> to see what is in the new matched data set.</p>
 <div class="cell">
@@ -2268,7 +2293,7 @@ $ subclass                                          &lt;fct&gt; 1, 1, 42, 3, 2, 
 <p>There are some new columns in addition to the columns in the original <code>ace</code> tibble. The column <code>distance</code> contains the propensity scores. The column <code>sub.class</code> identifies the matches. The column <code>weights</code> contains sample weights. All observations are equally weighted using the methods introduced in this section. See the resources in <a href="#sec-causal-further-reading" class="quarto-xref"><span>Section 13.5.3</span></a> to learn about propensity score matching that incorporates weighting.</p>
 <p>The <code>lm</code> function is used to fit the linear regression model for the treatment effect.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treatment_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Current.GPA</span> <span class="op">~</span> <span class="va">Tracking.Pathway</span>, data <span class="op">=</span> <span class="va">ace_matched</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treatment_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Current.GPA</span> <span class="op">~</span> <span class="va">Tracking.Pathway</span>, data <span class="op">=</span> <span class="va">ace_matched</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="sec-causal-further-reading" class="level3" data-number="13.5.3"><h3 data-number="13.5.3" class="anchored" data-anchor-id="sec-causal-further-reading">
 <span class="header-section-number">13.5.3</span> Further reading</h3>
@@ -2314,6 +2339,9 @@ Milborrow, Stephen. 2025. <span>“Rpart.plot: Plot ’Rpart’ Models: An Enhan
 </div>
 <div id="ref-montgomery2017design" class="csl-entry" role="listitem">
 Montgomery, Douglas C. 2017. <em>Design and Analysis of Experiments</em>. John wiley &amp; sons.
+</div>
+<div id="ref-tastyR" class="csl-entry" role="listitem">
+Mubia, Brian. 2025. <span>“tastyR: Recipe Data from ’Allrecipes.com’.”</span> <a href="https://doi.org/10.32614/CRAN.package.tastyR">https://doi.org/10.32614/CRAN.package.tastyR</a>.
 </div>
 <div id="ref-roback2021beyond" class="csl-entry" role="listitem">
 Roback, Paul, and Julie Legler. 2021. <em>Beyond Multiple Linear Regression: Applied Generalized Linear Models and Multilevel Models in r</em>. Chapman; Hall/CRC.

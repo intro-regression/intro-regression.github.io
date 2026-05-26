@@ -106,6 +106,8 @@ The analysis in this chapter will focus on `r nrow(recipes)` recipes that were p
 
 The data are in `recipes.csv`. We will use the following variables: <!--# remove all the variables I don't end up using-->
 
+- `name`: Recipe title
+
 - `country`: The country / region the cuisine is from (`Brazilian`, `Filipino`, `French`, `Italian`, `Other`). This is a simplified version of the `country` variable in the `cuisines` data frame.
 
 - `author`: User who posted the recipe
