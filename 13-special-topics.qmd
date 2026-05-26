@@ -82,7 +82,7 @@ The data was adapted from the `cuisines` data frame in the **tastyR** R package 
 
 See the **tastyR** documentation [@tastyR] for the full codebook.
 
-### Identifying missingness 
+### Identifying missingness  {#sec-missing-data-identify}
 
 We begin by observing how missingness appears in the data set. @tbl-missing-example shows examples of five recipes from the `recipes` data frame, each of which have different types and levels of missingness. For the sake of illustration, we will only consider whether there is missingness for the subset of variables analyzed in this section, not the entire `recipes` data set.
 
@@ -101,7 +101,7 @@ recipes |>
   filter(name %in% recipes_use)
 ```
 
-Let's take a look at each example and what we observe about the missingness.
+Let's take a look at this subset of recipes and what we observe about the missingness in each.
 
 Chef John's Nashville Hot Chicken is an example of acomplete case. A **complete case** is an observation that has values for all variables in the analysis. These types of observations have no missing values, so they are ready for analysis without applying the methods in this section.
 
@@ -111,17 +111,13 @@ The Brazilian Quentao recipe has missing values for all the variables related to
 
 The Danish Butter Cookies is missing data related to the user reviews (`avg_rating`, `total_ratings`, `reviews`). Upon looking at the webpage for this recipe, we observe that this recipe has no reviews. Thus, we could logically impute 0 for the `total_ratings` and `reviews`. It is less clear, however, how to impute the missing data for `avg_rating`. Depending on the analysis goals, we might narrow the scope of the analysis to recipes that have at least some minimum number of ratings or reviews.
 
-Lastly, the Chicken Adobo recipe has missing values for all variables of interest. This observation is not currently usable for the analysis, because it does not have any observed values that can inform the data exploration and modeling. We could go to the recipe's page on Allrecipes.com and manually impute any values we see on the page now that weren't available when the data were originally collected. Depending the number of observations in the data that have such volume of missingness, this type of manual imputation could be unfeasible in practice.
+Lastly, the Chicken Adobo Tacos recipe has missing values for all variables of interest. This observation is not currently usable for the analysis, because it does not have any observed values that can inform the data exploration and modeling. We could go to the recipe's page on Allrecipes.com and manually impute any values we see on the page now that weren't available when the data were originally collected. Depending the number of observations in the data that have such volume of missingness, this type of manual imputation could be unfeasible in practice.
 
-### Types of missigness
+These recipes have illustrated the two ways missingness can occur in the data: item non-response and unit non-response. **Item non-response** occurs when an observation has missing values for one variable or a small subset of variables. This is was the case with the Rose Water Turkish Delight, Brazilian Quentao, and Danish Butter Cookie recipes. Depending on the reason for missingness, we can use one of various imputation strategies to fill in the missing values. **Unit non-response** occurs when an observation has so many missing values that is not useful for the analysis. This is the case with the Chicken Adobo Tacos recipe that is missing values for every variable except `name`.
 
-- Missingness may occur in data in multiple ways for a given observation
+### Types of missingness
 
-  - Item non-response in an observation has missing values for a subset of the variables
-
-  - Unit non-response in which an observation has no available data, or not enough to be useful.
-
-    - Can use the penguins data set for an example of this.
+In @sec-missing-data-identify, we observed how missingness can appear in the data and provided some preliminary strategies for dealing with the missingness depending on what we knew about the observation. Now instead of looking at individual observations, let's look at the patterns of missingness within an individual variable. There are three patterns of missingness for a given variable: missing completely at random, missing at random, and missing not at random.
 
 - There are three types of missingness
 
