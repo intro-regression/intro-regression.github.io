@@ -153,9 +153,30 @@ These and any imputation methods can potentially result in biased data that does
 If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.
 :::
 
-### Imputation in R
+### Handling missing data in R
 
-- Add something about skimr tog et a quick view (or call back if this is introduced in chapter 3)
+The first step to identifying missingness is identifying where it occurs in the data set. Presumably, we could visually inspect the data, as in @sec-missing-data-identify, but this approach is tedious and unreliable when the data set has a lot of observations and/or variables. There are multiple functions in R that produce variable summaries, including the proportion of missing observations.
+
+The first is `summary()`, a base R function. To get a summary of all columns of a data frame, we input the name of the data frame in the function, e.g., `summary(recipes)`. We can also specify which columns to include in the summary, as shown below.
+
+```{r}
+recipes |>
+  select(name, calories, fat, carbs, protein,
+         avg_rating, total_ratings, reviews) |>
+  summary()
+```
+
+Another option for variable summaries is `skim()` from the **skimr** R package [@skimr-2]. Similar to `summary()`, we can put the name of the data frame in the `skim()` function to produce a summary for every column. Otherwise, we can the variables to include in the data summary.
+
+```{r}
+
+recipes |>
+  select(name, calories, fat, carbs, protein,
+         avg_rating, total_ratings, reviews) |>
+  skim()
+```
+
+We can "manually" impute missing values using a logical rule or mean imputation utilizing `if_else()` from the **dplyr R package** [@dplyr]. Below is code to use mean imputation for the missing values of `reviews`.
 
 ```{r}
 library(mice)
@@ -164,19 +185,11 @@ library(mice)
 
 # get mean of observed data
 mean_reviews <- mean(recipes$reviews, na.rm = TRUE)
-mean_ratings <- mean(recipes$avg_rating, na.rm = TRUE)
 
 # impute missing values with mean
-
 recipes <- recipes |>
-  mutate(reviews_imputed = if_else(is.na(reviews), mean_reviews, reviews), 
-         avg_rating_imputed = if_else(is.na(avg_rating), mean_ratings, avg_rating))
-
-# look at distribution of original vs. imputed
-
-ggplot(data = recipes) + 
-  geom_density(aes(x = reviews), color = "red") +
-  geom_density(aes(x =reviews_imputed), color = "blue")
+  mutate(reviews_imputed = if_else(is.na(reviews), mean_reviews, reviews)
+  )
 ```
 
 ```         
