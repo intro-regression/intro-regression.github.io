@@ -507,38 +507,11 @@ Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
 <p>If we are imputing missing values for a cateogrical predictor, we can fill in the missing values with <code>Missing</code> or some other label that indicates the values are missing. By doing this, we create a new level of the categorical predictor that identifies the missing observations. This is similar to the <code>No Response</code> or <code>Refused to respond</code> level on surveys to denote questions in which the paritcipate did not provide a response. If we use the variable as a predictor in a regression model, an indicator variable is created for the new <code>Missing</code> level, in addition to the other existing levels (with the exception of the baseline level). If the indicator for <code>Missing</code> is statistically significant, then we may conclude that the observations with missing data for that observation are statistically different from the baseline category. This could indicate the missingness is not completely random, and in fact, represents a subset of the population. <!--# make sure this is correct.--></p>
 <p>There is a vast array of methods for imputing missing values for quantitative variables. One commonly used approach is <strong>mean imputation</strong>, in which the missing values are imputed using the mean value computed from the observed values of that variable. The primary advantages to this method are that it is easy to execute and easy to understand and explain to others. The primary disadvantage is that imputing all the missing values using the mean can result in a distorted <!--# need different word so it's not the same--> distribution of the variable, in which an out-sized proportion of the distribution is concentrated at the mean value. If this is the case, we can underestimate the variability in the variable and thus potentially compute inaccurate regression coefficients and inferential statistics if the imputed variable is used as a predictor or response variable in a regression model. Therefore, we should interpret results with caution if a large proportion of observations were imputed using the mean.</p>
 <p>A more informed approach for imputing missing values is by using <strong>nearest neighbor imputation</strong>, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called <strong>hot deck imputation</strong> [(paper: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/" class="uri">https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/</a>)], or by using other observations in an external data set, called <strong>cold deck imputation</strong> [CITATION]. By using the more informed approach to filling in missing data, we reduce some of the limitations of imputation that occur with mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics [Cite gelamn here?].</p>
-<p>Nearest neighbor imputation</p>
-<ul>
-<li><ul>
-<li>
-<p>Fill in missing data using neighboring observations that are similar to the observation with missing data.</p>
-<ul>
-<li><p>Hot deck imputation - use observation in the same data set</p></li>
-<li><p>Cold deck imputation - use observation from a different data set (for example, if you are analyzing data from 2025, find a “neighbor” observation from a data set collected in previous year)</p></li>
-<li>
-<p>Can still have under estimated standard deviation for the variable with missingness, but generally the regression coefficients and subsequent inference is fairly accurate</p>
-<ul>
-<li>Potential to expand effects of any measurement error in the observations used for imputation</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>As one can imagine, biases can result from imputation methods, particularly if the missingness is missing at random or missing not at random</p></li>
-</ul></li>
-<li>
-<p>Logical rule - perhaps there is some logic that could be applied to filling in the missing data.</p>
-<ul>
-<li>Find exmaple from the recipes data.</li>
-</ul>
-</li>
-<li>
-<p>Multiple imputation</p>
-<ul>
-<li>create multiple data sets using differet imputation methods, then average the analysis results.</li>
-</ul>
-</li>
-<li><p>Call out box about variables that have a lot of missing values.</p></li>
-</ul></section></section><section id="imputation-in-r" class="level3" data-number="13.1.5"><h3 data-number="13.1.5" class="anchored" data-anchor-id="imputation-in-r">
+<p>These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy to mitigate the effects of these biases is through <strong>multiple imputation</strong>, in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In <span class="quarto-unresolved-ref">?sec-missing-data-r</span>, we show code for conducting multiple imputation in R We point the reader to the texts in <a href="#sec-missing-data-further-reading" class="quarto-xref"><span>Section 13.1.6</span></a> for more details about multiple imputation. <!--# do i need to cite something?--></p>
+<div class="analysis_in_practice">
+<p>If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.</p>
+</div>
+</section></section><section id="imputation-in-r" class="level3" data-number="13.1.5"><h3 data-number="13.1.5" class="anchored" data-anchor-id="imputation-in-r">
 <span class="header-section-number">13.1.5</span> Imputation in R</h3>
 <ul>
 <li>Add something about skimr tog et a quick view (or call back if this is introduced in chapter 3)</li>

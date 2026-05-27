@@ -147,31 +147,11 @@ There is a vast array of methods for imputing missing values for quantitative va
 
 A more informed approach for imputing missing values is by using **nearest neighbor imputation**, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called **hot deck imputation** \[(paper: <https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/>)\], or by using other observations in an external data set, called **cold deck imputation** \[CITATION\]. By using the more informed approach to filling in missing data, we reduce some of the limitations of imputation that occur with mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics \[Cite gelamn here?\].
 
-Nearest neighbor imputation
+These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy to mitigate the effects of these biases is through **multiple imputation**, in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In @sec-missing-data-r, we show code for conducting multiple imputation in R We point the reader to the texts in @sec-missing-data-further-reading for more details about multiple imputation. <!--# do i need to cite something?-->
 
-- 
-
-  - Fill in missing data using neighboring observations that are similar to the observation with missing data.
-
-    - Hot deck imputation - use observation in the same data set
-
-    - Cold deck imputation - use observation from a different data set (for example, if you are analyzing data from 2025, find a "neighbor" observation from a data set collected in previous year)
-
-    - Can still have under estimated standard deviation for the variable with missingness, but generally the regression coefficients and subsequent inference is fairly accurate
-
-      - Potential to expand effects of any measurement error in the observations used for imputation
-
-  - As one can imagine, biases can result from imputation methods, particularly if the missingness is missing at random or missing not at random
-
-- Logical rule - perhaps there is some logic that could be applied to filling in the missing data.
-
-  - Find exmaple from the recipes data.
-
-- Multiple imputation
-
-  - create multiple data sets using differet imputation methods, then average the analysis results.
-
-- Call out box about variables that have a lot of missing values.
+::: {.analysis_in_practice latex="1"}
+If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.
+:::
 
 ### Imputation in R
 
