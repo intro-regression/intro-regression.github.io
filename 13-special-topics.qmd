@@ -82,7 +82,7 @@ The data was adapted from the `cuisines` data frame in the **tastyR** R package 
 
 See the **tastyR** documentation [@tastyR] for the full codebook.
 
-### Identifying missingness  {#sec-missing-data-identify}
+### Identifying missingness {#sec-missing-data-identify}
 
 We begin by observing how missingness appears in the data set. @tbl-missing-example shows examples of five recipes from the `recipes` data frame, each of which have different types and levels of missingness. For the sake of illustration, we will only consider whether there is missingness for the subset of variables analyzed in this section, not the entire `recipes` data set.
 
@@ -125,9 +125,11 @@ A variable is **missing completely at random (MCAR)** if the pattern of missingn
 
 It is important to understand the pattern of missingness, because it helps us understand the potential impact of the strategy we use to deal with the missingness in terms of potential bias to the analysis. We'll briefly discuss these impacts as we introduce strategies for handling missing data in @sec-missing-data-strategies
 
-### Strategies for handling missing data  {#sec-missing-data-strategies}
+### Strategies for handling missing data {#sec-missing-data-strategies}
 
 Now that we understand how to identify missingness in the data and patterns of missingness, let's discuss some strategies for handling missing values. We introduce some basic strategies here and direct the reader to the texts in @sec-missing-data-further-reading for a more in-depth discussion about missing data.
+
+#### Complete case analysis
 
 Perhaps the easiest way to deal with missingness is to do a **complete case analysis** in which we remove observations that have any missing values for the variables of interest.[^13-special-topics-1] This is the approach used in many R functions. For example, when creating visualizations using **ggplot2** [@ggplot2], the visualization only includes observations that have observed values for all the variables in the visualization. There is a warning produced that indicates how many observations were excluded from the visualization. The regression functions `lm()` and `glm()` also excluded observations that have missing values for the response variable or any of the predictor variables. Unlike **ggplot2**, however, there is no warning produced. Therefore, it is imperative to conduct exploratory data analysis to identify and handle the missingness before any modeling.
 
@@ -135,43 +137,35 @@ Perhaps the easiest way to deal with missingness is to do a **complete case anal
 
 Complete case analysis provides a good example of the importance of understanding the pattern of missingness. If the missingness is MCAR, then we could reasonably assume removing observations with missingness does not systematically bias the data since the missingness is random. If the missingness is MAR or MNAR, however, simply removing observations with missingness could potentially bias the data. For example, if we removed observations with missing values for `avg_rating` from an analysis of the `recipes` data, we would be systematically excluding recipes with no ratings. These could be newer recipes that haven't been on the site for long or recipes that are generally not popular. It could be fine to narrow the scope of the analysis to exclude new and unpopular recipes, but it is important that we are aware of this limitation and clearly communicate it as we interpret results from the analysis.
 
-<!--# start here-->
+#### Imputation 
+
+In general, the alternative to complete case analysis is **imputation**, a systematic approach for filling in the missing values. By filling in the missing values, we are able to retain all the observations for the analysis and thus avoid some of the potential biases from complete case analysis. In @sec-missing-data-identify, we introduced one imputation method for the missing values of `total_ratings`. We proposed imputing the missing values using a logical rule <!--# does this term need to be cited--> that recipes that had missing data for total ratings, in fact had no ratings; thus, we can impute missing values of `total_ratings` with `0`. Here we will introduce some additional imputation strategies and direct the reader to the texts in @sec-missing-data-further-reading for more advanced imputation methods.
+
+If we are imputing missing values for a cateogrical predictor, we can fill in the missing values with `Missing` or some other label that indicates the values are missing. By doing this, we create a new level of the categorical predictor that identifies the missing observations. This is similar to the `No Response` or `Refused to respond` level on surveys to denote questions in which the paritcipate did not provide a response. If we use the variable as a predictor in a regression model, an indicator variable is created for the new `Missing` level, in addition to the other existing levels (with the exception of the baseline level). If the indicator for `Missing` is statistically significant, then we may conclude that the observations with missing data for that observation are statistically different from the baseline category. This could indicate the missingness is not completely random, and in fact, represents a subset of the population. <!--# make sure this is correct.-->
+
+There is a vast array of methods for imputing missing values for quantitative variables. One commonly used approach is **mean imputation**, in which the missing values are imputed using the mean value computed from the observed values of that variable. The primary advantages to this method are that it is easy to execute and easy to understand and explain to others. The primary disadvantage is that imputing all the missing values using the mean can result in a distorted <!--# need different word so it's not the same--> distribution of the variable, in which an out-sized proportion of the distribution is concentrated at the mean value. If this is the case, we can underestimate the variability in the variable and thus potentially compute inaccurate regression coefficients and inferential statistics if the imputed variable is used as a predictor or response variable in a regression model. Therefore, we should interpret results with caution if a large proportion of observations were imputed using the mean.
+
+A more informed approach for imputing missing values is by using **nearest neighbor imputation**, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called **hot deck imputation** \[(paper: <https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/>)\], or by using other observations in an external data set, called **cold deck imputation** \[CITATION\]. By using the more informed approach to filling in missing data, we reduce some of the limitations of imputation that occur with mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics \[Cite gelamn here?\].
+
+Nearest neighbor imputation
 
 - 
 
-  - Create missing indicator for categorical variable
+  - Fill in missing data using neighboring observations that are similar to the observation with missing data.
 
-    - enables you to analyze whether the observations with missing values have a different relationship with the response variable than other variables in the model.
+    - Hot deck imputation - use observation in the same data set
 
-  - Mean / median imputation for a quantitative variable
+    - Cold deck imputation - use observation from a different data set (for example, if you are analyzing data from 2025, find a "neighbor" observation from a data set collected in previous year)
 
-    - Impute missing values with the mean (or median) of that variable among the remaining observations
+    - Can still have under estimated standard deviation for the variable with missingness, but generally the regression coefficients and subsequent inference is fairly accurate
 
-    - This method is nice, because it is very easy to execute and understand
+      - Potential to expand effects of any measurement error in the observations used for imputation
 
-    - Disadvantages
+  - As one can imagine, biases can result from imputation methods, particularly if the missingness is missing at random or missing not at random
 
-      - Can distort the distribution of the variable <!--# need different phrasing, this phrasing is used in gelman and hill-->, since there are an artificially high proportion of observations at the mean, thus underestimating the standard deviation of that variable.
+- Logical rule - perhaps there is some logic that could be applied to filling in the missing data.
 
-      - can distort relationship between the predictor and response and result in inaccurate regression coefficient estimates and inference results
-
-  - Nearest neighbor imputation
-
-    - Fill in missing data using neighboring observations that are similar to the observation with missing data.
-
-      - Hot deck imputation - use observation in the same data set (paper: <https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/>)
-
-      - Cold deck imputation - use observation from a different data set (for example, if you are analyzing data from 2025, find a "neighbor" observation from a data set collected in previous year)
-
-      - Can still have under estimated standard deviation for the variable with missingness, but generally the regression coefficients and subsequent inference is fairly accurate
-
-        - Potential to expand effects of any measurement error in the observations used for imputation
-
-    - As one can imagine, biases can result from imputation methods, particularly if the missingness is missing at random or missing not at random
-
-  - Logical rule - perhaps there is some logic that could be applied to filling in the missing data.
-
-    - Find exmaple from the recipes data.
+  - Find exmaple from the recipes data.
 
 - Multiple imputation
 
