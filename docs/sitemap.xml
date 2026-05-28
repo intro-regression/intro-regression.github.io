@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://introregressio.netlify.app/index.html</loc>
-    <lastmod>2026-01-06T16:06:38.710Z</lastmod>
+    <loc>https://introregressio.netlify.app/13-special-topics.html</loc>
+    <lastmod>2026-05-28T19:27:23.869Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/00-preface.html</loc>
@@ -55,10 +55,6 @@
   <url>
     <loc>https://introregressio.netlify.app/12-logistic-prediction.html</loc>
     <lastmod>2026-01-06T03:06:59.953Z</lastmod>
-  </url>
-  <url>
-    <loc>https://introregressio.netlify.app/13-special-topics.html</loc>
-    <lastmod>2026-05-27T18:03:52.513Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/appendix-linear.html</loc>

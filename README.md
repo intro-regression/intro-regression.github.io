@@ -10,9 +10,9 @@ Repo for writing undergraduate regression analysis book
 
 ## Workflow (suggested by ChatGPT)
 
--   Create a new branch to write a new chapter
+- Create a new branch to write a new chapter
 
--   Once there is a good draft of the chapter, merge with the `draft` branch
+- Once there is a good draft of the chapter, merge with the `draft` branch
 
 ```         
 # example code
@@ -23,17 +23,17 @@ git branch -d ch3-results # only do this if I'm ready to delete branch
 git push origin draft
 ```
 
--   Once the draft is in a good place to share widely
+- Once the draft is in a good place to share widely
 
-    -   merge with the `main` branch
+  - merge with the `main` branch
 
-        ```         
-        git checkout main
-        git merge --no-ff draft
-        git push origin main
-        ```
+    ```         
+    git checkout main
+    git merge --no-ff draft
+    git push origin main
+    ```
 
-    -   make a tag (specifies a new release)
+  - make a tag (specifies a new release)
 
 ```         
 git checkout main

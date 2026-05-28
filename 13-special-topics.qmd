@@ -19,6 +19,7 @@ library(rpart.plot)
 library(ggridges)
 library(skimr)
 library(mice)
+library(VIM)
 
 ## voters data
 
@@ -137,7 +138,7 @@ Perhaps the easiest way to deal with missingness is to do a **complete case anal
 
 Complete case analysis provides a good example of the importance of understanding the pattern of missingness. If the missingness is MCAR, then we could reasonably assume removing observations with missingness does not systematically bias the data since the missingness is random. If the missingness is MAR or MNAR, however, simply removing observations with missingness could potentially bias the data. For example, if we removed observations with missing values for `avg_rating` from an analysis of the `recipes` data, we would be systematically excluding recipes with no ratings. These could be newer recipes that haven't been on the site for long or recipes that are generally not popular. It could be fine to narrow the scope of the analysis to exclude new and unpopular recipes, but it is important that we are aware of this limitation and clearly communicate it as we interpret results from the analysis.
 
-#### Imputation 
+#### Imputation
 
 In general, the alternative to complete case analysis is **imputation**, a systematic approach for filling in the missing values. By filling in the missing values, we are able to retain all the observations for the analysis and thus avoid some of the potential biases from complete case analysis. In @sec-missing-data-identify, we introduced one imputation method for the missing values of `total_ratings`. We proposed imputing the missing values using a logical rule <!--# does this term need to be cited--> that recipes that had missing data for total ratings, in fact had no ratings; thus, we can impute missing values of `total_ratings` with `0`. Here we will introduce some additional imputation strategies and direct the reader to the texts in @sec-missing-data-further-reading for more advanced imputation methods.
 
@@ -173,17 +174,13 @@ Another option for variable summaries is `skim()` from the **skimr** R package [
 ```{r}
 
 recipes |>
-  select(name, calories, fat, carbs, protein,
-         avg_rating, total_ratings, reviews) |>
-  skim()
+  skim(name, calories, fat, carbs, protein,
+       avg_rating, total_ratings, reviews)
 ```
 
 We can "manually" impute missing values using a logical rule or mean imputation utilizing `if_else()` from the **dplyr R package** [@dplyr]. Below is code to use mean imputation for the missing values of `reviews`.
 
 ```{r}
-library(mice)
-
-# mean imputation for reviews
 
 # get mean of observed data
 mean_reviews <- mean(recipes$reviews, na.rm = TRUE)
@@ -194,12 +191,27 @@ recipes <- recipes |>
   )
 ```
 
-```         
+The summary statistics for `reviews_imputed` with missing data handled using mean imputation are below.
+
+```{r}
+recipes |>
+  skim(reviews_imputed)
 ```
 
-VIM Package for hotdeck imputation (<https://www.jstatsoft.org/article/view/v074i07>)
+Hot deck imputation can be done using `hotdeck()` from the **VIM** R package [@vim]. Observations are arranged best of one to three specified ordering variables, the missing values are imputed based on the values from "nearest neighbor" observations. Below is the code to impute the missing values for `calories` using hot deck imputation, where the nearest neighbors are defined based on the other nutrition variables: `fat`, `carbs`, and `protein`.
 
-### Further reading {#sec-missing-data-further-reading}
+```{r}
+recipes <- hotdeck(recipes, variable = "calories",  ord_var = c("fat", "carbs", "protein"))
+```
+
+This function imputes the missing values and creates a new logical variable with the suffix `_imp` that is `TRUE` if the value was imputed and `FALSE` otherwise. The summary statistics for the variable `calories` with the missing values imputed are below.
+
+```{r}
+recipes |>
+  skim(calories)
+```
+
+### Further reading
 
 Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.
 
