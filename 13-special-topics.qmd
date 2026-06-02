@@ -57,6 +57,8 @@ This chapter introduces readers to a collection to models that are extensions of
 
 ## Missing data
 
+In @sec-ch-eda, we presented exploratory data analysis, one of the first steps in the data science workflow <!--# reference the chapter 1 diagram?--> One of the main purposes of exploratory data analysis is to understand the distributions of the variables in the data set, and as part of that identify special features in the data such as outliers or missing data before moving on to modeling. We introduced strategies for dealing with outliers in \[ insert chapter references\], and in this section we will discuss some strategies for dealing with missing data.
+
 <!--# notes for reference: https://www2.stat.duke.edu/courses/Fall19/sta210.001/slides/lec-slides/23-model-val-missing.html#31-->
 
 <!--# reference for MICE package: https://amices.org/mice/-->
@@ -211,7 +213,24 @@ recipes |>
   skim(calories)
 ```
 
-### Further reading
+We can conduct multiple mutation using the `mice()` in the **mice** package[@mice]. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is `m = 5`. We save the results as a new data frame.
+
+```{r}
+recipes_subset <- recipes |> 
+  select(name, calories, fat, carbs, protein, avg_rating, total_ratings, reviews)
+
+recipes_mice <- mice(recipes_subset, m = 5)
+```
+
+We use `complete()` to view the completed data frames. In the code below, we view the first complete data frame.
+
+```{r}
+
+```
+
+Here we have relied on the default settings for the multiple imputation, but `mice()` contains many arguments to customize the imputation. We refer the reader to the package documentation and additional resources for more information.
+
+Further reading
 
 Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.
 
