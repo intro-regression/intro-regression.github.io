@@ -149,11 +149,9 @@ If we are imputing missing values for a cateogrical predictor, we can fill in th
 
 There is a vast array of methods for imputing missing values for quantitative variables. One commonly used approach is **mean imputation**, in which the missing values are imputed using the mean value computed from the observed values of that variable. The primary advantages to this method are that it is easy to execute and easy to understand and explain to others. The primary disadvantage is that imputing all the missing values using the mean can result in a distorted <!--# need different word so it's not the same--> distribution of the variable, in which an out-sized proportion of the distribution is concentrated at the mean value. If this is the case, we can underestimate the variability in the variable and thus potentially compute inaccurate regression coefficients and inferential statistics if the imputed variable is used as a predictor or response variable in a regression model. Therefore, we should interpret results with caution if a large proportion of observations were imputed using the mean.
 
-A more informed approach for imputing missing values is by using **nearest neighbor imputation**, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called **hot deck imputation** \[(paper: <https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/>)\], or by using other observations in an external data set, called **cold deck imputation** \[CITATION\]. By using the more informed approach to filling in missing data, we reduce some of the limitations of imputation that occur with mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics \[Cite gelamn here?\].
+A more informed approach for imputing missing values is by using **nearest neighbor imputation**, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called **hot deck imputation**, or by using other observations in an external data set, called **cold deck imputation**. By using the more informed approach to filling in missing data, we reduce some of the limitations of imputation that occur with mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics [@gelman2007data].
 
-<!--# check description of hotdeck imputation and add citations. https://www.jstatsoft.org/article/view/v074i07-->
-
-These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy introduced by [CITATION RUBIN 1987? Or 1997] to mitigate the effects of these biases is through **multiple imputation**, in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In @sec-missing-data-r, we show code for conducting multiple imputation in R We point the reader to the texts in @sec-missing-data-further-reading for more details about multiple imputation. <!--# do i need to cite something?-->
+These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy to mitigate the effects of these biases is **multiple imputation** [@rubin1978multiple; @rubin1987multiple] in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In @sec-missing-data-r, we show code for conducting multiple imputation in R We point the reader to the texts in @sec-missing-data-further-reading for more details about multiple imputation. <!--# do i need to cite something?-->
 
 ::: {.analysis_in_practice latex="1"}
 If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.
@@ -201,7 +199,7 @@ recipes |>
   skim(reviews_imputed)
 ```
 
-Hot deck imputation can be done using `hotdeck()` from the **VIM** R package [@vim]. Observations are arranged best of one to three specified ordering variables, the missing values are imputed based on the values from "nearest neighbor" observations. Below is the code to impute the missing values for `calories` using hot deck imputation, where the nearest neighbors are defined based on the other nutrition variables: `fat`, `carbs`, and `protein`.
+Hot deck imputation can be done using `hotdeck()` from the **VIM** R package[@VIM]Observations are arranged best of one to three specified ordering variables, the missing values are imputed based on the values from "nearest neighbor" observations. Below is the code to impute the missing values for `calories` using hot deck imputation, where the nearest neighbors are defined based on the other nutrition variables: `fat`, `carbs`, and `protein`.
 
 ```{r}
 recipes <- hotdeck(recipes, variable = "calories",  ord_var = c("fat", "carbs", "protein"))
@@ -233,36 +231,46 @@ recipes_mice_1 |>
 
 ```
 
-Use `ggmice()` from the **ggmice** package [CITATION] to visualize the distribution of the imputed values for each new data frame created by `mice()`. <!--# explain the code below-->
+Use `ggmice()` from the **ggmice** package [@ggmice] to visualize the distribution of the imputed values for each new data frame created by `mice()`. In the code below, we view the distribution of `reviews` for the observed data and each imputed data set. The imputed data sets are defined by the variable `.imp`.
+
 ```{r}
+#| label: fig-ggmice-reviews
+#| fig-cap: "Distribution of `reviews` for observed (blue) and imputed (red) data"
+
 library(ggmice)
 ggmice(recipes_mice, aes(x = .imp, y = reviews)) +
-  geom_jitter() +
-  geom_boxplot(width = 0.5, size = 1, alpha = 0.75, outlier.shape = NA) +
-  labs(x = "Imputation number")
+  geom_boxplot() +
+  labs(x = "Imputation number",
+       y = "Number of reviews")
 ```
 
-Since the ultimate aim is modeling, we can evaluate whether the imputed data has a similar relationship between the response and predictor variable. For example, if we wish to use the data to explain variability in the average rating, we can look at the relationship.
+Since our ultimately analysis goal is modeling, we can evaluate whether the imputed data has a similar relationship between the response and predictor variable. For example, if we wish to use the data to explain variability in the average rating, we can look at the relationship.
 
-Look at it overall. 
+First we look at the relationship between the number of reviews and average ratings using `ggmice()`. The function will automatically identify the observed versus imputed observations.
+
 ```{r}
+#| label: fig-ggmice-reviews-v-rating
+#| fig-cap: "Relationship betwen `reviews` and `avg_rating` for observed and imputed data"
+
 ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
-  geom_jitter()
+  geom_point() + 
+  labs(x = "Number of reviews",
+       y = "Average rating")
 ```
 
-
-Facet it by iteration number. 
+The plot in @fig-ggmice-reviews-v-rating puts the values from all imputed data frames on the sample plot, so a given imputed observation is represented multiple times on the plot. If we wish to look at the relationship between two variables separately for the observed data and each imputed data set, we can facet by the imputation number (`.imp`).
 
 ```{r}
+#| label: fig-ggmice-reviews-v-rating-facet
+#| fig-cap:  "Relationship betwen `reviews` and `avg_rating` faceted by imputation number"
 ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
   geom_jitter() + 
   facet_wrap(~ .imp)
 ```
 
-
 ### Further reading
 
-We have just provided a brief introduction to handling missing data, but there is a wide variety of research and strategies for dealing with such data in an analysis. To learn more more about strategies for handling missingness and the analysis implications, see [CITATION] Little and Rubin 2002 and  Chapter 25 of [CITATION]. We also refer the reader to [CITE MICE Documentation] and CITE https://www.jstatsoft.org/article/view/v074i07 and [CITE GGMICE documentation] for more details on working with missing data in R. 
+We have just provided a brief introduction to handling missing data, but there is a wide variety of research and strategies for dealing with such data in an analysis. To learn more more about strategies for handling missingness and the analysis implications, see @little2019statistical and chapter 25 of @gelman2007data.
 
 ## Multinomial logistic regression {#sec-multinomial}
 
