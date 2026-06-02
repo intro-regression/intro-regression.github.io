@@ -509,7 +509,7 @@ Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
 <p>There is a vast array of methods for imputing missing values for quantitative variables. One commonly used approach is <strong>mean imputation</strong>, in which the missing values are imputed using the mean value computed from the observed values of that variable. The primary advantages to this method are that it is easy to execute and easy to understand and explain to others. The primary disadvantage is that imputing all the missing values using the mean can result in a distorted <!--# need different word so it's not the same--> distribution of the variable, in which an out-sized proportion of the distribution is concentrated at the mean value. If this is the case, we can underestimate the variability in the variable and thus potentially compute inaccurate regression coefficients and inferential statistics if the imputed variable is used as a predictor or response variable in a regression model. Therefore, we should interpret results with caution if a large proportion of observations were imputed using the mean.</p>
 <p>A more informed approach for imputing missing values is by using <strong>nearest neighbor imputation</strong>, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called <strong>hot deck imputation</strong> [(paper: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/" class="uri">https://pmc.ncbi.nlm.nih.gov/articles/PMC3130338/</a>)], or by using other observations in an external data set, called <strong>cold deck imputation</strong> [CITATION]. By using the more informed approach to filling in missing data, we reduce some of the limitations of imputation that occur with mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics [Cite gelamn here?].</p>
 <!--# check description of hotdeck imputation and add citations. https://www.jstatsoft.org/article/view/v074i07-->
-<p>These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy to mitigate the effects of these biases is through <strong>multiple imputation</strong>, in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In <span class="quarto-unresolved-ref">?sec-missing-data-r</span>, we show code for conducting multiple imputation in R We point the reader to the texts in <span class="quarto-unresolved-ref">?sec-missing-data-further-reading</span> for more details about multiple imputation. <!--# do i need to cite something?--></p>
+<p>These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy introduced by [CITATION RUBIN 1987? Or 1997] to mitigate the effects of these biases is through <strong>multiple imputation</strong>, in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In <span class="quarto-unresolved-ref">?sec-missing-data-r</span>, we show code for conducting multiple imputation in R We point the reader to the texts in <span class="quarto-unresolved-ref">?sec-missing-data-further-reading</span> for more details about multiple imputation. <!--# do i need to cite something?--></p>
 <div class="analysis_in_practice">
 <p>If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.</p>
 </div>
@@ -908,14 +908,271 @@ Table&nbsp;13.1: Examples of missingness in the <code>recipes</code> data
 </table>
 </div>
 </div>
-<p>We can conduct multiple mutation using the</p>
+<p>We can conduct multiple mutation using the <code>mice()</code> in the <strong>mice</strong> package<span class="citation" data-cites="mice">(<a href="references.html#ref-mice" role="doc-biblioref">Buuren and Groothuis-Oudshoorn 2011</a>)</span>. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is <code>m = 5</code>. We save the results as a new data frame.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ iter imp variable
+  1   1  fat  carbs  protein  avg_rating  total_ratings  reviews
+  1   2  fat  carbs  protein  avg_rating  total_ratings  reviews
+  1   3  fat  carbs  protein  avg_rating  total_ratings  reviews
+  1   4  fat  carbs  protein  avg_rating  total_ratings  reviews
+  1   5  fat  carbs  protein  avg_rating  total_ratings  reviews
+  2   1  fat  carbs  protein  avg_rating  total_ratings  reviews
+  2   2  fat  carbs  protein  avg_rating  total_ratings  reviews
+  2   3  fat  carbs  protein  avg_rating  total_ratings  reviews
+  2   4  fat  carbs  protein  avg_rating  total_ratings  reviews
+  2   5  fat  carbs  protein  avg_rating  total_ratings  reviews
+  3   1  fat  carbs  protein  avg_rating  total_ratings  reviews
+  3   2  fat  carbs  protein  avg_rating  total_ratings  reviews
+  3   3  fat  carbs  protein  avg_rating  total_ratings  reviews
+  3   4  fat  carbs  protein  avg_rating  total_ratings  reviews
+  3   5  fat  carbs  protein  avg_rating  total_ratings  reviews
+  4   1  fat  carbs  protein  avg_rating  total_ratings  reviews
+  4   2  fat  carbs  protein  avg_rating  total_ratings  reviews
+  4   3  fat  carbs  protein  avg_rating  total_ratings  reviews
+  4   4  fat  carbs  protein  avg_rating  total_ratings  reviews
+  4   5  fat  carbs  protein  avg_rating  total_ratings  reviews
+  5   1  fat  carbs  protein  avg_rating  total_ratings  reviews
+  5   2  fat  carbs  protein  avg_rating  total_ratings  reviews
+  5   3  fat  carbs  protein  avg_rating  total_ratings  reviews
+  5   4  fat  carbs  protein  avg_rating  total_ratings  reviews
+  5   5  fat  carbs  protein  avg_rating  total_ratings  reviews</code></pre>
+</div>
+</div>
+<p>We use <code>complete()</code> to view the completed data frames. In the code below, we view the first complete data frame.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">recipes_mice_1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">2218</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: left;">name</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2216</td>
+<td style="text-align: right;">0</td>
+</tr></tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 16%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 3%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 7%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">calories</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">383.73</td>
+<td style="text-align: right;">317.2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">192.0</td>
+<td style="text-align: right;">325.0</td>
+<td style="text-align: right;">484.0</td>
+<td style="text-align: right;">2266</td>
+<td style="text-align: left;">▇▃▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fat</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">19.91</td>
+<td style="text-align: right;">20.1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">7.0</td>
+<td style="text-align: right;">15.0</td>
+<td style="text-align: right;">26.0</td>
+<td style="text-align: right;">225</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">carbs</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">34.18</td>
+<td style="text-align: right;">32.1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">13.0</td>
+<td style="text-align: right;">27.0</td>
+<td style="text-align: right;">46.0</td>
+<td style="text-align: right;">264</td>
+<td style="text-align: left;">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">protein</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">17.50</td>
+<td style="text-align: right;">18.2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.0</td>
+<td style="text-align: right;">12.0</td>
+<td style="text-align: right;">26.0</td>
+<td style="text-align: right;">159</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">avg_rating</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.51</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">▁▁▁▂▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_ratings</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">84.76</td>
+<td style="text-align: right;">148.1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">24.0</td>
+<td style="text-align: right;">86.0</td>
+<td style="text-align: right;">997</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">reviews</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">77.97</td>
+<td style="text-align: right;">146.2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">21.0</td>
+<td style="text-align: right;">73.0</td>
+<td style="text-align: right;">975</td>
+<td style="text-align: left;">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Use <code>ggmice()</code> from the <strong>ggmice</strong> package [CITATION] to visualize the distribution of the imputed values for each new data frame created by <code>mice()</code>. <!--# explain the code below--></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-10-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="13-special-topics_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Since the ultimate aim is modeling, we can evaluate whether the imputed data has a similar relationship between the response and predictor variable. For example, if we wish to use the data to explain variability in the average rating, we can look at the relationship.</p>
+<p>Look at it overall.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="13-special-topics_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Facet it by iteration number.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="13-special-topics_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
 </section><section id="further-reading" class="level3" data-number="13.1.6"><h3 data-number="13.1.6" class="anchored" data-anchor-id="further-reading">
 <span class="header-section-number">13.1.6</span> Further reading</h3>
-<p>Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.</p>
-<ul>
-<li><p>mice documentation</p></li>
-<li><p><a href="https://www.jstatsoft.org/article/view/v074i07" class="uri">https://www.jstatsoft.org/article/view/v074i07</a></p></li>
-</ul></section></section><section id="sec-multinomial" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="sec-multinomial">
+<p>We have just provided a brief introduction to handling missing data, but there is a wide variety of research and strategies for dealing with such data in an analysis. To learn more more about strategies for handling missingness and the analysis implications, see [CITATION] Little and Rubin 2002 and Chapter 25 of [CITATION]. We also refer the reader to [CITE MICE Documentation] and CITE https://www.jstatsoft.org/article/view/v074i07 and [CITE GGMICE documentation] for more details on working with missing data in R.</p>
+</section></section><section id="sec-multinomial" class="level2" data-number="13.2"><h2 data-number="13.2" class="anchored" data-anchor-id="sec-multinomial">
 <span class="header-section-number">13.2</span> Multinomial logistic regression</h2>
 <!--# need further reading section.-->
 <p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced logistic regression models for binary response variables. In this section, we introduce multinomial logistic regression, models for categorical response variables with three or more levels.</p>
@@ -1343,7 +1600,7 @@ Table&nbsp;13.4: Predictions from voter frequency model for ten observations
 <div class="cell-output-display">
 <div id="fig-confmat-voters-model" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-confmat-voters-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;13.3: Confusion matrix for voters model"><img src="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;13.3: Confusion matrix for voters model"><img src="13-special-topics_files/figure-html/fig-confmat-voters-model-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confmat-voters-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.3: Confusion matrix for voters model
@@ -1368,7 +1625,7 @@ Figure&nbsp;13.3: Confusion matrix for voters model
 <div class="cell-output-display">
 <div id="fig-voters-roc-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-voters-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in Table&nbsp;tbl-voter-model"><img src="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in Table&nbsp;tbl-voter-model"><img src="13-special-topics_files/figure-html/fig-voters-roc-curve-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-voters-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in <a href="#tbl-voter-model" class="quarto-xref">Table&nbsp;<span>13.3</span></a>
@@ -1382,7 +1639,7 @@ Figure&nbsp;13.4: Multiclass ROC curves for the voter frequency model in <a href
 <span class="header-section-number">13.2.7</span> Multinomial logistic regression in R</h3>
 <p>Multinomial logistic models are fit using <code>multinom()</code> from the <strong>nnet</strong> R package <span class="citation" data-cites="nnet">(<a href="references.html#ref-nnet" role="doc-biblioref">Venables and Ripley 2002</a>)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># library(nnet) </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># library(nnet) </span></span>
 <span></span>
 <span><span class="va">voter_fit</span> <span class="op">&lt;-</span> <span class="fu">multinom</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span>,</span>
 <span>                      data <span class="op">=</span> <span class="va">voters</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1396,7 +1653,7 @@ converged</code></pre>
 </div>
 <p>The model output can be tidied and neatly displayed using <code>tidy()</code> from the <strong>broom</strong> package <span class="citation" data-cites="broom">(<a href="references.html#ref-broom" role="doc-biblioref">Robinson, Hayes, and Couch 2023</a>)</span> and <code>kable()</code> from the <strong>knitR</strong> package <span class="citation" data-cites="knitr">(<a href="references.html#ref-knitr" role="doc-biblioref">Xie 2024</a>)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">voter_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">voter_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -1492,7 +1749,7 @@ converged</code></pre>
 <p>Predictions from the multinomial model are computed using the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function. The argument <code>type = "probs"</code> produces a matrix of the predicted probabilities and <code>type = "class"</code> produces a vector of the predicted classes.</p>
 <p>We add these to the original tibble for additional analysis.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute predicted probabilities</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute predicted probabilities</span></span>
 <span><span class="va">voter_pred_prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">voter_fit</span>, type <span class="op">=</span> <span class="st">"probs"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># compute predicted class</span></span>
@@ -1506,19 +1763,19 @@ converged</code></pre>
 <p>The syntax for the confusion matrix, ROC curves, and AUC are similar to logistic regression in <a href="12-logistic-prediction.html#sec-logistic-prediction-R" class="quarto-xref"><span>Section 12.6</span></a>.</p>
 <p>The confusion matrix is produced using <code>conf_mat()</code> from the <strong>yardstick</strong> R package <span class="citation" data-cites="yardstick">(<a href="references.html#ref-yardstick" role="doc-biblioref">Kuhn, Vaughan, and Hvitfeldt 2025</a>)</span>. We use <code>autoplot()</code> to format the confusion matrix such that the cells are shaded by the number of observations.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">conf_mat</span><span class="op">(</span><span class="va">voter_category</span>, <span class="va">pred_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">autoplot</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="13-special-topics_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-16-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="13-special-topics_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The multiclass ROC curves are produced using <code>roc_curve()</code> in the <strong>yardstick</strong> R package <span class="citation" data-cites="yardstick">(<a href="references.html#ref-yardstick" role="doc-biblioref">Kuhn, Vaughan, and Hvitfeldt 2025</a>)</span>. The argument <code>truth =</code> specifies the columns with the observed classes, and the next line of code indicates the columns that contain the predicted probabilities. The <code>roc_curve()</code> function produces the data underlying the curves, and <code>autoplot()</code> produces the curves.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_curve</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
 <span>    <span class="va">`rarely/never`</span><span class="op">:</span><span class="va">always</span></span>
@@ -1526,14 +1783,14 @@ converged</code></pre>
 <span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="13-special-topics_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-17-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="13-special-topics_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Lastly, the AUC is computed using <code>roc_auc()</code> from the <strong>yardstick</strong> R package. The the weighted average AUC is computed using the argument <code>estimator = "macro_weighted"</code>. The unweighted average AUC is computed by default.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute unweighted average AUC</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute unweighted average AUC</span></span>
 <span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_auc</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
@@ -1545,7 +1802,7 @@ converged</code></pre>
   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
 1 roc_auc hand_till      0.656</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute weighted average AUC</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># compute weighted average AUC</span></span>
 <span><span class="va">voters</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">roc_auc</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">voter_category</span>, </span>
@@ -1566,7 +1823,7 @@ converged</code></pre>
 <p>One of the key assumptions we’ve made throughout this book is that the observations in the sample data are independent of each other. Often in practice, however, there is an underlying grouping structure in the data, and the observations are not completely independent of one another. For example, the data may contain multiple measurements from each individual (call repeated measures) as in <a href="#fig-repeated-measures" class="quarto-xref">Figure&nbsp;<span>13.5</span></a>.</p>
 <div id="fig-repeated-measures" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-repeated-measures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/13-repeated-measures-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;13.5: Repeated measures data structure"><img src="images/13-repeated-measures-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="images/13-repeated-measures-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;13.5: Repeated measures data structure"><img src="images/13-repeated-measures-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-repeated-measures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.5: Repeated measures data structure
@@ -1575,7 +1832,7 @@ Figure&nbsp;13.5: Repeated measures data structure
 <p>Another common grouping structure is having multiple observations from within a single group, such that we expect the observations within the group to be more similar than observations from different groups, as in <a href="#fig-grouped-data-structure" class="quarto-xref">Figure&nbsp;<span>13.6</span></a>.</p>
 <div id="fig-grouped-data-structure" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-grouped-data-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/13-grouped-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;13.6: Grouped data structure"><img src="images/13-grouped-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="images/13-grouped-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;13.6: Grouped data structure"><img src="images/13-grouped-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-grouped-data-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.6: Grouped data structure
@@ -1608,7 +1865,7 @@ Figure&nbsp;13.6: Grouped data structure
 <p>The goal of the analysis is to understand a lemur’s growth rate (relationship between age and weight) after adjusting for other characteristics.</p>
 <div id="fig-lemur-structure" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemur-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="images/13-lemurs-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;13.7: Structure of lemur data"><img src="images/13-lemurs-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="images/13-lemurs-data-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;13.7: Structure of lemur data"><img src="images/13-lemurs-data-structure.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemur-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.7: Structure of lemur data
@@ -1708,7 +1965,7 @@ Table&nbsp;13.5: All observations from an individual lemur
 <div class="cell-output-display">
 <div id="fig-lemurs-weight" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;13.8: weight versus age for nine lemurs"><img src="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;13.8: weight versus age for nine lemurs"><img src="13-special-topics_files/figure-html/fig-lemurs-weight-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.8: <code>weight</code> versus <code>age</code> for nine lemurs
@@ -1721,7 +1978,7 @@ Figure&nbsp;13.8: <code>weight</code> versus <code>age</code> for nine lemurs
 <div class="cell-output-display">
 <div id="fig-lemurs-spaghetti-plot" class="quarto-float quarto-figure quarto-figure-center anchored" width="100%">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-spaghetti-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;13.9: "><img src="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" id="fig-lemurs-spaghetti-plot" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;13.9: "><img src="13-special-topics_files/figure-html/fig-lemurs-spaghetti-plot-1.png" id="fig-lemurs-spaghetti-plot" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-lemurs-spaghetti-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.9
@@ -1850,7 +2107,7 @@ Table&nbsp;13.6: Random intercepts model for lemurs data
 <span class="header-section-number">13.3.3</span> Random intercepts model in R</h3>
 <p>Random intercepts models are fit using the <code>lmer</code> function in the <code>lme4</code> R package <span class="citation" data-cites="lme4">(<a href="references.html#ref-lme4" role="doc-biblioref">Bates et al. 2015</a>)</span>. The syntax for the response and predictor variables is the same as in <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>. The grouping variable is specified using the syntax <code>(1|grouping_var)</code>. This specifies that the random intercepts are based on <code>grouping_var</code>. The syntax for the model in <a href="#tbl-lemurs-model-random-int" class="quarto-xref">Table&nbsp;<span>13.6</span></a> is below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_fit</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">taxon</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">litter_size</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_fit</span> <span class="op">&lt;-</span> <span class="fu">lmer</span><span class="op">(</span><span class="va">weight</span> <span class="op">~</span> <span class="va">taxon</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">litter_size</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> </span>
 <span>                     <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">dlc_id</span><span class="op">)</span>, </span>
 <span>                   data <span class="op">=</span> <span class="va">lemurs</span><span class="op">)</span></span>
 <span></span>
@@ -1872,7 +2129,7 @@ Fixed Effects:
 </div>
 <p>The results can be displayed in a tidy format using <code>tidy</code> function in the <strong>broom.mixed</strong> R package <span class="citation" data-cites="broom.mixed">(<a href="references.html#ref-broom.mixed" role="doc-biblioref">Bolker and Robinson 2024</a>)</span>. The results below are neatly displayed using <code>kable()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lemurs_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lemurs_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -2013,7 +2270,7 @@ Figure&nbsp;13.10: Distribution of original and log-transformed <code>expenditur
 <div class="cell-output-display">
 <div id="fig-ncaa-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure"><img src="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20" title="Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure"><img src="13-special-topics_files/figure-html/fig-ncaa-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure
@@ -2039,7 +2296,7 @@ Figure&nbsp;13.11: Regression tree predicting NCAA basketball expenditure
 <div class="cell-output-display">
 <div id="fig-voters-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-voters-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="Figure&nbsp;13.12: Classification tree voter frequency"><img src="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" title="Figure&nbsp;13.12: Classification tree voter frequency"><img src="13-special-topics_files/figure-html/fig-voters-tree-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-voters-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.12: Classification tree voter frequency
@@ -2057,7 +2314,7 @@ Figure&nbsp;13.12: Classification tree voter frequency
 <p>We fit decision trees using the <code>rpart()</code> function in the <strong>rpart</strong> R package <span class="citation" data-cites="rpart">(<a href="references.html#ref-rpart" role="doc-biblioref">Therneau and Atkinson 2025</a>)</span>. The argument <code>method =</code> is used to specify the type of decision tree.</p>
 <p>Below is the code for the regression tree fit in <a href="#sec-regression-trees" class="quarto-xref"><span>Section 13.4.1</span></a>. The argument <code>method = "anova"</code> specifies that we are fitting a regression tree. If we type the name of the tree, we see a summary of the nodes and branches</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">expenditure_m</span><span class="op">)</span> <span class="op">~</span> <span class="va">enrollment_th</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">expenditure_m</span><span class="op">)</span> <span class="op">~</span> <span class="va">enrollment_th</span> <span class="op">+</span> </span>
 <span>                     <span class="va">type</span> <span class="op">+</span> <span class="va">region</span>,</span>
 <span>                   data <span class="op">=</span> <span class="va">ncaa_train</span>,</span>
 <span>                   method <span class="op">=</span> <span class="st">"anova"</span><span class="op">)</span></span>
@@ -2094,7 +2351,7 @@ node), split, n, deviance, yval
 </div>
 <p>The code below is the classification tree from <a href="#sec-classification-trees" class="quarto-xref"><span>Section 13.4.2</span></a>. We use the argument <code>method = "class"</code> to specify the classification tree. Similar to regression trees, we can type the name of the tree to see a summary of the nodes and branches.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">voters_tree</span> <span class="op">&lt;-</span> <span class="fu">rpart</span><span class="op">(</span><span class="va">voter_category</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">party_id</span> <span class="op">+</span></span>
 <span>                       <span class="va">income_cat</span> <span class="op">+</span> <span class="va">educ</span>, </span>
 <span>                   data <span class="op">=</span> <span class="va">voters_train</span>, </span>
 <span>                   method <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span>
@@ -2117,10 +2374,10 @@ node), split, n, loss, yval, (yprob)
 </div>
 <p>The summaries produced by <code>rpart()</code> are challenging to read, so we use the <code>rpart.plot()</code> from the <strong>rpart.plot</strong> R package <span class="citation" data-cites="rpart.plot">(<a href="references.html#ref-rpart.plot" role="doc-biblioref">Milborrow 2025</a>)</span> to create a visual representation of the tree. The code below produces the visualization of the regression tree for NCAA basketball expenditures.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rpart.plot</span><span class="op">(</span><span class="va">ncaa_tree</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">rpart.plot</span><span class="op">(</span><span class="va">ncaa_tree</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-19-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="13-special-topics_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="13-special-topics_files/figure-html/unnamed-chunk-24-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img src="13-special-topics_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -2128,7 +2385,7 @@ node), split, n, loss, yval, (yprob)
 <p>Predictions are produced using <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>. This will produce a vector of predictions that can be added to the original data frame to evaluate model performance.</p>
 <p>The code below produces the predictions for the testing data from the regression tree predicting NCAA basketball expenditures and saves the predictions as a column in the testing data. The same code is used to produce predictions from the classification tree.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_test</span> <span class="op">&lt;-</span> <span class="va">ncaa_test</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ncaa_test</span> <span class="op">&lt;-</span> <span class="va">ncaa_test</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>predict_expend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ncaa_tree</span>, <span class="va">ncaa_test</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The predictions are in the same units as the response variable, so in this case, the predicted values are the predicted <code>log(expenditure_m)</code>.</p>
@@ -2167,7 +2424,7 @@ node), split, n, loss, yval, (yprob)
 <div class="cell-output-display">
 <div id="fig-response-gpa" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-response-gpa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20" title="Figure&nbsp;13.13: Distribution of GPA for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23" title="Figure&nbsp;13.13: Distribution of GPA for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-response-gpa-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-response-gpa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.13: Distribution of GPA for treatment and control groups
@@ -2327,7 +2584,7 @@ Table&nbsp;13.7
 <div class="cell-output-display">
 <div id="fig-propensity-scores" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-propensity-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="Figure&nbsp;13.15: Distribution of propensity scores for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27" title="Figure&nbsp;13.15: Distribution of propensity scores for treatment and control groups"><img src="13-special-topics_files/figure-html/fig-propensity-scores-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-propensity-scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13.15: Distribution of propensity scores for treatment and control groups
@@ -2553,7 +2810,7 @@ Table&nbsp;13.10: Model of treatment effect with 95% confidence intervals for co
 <p>Much of the code for causal inference is the code for linear <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and logistic <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> models that we’ve seen in previous chapters. The primarily new code is for creating the matched data set using the propensity scores.</p>
 <p>We compute the propensity scores “manually” by fitting a logistic regression model using <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">propensity_score_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">propensity_score_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> </span>
 <span>                                <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span> <span class="va">ELL</span> <span class="op">+</span> </span>
 <span>                                <span class="va">Sped</span> <span class="op">+</span> <span class="va">Homeless</span>,</span>
 <span>                        data <span class="op">=</span> <span class="va">ace</span>, </span>
@@ -2562,7 +2819,7 @@ Table&nbsp;13.10: Model of treatment effect with 95% confidence intervals for co
 <p>The assigned matches are done using the <code>matchit()</code> function from the <strong>MatchIt</strong> R package <span class="citation" data-cites="MatchIt">(<a href="references.html#ref-MatchIt" role="doc-biblioref">Ho et al. 2011</a>)</span>. The code below shows the propensity score matching for the Project Ace data.</p>
 <p>The argument <code>method = "nearest"</code> species to conduct nearest-neighbor matching (the default method), and <code>distance = "logit"</code> indicates to compute the propensity scores using a logistic regression model. The <code>matchit()</code> function will refit the model with propensity scores.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_psm</span> <span class="op">&lt;-</span> <span class="fu">matchit</span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_psm</span> <span class="op">&lt;-</span> <span class="fu">matchit</span><span class="op">(</span><span class="va">Tracking.Pathway</span> <span class="op">~</span> <span class="va">Grade</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">Ethnicity.Hispanic.Y.N</span> <span class="op">+</span></span>
 <span>                          <span class="va">Race</span> <span class="op">+</span> <span class="va">ELL</span> <span class="op">+</span> <span class="va">Sped</span> <span class="op">+</span> <span class="va">Homeless</span>,</span>
 <span>                 data <span class="op">=</span> <span class="va">ace</span>,</span>
 <span>                 method <span class="op">=</span> <span class="st">"nearest"</span>,   </span>
@@ -2581,7 +2838,7 @@ Table&nbsp;13.10: Model of treatment effect with 95% confidence intervals for co
 </div>
 <p>This code creates a <code>matchit</code> object called <code>ace_psm</code> that contains information about the propensity score matching. We retrieve the matched data using the <code>match.data()</code> function as shown below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_matched</span> <span class="op">&lt;-</span> <span class="fu">match.data</span><span class="op">(</span><span class="va">ace_psm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ace_matched</span> <span class="op">&lt;-</span> <span class="fu">match.data</span><span class="op">(</span><span class="va">ace_psm</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We use <code>glimpse()</code> to see what is in the new matched data set.</p>
 <div class="cell">
@@ -2610,7 +2867,7 @@ $ subclass                                          &lt;fct&gt; 1, 1, 42, 3, 2, 
 <p>There are some new columns in addition to the columns in the original <code>ace</code> tibble. The column <code>distance</code> contains the propensity scores. The column <code>sub.class</code> identifies the matches. The column <code>weights</code> contains sample weights. All observations are equally weighted using the methods introduced in this section. See the resources in <a href="#sec-causal-further-reading" class="quarto-xref"><span>Section 13.5.3</span></a> to learn about propensity score matching that incorporates weighting.</p>
 <p>The <code>lm</code> function is used to fit the linear regression model for the treatment effect.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treatment_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Current.GPA</span> <span class="op">~</span> <span class="va">Tracking.Pathway</span>, data <span class="op">=</span> <span class="va">ace_matched</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">treatment_effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Current.GPA</span> <span class="op">~</span> <span class="va">Tracking.Pathway</span>, data <span class="op">=</span> <span class="va">ace_matched</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="sec-causal-further-reading" class="level3" data-number="13.5.3"><h3 data-number="13.5.3" class="anchored" data-anchor-id="sec-causal-further-reading">
 <span class="header-section-number">13.5.3</span> Further reading</h3>
@@ -2626,6 +2883,9 @@ Bates, Douglas, Martin Maechler, Ben Bolker, and Steve Walker. 2015. <span>“Fi
 </div>
 <div id="ref-broom.mixed" class="csl-entry" role="listitem">
 Bolker, Ben, and David Robinson. 2024. <span>“Broom.mixed: Tidying Methods for Mixed Models.”</span> <a href="https://doi.org/10.32614/CRAN.package.broom.mixed">https://doi.org/10.32614/CRAN.package.broom.mixed</a>.
+</div>
+<div id="ref-mice" class="csl-entry" role="listitem">
+Buuren, Stef van, and Karin Groothuis-Oudshoorn. 2011. <span>“<span></span>Mice<span></span>: Multivariate Imputation by Chained Equations in r”</span> 45: 1–67. <a href="https://doi.org/10.18637/jss.v045.i03">https://doi.org/10.18637/jss.v045.i03</a>.
 </div>
 <div id="ref-tidytuesday" class="csl-entry" role="listitem">
 Community, Data Science Learning. 2024. <span>“Tidy Tuesday: A Weekly Social Data Project.”</span> <a href="https://tidytues.day">https://tidytues.day</a>.

@@ -20,6 +20,7 @@ library(ggridges)
 library(skimr)
 library(mice)
 library(VIM)
+library(ggmice)
 
 ## voters data
 
@@ -152,7 +153,7 @@ A more informed approach for imputing missing values is by using **nearest neigh
 
 <!--# check description of hotdeck imputation and add citations. https://www.jstatsoft.org/article/view/v074i07-->
 
-These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy to mitigate the effects of these biases is through **multiple imputation**, in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In @sec-missing-data-r, we show code for conducting multiple imputation in R We point the reader to the texts in @sec-missing-data-further-reading for more details about multiple imputation. <!--# do i need to cite something?-->
+These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy introduced by [CITATION RUBIN 1987? Or 1997] to mitigate the effects of these biases is through **multiple imputation**, in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In @sec-missing-data-r, we show code for conducting multiple imputation in R We point the reader to the texts in @sec-missing-data-further-reading for more details about multiple imputation. <!--# do i need to cite something?-->
 
 ::: {.analysis_in_practice latex="1"}
 If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.
@@ -225,18 +226,43 @@ recipes_mice <- mice(recipes_subset, m = 5)
 We use `complete()` to view the completed data frames. In the code below, we view the first complete data frame.
 
 ```{r}
+recipes_mice_1 <- complete(recipes_mice, 1)
+
+recipes_mice_1 |> 
+  skim()
 
 ```
 
-Here we have relied on the default settings for the multiple imputation, but `mice()` contains many arguments to customize the imputation. We refer the reader to the package documentation and additional resources for more information.
+Use `ggmice()` from the **ggmice** package [CITATION] to visualize the distribution of the imputed values for each new data frame created by `mice()`. <!--# explain the code below-->
+```{r}
+library(ggmice)
+ggmice(recipes_mice, aes(x = .imp, y = reviews)) +
+  geom_jitter() +
+  geom_boxplot(width = 0.5, size = 1, alpha = 0.75, outlier.shape = NA) +
+  labs(x = "Imputation number")
+```
 
-Further reading
+Since the ultimate aim is modeling, we can evaluate whether the imputed data has a similar relationship between the response and predictor variable. For example, if we wish to use the data to explain variability in the average rating, we can look at the relationship.
 
-Further reading: Gelman and Hill book Chapter 25. Add little and rubin (2002) book here. Rubin 1987 and 1996 for more on multiple imputation.
+Look at it overall. 
+```{r}
+ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
+  geom_jitter()
+```
 
-- mice documentation
 
-- <https://www.jstatsoft.org/article/view/v074i07>
+Facet it by iteration number. 
+
+```{r}
+ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
+  geom_jitter() + 
+  facet_wrap(~ .imp)
+```
+
+
+### Further reading
+
+We have just provided a brief introduction to handling missing data, but there is a wide variety of research and strategies for dealing with such data in an analysis. To learn more more about strategies for handling missingness and the analysis implications, see [CITATION] Little and Rubin 2002 and  Chapter 25 of [CITATION]. We also refer the reader to [CITE MICE Documentation] and CITE https://www.jstatsoft.org/article/view/v074i07 and [CITE GGMICE documentation] for more details on working with missing data in R. 
 
 ## Multinomial logistic regression {#sec-multinomial}
 
