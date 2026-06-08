@@ -14,13 +14,13 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Describe how model conditions are used to check the assumptions for linear regression
--   Use the data to check model conditions and diagnostics
--   Identify strategies to handle violations in the conditions
--   Identifying influential observations using Cook's distance
--   Use leverage and standardized residuals to understand potential outliers
--   Identify strategies for dealing with outliers and influential points
--   Check model conditions and diagnostics using R
+- Describe how model conditions are used to check the assumptions for linear regression
+- Use the data to check model conditions and diagnostics
+- Identify strategies to handle violations in the conditions
+- Identifying influential observations using Cook's distance
+- Use leverage and standardized residuals to understand potential outliers
+- Identify strategies for dealing with outliers and influential points
+- Check model conditions and diagnostics using R
 
 ```{=html}
 <!--#
@@ -48,9 +48,9 @@ library(skimr)
 
 What makes a delicious cup of coffee? Is there a relationship between a coffee's aroma and its flavor? We will consider these questions by analyzing data from the Coffee Quality Database (<https://database.coffeeinstitute.org/>). The data set used in this analysis was curated by James LeDoux and was featured as part of the TidyTuesday weekly data visualization challenge in July 2020 [@tidytuesday]. It contains a variety of features and quality ratings for over 1,000 coffees scraped from the Coffee Quality Database in 2018.<!--# add something about how the grades are determined-->The data are in `coffee-grades.csv`. We will use the following variables in this chapter:
 
--   `aroma` : Aroma grade (0: worst aroma - 10: best aroma)
+- `aroma` : Aroma grade (0: worst aroma - 10: best aroma)
 
--   `flavor`: Flavor grade (0: worst flavor - 10: best flavor)
+- `flavor`: Flavor grade (0: worst flavor - 10: best flavor)
 
 ::: {.objective latex=""}
 The goal of the analysis is to use the aroma grade to understand variability in the flavor grade, and assess model conditions and diagnostics to evaluate whether regression analysis is suitable for drawing reliable conclusions from the data.
@@ -149,8 +149,8 @@ tidy(coffee_model, conf.int = TRUE) |>
 We use the model in @tbl-coffee-model to describe the relationship between the aroma and flavor of coffee. For each additional point in the aroma grade, the flavor grade is expected to increase by `r round(coffee_slope, 3)` points, on average.
 
 ::: {.yourturn latex=""}
--   Use @tbl-coffee-model to conduct a hypothesis test to determine if the data provide evidence of a linear relationship between `aroma` and `flavor`.
--   Is the confidence interval consistent with the conclusion from the test?[^06-slr-conditions-1]
+- Use @tbl-coffee-model to conduct a hypothesis test to determine if the data provide evidence of a linear relationship between `aroma` and `flavor`.
+- Is the confidence interval consistent with the conclusion from the test?[^06-slr-conditions-1]
 :::
 
 [^06-slr-conditions-1]: The null hypothesis is there is no linear relationship between `aroma` and `flavor` $(H_0: \beta_1 = 0)$ and the alternative is that there is a linear relationship $(H_a:\beta_1 \neq 0)$. The p-value is $\approx 0$, so we reject the null hypothesis. The data provide evidence of a linear relationship between the two variables. The confidence interval is consistent, because 0 is not in the interval.
@@ -181,10 +181,10 @@ The assumptions are based on population-level data, yet we work with sample data
 
 After fitting a simple linear regression model, we check four conditions to evaluate whether the data are consistent with the underlying assumptions. They are commonly referred to using the mnemonic LINE.<!--# is there a citation for the original use?--> These four conditions are the following:
 
--   **L**inearity: There is a linear relationship between the response and predictor variables.
--   **I**ndependence: The residuals are independent of one another. <!--# Is there a more useful way to describe independence? One residual does not inform another residual? -->
--   **N**ormality: The distribution of the residuals is approximately normal.
--   **E**qual variance: The spread of the residuals is approximately equal for all predicted values.
+- **L**inearity: There is a linear relationship between the response and predictor variables.
+- **I**ndependence: The residuals are independent of one another. <!--# Is there a more useful way to describe independence? One residual does not inform another residual? -->
+- **N**ormality: The distribution of the residuals is approximately normal.
+- **E**qual variance: The spread of the residuals is approximately equal for all predicted values.
 
 After fitting the regression model, we calculate the residuals for each observation, $e_i = y_i - \hat{y}_i$, and use the residuals to check the conditions. We introduce the four model conditions in order based on the LINE acronym; however, the conditions may be checked in any order.
 
@@ -223,9 +223,9 @@ When we fit a linear regression model, we are using the predictor to explain som
 
 > *Based on the plot, can you generally guess with some certainty whether the residual would be positive or negative for a given predicted value or range of predicted values?*
 >
-> -   If the answer is no, then the linearity condition is satisfied.
+> - If the answer is no, then the linearity condition is satisfied.
 >
-> -   If the answer is yes, then the current linear model does not adequately capture the relationship between the response and predictor variables. A model that incorporates information from more predictors or a different modeling approach is needed (we'll discuss some of these in @sec-ch-mlr and \@\@sec-ch-transformations).
+> - If the answer is yes, then the current linear model does not adequately capture the relationship between the response and predictor variables. A model that incorporates information from more predictors or a different modeling approach is needed (we'll discuss some of these in @sec-ch-mlr and \@\@sec-ch-transformations).
 
 @fig-linearity-not-met shows an example of a residual plot for simulated data in which the linearity condition is not met. There is a parabolic pattern in the plot, so the residuals are not randomly scattered around 0.
 
@@ -356,13 +356,13 @@ From @fig-coffee-equal-var, the vertical spread of the residuals is approximatel
 ::: {.analysis_in_practice latex=""}
 **Checking model conditions**
 
--   **Linearity**: Plot residuals versus predicted values. Look for points to be randomly scattered around 0 on the $y$-axis $(\text{residuals} = 0)$ .
+- **Linearity**: Plot residuals versus predicted values. Look for points to be randomly scattered around 0 on the $y$-axis $(\text{residuals} = 0)$ .
 
--   **Independence**: Use the description of the data and data collection process to assess if the observations can reasonably be treated as independent. If data are collected over time, examine plot of residuals versus time to assess potential serial effect. If unaccounted for subgroups are represented in the data, examine plot of residuals versus predicted for each subgroup.
+- **Independence**: Use the description of the data and data collection process to assess if the observations can reasonably be treated as independent. If data are collected over time, examine plot of residuals versus time to assess potential serial effect. If unaccounted for subgroups are represented in the data, examine plot of residuals versus predicted for each subgroup.
 
--   **Normality**: Plot the distribution of the residuals. Look for a distribution that is approximately unimodal and symmetric.
+- **Normality**: Plot the distribution of the residuals. Look for a distribution that is approximately unimodal and symmetric.
 
--   **Equal variance**: Plot the residuals versus predicted values. Look for approximately equal vertical spread as we move along the $x$-axis.
+- **Equal variance**: Plot the residuals versus predicted values. Look for approximately equal vertical spread as we move along the $x$-axis.
 :::
 
 ## Strategies when conditions aren't satisfied {#sec-conditions-not-satisfied}
@@ -379,8 +379,8 @@ If the linearity condition is not satisfied, we can ask ourselves a few question
 
 1.  Is the violation in the linearity condition due to the fact that there is, in fact, no evidence of a meaningful relationship between the response and predictor variable? In this case, reconsider if a linear regression model is the most useful way to understand these data.
 2.  Is the violation in the linearity condition because there is evidence of a meaningful non-linear relationship between the response and predictor variable? If this is the case, there are a few options to work with this non-linear relationship.
-    -   Add a higher-order term, for example $x^2$, in the model to capture the non-linearity of the relationship. We discuss higher-order model terms in more detail in @sec-ch-mlr. <!--# add reference at some point-->
-    -   Apply a transformation on the response and/or predictor variable, so there is a linear relationship between the transformed variables. Then proceed with simple linear regression using the transformed variable(s). We discuss variable transformations in @sec-ch-transformations.
+    - Add a higher-order term, for example $x^2$, in the model to capture the non-linearity of the relationship. We discuss higher-order model terms in more detail in @sec-ch-mlr. <!--# add reference at some point-->
+    - Apply a transformation on the response and/or predictor variable, so there is a linear relationship between the transformed variables. Then proceed with simple linear regression using the transformed variable(s). We discuss variable transformations in @sec-ch-transformations.
 
 ### Independence
 
@@ -407,8 +407,8 @@ Recall from @sec-ch-slr-inf the objective of simulation-based inference is to us
 ::: {.analysis_in_practice latex=""}
 Thirty should not be treated as an absolute threshold. In other words, we should not treat data with a sample size of 29 materially different from data with a sample size of 31. If the sample size is small:
 
--   The distribution of the residuals should not have large departures from normality, in order to have reliable conclusions from the CLT-based inferential results.
--   You can conduct simulation-based inference, because these methods do not rely any assumptions about the sampling distribution of $\hat{\beta}_1$, and thus do not rely on assumptions about the distribution of the residuals.
+- The distribution of the residuals should not have large departures from normality, in order to have reliable conclusions from the CLT-based inferential results.
+- You can conduct simulation-based inference, because these methods do not rely any assumptions about the sampling distribution of $\hat{\beta}_1$, and thus do not rely on assumptions about the distribution of the residuals.
 :::
 
 ### Equal variance
@@ -437,7 +437,7 @@ There are approaches for handling violations in the equal variance condition. Th
 | Equal variance  | Not needed            | Not needed                 | Important              |
 +-----------------+-----------------------+----------------------------+------------------------+
 
-: Summary of necessary conditions for various analysis tasks on the slope {#tbl-slr-conditions}
+: Summary of necessary conditions for various analysis tasks on the slope
 
 So far we have discussed the model conditions to assess whether the assumptions for simple linear regression reasonably hold true for our data. We have not, however, dealt with the presence of outliers in the data and the potential impact (or "influence") they may have on the regression model. In the next section, we discuss measures we can use to identify and assess the potential impact of such outlying observations.
 
@@ -493,9 +493,9 @@ Sometimes potential influential points can be identified in a scatterplot of the
 
 There are three diagnostic measures to identify outliers and influential points:
 
--   **Leverage:** Identify observations that are outliers in the values of the predictor
--   **Standardized residuals:** Identify observations that are outliers in the value of the response
--   **Cook's distance:** Identify observations that are influential (a combination of leverage and standardized residuals)
+- **Leverage:** Identify observations that are outliers in the values of the predictor
+- **Standardized residuals:** Identify observations that are outliers in the value of the response
+- **Cook's distance:** Identify observations that are influential (a combination of leverage and standardized residuals)
 
 Ultimately, we are most interested in examining Cook's distance, because it provides the indication about each observation's impact on the regression analysis. Cook's distance takes into account information gleaned from leverage and standardized residuals, so we will introduce these diagnostics first.
 
@@ -505,9 +505,8 @@ The **leverage** of the $i^{th}$ observation is a measure of the distance betwee
 
 When doing simple linear regression, an observation's leverage, denoted $h_i$, is calculated using @eq-slr-leverage.
 
-$$
-h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^n(x_j - \bar{x})^2}
-$$ {#eq-slr-leverage}
+$$h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^n(x_j - \bar{x})^2}$$
+ {#eq-slr-leverage}
 
 <!--# Maybe provide more explanation about where this formula comes from?-->
 
@@ -579,9 +578,8 @@ The residual is an indication of how well the regression model predicts the valu
 
 The residuals have the same units as the response variable, so what is considered a residual with large magnitude depends on the scale and range of the response variable. This means what is considered a "large" residuals can be different for every analysis. We can address this by instead examining **standardized residuals**, defined as the residual divided by its standard error. @eq-std-resid shows the formula to calculate the standardized residual for the $i^{th}$ observation.
 
-$$
-std.resid_i = \frac{e_i}{SE_{e_i}} = \frac{e_i}{\hat{\sigma}_{\epsilon} \sqrt{1 - h_i}}
-$$ {#eq-std-resid}
+$$std.resid_i = \frac{e_i}{SE_{e_i}} = \frac{e_i}{\hat{\sigma}_{\epsilon} \sqrt{1 - h_i}}$$
+ {#eq-std-resid}
 
 The residuals for every analysis are now on the same scale. Thus, we can use a common threshold to determine residuals that are considered to have large magnitude. An observation is an outlier in the response if it its standardized residual has a magnitude greater than two, $|std.resid_i| > 2$ ($std.resid_i < - 2 \hspace{1mm} \text{ or }\hspace{1mm} std.resid_i > 2$). For large data sets, we recommend a more restrictive threshold of 3, so there is not an overwhelming number of observations considered outliers that may require further evaluation.
 
@@ -678,9 +676,8 @@ At this point we have introduced a diagnostic to identify outliers in the predic
 
 **Cook's distance** is a measure of an observation's overall impact on the estimated model coefficients. In @eq-cooks-d, we see that Cook's distance takes into account an observation's leverage, $h_i$, the standardized residuals, $std.resid_i$, and the number of predictors in the model, $p$ ( $p=1$ for simple linear regression).
 
-$$
-D_i = \frac{1}{p}(std.resid_i)^2\Big(\frac{h_i}{1-h_i}\Big)
-$$ {#eq-cooks-d}
+$$D_i = \frac{1}{p}(std.resid_i)^2\Big(\frac{h_i}{1-h_i}\Big)$$
+ {#eq-cooks-d}
 
 <!--# add something referring reader to the appendix-->
 
@@ -764,9 +761,9 @@ In this chapter, we have introduced a set of model conditions and diagnostics to
 
     Then, check Cook's distance to determine if there are potential influential points in the data.
 
-    -   If there are influential points, check the leverage and standardized residuals to try to understand why these points are influential. Use this information, along with the analysis objective and subject matter expertise, to determine how to best proceed with the dealing with these points.
+    - If there are influential points, check the leverage and standardized residuals to try to understand why these points are influential. Use this information, along with the analysis objective and subject matter expertise, to determine how to best proceed with the dealing with these points.
 
-    -   If there are no influential points, we can examine the leverage and standardized residuals for a deeper understanding of the data; however, no further action is needed in terms of refitting the model.
+    - If there are no influential points, we can examine the leverage and standardized residuals for a deeper understanding of the data; however, no further action is needed in terms of refitting the model.
 
     Make any adjustments as needed based on the model conditions and diagnostics.
 
@@ -805,11 +802,11 @@ coffee_model_aug |>
 
 We use the following columns produced by `augment()` to check model conditions and diagnostics:
 
--   `.fitted`: Predicted values
--   `.resid`: Residuals
--   `.hat`: Leverage
--   `.cooksd`: Cook's distance
--   `.std.resid`: Standardized residuals
+- `.fitted`: Predicted values
+- `.resid`: Residuals
+- `.hat`: Leverage
+- `.cooksd`: Cook's distance
+- `.std.resid`: Standardized residuals
 
 The plots used to check the model conditions and diagnostics are produced using `ggplot()` functions. We can also produce similar plots in base R format using the `plot` function. The QQ-plot produced from `plot()` is used to check the normality condition. The distribution of the residuals is approximately normal if the points lie along the diagonal line.
 
