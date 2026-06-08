@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Maria Tackett">
+<title>12&nbsp; Logistic regression: Prediction and evaluation – Introduction to Regression Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./13-special-topics.html" rel="next">
+<link href="./11-logistic.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-31c3c5ec0f84e3846e28bd1517aa8340.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script defer="" data-domain="https://matackett.github.io/regression-book/" src="https://plausible.io/js/script.js"></script><script src="site_libs/kePrint-0.0.1/kePrint.js"></script><link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./11-logistic.html">Part 4: Beyond linear regression</a></li><li class="breadcrumb-item"><a href="./12-logistic-prediction.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Logistic regression: Prediction and evaluation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Regression Analysis</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/matackett/regression-book" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00-preface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 1: Getting started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Regression in the data science workflow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-review-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data analysis in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-eda.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 2: Simple linear regression</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-slr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-slr-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Inference for simple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-slr-conditions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Model conditions and diagnostics</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 3: Multiple linear regression</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-mlr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-mlr-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Inference for multiple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-mlr-transformations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Variable transformations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-model-eval.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Model selection</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part 4: Beyond linear regression</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-logistic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistic regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-logistic-prediction.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Logistic regression: Prediction and evaluation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-special-topics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Special topics</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-linear.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Mathematics of linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-logistic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Mathematics of logistic regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Data sets</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
+  <li><a href="#introduction-predicting-comfort-with-driverless-cars" id="toc-introduction-predicting-comfort-with-driverless-cars" class="nav-link" data-scroll-target="#introduction-predicting-comfort-with-driverless-cars"><span class="header-section-number">12.1</span> Introduction: Predicting comfort with driverless cars</a></li>
+  <li>
+<a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis"><span class="header-section-number">12.2</span> Exploratory data analysis</a>
+  <ul class="collapse">
+<li><a href="#univariate-eda" id="toc-univariate-eda" class="nav-link" data-scroll-target="#univariate-eda"><span class="header-section-number">12.2.1</span> Univariate EDA</a></li>
+  <li><a href="#bivariate-eda" id="toc-bivariate-eda" class="nav-link" data-scroll-target="#bivariate-eda"><span class="header-section-number">12.2.2</span> Bivariate EDA</a></li>
+  <li><a href="#initial-model" id="toc-initial-model" class="nav-link" data-scroll-target="#initial-model"><span class="header-section-number">12.2.3</span> Initial model</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#prediction-and-classification" id="toc-prediction-and-classification" class="nav-link" data-scroll-target="#prediction-and-classification"><span class="header-section-number">12.3</span> Prediction and classification</a>
+  <ul class="collapse">
+<li><a href="#sec-logistic-prediction" id="toc-sec-logistic-prediction" class="nav-link" data-scroll-target="#sec-logistic-prediction"><span class="header-section-number">12.3.1</span> Prediction</a></li>
+  <li><a href="#sec-classification" id="toc-sec-classification" class="nav-link" data-scroll-target="#sec-classification"><span class="header-section-number">12.3.2</span> Classification</a></li>
+  </ul>
+</li>
+  <li><a href="#sec-roc" id="toc-sec-roc" class="nav-link" data-scroll-target="#sec-roc"><span class="header-section-number">12.4</span> ROC Curve</a></li>
+  <li>
+<a href="#sec-logistic-model-eval" id="toc-sec-logistic-model-eval" class="nav-link" data-scroll-target="#sec-logistic-model-eval"><span class="header-section-number">12.5</span> Model evaluation and comparison</a>
+  <ul class="collapse">
+<li><a href="#area-under-the-curve-auc" id="toc-area-under-the-curve-auc" class="nav-link" data-scroll-target="#area-under-the-curve-auc"><span class="header-section-number">12.5.1</span> Area Under the Curve (AUC)</a></li>
+  <li><a href="#sec-logistic-aic-bic" id="toc-sec-logistic-aic-bic" class="nav-link" data-scroll-target="#sec-logistic-aic-bic"><span class="header-section-number">12.5.2</span> Comparing models using AIC and BIC</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#sec-logistic-prediction-R" id="toc-sec-logistic-prediction-R" class="nav-link" data-scroll-target="#sec-logistic-prediction-R"><span class="header-section-number">12.6</span> Prediction and evaluation in R</a>
+  <ul class="collapse">
+<li><a href="#prediction-and-classification-1" id="toc-prediction-and-classification-1" class="nav-link" data-scroll-target="#prediction-and-classification-1"><span class="header-section-number">12.6.1</span> Prediction and classification</a></li>
+  <li><a href="#confusion-matrix-and-roc-curve" id="toc-confusion-matrix-and-roc-curve" class="nav-link" data-scroll-target="#confusion-matrix-and-roc-curve"><span class="header-section-number">12.6.2</span> Confusion matrix and ROC curve</a></li>
+  <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation"><span class="header-section-number">12.6.3</span> Model evaluation</a></li>
+  </ul>
+</li>
+  <li><a href="#sec-logistic-workflow" id="toc-sec-logistic-workflow" class="nav-link" data-scroll-target="#sec-logistic-workflow"><span class="header-section-number">12.7</span> Modeling building workflow in R</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">12.8</span> Summary</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./11-logistic.html">Part 4: Beyond linear regression</a></li><li class="breadcrumb-item"><a href="./12-logistic-prediction.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Logistic regression: Prediction and evaluation</span></a></li></ol></nav><div class="quarto-title">
+<h1 class="title"><span id="sec-ch-logistic-prediction" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Logistic regression: Prediction and evaluation</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="learning-goals" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="learning-goals">Learning goals</h2>
+<ul>
+<li>Compute predictions from the logistic regression model</li>
+<li>Use model predictions to classify observations</li>
+<li>Construct and interpret a confusion matrix</li>
+<li>Use the ROC curve to evaluate model performance and select classification threshold</li>
+<li>Evaluate model performance using AUC, AIC, and BIC</li>
+<li>Implement a model building workflow for logistic regression using R</li>
+</ul>
+<!--#
+## Software and packages {.unnumbered}
+
+-   `tidyverse` [@tidyverse]
+
+-   `tidymodels` [@tidymodels]
+
+-   `knitr` [@knitr]
+
+-   `pROC` [@pROC]
+--></section><section id="introduction-predicting-comfort-with-driverless-cars" class="level2" data-number="12.1"><h2 data-number="12.1" class="anchored" data-anchor-id="introduction-predicting-comfort-with-driverless-cars">
+<span class="header-section-number">12.1</span> Introduction: Predicting comfort with driverless cars</h2>
+<p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced data from the 2024 General Social Survey in which adults in the United States their opinions were asked on a variety of issues, including their comfort with driverless cars. In the previous chapter, we fit a logistic regression model used the model to describe the characteristics associated with the odds an adult is comfortable with driverless cars. We continue with the analysis in this chapter, with a focus on using the model for prediction. We will also evaluate the model performance and show an example workflow for comparing two logistic regression models.</p>
+<p>We use the variables below in this chapter. The variable definitions are based on survey prompts and variable definitions in the <em>General Social Survey Documentation and Public Use File Codebook</em> <span class="citation" data-cites="gss2024">(<a href="references.html#ref-gss2024" role="doc-biblioref">Davern et al. 2025</a>)</span>.</p>
+<ul>
+<li>
+<p><code>aidrive_comfort</code>: Indicator variable for respondent’s comfort with driverless (self-driving) cars. <code>0</code>: Not comfortable at all; <code>1</code>: At least some comfort.</p>
+<ul>
+<li>This variable was derived from responses to the original survey prompt: “Comfort with driverless cars”. Scores ranged from 0 to 10 with 0 representing “totally uncomfortable with this situation” and 10 representing “totally comfortable with this situation”. Responses of 0 on the original survey were coded as <code>aidrive_comfort = 0</code>. All other responses coded as 1.</li>
+</ul>
+</li>
+<li><p><code>tech_easy</code> : Response to the question, “Does technology make our lives easier?” Categories are <code>Neutral</code>, <code>Can't choose</code> (Respondent doesn’t know / is unable to provide an answer), <code>Agree</code>, <code>Disagree</code>.</p></li>
+<li><p><code>age</code>: Respondent’s age in years</p></li>
+<li>
+<p><code>income</code>: Response to the question “In which of these groups did your total family income, from all sources, fall last year? That is, before taxes.” Categories are <code>Less than $20k</code>, <code>$20-50k</code>, <code>$50-110k</code>, <code>$110k or more</code>, <code>Not reported</code> .</p>
+<ul>
+<li>Note: These categories were defined based on the 27 categories in <code>income16</code> from the original survey.</li>
+</ul>
+</li>
+<li><p><code>tech_harm</code>: Response to the question, “Does technology do more harm than good?”. Categories are <code>Neutral</code>, <code>Can't choose</code> (Respondent doesn’t know / is unable to provide an answer), <code>Agree</code>, <code>Disagree</code>.</p></li>
+<li>
+<p><code>polviews</code>: Response to the question, “I’m going to show you a seven-point scale on which the political views that people might hold are arranged from extremely liberal–point 1–to extremely conservative–point 7. Where would you place yourself?” Categories are <code>Moderate</code>, <code>Liberal</code>, <code>Conservative</code>, <code>No reported</code>.</p>
+<ul>
+<li>Note: These categories were defined based on the original 7 point scale.</li>
+</ul>
+</li>
+</ul>
+<!--# do i want to put Sex back in this chapter?--></section><section id="exploratory-data-analysis" class="level2" data-number="12.2"><h2 data-number="12.2" class="anchored" data-anchor-id="exploratory-data-analysis">
+<span class="header-section-number">12.2</span> Exploratory data analysis</h2>
+<section id="univariate-eda" class="level3" data-number="12.2.1"><h3 data-number="12.2.1" class="anchored" data-anchor-id="univariate-eda">
+<span class="header-section-number">12.2.1</span> Univariate EDA</h3>
+<p>We conducted exploratory data analysis for the response variable <code>aidrive_comfort</code> and the predictors <code>age</code> and <code>tech_easy</code> in <a href="11-logistic.html#sec-logistic-intro-gss" class="quarto-xref"><span>Section 11.1</span></a>. Here we focus on EDA for the new predictors and their relationship with the response variable.</p>
+<div id="fig-aidrive-eda-2" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-aidrive-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-aidrive-eda-2-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-eda-2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-1.png" class="lightbox" data-gallery="fig-aidrive-eda-2" title="Figure&nbsp;12.1&nbsp;(a): income"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-eda-2"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-eda-2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) <code>income</code>
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-aidrive-eda-2-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-eda-2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-2.png" class="lightbox" data-gallery="fig-aidrive-eda-2" title="Figure&nbsp;12.1&nbsp;(b): polviews"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-eda-2"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-eda-2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) <code>polviews</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-aidrive-eda-2-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-eda-2-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-3.png" class="lightbox" data-gallery="fig-aidrive-eda-2" title="Figure&nbsp;12.1&nbsp;(c): tech_harm"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-eda-2"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-eda-2-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) <code>tech_harm</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aidrive-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.1: Univariate exploratory data analysis
+</figcaption></figure>
+</div>
+<p><a href="#fig-aidrive-eda-2" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> shows the distributions of the predictors that are new in this chapter. From the distribution of <code>income</code> in <a href="#fig-aidrive-eda-2-1" class="quarto-xref">Figure&nbsp;<span>12.1 (a)</span></a> , we see that the most common response for income is between $50-110K. There is a sizable proportion of the respondents who did not report an income. Studies have shown that failure to report income in surveys is not random <span class="citation" data-cites="jabkowski2024not">(e.g., <a href="references.html#ref-jabkowski2024not" role="doc-biblioref">Jabkowski and Piekut 2024</a>)</span>, so it will be worth noting if the <code>Not Reported</code> indicator has a statistically significant relationship with the response variable as we continue the analysis.</p>
+<p>The distribution of <code>polviews_fct</code> in <a href="#fig-aidrive-eda-2-2" class="quarto-xref">Figure&nbsp;<span>12.1 (b)</span></a> shows a relatively even distribution along the range of political views. A few respondents chose not to report their political views. Lastly, the distribution of <code>tech_harm</code> in <a href="#fig-aidrive-eda-2-3" class="quarto-xref">Figure&nbsp;<span>12.1 (c)</span></a> shows that most people either disagree are have neutral feelings about the statement that technology causes more harm than good.</p>
+</section><section id="bivariate-eda" class="level3" data-number="12.2.2"><h3 data-number="12.2.2" class="anchored" data-anchor-id="bivariate-eda">
+<span class="header-section-number">12.2.2</span> Bivariate EDA</h3>
+<div id="fig-aidrive-bivariate-eda-2" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-aidrive-bivariate-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-bivariate-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-aidrive-bivariate-eda-2-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-bivariate-eda-2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-1.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(a): aidrive_comfort vs.&nbsp;income"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-bivariate-eda-2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) <code>aidrive_comfort</code> vs.&nbsp;<code>income</code>
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-bivariate-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-aidrive-bivariate-eda-2-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-bivariate-eda-2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-2.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(b): aidrive_comfort vs.&nbsp;polviews"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-bivariate-eda-2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) <code>aidrive_comfort</code> vs.&nbsp;<code>polviews</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-bivariate-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-aidrive-bivariate-eda-2-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-bivariate-eda-2-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-3.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(c): aidrive_comfort vs.&nbsp;tech_harm"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-bivariate-eda-2-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) <code>aidrive_comfort</code> vs.&nbsp;<code>tech_harm</code>
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aidrive-bivariate-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.2: Bivariate exploratory data analysis. Blue: <code>adrive_comfort = 0</code>, Red: <code>aidrive_comfort = 1</code>
+</figcaption></figure>
+</div>
+<p>The visualizations in <a href="#fig-aidrive-bivariate-eda-2" class="quarto-xref">Figure&nbsp;<span>12.2</span></a> show the relationships between the response variable and each new predictor variable. <a href="#fig-aidrive-bivariate-eda-2-1" class="quarto-xref">Figure&nbsp;<span>12.2 (a)</span></a> shows the relationship between <code>income</code> and <code>aidrive_comfort</code>. The graph shows that a higher proportion of respondents in the higher income categories are comfortable with driverless cars compared to respondents in lower income categories or who did not report income. This suggests an individual’s income may be useful in understanding the chance they are comfortable with driverless cars.</p>
+<p>The relationship between <code>polviews</code> and <code>aidrive_comfort</code> is in <a href="#fig-aidrive-bivariate-eda-2-2" class="quarto-xref">Figure&nbsp;<span>12.2 (b)</span></a>. Those who identify as “liberal” on the political spectrum are the most likely to be comfortable with driverless cars, and those who did not report a political affiliation are the least likely. Those who identify as “moderate” or “conservative” have about the same odds of being comfortable with driverless cars.</p>
+<p>Lastly, <a href="#fig-aidrive-bivariate-eda-2-3" class="quarto-xref">Figure&nbsp;<span>12.2 (c)</span></a> is the relationship between <code>tech_harm</code> and <code>aidrive_comfort</code>. Those who disagree that technology causes more harm than good are the most likely to be comfortable with driverless cars. Those who did not provide a response or agree that technology causes more harm than good are the least likely to be comfortable with driverless cars.</p>
+</section><section id="initial-model" class="level3" data-number="12.2.3"><h3 data-number="12.2.3" class="anchored" data-anchor-id="initial-model">
+<span class="header-section-number">12.2.3</span> Initial model</h3>
+<p>We begin by fitting a model using the predictors from <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, <code>age</code> and <code>tech_easy</code>, along with a new predictor <code>income</code> to predict whether an individual is comfortable with driverless cars. We’ll use this model for the majority of the chapter as we introduce prediction, classification, and model assessment for logistic regression. In <a href="#sec-logistic-workflow" class="quarto-xref"><span>Section 12.7</span></a>, we’ll use cross validation and the model selection workflow from <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a> to compare this model to another one that also includes <code>polviews</code> and <code>tech_harm</code>.</p>
+<div class="cell">
+<div id="tbl-aidrive-comfort-fit" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aidrive-comfort-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.1: Model of <code>aidrive_comfort</code> versus <code>age</code>, <code>tech_easy</code>, and <code>income</code> with 95% confidence intervals
+</figcaption><div aria-describedby="tbl-aidrive-comfort-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 11%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 12%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">0.237</td>
+<td style="text-align: right;">0.136</td>
+<td style="text-align: right;">0.892</td>
+<td style="text-align: right;">-0.433</td>
+<td style="text-align: right;">0.496</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">age</td>
+<td style="text-align: right;">-0.016</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">-5.165</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">-0.022</td>
+<td style="text-align: right;">-0.010</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tech_easyCan’t choose</td>
+<td style="text-align: right;">0.075</td>
+<td style="text-align: right;">0.408</td>
+<td style="text-align: right;">0.184</td>
+<td style="text-align: right;">0.854</td>
+<td style="text-align: right;">-0.746</td>
+<td style="text-align: right;">0.866</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tech_easyAgree</td>
+<td style="text-align: right;">0.576</td>
+<td style="text-align: right;">0.155</td>
+<td style="text-align: right;">3.730</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.275</td>
+<td style="text-align: right;">0.881</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tech_easyDisagree</td>
+<td style="text-align: right;">-0.436</td>
+<td style="text-align: right;">0.300</td>
+<td style="text-align: right;">-1.456</td>
+<td style="text-align: right;">0.145</td>
+<td style="text-align: right;">-1.039</td>
+<td style="text-align: right;">0.140</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">income_fct$20-50k</td>
+<td style="text-align: right;">0.264</td>
+<td style="text-align: right;">0.177</td>
+<td style="text-align: right;">1.491</td>
+<td style="text-align: right;">0.136</td>
+<td style="text-align: right;">-0.082</td>
+<td style="text-align: right;">0.612</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">income_fct$50-110k</td>
+<td style="text-align: right;">0.526</td>
+<td style="text-align: right;">0.169</td>
+<td style="text-align: right;">3.111</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.196</td>
+<td style="text-align: right;">0.860</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">income_fct$110k or more</td>
+<td style="text-align: right;">1.223</td>
+<td style="text-align: right;">0.182</td>
+<td style="text-align: right;">6.704</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.868</td>
+<td style="text-align: right;">1.584</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">income_fctNot reported</td>
+<td style="text-align: right;">0.265</td>
+<td style="text-align: right;">0.219</td>
+<td style="text-align: right;">1.212</td>
+<td style="text-align: right;">0.225</td>
+<td style="text-align: right;">-0.164</td>
+<td style="text-align: right;">0.694</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="yourturn">
+<p>Consider the coefficients for the indicators of <code>income_fct</code>. Are they consistent with the observations from the EDA? Why or why not. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</div>
+</section></section><section id="prediction-and-classification" class="level2" data-number="12.3"><h2 data-number="12.3" class="anchored" data-anchor-id="prediction-and-classification">
+<span class="header-section-number">12.3</span> Prediction and classification</h2>
+<p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced the logistic regression, where we used the model to describe and draw conclusions about the relationship between the response and predictor variables. In practice, logistic regression models are widely used for classification, particularly in data science and machine learning. They are part of a branch of machine learning models called <strong>supervised learning</strong>, in which the model is built and evaluated using data that contains observed outcomes. Therefore, we will now focus on using the model to predict whether an individual is comfortable with self-driving cars given particular characteristics.</p>
+<section id="sec-logistic-prediction" class="level3" data-number="12.3.1"><h3 data-number="12.3.1" class="anchored" data-anchor-id="sec-logistic-prediction">
+<span class="header-section-number">12.3.1</span> Prediction</h3>
+<p>Recall from <a href="11-logistic.html#sec-logistic-model" class="quarto-xref"><span>Section 11.3</span></a> that the response variable in the logistic regression model is the logit (log-odds). When we input values of <code>age</code>, <code>tech_easy</code>, and <code>income</code> into the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a>, the model will output the log odds an individual with those characteristics is comfortable with driverless cars. Once we have the predicted log odds, we can use the relationships in <a href="11-logistic.html#sec-prob-odds" class="quarto-xref"><span>Section 11.2</span></a> to compute the predicted odds and the predicted probability. <!--# do i show odds to prob in previous chapter?--> <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a> shows the predicted log odds, predicted odds, and predicted probability for 10 observations in the data set.</p>
+<div class="cell">
+<div id="tbl-aidrive-comfort-predict" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aidrive-comfort-predict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.2: Predictions from model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> for 10 respondents
+</figcaption><div aria-describedby="tbl-aidrive-comfort-predict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 16%">
+<col style="width: 4%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 11%">
+<col style="width: 18%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;"></th>
+<th style="text-align: left;">aidrive_comfort</th>
+<th style="text-align: right;">age</th>
+<th style="text-align: left;">tech_easy</th>
+<th style="text-align: left;">income</th>
+<th style="text-align: right;">Pred. log odds</th>
+<th style="text-align: right;">Pred. odds</th>
+<th style="text-align: right;">Pred. probability</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: left;">Agree</td>
+<td style="text-align: left;">$110k or more</td>
+<td style="text-align: right;">1.306</td>
+<td style="text-align: right;">3.692</td>
+<td style="text-align: right;">0.787</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">Neutral</td>
+<td style="text-align: left;">$110k or more</td>
+<td style="text-align: right;">0.953</td>
+<td style="text-align: right;">2.593</td>
+<td style="text-align: right;">0.722</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">Can’t choose</td>
+<td style="text-align: left;">Not reported</td>
+<td style="text-align: right;">-0.026</td>
+<td style="text-align: right;">0.974</td>
+<td style="text-align: right;">0.494</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">Neutral</td>
+<td style="text-align: left;">Less than $20k</td>
+<td style="text-align: right;">-1.052</td>
+<td style="text-align: right;">0.349</td>
+<td style="text-align: right;">0.259</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: left;">Can’t choose</td>
+<td style="text-align: left;">Less than $20k</td>
+<td style="text-align: right;">-0.897</td>
+<td style="text-align: right;">0.408</td>
+<td style="text-align: right;">0.290</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: left;">Agree</td>
+<td style="text-align: left;">$50-110k</td>
+<td style="text-align: right;">0.641</td>
+<td style="text-align: right;">1.899</td>
+<td style="text-align: right;">0.655</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: left;">Agree</td>
+<td style="text-align: left;">$110k or more</td>
+<td style="text-align: right;">0.828</td>
+<td style="text-align: right;">2.288</td>
+<td style="text-align: right;">0.696</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: left;">Agree</td>
+<td style="text-align: left;">$50-110k</td>
+<td style="text-align: right;">0.482</td>
+<td style="text-align: right;">1.619</td>
+<td style="text-align: right;">0.618</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: left;">Agree</td>
+<td style="text-align: left;">$20-50k</td>
+<td style="text-align: right;">-0.323</td>
+<td style="text-align: right;">0.724</td>
+<td style="text-align: right;">0.420</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: left;">Agree</td>
+<td style="text-align: left;">$110k or more</td>
+<td style="text-align: right;">1.019</td>
+<td style="text-align: right;">2.771</td>
+<td style="text-align: right;">0.735</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Let’s show how the predicted values for the first observation are computed. The predicted log odds the first individual who is 33 years old, agrees that technology makes life better, and has an annual income of $110k or more are</p>
+<p><span class="math display">\[
+\begin{aligned}
+\log \Big(\frac{\hat{\pi}}{1-\hat{\pi}}\Big) &amp;=  0.032 - 0.016  \times 33 + 0.075   \times 0 +  0.576 \times 1 \\
+&amp;- 0.436  \times 0 +  0.264 \times 0 +  0.526  \times 0 \\
+&amp; + 1.223  \times 1 + 0.265 \times 0 \\
+&amp; = 1.3
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\hat{\pi}\)</span> is the predicted probability of being comfortable with driverless cars.</p>
+<p>Using the predicted log odds from <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a>, the predicted odds for this individual are</p>
+<p><span class="math display">\[\widehat{\text{odds}} = e^{\log \big( \frac{\hat{\pi}}{1-\hat{\pi}}\big)} = e^{1.306} = 3.69 \]</span></p>
+<p>Lastly, we use the odds from <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a> to compute the predicted probability:</p>
+<p><span class="math display">\[
+\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.692}{1 + 3.692} = 0.787
+\]</span></p>
+<p>Note: These values may differ slightly from the values in the the table, because we are computing predictions using rounded coefficient.</p>
+<div class="yourturn">
+<p>Show how to compute the predicted log odds, odds, and probability for individual #2 in <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+</div>
+</section><section id="sec-classification" class="level3" data-number="12.3.2"><h3 data-number="12.3.2" class="anchored" data-anchor-id="sec-classification">
+<span class="header-section-number">12.3.2</span> Classification</h3>
+<p>Knowing the predicted odds and probabilities can be useful for understanding how likely individuals with various characteristics will be comfortable with driverless cars. In many contexts, however, we would like to group individuals based on whether or not the model predicts they are comfortable with driverless cars. For example, the marketing team for a robotaxi company may want to use targeted marketing strategies and offer discounts to potential new customers. To have a successful marketing campaign, they want to direct the marketing to those who are comfortable with driverless cars.</p>
+<p>As we’ve seen thus far, the logistic regression model does not directly produce predicted values of the binary response variable. Therefore, we can group observations based on the predicted probabilities computed from the model output. This process of grouping observations based on the predictions is called <strong>classification</strong>. The groups the observations are put into are the <strong>predicted classes</strong>. In the case of our analysis, we will use the model to classify observations into the class of those not comfortable with driverless cars (<code>aidrive_comfort = 0</code>) or the class of those comfortable with driverless cars (<code>aidrive_comfort = 1</code>) .</p>
+<!--# Key terms: Predicted class: Group assignment for an observation based on model predictions Classification: Process of using the model predictions to assign observations to classes-->
+<p>We showed how to compute the predicted probabilities from the logistic regression output in <a href="#sec-logistic-prediction" class="quarto-xref"><span>Section 12.3.1</span></a>, and we will use those probabilities to classify observations. The question, then, is how large does the probability need to be to classify an observation as having the response <span class="math inline">\(Y = 1\)</span> ? In terms of our analysis, how large does the probability of being comfortable with driverless cars need to be to classify an individual as being comfortable with driverless cars, <code>aidrive_comfort = 1</code>?</p>
+<p>When using the logistic regression model for classification, we define a threshold, such an observation is classified as <span class="math inline">\(\hat{Y} = 1\)</span> if the predicted probability is greater than the threshold. Otherwise, the observation is classified as <span class="math inline">\(\hat{Y} = 0\)</span>. If we’re unsure what threshold to set, we can start with a threshold of 0.5, the default threshold typically used in statistical software. This means if the model predicts an observation is more likely than not to have response <span class="math inline">\(Y = 1\)</span>, even if just by a small amount, then the observation is classified as having response <span class="math inline">\(\hat{Y} = 1\)</span>.</p>
+<p>For now, let’s use the threshold equal to 0.5 to assign the predicted classes of <code>aidrive_comfort</code> for the respondents in the sample data based on the predicted probabilities produced from the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a>.</p>
+<div class="cell">
+<div id="tbl-aidrive-comfort-pred-class" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aidrive-comfort-pred-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.3: Predicted class based on model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and threshold of 0.5 for 10 respondents
+</figcaption><div aria-describedby="tbl-aidrive-comfort-pred-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;"></th>
+<th style="text-align: left;">aidrive_comfort</th>
+<th style="text-align: right;">Pred. probability</th>
+<th style="text-align: left;">Pred. class</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.787</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.722</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.494</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.259</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.290</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.655</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.696</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.618</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.420</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.735</td>
+<td style="text-align: left;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-aidrive-comfort-pred-class" class="quarto-xref">Table&nbsp;<span>12.3</span></a> shows the observed value of the response (<code>aidrive_comfort</code>), predicted probability, and predicted class for ten respondents. For many of these respondents, the observed and predicted classes are equal. There are some, such as Observation 6, in which the predicted classes differs from the observed. In this instance, the respondent had a combination of <code>age</code>, <code>income</code>, and <code>tech_easy</code>, that are associated with a higher probability of being comfortable with driverless cars; however, the individual responded they are not comfortable with driverless cars in the General Social Survey.</p>
+<p>We need a way to more holistically evaluate how well the predicted classes align with the observed classes. To do so, we use a <strong>confusion matrix</strong>, a <span class="math inline">\(2 \times 2\)</span> table of the observed classes versus the predicted classes.</p>
+<div class="cell">
+<div id="tbl-confusion-matrix" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.4: Confusion matrix for model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and threshold of 0.5. Observed class (columns), Predicted class (rows)
+</figcaption><div aria-describedby="tbl-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Observed class
+</div></th>
+</tr>
+<tr class="even">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Pred. class</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">349</td>
+<td style="text-align: right;">228</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">343</td>
+<td style="text-align: right;">601</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<!--# Maybe make this table in keynote, so I can label rows to say actual-->
+<p><a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> shows the confusion matrix for the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and a threshold of 0.5. In this table, the rows define the predicted classes and the columns define the observed classes. Let’s break down what each cell is in the table:</p>
+<ul>
+<li>There are 349 observations with the predicted class of 0 and observed class of 0.</li>
+<li>There are 228 observations with the predicted class of 0 and observed class of 1.</li>
+<li>There are 343 observations with the predicted class of 1 and observed class of 0.</li>
+<li>There are 601 observations with the predicted class of 1 and observed class of 1.</li>
+</ul>
+<p>We compute various statistics from the confusion matrix to evaluate how well the observations are classified. The first statistics we can calculate are the accuracy and misclassification rate. The <strong>accuracy</strong> is the proportion <!--# or percentage?--> of observations that are correctly classified (the observed and predicted classes are the same). The accuracy based on <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> is</p>
+<p><span id="eq-logistic-accuracy"><span class="math display">\[
+\text{accuracy} = \frac{349 + 601}{349 + 228 + 343 + 601} = 0.625
+\tag{12.1}\]</span></span></p>
+<p>Using the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and the threshold of 0.5, 62.5% of the observations are correctly classified.</p>
+<p>The <strong>misclassification rate</strong> is the proportion of observations that are not correctly classified (the observed and predicted classes differ). The misclassification rate based on <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> is</p>
+<p><span id="eq-logistic-misclassification"><span class="math display">\[
+\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375
+\tag{12.2}\]</span></span></p>
+<p>Using the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and the threshold of 0.5, 37.5% of the observations are incorrectly classified. Note that the misclassification rate is equal to <span class="math inline">\(1 - \text{accuracy}\)</span> ,and vice versa.</p>
+<div class="analysis_in_practice">
+<p>When the distribution of the response variable is largely imbalanced, the accuracy can be a misleading measure of how well the observations are classified. For example, suppose there are 100 observations, such that 5% of the observations have an observed response <span class="math inline">\(Y = 1\)</span>, and 95% of the observations have an observed response of <span class="math inline">\(Y = 0\)</span>. We may observe an imbalanced distribution like this when building a model to detect the presence of a rare disease, for example.</p>
+<p><br></p>
+<p>Let’s suppose based on the model and threshold, all observations have a predicted class of 0, and the confusion matrix looks like the following:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: right; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Observed class
+</div></th>
+</tr>
+<tr class="even">
+<th style="text-align: right;" data-quarto-table-cell-role="th">Pred. class</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br>
+The accuracy for this model will be (95 + 0 ) / (95 + 5) = 0.95. Based on this value, it appears the classification has performed very well, even though we did not accurately classify any of the observations in which the observed response is <span class="math inline">\(Y = 1\)</span>.</p>
+</div>
+<p>The accuracy and misclassification rate provide a nice initial indication of the how well the model classifies observations, but they do not give a complete picture. For example, suppose we want to know how many of the people who are actually comfortable with driverless cars are predicted to be comfortable based on the model predictions and threshold. Or suppose we want to know how many people who are actually not comfortable with driverless cars were incorrectly classified as being comfortable. To answer these and similar questions, let’s take a more detailed look at the confusion matrix.</p>
+<div id="tbl-confusion-matrix-detailed" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-detailed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.5: Detailed confusion matrix
+</figcaption><div aria-describedby="tbl-confusion-matrix-detailed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th></th>
+<th>
+<strong>Not comfortable with driverless cars</strong> <span class="math inline">\((y_i = 0)\)</span>
+</th>
+<th>
+<strong>Comfortable with driverless cars</strong> <span class="math inline">\((y_i = 1)\)</span>
+</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<strong>Classified</strong> <strong>not comfortable</strong><span class="math inline">\((\hat{y}_i = 0)\)</span>
+</td>
+<td>True negative (TN)</td>
+<td>False negative (FN)</td>
+</tr>
+<tr class="even">
+<td>
+<strong>Classified comfortable</strong><span class="math inline">\((\hat{y}_i = 1)\)</span>
+</td>
+<td>False positive (FP)</td>
+<td>True positive (TP)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<!--# check the notation used in this table, y_i and p_i-->
+<p><a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a> shows in greater detail what is being quantified in each cell of the confusion matrix. We will use these values to compute more granular values about the classification. As in <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a>, the rows define the predicted classes and the columns define the observed classes. The values in the cell indicate the following:</p>
+<ul>
+<li><p><strong>True negative (TN):</strong> The number of observations that are predicted to be not comfortable with driverless cars ( <span class="math inline">\(\hat{y}_i = 0\)</span>) and have observed response of not comfortable (<span class="math inline">\(y_i = 0\)</span>) .</p></li>
+<li><p><strong>False negative (FN):</strong> The number of observations that are predicted to be not comfortable with driverless cars ( <span class="math inline">\(\hat{y}_i = 0\)</span>) and have observed response of comfortable ( <span class="math inline">\(y_i = 1\)</span>) .</p></li>
+<li><p><strong>False positive (FP):</strong> The number of observations that are predicted to be comfortable with driverless cars ( <span class="math inline">\(\hat{y}_i = 1\)</span>) and have observed response of not comfortable ( <span class="math inline">\(y_i = 0\)</span>) .</p></li>
+<li><p><strong>True positive (TP):</strong> The number of observations that are predicted to be comfortable with driverless cars ( <span class="math inline">\(\hat{y}_i = 1\)</span>) and have observed response of comfortable ( <span class="math inline">\(y_i = 1\)</span>) .</p></li>
+</ul>
+<p>Using these definitions, the general form of accuracy computed in <a href="#eq-logistic-accuracy" class="quarto-xref">Equation&nbsp;<span>12.1</span></a> is</p>
+<p><span id="eq-accuracy-general"><span class="math display">\[
+\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}
+\tag{12.3}\]</span></span></p>
+<div class="yourturn">
+<p>Write the general equation for the misclassification computed in <a href="#eq-logistic-misclassification" class="quarto-xref">Equation&nbsp;<span>12.2</span></a> using the terms in <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+</div>
+<p>Now let’s take a look at additional statistics that help us quantify how well the observations are classified. First, we’ll focus on the column containing those who have observed values <span class="math inline">\(y_i = 1\)</span>.</p>
+<p>The <strong>sensitivity</strong> (<strong>true positive rate</strong>) is the proportion of those with observed <span class="math inline">\(y_i = 1\)</span> that were correctly classified as <span class="math inline">\(\hat{y}_i = 1\)</span>. In machine learning contexts, this value is also called <strong>recall</strong> or <strong>probability of detection</strong>.</p>
+<p><span id="eq-sensitivity"><span class="math display">\[
+\text{Sensitivity} = \frac{\text{True positive}}{\text{False negative} + \text{True positive}}
+\tag{12.4}\]</span></span></p>
+<p>The <strong>false negative rate</strong> is the proportion of those with observed <span class="math inline">\(y_i = 1\)</span> that were incorrectly classified as <span class="math inline">\(\hat{y}_i = 0\)</span>.</p>
+<p><span id="eq-false-negative"><span class="math display">\[
+\text{False negative rate} = \frac{\text{False negative}}{\text{False negative} + \text{True positive}}
+\tag{12.5}\]</span></span></p>
+<p>The false negative rate is equal to <span class="math inline">\(1 - \text{Sensitivity}\)</span> and vice versa. The denominators for the false negative rate and the sensitivity are the total number of observations with observed response <span class="math inline">\(y_i = 1\)</span>. In terms of our analysis, this is the total number of people who responded they are comfortable with driverless cars in the General Social Survey.</p>
+<p>Next, we look at the column of containing those who have observed values of <span class="math inline">\(y_i =0\)</span>.</p>
+<p>The <strong>specificity</strong> (<strong>true negative rate</strong>) is the proportion of those with observed <span class="math inline">\(y_i = 0\)</span> who were correctly classified as <span class="math inline">\(\hat{y}_i = 0\)</span>.</p>
+<p><span id="eq-specificity"><span class="math display">\[
+\text{Specificity} = \frac{\text{True negative}}{\text{True negative} + \text{False positive}}
+\tag{12.6}\]</span></span></p>
+<p>The <strong>false positive rate</strong> is the proportion of those with observed <span class="math inline">\(y_i = 0\)</span> who were incorrectly classified as <span class="math inline">\(\hat{y}_i = 1\)</span>. In machine learning contexts, this value is also called the <strong>probability of false alarm.</strong></p>
+<p><span id="eq-false-positive"><span class="math display">\[
+\text{False positive rate} = \frac{\text{False positive}}{\text{True negative} + \text{False positive}}
+\tag{12.7}\]</span></span></p>
+<p>The false positive rate is equal to <span class="math inline">\(1 - \text{specificity}\)</span>. The denominators for the specificity and false positive rate are the total number of observations with observed response <span class="math inline">\(y_i = 0\)</span>. In terms of our analysis, this is the total number of people who responded they are not comfortable with driverless cars in the General Social Survey.</p>
+<p>The values shown thus far quantify how well observations are classified based on the observed response. Another question that is often of interest is among those with predicted class of <span class="math inline">\(\hat{y}_i = 1\)</span>, how many actually have observed values of <span class="math inline">\(y_i = 1\)</span>? This value is called the <strong>precision.</strong></p>
+<p><span id="eq-precision"><span class="math display">\[
+\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}}
+\tag{12.8}\]</span></span></p>
+<p>Now the denominator is the number of observations that have a predicted class <span class="math inline">\(\hat{y}_i = 1\)</span>, the second row in the <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>. In the context of our analysis, the precision is how many of the individuals who are predicted to be comfortable with driverless cars actually responded on the General Social Survey that they are comfortable with driverless cars. If we’re using the model to identify individuals for a targeted marketing campaign, the precision can be useful in quantifying whether the marketing will generally capture those who are actually comfortable with driverless cars or if a large proportion would be aimed at those who actually aren’t comfortable with driverless cars and likely won’t become robotaxi customers.</p>
+<div class="yourturn">
+<p>Use <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> to compute the following:</p>
+<ul>
+<li><p>Sensitivity</p></li>
+<li><p>Specificity</p></li>
+<li><p>Precision<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p></li>
+</ul>
+</div>
+<p>We have shown how we can derive a lot of useful information from the confusion matrix. As we use the confusion matrix to evaluate how well observations are classified; however, we need to keep in mind that the confusion matrix is determined based on the model predictions <u><strong>and</strong></u> the threshold for classification. For example, in <a href="#tbl-confusion-matrix-0.3" class="quarto-xref">Table&nbsp;<span>12.6</span></a>, we see a confusion matrix for the same model in <span class="citation" data-cites="aidrive-comfort-fit">(<a href="references.html#ref-aidrive-comfort-fit" role="doc-biblioref"><strong>aidrive-comfort-fit?</strong></a>)</span> using the threshold of 0.3.</p>
+<div class="cell">
+<div id="tbl-confusion-matrix-0.3" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-0.3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.6: Confusion matrix using model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and threshold of 0.3
+</figcaption><div aria-describedby="tbl-confusion-matrix-0.3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Observed class
+</div></th>
+</tr>
+<tr class="even">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Pred. class</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">622</td>
+<td style="text-align: right;">814</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Due to the low threshold, there are many more observations classified as <span class="math inline">\(\hat{y}_i = 1\)</span> compared to <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a>. The accuracy rate is now 58.1% and the misclassification rate is 41.9% even though the model hasn’t changed. From this example, we see that even if the model is unchanged, the metrics computed from the confusion matrix will differ based on the threshold. Therefore, we would like a way to evaluate the model performance independent from the choice of threshold.</p>
+</section></section><section id="sec-roc" class="level2" data-number="12.4"><h2 data-number="12.4" class="anchored" data-anchor-id="sec-roc">
+<span class="header-section-number">12.4</span> ROC Curve</h2>
+<p>Ideally, we want a way to evaluate the the model performance regardless of threshold and then choose a threshold that results in the “best” classification as determined by the statistics from the previous section. We could make confusion matrices across a range of thresholds, but this process could be cumbersome and time consuming to make so many confusion matrices. Rather than make individual confusion matrices, we will use the <strong>receiving operator characteristic (ROC) curve</strong> shown in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.3</span></a>. The ROC curve is a single visualization to holistically evaluate the model fit and see how well the model classifies at different thresholds. We can use the data from the ROC curve to choose a classification threshold. <!--# add something about origin of ROC curve or where it gets its name--></p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-aidrive-comfort-roc-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-aidrive-comfort-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-comfort-roc-curve-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;12.3: ROC curve for model in Table&nbsp;tbl-aidrive-comfort-fit with point marked at threshold = 0.4754"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-comfort-roc-curve-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aidrive-comfort-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.3: ROC curve for model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> with point marked at threshold = 0.4754
+</figcaption></figure>
+</div>
+</div>
+</div>
+<!--# need to update this graph so that it is not a direct copy of Mine's, including the colors-->
+<p><a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> is the ROC curve for the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a>. The <span class="math inline">\(x\)</span>-axis on the ROC curve is <span class="math inline">\(1 - \text{Specificity}\)</span>, the false positive rate, and the <span class="math inline">\(y\)</span>-axis is <span class="math inline">\(\text{Sensitivity}\)</span>, the true positive rate. Thus, the ROC curve is a visualization of the true positive rate versus the false positive rate at classification thresholds ranging from 0 to 1 (equivalent to the log odds ranging from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(\infty\)</span>). The diagonal line represents a model fit in which the true positive rate and false positives are equal regardless of the threshold. This means the model is unable to distinguish the observations that actually have an observed response of <span class="math inline">\(y_i = 1\)</span> versus those that do not, so it is essentially the same as using a coin flip to classify observations (not a good model!). In contrast, ROC curves that hit closer to the top-left corner indicate a model that is good at distinguishing true positives and false positives.</p>
+<div id="fig-roc-curve-examples" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-roc-curve-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-roc-curve-examples-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-1.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.4&nbsp;(a): Poor distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Poor distinction
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-roc-curve-examples-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-2.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.4&nbsp;(b): Good distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Good distinction
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-roc-curve-examples-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-3.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.4&nbsp;(c): Nearly perfect distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) Nearly perfect distinction
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-curve-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.4: Example ROC curves for different model performs
+</figcaption></figure>
+</div>
+<!--# think of better words than distinction?-->
+<p><a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> shows example ROC curves for different model fits. <a href="#fig-roc-curve-examples-1" class="quarto-xref">Figure&nbsp;<span>12.4 (a)</span></a> is the ROC curve for a model that does a poor job distinguishing between the true positives and false positives (close to the diagonal line) and <a href="#fig-roc-curve-examples-3" class="quarto-xref">Figure&nbsp;<span>12.4 (c)</span></a> is the ROC curve for a model that almost perfectly distinguishes between the true and false positives (close to the top-left corner). Generally, we expect to see ROC curves somewhere in the middle, similar to <a href="#fig-roc-curve-examples-2" class="quarto-xref">Figure&nbsp;<span>12.4 (b)</span></a>. Here, the model generally does a good job distinguishing between the true and false positives, but we will expect to get some false positives if we want a high true positive rate (sensitivity).</p>
+<p>Each point in the ROC curve is <span class="math inline">\((1 - \text{Specificity, } \text{Sensitivity})\)</span> at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> shows corresponds to <span class="math inline">\(1 - \text{Specificity} = 0.525\)</span> and <span class="math inline">\(\text{Sensitivity} = 0.75\)</span>. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a>. Observations with predicted probability <span class="math inline">\(\hat{\pi}_i &gt; 0.4888088\)</span> are classified as being comfortable with driverless cars, and those with <span class="math inline">\(\hat{\pi}_i \leq 0.4888088\)</span> are classified as not being comfortable with driverless cars.</p>
+<div class="cell" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
+<div id="tbl-aidrive-roc-confmat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.7
+</figcaption><div aria-describedby="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Observed class
+</div></th>
+</tr>
+<tr class="even">
+<th style="text-align: left;" data-quarto-table-cell-role="th">pred_class3</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">329</td>
+<td style="text-align: right;">207</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">363</td>
+<td style="text-align: right;">622</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<!--# would be nice to have the roc curve and confusion mat side-by-side-->
+<div class="yourturn">
+<p>Compute the sensitivity and specificity from <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a> and compare these to the values observed on the curve in <span class="quarto-unresolved-ref">?fig-aidrive-roc</span>.</p>
+</div>
+<p>In the next section, we will talk more about using the ROC curve to evaluate the model fit beyond a visual assessment. For now, let’s discuss how to use the ROC curve to determine a probability threshold for classification. When we use a model for classification, we want a high true positive rate and a low false positive rate. Therefore, one of the most straightforward ways of using the ROC curve to identify a classification threshold is to choose the threshold that corresponds to the point on the curve that is closest to the top-left corner. <!--# This will be the point that has the best ratio of true positive rate to false positive rate. not sure if that is true--> <!--# does this relate to that F1 metric from machine learning?-->. There are many ways to identify this point mathematically. For example, we can find the combination of <span class="math inline">\(\text{Sensitivity}\)</span> and <span class="math inline">\(1 - \text{Specificity}\)</span> that minimizes the following:</p>
+<p><span class="math display">\[
+\sqrt{(1 - \text{Specificity})^2 + (\text{Sensitivity} - 1)^2}
+\]</span></p>
+<!--# verify this equation is correct.-->
+<p>In terms of the ROC curve in <span class="quarto-unresolved-ref">?fig-aidrive-roc</span>, this point is at a false positive rate of and true positive rate of 0.612, corresponding to a threshold of 0.552.</p>
+<p>While this may be a reasonable approach for identifying a threshold in many contexts, we often need to consider the practical implications when making analysis decisions in practice. For example, suppose we build a logistic regression model to diagnosis a medical illness. A classification of “1” means the patient has the illness and undergoes a treatment plan. A classification of “0” means the patient does not have the illness and does not undergo a treatment plan.</p>
+<div class="yourturn">
+<p>What is a “true positive” in this scenario? What is a “false positive”?<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+</div>
+<p>When determining the probability threshold for classification, we need to think carefully about the implications of the analysis decision. More specifically, one thing we need to consider is the severity of the treatment the patient will undergo. If the treatment is minimal, then perhaps we might be willing to set a threshold that results in more false positives. If the treatment is very invasive, however, we want to minimize false positives. Otherwise, there will be many patients who do not need the treatment who will undergo an invasive treatment. Similarly, we want to consider the implications of lower sensitivity and not diagnosing individuals who actually have the illness.</p>
+<div class="yourturn">
+<ul>
+<li><p>If the main objective is high sensitivity, do we set a probability threshold closer to 0 or to 1?</p></li>
+<li><p>If the main objective is high specificity, do we set a probability threshold closer to 0 or to 1?<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p></li>
+</ul>
+</div>
+</section><section id="sec-logistic-model-eval" class="level2" data-number="12.5"><h2 data-number="12.5" class="anchored" data-anchor-id="sec-logistic-model-eval">
+<span class="header-section-number">12.5</span> Model evaluation and comparison</h2>
+<p>In <a href="#sec-classification" class="quarto-xref"><span>Section 12.3.2</span></a>, we discussed methods for evaluating how well a model classifies observations at a given threshold. As in linear regression, we want to quantify the overall model fit, independent of the threshold, so we can evaluate how well the model fits the data and compare multiple models.</p>
+<section id="area-under-the-curve-auc" class="level3" data-number="12.5.1"><h3 data-number="12.5.1" class="anchored" data-anchor-id="area-under-the-curve-auc">
+<span class="header-section-number">12.5.1</span> Area Under the Curve (AUC)</h3>
+<p>The ROC curve visualizes how well the model differentiates between true positives and false positives for the full range of classification thresholds 0 to 1. Therefore, in addition to helping us identify a classification threshold, it can be used to evaluate the model performance. The <strong>Area Under the Curve (AUC)</strong> is a measure of the model performance and is computed as the area under the ROC curve. The values of AUC range from 0.5 to 1. An <span class="math inline">\(AUC = 0.5\)</span> corresponds to an ROC curve on the diagonal line, indicating the model is unable to distinguish between true and false positives. An <span class="math inline">\(AUC = 1\)</span> corresponds to a curve that meets the top-left corner, indicating the model is able to perfectly distinguish between true and false positives.</p>
+<div id="fig-roc-curve-examples-auc" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-roc-curve-examples-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples-auc" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-roc-curve-examples-auc-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-auc-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-1.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.5&nbsp;(a): AUC = 0.57"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-auc-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) AUC = 0.57
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples-auc" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-roc-curve-examples-auc-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-auc-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-2.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.5&nbsp;(b): AUC = 0.79"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-auc-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) AUC = 0.79
+</figcaption></figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples-auc" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div id="fig-roc-curve-examples-auc-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-auc-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-3.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.5&nbsp;(c): AUC = 0.99"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-auc-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) AUC = 0.99
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-curve-examples-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.5: Examle ROC curves with corresponding AUC
+</figcaption></figure>
+</div>
+<p><a href="#fig-roc-curve-examples-auc" class="quarto-xref">Figure&nbsp;<span>12.5</span></a> shows the ROC curves from <a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> along with the AUC for each curve. Similar to <span class="math inline">\(R^2\)</span> for linear regression (<a href="04-slr.html#sec-slr-sum-sq" class="quarto-xref"><span>Section 4.7.2</span></a>), we prefer models with AUC close to 1. However, there is no single threshold that defines “good” AUC. What is considered a “good” AUC depends on the subject matter context and complexity of the modeling task.</p>
+<p>The AUC for the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> is 0.664. Predicting individuals’ opinions is a complex modeling task, so the model is a reasonably good fit for the data. We are only using three predictors, however, so we will consider other predictors in <a href="#sec-logistic-workflow" class="quarto-xref"><span>Section 12.7</span></a> to potentially improve the model performance.</p>
+<div class="analysis_in_practice">
+<p>Though we prefer models with high values of AUC (close to 1), we do not want a model in which <span class="math inline">\(AUC = 1\)</span> exactly. When the <span class="math inline">\(AUC  =1\)</span>, it means the model has perfect separation, the ability to perfectly distinguish between the true positives and false positives. Though this may seem like ideal model performance, it is often a sign that the model is overfit <!--# do a i make a call back to the earlier section--> and will not effectively classify observations in new data.</p>
+</div>
+</section><section id="sec-logistic-aic-bic" class="level3" data-number="12.5.2"><h3 data-number="12.5.2" class="anchored" data-anchor-id="sec-logistic-aic-bic">
+<span class="header-section-number">12.5.2</span> Comparing models using AIC and BIC</h3>
+<p>Similar to linear regression, we can use the Akaike’s Information Criterion (AIC) <span class="citation" data-cites="akaike1974">(<a href="references.html#ref-akaike1974" role="doc-biblioref">Akaike 1974</a>)</span> and the Bayesian Schwarz’s Criterion (BIC) <span class="citation" data-cites="schwarz1978estimating">(<a href="references.html#ref-schwarz1978estimating" role="doc-biblioref">Schwarz 1978</a>)</span> as relative measures for comparing logistic regression models. The equations for AIC and BIC in logistic regression are the same as these in linear regression <a href="10-model-eval.html#sec-aic-bic" class="quarto-xref"><span>Section 10.2.3</span></a>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\text{AIC} = -2 \log L + 2(p+1) \\[5pt]
+&amp;\text{BIC} = -2 \log L + \log(n)(p+1)
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\log L\)</span> is the log-likelihood of the model, <span class="math inline">\(n\)</span> is the number of observations, and <span class="math inline">\(p + 1\)</span> is the number of terms in the model. The penalty applied by BIC for the number of predictors in the model is greater than the penalty applied in AIC, as <span class="math inline">\(\log(n) &gt; 2\)</span> (when <span class="math inline">\(n &gt; 8\)</span>). Therefore, BIC will tend to preference more parsimonious models, those with a fewer number of predictors. The values of AIC and BIC are not meaningful to interpret for individual models. These values are most useful for comparing models in the model selection process. When using AIC and BIC to compare models, we can use the guidelines in <a href="10-model-eval.html#tbl-aic-bic-guidelines" class="quarto-xref">Table&nbsp;<span>10.3</span></a>, the same as with linear regression.</p>
+<p>Let’s use AIC and BIC to compare the model from <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> to a model that includes the same predictors along with <code>polviews</code> (how individuals rate their political views) and <code>tech_harm</code> (whether an individual thinks technology generally does more harm than good).</p>
+<div class="cell">
+<div id="tbl-aic-bic-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aic-bic-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.8: AIC and BIC for two candidate models
+</figcaption><div aria-describedby="tbl-aic-bic-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">age, income, tech_easy</td>
+<td style="text-align: right;">1984</td>
+<td style="text-align: right;">2032</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">age, income, tech_easy, polviews, tech_harm</td>
+<td style="text-align: right;">1730</td>
+<td style="text-align: right;">1782</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-aic-bic-compare" class="quarto-xref">Table&nbsp;<span>12.8</span></a> shows AIC and BIC for both models. Based on these measures, there is very strong evidence in favor of the model that includes the additional predictors <code>polviews</code> and <code>tech_harm</code>.</p>
+<!--# include log-loss, cross entropy? Is this too much machine learning?  -->
+<!--# Drop-in-deviance test - this should go in inference-->
+</section></section><section id="sec-logistic-prediction-R" class="level2" data-number="12.6"><h2 data-number="12.6" class="anchored" data-anchor-id="sec-logistic-prediction-R">
+<span class="header-section-number">12.6</span> Prediction and evaluation in R</h2>
+<section id="prediction-and-classification-1" class="level3" data-number="12.6.1"><h3 data-number="12.6.1" class="anchored" data-anchor-id="prediction-and-classification-1">
+<span class="header-section-number">12.6.1</span> Prediction and classification</h3>
+<p>Many of the functions for prediction and evaluation for logistic regression are the same as those used in linear regression. The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function is used to compute predictions from the logistic regression model. The predicted logit can also be obtained from the <code>.fitted</code> column in the data produced by the <code>augment()</code> function.</p>
+<p>Below is the code to fit the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and produce the predicted log odds. The predictions for the first 10 observations are shown.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">aidrive_comfort_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">aidrive_comfort</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">tech_easy</span> <span class="op">+</span> <span class="va">income_fct</span>, </span>
+<span>                           data <span class="op">=</span> <span class="va">gss24_ai</span>, </span>
+<span>                           family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">aidrive_comfort_fit</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      1       2       3       4       5       6       7       8       9      10 
+ 1.3061  0.9528 -0.0258 -1.0516 -0.8967  0.6411  0.8279  0.4817 -0.3228  1.0192 </code></pre>
+</div>
+</div>
+<p>The predicted probabilities can be computed directly using the argument <code>type = "response"</code> in <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">aidrive_comfort_fit</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>    1     2     3     4     5     6     7     8     9    10 
+0.787 0.722 0.494 0.259 0.290 0.655 0.696 0.618 0.420 0.735 </code></pre>
+</div>
+</div>
+<p>The predicted classes can be computed “manually” using the predicted probabilities and <strong>dplyr</strong> functions. Below is code to compute the predicted probabilities, predict the classes based on a threshold of 0.5, and add these as columns to the original <code>gss24_ai</code> data frame. The predicted probability and class for the first 10 observations are shown below.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gss24_ai</span> <span class="op">&lt;-</span> <span class="va">gss24_ai</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>pred_prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">aidrive_comfort_fit</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span>,</span>
+<span>         pred_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu">if_else</span><span class="op">(</span><span class="va">pred_prob</span> <span class="op">&gt;</span> <span class="fl">0.5</span>, <span class="st">"1"</span>, <span class="st">"0"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+  pred_prob pred_class
+      &lt;dbl&gt; &lt;fct&gt;     
+1     0.787 1         
+2     0.722 1         
+3     0.494 0         
+4     0.259 0         
+5     0.290 0         
+6     0.655 1         
+# ℹ 4 more rows</code></pre>
+</div>
+</div>
+</section><section id="confusion-matrix-and-roc-curve" class="level3" data-number="12.6.2"><h3 data-number="12.6.2" class="anchored" data-anchor-id="confusion-matrix-and-roc-curve">
+<span class="header-section-number">12.6.2</span> Confusion matrix and ROC curve</h3>
+<p>We use the predicted probabilities and predicted classes to make the confusion matrix is using the <code>conf_mat()</code> function from the <strong>yardstick</strong> package <span class="citation" data-cites="yardstick">(<a href="references.html#ref-yardstick" role="doc-biblioref">Kuhn, Vaughan, and Hvitfeldt 2025</a>)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">aidrive_conf_mat</span> <span class="op">&lt;-</span> <span class="va">gss24_ai</span> <span class="op">|&gt;</span></span>
+<span><span class="fu">conf_mat</span><span class="op">(</span><span class="va">aidrive_comfort</span>, <span class="va">pred_class</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">aidrive_conf_mat</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Truth
+Prediction   0   1
+         0 349 228
+         1 343 601</code></pre>
+</div>
+</div>
+<p>The <code>autoplot()</code> function produces the same confusion matrix with some additional formatting applied. For example, the argument <code>type = "heatmap"</code> produces a confusion matrix in which the cells are shaded in based on the number of observations.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">aidrive_conf_mat</span>, type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <code>roc_curve</code> function is used to compute the data for the ROC curve. Ten data points from the ROC curve data are shown below.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">aidrive_roc_data</span> <span class="op">&lt;-</span> <span class="va">gss24_ai</span> <span class="op">|&gt;</span></span>
+<span><span class="fu">roc_curve</span><span class="op">(</span><span class="va">aidrive_comfort</span>, <span class="va">pred_prob</span>, event_level <span class="op">=</span> <span class="st">"second"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+  .threshold specificity sensitivity
+       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+1      0.367      0.188        0.935
+2      0.283      0.0679       0.984
+3      0.432      0.308        0.852
+4      0.525      0.571        0.665
+5      0.430      0.305        0.856
+6      0.319      0.121        0.972
+# ℹ 4 more rows</code></pre>
+</div>
+</div>
+<p>The argument <code>event_level = "second"</code> is needed to specify that the predicted probability is associated with the probability that <span class="math inline">\(y_i = 1\)</span> (rather than the probability <span class="math inline">\(y_i = 0\)</span>). The <code>.threshold</code> column contains the classification thresholds.</p>
+<p>The ROC curve data can be plotted using the <code>autoplot()</code> function. The resulting graph is <code>ggplot</code> object, so additional <strong>ggplot2</strong> layers such as <code>labs</code> and <code>annotate</code> can be applied to the ROC curve.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">aidrive_roc_data</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"ROC Curve"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="model-evaluation" class="level3" data-number="12.6.3"><h3 data-number="12.6.3" class="anchored" data-anchor-id="model-evaluation">
+<span class="header-section-number">12.6.3</span> Model evaluation</h3>
+<p>The <code>roc_auc()</code> function is used to compute the Area Under the Curve using the predicted probabilities and predicted classes. It follows a similar syntax as <code>roc_curve()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gss24_ai</span> <span class="op">|&gt;</span> </span>
+<span><span class="fu">roc_auc</span><span class="op">(</span><span class="va">aidrive_comfort</span>, <span class="va">pred_prob</span>, event_level <span class="op">=</span> <span class="st">"second"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 roc_auc binary         0.664</code></pre>
+</div>
+</div>
+<p>The last model comparison statistics, AIC and BIC, are computed from the <code>glance()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">glance</span><span class="op">(</span><span class="va">aidrive_comfort_fit</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 8
+  null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
+          &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+1         2096.    1520  -983. 1984. 2032.    1966.        1512  1521</code></pre>
+</div>
+</div>
+<p>Note that the output from <code>glance()</code> does not include <span class="math inline">\(R^2\)</span> and Adj. <span class="math inline">\(R^2\)</span> as it does in linear regression, because we do not use the ANOVA-based statistics in logistic regression.</p>
+</section></section><section id="sec-logistic-workflow" class="level2" data-number="12.7"><h2 data-number="12.7" class="anchored" data-anchor-id="sec-logistic-workflow">
+<span class="header-section-number">12.7</span> Modeling building workflow in R</h2>
+<p>Let’s put together what we learned about model selection in <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a> and evaluating logistic regression models in <a href="#sec-logistic-model-eval" class="quarto-xref"><span>Section 12.5</span></a> to illustrate an example model building workflow for logistic regression. Here, we will split the data into training and testing sets, and use cross validation with AUC as the criteria for choosing between two candidate models.</p>
+<p>The first model is the one we’ve analyzed in this chapter that includes the predictors <code>age</code>, <code>tech_easy</code> and <code>income</code>. The second model will use these predictors along with <code>polviews</code> and <code>tech_harm</code>.</p>
+<p>First, we define the training and testing sets. We’ll use simple random sampling to assign 80% of the observations to the training set and 20% of the observations to the testing set.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
+<span><span class="va">aidrive_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">gss24_ai</span>, prop <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="va">aidrive_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">aidrive_split</span><span class="op">)</span></span>
+<span><span class="va">aidrive_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">aidrive_split</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can use the training data to evaluate the conditions for logistic regression, linearity and independence. We evaluated these conditions in <a href="11-logistic.html#sec-logistic-conditions" class="quarto-xref"><span>Section 11.6</span></a> and determined they were satisfied. Therefore, we proceed with modeling and split the data into 5 folds for cross validation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">aidrive_train</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next, we conduct 5-fold cross validation for Model 1 with the predictors <code>age</code>, <code>tech_easy</code>, and <code>income</code>. We collect a summary of the metrics in cross validation in the objective <code>aidrive_cv_1_metrics</code>. Because we are fitting logistic regression models, <code>collect_metrics()</code> uses AUC to measure the model performance.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># cross validation workflow for Model 1</span></span>
+<span><span class="va">aidrive_workflow_1</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_formula</span><span class="op">(</span><span class="va">aidrive_comfort</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">tech_easy</span> <span class="op">+</span> <span class="va">income_fct</span><span class="op">)</span> </span>
+<span>  </span>
+<span><span class="va">aidrive_cv_1</span> <span class="op">&lt;-</span> <span class="va">aidrive_workflow_1</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">folds</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">aidrive_cv_1_metrics</span> <span class="op">&lt;-</span> <span class="fu">collect_metrics</span><span class="op">(</span><span class="va">aidrive_cv_1</span>, summarize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We repeat the process of cross validation for Mode 2 that includes the predictors <code>age</code>, <code>tech_easy</code>, <code>income_fct</code>, <code>polviews_fct</code>, and <code>tech_harm</code>. The performance metrics from cross validation are stored in the object <code>aidrive_cv_2_metrics</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># cross validation workflow for Model 2</span></span>
+<span><span class="va">aidrive_workflow_2</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_formula</span><span class="op">(</span><span class="va">aidrive_comfort</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">tech_easy</span> <span class="op">+</span> <span class="va">income_fct</span> <span class="op">+</span> </span>
+<span>                <span class="va">polviews_fct</span> <span class="op">+</span> <span class="va">tech_harm</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="va">aidrive_cv_2</span> <span class="op">&lt;-</span> <span class="va">aidrive_workflow_2</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">folds</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">aidrive_cv_2_metrics</span> <span class="op">&lt;-</span> <span class="fu">collect_metrics</span><span class="op">(</span><span class="va">aidrive_cv_2</span>, summarize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now let’s look at the average AUC across the 5-fold cross validation for each model. When we do cross validation, the AUC is computed based on a ROC curve fit on the assessment data in each fold. This gives us a view of how well each model performs on new data.</p>
+<p><strong>Model 1</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">aidrive_cv_1_metrics</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">.metric</span> <span class="op">==</span> <span class="st">"roc_auc"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  .metric .estimator  mean     n std_err .config        
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
+1 roc_auc binary     0.649     5 0.00737 pre0_mod0_post0</code></pre>
+</div>
+</div>
+<p><strong>Model 2</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">aidrive_cv_2_metrics</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">.metric</span> <span class="op">==</span> <span class="st">"roc_auc"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  .metric .estimator  mean     n std_err .config        
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
+1 roc_auc binary     0.674     5 0.00895 pre0_mod0_post0</code></pre>
+</div>
+</div>
+<p>The average AUC is 0.649 for Model 1 and 0.674 for Model 2. Therefore, we select Model 2 that includes the additional predictors <code>tech_harm</code> and <code>polviews_fct</code>, because it has the higher average AUC across the five folds. This is consistent with the conclusion from AIC and BIC in <a href="#sec-logistic-aic-bic" class="quarto-xref"><span>Section 12.5.2</span></a>. In practice, we will likely consider more than two models, for example, we might consider models with interaction terms or transformations. We will conduct cross validation and compare average AUC for each candidate model. For simplicity, we will only compare two models here and proceed with Model 2 as the final model.</p>
+<p>Now that we have selected the final model we refit this model on the entire training set, and we use the testing set to compute AUC as a final evaluation of how well the model performs on new data. We compute the predicted probabilities and construct the ROC curve on the testing data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># refit model on full training set</span></span>
+<span><span class="va">aidrive_comfort_final</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">aidrive_comfort</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">tech_easy</span> <span class="op">+</span> </span>
+<span>                               <span class="va">income_fct</span> <span class="op">+</span> <span class="va">tech_harm</span> <span class="op">+</span> <span class="va">polviews_fct</span>, </span>
+<span>                             data <span class="op">=</span> <span class="va">aidrive_train</span>, </span>
+<span>                             family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># compute predicted probabilities </span></span>
+<span><span class="va">aidrive_test</span> <span class="op">&lt;-</span> <span class="va">aidrive_test</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>pred_prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">aidrive_comfort_final</span>, newdata <span class="op">=</span> <span class="va">aidrive_test</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># make roc curve </span></span>
+<span><span class="va">aidrive_test</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu">roc_curve</span><span class="op">(</span><span class="va">aidrive_comfort</span>, </span>
+<span>              <span class="va">pred_prob</span>, </span>
+<span>            event_level <span class="op">=</span> <span class="st">"second"</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The AUC for the testing data is 0.692. Given the analysis task of modeling individuals’ opinions, this model performs reasonably well in classifying individuals who are comfortable with driverless cars versus those who are not.</p>
+<p>As a final step, we refit the model using all observations in the data. At this point, we are ready to use the model for interpretation, drawing inferential conclusions, and to put into production for prediction and classification.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">aidrive_comfort</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">tech_easy</span> <span class="op">+</span> </span>
+<span>                               <span class="va">income_fct</span> <span class="op">+</span> <span class="va">tech_harm</span> <span class="op">+</span> <span class="va">polviews_fct</span>, </span>
+<span>                             data <span class="op">=</span> <span class="va">gss24_ai</span>, </span>
+<span>                             family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">kable</span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">0.203</td>
+<td style="text-align: right;">0.254</td>
+<td style="text-align: right;">0.798</td>
+<td style="text-align: right;">0.425</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">age</td>
+<td style="text-align: right;">-0.017</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">-5.334</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tech_easyCan’t choose</td>
+<td style="text-align: right;">0.226</td>
+<td style="text-align: right;">0.484</td>
+<td style="text-align: right;">0.467</td>
+<td style="text-align: right;">0.640</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tech_easyAgree</td>
+<td style="text-align: right;">0.381</td>
+<td style="text-align: right;">0.163</td>
+<td style="text-align: right;">2.339</td>
+<td style="text-align: right;">0.019</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tech_easyDisagree</td>
+<td style="text-align: right;">-0.355</td>
+<td style="text-align: right;">0.309</td>
+<td style="text-align: right;">-1.149</td>
+<td style="text-align: right;">0.251</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">income_fct$20-50k</td>
+<td style="text-align: right;">0.244</td>
+<td style="text-align: right;">0.181</td>
+<td style="text-align: right;">1.349</td>
+<td style="text-align: right;">0.177</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">income_fct$50-110k</td>
+<td style="text-align: right;">0.481</td>
+<td style="text-align: right;">0.174</td>
+<td style="text-align: right;">2.771</td>
+<td style="text-align: right;">0.006</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">income_fct$110k or more</td>
+<td style="text-align: right;">1.133</td>
+<td style="text-align: right;">0.187</td>
+<td style="text-align: right;">6.062</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">income_fctNot reported</td>
+<td style="text-align: right;">0.302</td>
+<td style="text-align: right;">0.224</td>
+<td style="text-align: right;">1.350</td>
+<td style="text-align: right;">0.177</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tech_harmCan’t choose</td>
+<td style="text-align: right;">-0.402</td>
+<td style="text-align: right;">0.423</td>
+<td style="text-align: right;">-0.949</td>
+<td style="text-align: right;">0.343</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tech_harmAgree</td>
+<td style="text-align: right;">-0.378</td>
+<td style="text-align: right;">0.148</td>
+<td style="text-align: right;">-2.555</td>
+<td style="text-align: right;">0.011</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tech_harmDisagree</td>
+<td style="text-align: right;">0.394</td>
+<td style="text-align: right;">0.134</td>
+<td style="text-align: right;">2.934</td>
+<td style="text-align: right;">0.003</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">polviews_fctLiberal</td>
+<td style="text-align: right;">0.286</td>
+<td style="text-align: right;">0.141</td>
+<td style="text-align: right;">2.024</td>
+<td style="text-align: right;">0.043</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">polviews_fctConservative</td>
+<td style="text-align: right;">-0.167</td>
+<td style="text-align: right;">0.135</td>
+<td style="text-align: right;">-1.239</td>
+<td style="text-align: right;">0.215</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">polviews_fctNot reported</td>
+<td style="text-align: right;">-0.443</td>
+<td style="text-align: right;">0.295</td>
+<td style="text-align: right;">-1.502</td>
+<td style="text-align: right;">0.133</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section><section id="summary" class="level2" data-number="12.8"><h2 data-number="12.8" class="anchored" data-anchor-id="summary">
+<span class="header-section-number">12.8</span> Summary</h2>
+<p>In this chapter, we expanded on the introduction to logistic regression in <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, as we used the logistic regression model to compute predicted log odds, odds, and probabilities. We then used the predicted values to classify observations into <span class="math inline">\(\hat{Y} = 0\)</span> or <span class="math inline">\(\hat{Y} = 1\)</span> . We constructed confusion matrices to evaluate the model performance at individual thresholds, and evaluated classification results using statistics such as sensitivity and specificity, among others. We used the ROC curve to select a classification threshold and computed the area under the curve (AUC) to more holistically evaluate the model fit. We also computed AIC and BIC for model comparison. We applied the model building practices from <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a> to compare two models using a cross validation workflow.</p>
+<p>In the <a href="13-special-topics.html" class="quarto-xref"><span>Chapter 13</span></a>, we conclude with some advanced modeling techniques and special topics for analysis in practice.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-akaike1974" class="csl-entry" role="listitem">
+Akaike, H. 1974. <span>“A New Look at the Statistical Model Identification.”</span> <em>IEEE Transactions on Automatic Control</em> 19 (6): 716–23. <a href="https://doi.org/10.1109/TAC.1974.1100705">https://doi.org/10.1109/TAC.1974.1100705</a>.
+</div>
+<div id="ref-gss2024" class="csl-entry" role="listitem">
+Davern, Michael, Rene Bautista, Jeremy Freese, Pamela Herd, and Stephen L. Morgan. 2025. <span>“General Social Survey 1972–2024.”</span> NORC at the University of Chicago; [Machine-readable data file]. <a href="https://gss.norc.org/content/dam/gss/get-documentation/pdf/codebook/GSS%202024%20Codebook.pdf">https://gss.norc.org/content/dam/gss/get-documentation/pdf/codebook/GSS%202024%20Codebook.pdf</a>.
+</div>
+<div id="ref-jabkowski2024not" class="csl-entry" role="listitem">
+Jabkowski, Piotr, and Aneta Piekut. 2024. <span>“Not Random and Not Ignorable. An Examination of Nonresponse to Income Question in the European Social Survey, 2008–2018.”</span> <em>Field Methods</em> 36 (3): 213–28.
+</div>
+<div id="ref-yardstick" class="csl-entry" role="listitem">
+Kuhn, Max, Davis Vaughan, and Emil Hvitfeldt. 2025. <span>“Yardstick: Tidy Characterizations of Model Performance.”</span> <a href="https://doi.org/10.32614/CRAN.package.yardstick">https://doi.org/10.32614/CRAN.package.yardstick</a>.
+</div>
+<div id="ref-schwarz1978estimating" class="csl-entry" role="listitem">
+Schwarz, Gideon. 1978. <span>“Estimating the Dimension of a Model.”</span> <em>The Annals of Statistics</em>, 461–64.
+</div>
+</div>
+</section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
+<ol>
+<li id="fn1"><p>Yes, the coefficients and confidence intervals for the indicators for <code>income_fct s</code>upport the observations from the EDA. The indicators for higher income, <code>$50-110K</code>, and <code>$110k or more</code> are positive. Thus, those with higher income are more likely to be comfortable with driverless cars compared to individuals in the lowest level, after adjusting for <code>age</code> and <code>tech_easy</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2">
+<p><strong>Log odds:</strong> <span class="math inline">\(\log \Big(\frac{\hat{\pi}}{1-\hat{\pi}}\Big) =  0.032 - 0.016  \times 19 + 0.075   \times 0 +  0.576 \times 0
+- 0.436  \times 0 +  0.264 \times 0 +  0.526  \times 0
++ 1.223  \times 1 + 0.265 \times 0 = 0.951\)</span></p>
+<p><strong>Odds:</strong> <span class="math inline">\(e^{\log(\frac{\hat{\pi}}{1-\hat{\pi}})} = e^{0.953} = 2.59\)</span></p>
+<p><strong>Probability:</strong> <span class="math inline">\(\frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{2.593}{1 + 2.593} = 0.722\)</span><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p>
+</li>
+<li id="fn3"><p><span class="math display">\[\text{misclassification} = \frac{\text{False negative} + \text{False positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}
+\]</span><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><span class="math display">\[\begin{aligned}\text{Sensitivity} &amp;= 601/ (228 + 601) = 0.725 \\ \text{Specificity} &amp;= 349 / (349 + 343) = 0.504 \\\text{Precision} &amp;= 601 / (343 + 601) = 0.637\end{aligned}\]</span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>A true positive is correctly classifying a patient with the illness as a “1”, having the illness. A “false positive” is incorrectly classifying a patient that doesn’t have the illness as a “1”, having the illness.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>If the main objective is high sensitivity, we set a low threshold close to 0. If the main objective is high specificity, we set a high threshold close to 1.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/introregressio\.netlify\.app");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./11-logistic.html" class="pagination-link" aria-label="Logistic regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Logistic regression</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./13-special-topics.html" class="pagination-link" aria-label="Special topics">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Special topics</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer><script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+</body></html>
