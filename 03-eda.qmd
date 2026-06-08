@@ -1327,7 +1327,7 @@ From @fig-multivar-eda, the relationship between `avg_rating` and `chef_john` is
 
 Much of the exploratory data analysis in this chapter is done using functions from the **dplyr** and **ggplot2** packages. We refer the reader to @sec-ch-computing for a more detailed introduction to those packages. Here we will focus on the new functions that were used in this chapter: `skim()` in @sec-univar-eda-quant, `waffle()` in @sec-univar-eda-cat, `geom_ridges()` in @sec-bivar-eda-quant-cat, and `geom_mosaic()` in @sec-bivar-eda-cat-cat.
 
-### Data summaries
+### Data summaries  {#sec-eda-data-summaries}
 
 The `skim()` function in the **skimr** R package [@skimr] provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data [@sec-initial-check] and univariate data analysis ([@sec-univar-eda]). The code below produces a summary for each column `recipes`. Different types of summary output is produced based on the column's data format.
 

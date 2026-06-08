@@ -1,4 +1,812 @@
-## Notes
+# Notes
+
+Link to track time writing:
+
+<https://docs.google.com/spreadsheets/d/1W4gUNBltUuzhOeyokZ_eA5FssLHQoto4AOXeN1nMngs/edit?gid=0#gid=0>
+
+# Things used throughout book
+
+## Color palette
+
+-   PNW Palettes: <https://github.com/jakelawlor/PNWColors>
+
+-   Using Sunset2
+
+    -   Don't love the 2-color palette
+
+# Chapter notes
+
+### Definition of regression analysis
+
+> Response from ChatGPT to the prompt "What is regression analysis" on May 29, 2025:\
+> \
+> ***Regression analysis** is a statistical method used to examine the relationship between one dependent variable (also called the outcome or response variable) and one or more independent variables (also known as predictors or explanatory variables). The goal is to model how changes in the independent variables affect the dependent variable.*
+>
+> **Key Concepts:**
+>
+> -   **Dependent variable (Y):** The outcome you're trying to predict or explain.
+>
+> -   **Independent variable(s) (X):** The input(s) used to make predictions or explain the outcome.
+
+### Definition of data science
+
+Response from ChatGPT to the prompt "What is data science" on May 29, 2025
+
+**Data science** is an interdisciplinary field that focuses on extracting meaningful insights, patterns, and knowledge from data using a combination of techniques from **statistics, computer science, mathematics, and domain expertise**.
+
+### Key Components of Data Science:
+
+1.  **Data Collection** Gathering raw data from various sources like databases, sensors, social media, APIs, etc.
+2.  **Data Cleaning and Preparation** Removing errors, handling missing values, transforming data types, and organizing the data into a usable format.
+3.  **Exploratory Data Analysis (EDA)** Summarizing the main characteristics of the data, often using visualizations and descriptive statistics.
+4.  **Statistical Modeling & Machine Learning** Building models to make predictions or understand relationships in data. This includes techniques like:
+    -   Regression
+    -   Classification
+    -   Clustering
+    -   Decision trees
+    -   Neural networks
+5.  **Data Visualization** Creating charts, graphs, and dashboards to help communicate findings clearly and effectively.
+6.  **Interpretation and Communication** Translating technical results into actionable business or research insights.
+7.  **Deployment** Integrating models into real-world applications (e.g., recommendation engines, fraud detection systems).
+
+-   Read Modern Data Science with R introduction about what data science is: <https://mdsr-book.github.io/mdsr3e/01-intro.html>
+-   Read Hadley Wickham 2014 article on Data Science: <https://imstat.org/2014/09/04/data-science-how-is-it-different-to-statistics/>
+
+## Chapter 1: Introduction
+
+-   Introduce terms response and predictor ehre.
+-   Add some regression analysis cycle that starts with EDA or something - use the 210 notes as inspiration.
+-   Tukey (1964) paper defines a science and how data analysis meets the criteria (pg 5 and 6). Could something similar be done as a framing for data science and thus why the regression text will approach things in a "science" way?
+-   Great quote in Tukey (1964) about all sciences having art in the make up - pg. 6- would be good to use in the introduction?
+    -   Can use this to make the point that throughout the text, there will be discussion about decisions that are being made and tips to help with analysis in practice. This is to help illustrate this type of thinking and the "art" but really this comes from a lot of practice.
+-   Tukey (1964) has some good stuff on the absence of judgment on pg. 9
+    -   "It is very helpful to replace the use of judgment by the use of knowledge,b ut only if the result is the use of *knowledge with judgement*."
+    -   Look at the list of sources of judgment on pg. 9 and how we'll encounter these throughout the text.
+    -   Quote on pg. 10 "If data analysis is to be well done, much of it must be a matter of judgment, and "theory", whether statistical or non-statistical, will have to guide, not command."
+-   Make the point that we are primarily focused on models that we are focused on models that are interpretable. This is how this text may differ from a machine learning text that is much more focused on prediction.
+-   Either here or in the SLR chapter Briemann paper on 2 cultures of modeling - inference and prediction: <https://projecteuclid.org/journals/statistical-science/volume-16/issue-3/Statistical-Modeling--The-Two-Cultures-with-comments-and-a/10.1214/ss/1009213726.full>
+-   Data science is about understanding the context, so we spend time at the beginning of each chapter introducing the data, analysis purpose, and data exploration.
+    -   We are emphasizing the point that statistic methods are motivated by the data, and what's required to answer our analysis question - not the other way around.
+-   Modern Data Science with R has good section breaking down what is data science and how that might differ from traditional statistics: <https://mdsr-book.github.io/mdsr3e/01-intro.html>
+-   Data science is 'extracting knowledge from data'
+-   This book is really thinking about data science as everyone might use it - academia and industry
+    -   While industry leans more on machine learning, academia is still often interested in interpretation and learning about the relationship between predictors. this can be a concern in industry too, for example, it may be useful to know what factors are associated with the recent increase in sales.
+    -   Therefore, this book is approaching both. This is preparing people for research (and some industry!) settings in which interpretation and inference are still prime, and for industry settings where prediction is key and perhaps interpretation less important.
+
+## Chapter 3: EDA
+
+-   I don't love the 2 colors in the sunset 2 palette
+-   I removed the table for interpreting correlation - this may be too prescriptive.
+-   Use "chart" for categorical visualizations and "plot" for quantitative visualizations
+    -   For categorical vs. categorical, so I say "grouped bar chart" and 'segmented bar chart" and "mosaic plot" or make all of the plot?
+-   Need to figure out the headers for this chapter
+
+Maybe start
+
+-   Mention the DuBois Challenge
+
+Katherine Dunham dance data. Here is the description from the August 23 Data Is Plural email\
+\
+***Katherine Dunham.**[Dunham's Data](https://urldefense.com/v3/__https://dunhamsdata.org/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZplwuRNJQ$), a project led by [Kate Elswit](https://urldefense.com/v3/__https://www.kateelswit.org/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqguWsqOw$) and [Harmony Bench](https://urldefense.com/v3/__https://dance.osu.edu/people/bench.9__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqS2H48_w$), "explores the kinds of questions and problems that make the analysis and visualization of data meaningful for dance history, through the case study of 20th century African American choreographer Katherine Dunham" ([1909--2006](https://urldefense.com/v3/__https://en.wikipedia.org/wiki/Katherine_Dunham__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZpWlbolWw$)). Drawing on materials "held by seven archives across the United States," the team has built [three core datasets](https://urldefense.com/v3/__https://dunhamsdata.org/portfolio/datasets__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZq6eOSqxg$), accompanied by [essays](https://urldefense.com/v3/__https://dunhamsdata.org/index.php/portfolio/essays__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZpVD9wgvQ$), [visualizations](https://urldefense.com/v3/__https://dunhamsdata.org/index.php/portfolio/visualizations__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZrlDROe4A$), and [code repositories](https://urldefense.com/v3/__https://dunhamsdata.org/blog/code-tutorial-release__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZo43HrkLg$). They "document the daily itinerary of Dunham's touring and travel from the 1930s-60s; the over 300 dancers, drummers, and singers who appeared with her; and the shifting configurations of the nearly 300 repertory entities they performed." \[h/t [Selena Chau](https://urldefense.com/v3/__https://www.linkedin.com/in/selenachau/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqERnu8Ww$)\]*
+
+-   Good article with some example data viz (if I teach intro this would be fun). Not useful for EDA chapter though :( <https://www.cambridge.org/core/journals/the-drama-review/article/visceral-data-for-dance-histories/72623D4392C448812C21E3EFDDC9FC69>
+
+<!-- -->
+
+-   Show different types of plots (e.g., histogram vs. density plot vs. map). What do you learn from each one? What are advantages / disadvantages of each?
+-   Add something about data types when loading a data set - is the data type what you expect
+-   talk about when you might use `geom_jitter` versus `geom_point`.
+
+## Outliers {#sec-handling-outliers}
+
+Once the outliers have been identified and better understood from further investigation, there are options on how to address them. If they are merely unusual observations, it is good practice to keep them in the analysis or compare models fit with and without these observations. If we remove them from the analysis, we must note that they've been removed and discuss potential limitations in the scope of the conclusions. If the outliers are a result of a data entry error, then it is recommended to correct the value, if it is possible to determine what the intended value is, or remove the observation from the analysis. Again, it is important to document how the outlying observations are handled and handle them in a reproducible way. Handling outliers in regression is discussed in more detail in \@ch-slr-conditions.
+
+## Extra text I don't want to throw away:
+
+-   **Outliers or other notable patterns:** The last part of describing a univariate distribution is describing outliers or other interesting and unusual patterns in the data, if they are present in the distribution. Outliers can be observations that just happen to be different from the others (e.g,. LeBron James' (a very famous NBA player) salary compared to the salary of 1000 randomly selected adults in the United States); however, they may also be due to data entry errors (e.g., a person's age recorded as 150 years). Unusual patterns are those that may not follow what we would expect, such as a mode at an unexpected value. This commonly happens in practice with modes at values such as -1 or 0, which are intended to represent missing data rather than actual observed values.
+
+Once the outliers have been identified and better understood from further investigation, there are options on how to address them. If they are merely unusual observations, it is good practice to keep them in the analysis or compare models fit with and without these observations. If we remove them from the analysis, we must note that they've been removed and discuss potential limitations in the scope of the conclusions. If the outliers are a result of a data entry error, then it is recommended to correct the value, if it is possible to determine what the intended value is, or remove the observation from the analysis. Again, it is important to document how the outlying observations are handled and handle them in a reproducible way. Handling outliers in regression is discussed in more detail in \@ch-slr-conditions.
+
+## 
+
+## Chapter 4: Simple Linear Regression
+
+-   Make response versus predictor a review rather than new terms.
+-   Tukey (1951) - Components of regression paper (pg. 1) - observed data = steady part + fluncation
+    -   take a look at this paper to describe some things in regression.
+-   Should I introduce the idea of an effect size?
+-   Use an updated data set (these data will be over 10 years old by publication time)
+
+<!-- -->
+
+-   **Stick with "predictor" or use another term? YES!**
+
+    -   The concern is that it creates a disconnect with the purpose of $X$ when doing inference.
+
+    -   What other books use:
+
+        -   IMS: predictor
+
+        -   Modern Dive: explanatory
+
+        -   Modern Data Science with R: inputs (calls it "predictive modeling"), not focused on regression
+
+        -   Telling Stories with Data: predictor
+
+        -   Stat2: explanatory variable
+
+        -   Beyond Multiple Linear regression: predictor
+
+-   Stick with the movies data example? Concern is that these data are percentages, so there is an obvious upper and lower bound.
+
+    -   the parks data may be a good alternative?
+
+-   Move the partitioning variability + $R^2$ + model evaluation to the end of this chapter.
+
+-   Do we stick with "slope", "slope coefficient", or "coefficient"?
+
+-   Reference notes:
+
+    -   Fall 2021: https://sta210-fa21.netlify.app/slides/03-slr-intro.html
+
+    -   Fall 2022: https://sta210-fa22.netlify.app/slides/02-slr-intro.html#/title-slide
+
+-   Need to figure out when to capitalize Y and X and when to use lower case...make it not awkward (especially in the appendix)
+
+## Chapter 5: SLR inference
+
+-   Potential reference: Book - *Bootstrap Method and Their Application* by Davidson and Hinkley (Chapter 6 on linear regression)
+
+-   Add reference to the Tibshriani statistical learning book for bootstrapping and permutation
+
+    -   Quote from this book ISL about bootstrapping: *"The bootstrap is a widely applicable and extremely powerful statistical tool that can be used to quantify the uncertainty associated with a given estimator or statistical learning method."*
+
+-   Include a visual that shows the difference between bootstrapping and permutation tests. Bootstrap the x and y travel together. Permutation, they are mixed up.
+
+-   Maybe start with hypothesis testing then do confidence intervals in simulation-based inference section
+
+-   Do I put model conditions and diagnostics in this chapter or make a separate chapter (I think this is what Stat2 does)?
+
+-   Need to adopt the terminology from Chapter 4
+
+-   Is there enough here that simulation-based methods and CLT are separate chapters?
+
+-   Need to write an introduction to simulation-based inference, maybe like 1 paragraph
+
+    -   What it is, in general.
+
+    -   Maybe a motivating quote about why its useful?
+
+Notes from previous semesters:
+
+-   Fall 2023 (similar notes in Fall 2022)
+
+    -   Bootstrap CI: <https://sta210-fa23.netlify.app/slides/04-slr-bootstrap#/title-slide>
+
+    -   Randomization test: <https://sta210-fa23.netlify.app/slides/05-slr-sim-testing#/title-slide>
+
+    -   Mathematical models: <https://sta210-fa23.netlify.app/slides/06-slr-math-models#/title-slide>
+
+-   Fall 2021
+
+    -   Inference for coefficients: <https://sta210-fa21.netlify.app/slides/04-slr-coef-inf#1>
+
+    -   Foundations for inference: <https://sta210-fa21.netlify.app/slides/04-slr-foundation#1>
+
+-   Spring 2020
+
+    -   CI review: <https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/01-review-ci.html#1>
+
+    -   Hypothesis test review: <https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/02-review-ht.html#1>
+
+    -   SLR Inference: <https://www2.stat.duke.edu/courses/Spring20/sta210.001/slides/lec-slides/04-slr-inf.html#1>
+
+-   Have I included inference for predictions?
+
+## Chapter 5.5: Conditions for SLR
+
+-   Do I want to just make this for regression in general, or leave it here in the SLR case?
+
+## Chapter 6: MLR
+
+-   Coefficient for male is negative in the model though males look greater on average in the EDA. Look into this more - this could be confusing to readers.
+-   Use alumni data for some exercises. Sitting in the `*alumni-data-hold-mlr.qmd` file.
+-   Limit this to lemurs who are 24 months old or less so that age is linear.
+
+## Chapter 7 (8): MLR inference
+
+**Branch: draft-mlr-inference**
+
+-   Where do I put multicollinearity?
+
+    -   Introduce multicollinearity
+
+        -   What it is
+
+        -   Why it's a problem
+
+            -   Make appendix item for math details
+
+        -   How to detect it.
+
+        -   What to do about it.
+
+-   Figure out what to do with inference for prediction (outline of content)
+
+    -   Section: Intervals for prediction
+
+        -   Motivation for why we need intervals for prediction
+
+        -   Confidence intervals for predicting the mean
+
+        -   Prediction intervals for an individual outcome
+
+        -   Computing these intervals in R
+
+<!-- -->
+
+-   Maybe increase the simulation reps so the interval is closer to the theoretical results
+
+-   If I stick with the lemurs data for this chapter, should I use the movies data for the SLR inference chapter?
+
+    -   See what feedback comes back and whether the parks data is too confusing....
+
+-   Am I calling it **hypothesis tests** or **hypothesis testing**?
+
+-   Make sure language used to describe inference is consistent with Chapter 5.
+
+-   Notes
+
+    -   STA 221 (Spring 2025)
+
+        -   Inference for regression: <https://sta221-sp25.netlify.app/slides/08-inference#/title-slide>
+
+        -   Inference for regression cont'd :<https://sta221-sp25.netlify.app/slides/09-inference-pt2#/inference-for-regression>
+
+        -   Model conditions: <https://sta221-sp25.netlify.app/slides/12-conditions-diagnostics#/title-slide>
+
+        -   Multicollinearity: <https://sta221-sp25.netlify.app/slides/13-multicollinearity#/title-slide>
+
+        -   Multicollinearity cont'd: <https://sta221-sp25.netlify.app/slides/14-multicollinearity-contd#/title-slide>
+
+    -   STA 210 (Spring 2025)
+
+        -   Inference for multiple linear regression: <https://sta210-sp25.netlify.app/slides/10-mlr-inference-conditions#/inference-for-multiple-linear-regression>
+
+        -   Model conditions & diagnostics; <https://sta210-sp25.netlify.app/slides/12-conditions-diagnostics#/title-slide>
+
+        -   Multicollinearity: <https://sta210-sp25.netlify.app/slides/13-multicollinearity#/title-slide>
+
+        -   Multicollinearity cont'd: <https://sta210-sp25.netlify.app/slides/14-multicollinearity-contd#/title-slide>
+
+## Chapter 6.5: transformations
+
+**Branch: draft-variable-transformations**
+
+-   Use the lemurs data but extend age to full 120 months in lemurs_sample data set.
+    -   Use this for a homewokr problem
+-   Use the NCAA data set bc there is a good log/log transformation there.
+-   How much to go through Box Cox transformations?
+
+```{r}
+library(tidyverse)
+lemurs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-24/lemur_data.csv')
+
+# filter for just three species (maybe even just one species) adjults, and take the latest weight measurement for each lem
+lemurs <- lemurs |>
+  filter(taxon %in% c("PCOQ", "EMAC", "ERUB"), sex != "ND") |> #only 1 obs in final sample with sex ND
+  #filter(taxon == "PCOQ") |>
+  filter(age_category == "young_adult") |> 
+  group_by(dlc_id) |>
+  arrange(desc(weight_date)) |>
+  slice(1) |> 
+  ungroup()
+```
+
+```{r}
+# NCAA data from the Equity in Athletics Analysis data base from US department of education. Retrieved July 2025
+
+# https://ope.ed.gov/athletics/#/
+
+
+library(tidyverse)
+library(tidymodels)
+library(readxl)
+library(usmap)
+
+ncaa <- read_excel("data/ncaa-schools.xlsx", sheet = 1)
+
+# join regions 
+
+state_region_lookup <- tibble(
+  state_cd = state.abb,
+  region = state.region
+)
+
+
+## filter data to NCAA Soccer at 4-year institutions
+
+
+ncaa_sub <- ncaa |> 
+  filter(Sports %in% c("Soccer"), 
+         str_detect(classification_name, "NCAA"), 
+         sector_name != "Sector Unknown",
+         #!str_detect(classification_name, "NCAA Division II"), 
+         !str_detect(sector_name, "for-profit"), 
+         !str_detect(sector_name, "2-year")) |>  
+  mutate(type = if_else(str_detect(sector_name , "Private"), "Private", "Public")) |>
+  left_join(state_region_lookup, by = "state_cd") |>
+  mutate(region = if_else(state_cd == "DC", "Northeast", region), 
+         division = case_when(
+           str_detect(classification_name, "Division III") ~ "Division III", 
+           str_detect(classification_name, "Division II") ~ 'Division II', 
+           TRUE ~ "Division I"
+         )
+  )
+  #remove for-profit institution
+
+# try model
+m <- lm(TOTAL_EXP_MENWOMEN ~ region + type + EFTotalCount + division, 
+        data = ncaa_sub)
+tidy(m) |> view()
+```
+
+## Chapter 10: Model evaluation and selection
+
+**Branch: draft-model-eval**
+
+-   Using spotify data to predict the valence of a song!
+
+<!-- -->
+
+-   Include stepwise and non-stepwise methods?
+-   General Social survey? <https://gssdataexplorer.norc.org/gss_data>
+    -   See data folder for codebook
+-   Should this chapter be renamed to more clearly discuss model selection?
+-   Lecture notes
+    -   STA 221 - Spring 2025
+
+        -   Model comparison (R-sq vs Adj R-sq): <https://sta221-sp25.netlify.app/slides/07-mlr-pt3#/model-comparison>
+
+        -   AIC and BIC: <https://sta221-sp25.netlify.app/slides/21-logistic-comparison#/aic-bic>
+
+    -   STA 210 - Spring 2025
+
+        -   Model evaluation (R-sq and RMSE): <https://sta210-sp25.netlify.app/slides/08-model-eval#/title-slide>
+
+        -   Model comparison (R-sq and Adjusted R-sq, training and testing sets): <https://sta210-sp25.netlify.app/slides/09-model-compare#/title-slide>
+
+        -   Cross validation: <https://sta210-sp25.netlify.app/slides/23-cross-validation#/title-slide>
+
+    -   STA 210 - Spring 2021
+
+        -   Stepwise selection: <https://sta210-fa21.netlify.app/slides/16-model-selection#24>
+
+## Chapter 11 - logistic regression
+
+-   Add drop-in-deviance test?
+-   Maybe say "logit" instead of "log odds" throughout?
+-   Good example but would need data: <https://www.sciencedirect.com/science/article/pii/S0091743517304231?via%3Dihub#s0010>
+-   Is it "log odds" or "log-odds"?
+-   Pew research AI data from STA 210 and STA 221 notes for odds and probabilities
+-   Maybe use this processed food ML classifier for this chapter :<https://www.nature.com/articles/s41467-023-37457-1>
+-   Use Jamila's data set for something?
+-   Logistic regression - paper with data on high schools that offer financial education: <https://www.cambridge.org/core/journals/journal-of-financial-literacy-and-wellbeing/article/high-school-financial-education-courses-in-the-united-states-what-is-the-importance-of-setting-state-policies/ABD577136362C0289884C41676341271>
+-   Viral data set that students used in project.
+-   Lecture notes:
+    -   STA 221
+        -   Logistic regression: <https://sta221-sp25.netlify.app/slides/19-logistic-regression#/title-slide>
+
+        -   Logistic regression - prediction: <https://sta221-sp25.netlify.app/slides/20-logistic-prediction#/title-slide>
+
+        -   Logistic regression - model comparison: <https://sta221-sp25.netlify.app/slides/21-logistic-comparison#/title-slide>
+
+        -   Logistic regression - inference: <https://sta221-sp25.netlify.app/slides/22-logistic-inference#/title-slide>
+
+        -   Logistic regression - assumptions & estimation: <https://sta221-sp25.netlify.app/slides/23-logistic-assumptions#/title-slide>
+    -   STA 210
+        -   Probabilities, odds, odds ratios: <https://sta210-sp25.netlify.app/slides/16-prob-odds#/title-slide>
+
+## Chapter 12 - logistic regression: prediction+ assessment
+
+-   Add this quote from Tukey (1964) to the point about finding the opitimum point on the ROC curve (pg. 8) - "Danger only comes from mathematical optimizing when the results are taken too seriously. In elementary calculus we all optimize surface-to-volume relations, but no one complains when milk bottles turn out ot be neither spherical or cylindrical. It is understood that such optimum problems are unrealistically oversimplified, that the offer *guidance*, not the *answer*.
+
+Notes from classes
+
+-   STA 221
+
+    -   Prediction: <https://sta221-sp25.netlify.app/slides/20-logistic-prediction#/title-slide>
+
+    -   Model comparison: <https://sta221-sp25.netlify.app/slides/21-logistic-comparison#/title-slide>
+
+-   STA 210
+
+    -   Prediction: <https://sta210-sp25.netlify.app/slides/18-logistic-prediction#/title-slide>
+
+    -   Model comparison: <https://sta210-sp25.netlify.app/slides/19-logistic-compare#/title-slide>
+
+## chapter 13 - special topics
+
+-   Nonparametric regression?
+
+    -   Use bob Ross data - regression tree for "happy little trees"?
+
+-   Missing data - return to recipes data
+
+    -   Missing Data: Five Practical Guidelines: <https://journals.sagepub.com/doi/10.1177/1094428114548590>
+
+    -   Much Ado about Nothing: <https://pubmed.ncbi.nlm.nih.gov/17401454/>
+
+-   Causal inference
+
+-   Additional models- multinomial, poisson?
+
+-   Refer readers for next steps in modeling?
+
+## Causal inference?
+
+-   Experiment on learning by doing: <https://www.openicpsr.org/openicpsr/project/212821/version/V1/view>
+
+-   Book to read on causal inference: Imbens, G. W. and Rubin, D. B. (2015), Causal Inference for Statistics, Social, and Behavioral Sciences: An Introduction, Cambridge University Press. ISBN 0521885884
+
+-   Feedback in promotion letter that dealing with issues of causal inference in regression could be nice addition that makes this book unique
+
+-   Consider something like a chapter / section on propensity scores? - suggestion from Amy
+
+    -   Ask Fan and/or Lucy McGowan
+
+-   Start with section on experimental design and just using what we know about linear regression models to find treatment effects
+
+## Appendix
+
+Extra text about model diagnostics I removed from the appendix:\
+\
+Model diagnostics
+
+Here we utilize the matrix notation to further explore the mathematics behind the model diagnostics introduced in @sec-model-diagnostics.
+
+### Standardized & studentized Residuals
+
+In general, we standardize a value by shifting by the expected value and rescaling by the standard deviation (or standard error). Thus, the $i^{th}$ standardized residual takes the form
+
+$$std.res_i = \frac{e_i - E(e_i)}{SE(e_i)}$$
+
+The expected value of the residuals is 0, i.e. $E(e_i) = 0$. From (\ref{resid-var}), the standard error of the residual is $SE(e_i) = \hat{\sigma}\sqrt{1-h_{ii}}$. Therefore,
+
+\begin{equation}
+\label{std.resid.}
+std.res_i = \frac{e_i}{\hat{\sigma}\sqrt{1-h_{ii}}}
+\end{equation}
+
+### Cook's Distance
+
+Cook's distance is a measure of how much each observation influences the model coefficients, and thus the predicted values. The Cook's distance for the $i^{th}$ observation can be written as
+
+\begin{equation}
+\label{cooksd}
+D_i = \frac{(\hat{\mathbf{Y}} -\hat{\mathbf{Y}}_{(i)})^\mathsf{T}(\hat{\mathbf{Y}} -\hat{\mathbf{Y}}_{(i)})}{(p+1)\hat{\sigma}}
+\end{equation}
+
+where $\hat{\mathbf{Y}}_{(i)}$ is the vector of predicted values from the model fitted when the $i^{th}$ observation is deleted. Cook's Distance can be calculated without deleting observations one at a time, since (\ref{cooksd-v2}) below is mathematically equivalent to (\ref{cooksd}).
+
+\begin{equation}
+\label{cooksd-v2}
+D_i = \frac{1}{p+1}std.res_i^2\Bigg[\frac{h_{ii}}{(1-h_{ii})}\Bigg] = \frac{e_i^2}{(p+1)\hat{\sigma}^2(1-h_{ii})}\Bigg[\frac{h_{ii}}{(1-h_{ii})}\Bigg]
+\end{equation}
+
+<!--# Add coding example to illustrate these equations using a toy data set -->
+
+## Overall
+
+-   use MVN vs. Normal to make it clear when I'm talking about multivariate distributions.
+
+-   Am I using the term "data dictionary" or "codebook"?
+
+-   Open Intro has the footnotes like my book - see how these footnotes show up in the PDF - guided practice questions.
+
+-   Do I keep the packages section in each chapter? If so, how does that square with R not being a key part of the text - maybe I move this inside the R section?
+
+    -   List the packages in alphabetical order?
+
+-   I like the list of key terms, defining some things in the introduction and the list of acronyms and symbols in this book: https://api.pageplace.de/preview/DT0400.9781000478235_A41909324/preview-9781000478235_A41909324.pdf
+
+-   Figure out why Your Turn footnotes print inside the box in PDF version.
+
+-   Should I drop the "parts" labels from the book? It's very uneven...
+
+-   I really need to talk more about prediction in one of the linear regression chapters!
+
+-   Figure out how other books deal with differences due to rounding.
+
+-   Need to define "model building" and "model fit" - differentiate these or be consistent.
+
+-   People like ANOVA - do I need to add it?
+
+-   Figure out convention for words like "data set / dataset", "box plot / boxplot", "scatter plot / scatterplot"
+
+-   Make a call out box or some other way to highlight the analysis goal in each chapter.
+
+-   Do I include the R packages in the beginning? If so, put them in alphabetical order.
+
+-   Need to incorporate recent discussion about pvalues in the text.
+
+-   How specific should section references be? Just to Level 2 (e.g., Section 1.3) or to Level 3? (Section 1.3.4)?
+
+-   Need to figure out a good color scheme for plots and such.
+
+-   Include something about ethics and algorithimic bias?
+
+-   Should I remove the "Software" section from the beginning? Maybe put this in the section about R?
+
+-   **Aim for about 4 - 6 Your Turns per chapter**
+
+-   **Primarily use captions rather than titles for visualizations**
+
+-   Read Dogucu et al paper on accessibility and see how book aligns with recommendations.
+
+-   Consistency with numbers - when do I use digits vs. spelling out - especially for values 0 to 10
+
+-   Make sure learning goal regarding R is consistent across chapters, e..g, "Conduct multiple linear regression analysis using R" - from MLR chapter
+
+-   End each chapter with summary and looking ahead
+
+-   **CriticMarkup** plug in for editing: <https://github.com/mloubout/critic-markup#readme>
+
+-   Need to be consistent with naming convention for models (e.g. movies_fit vs. lemurs_model).
+
+-   Consider offering a repository with HW assignments and labs, rather than exercises (see <https://theeffectbook.net/index.html#additional-materials>)
+
+-   Make sure plots of accessible.
+
+    -   colors
+    -   alt-text
+    -   using shapes and line type to help differentiate
+
+-   Use another phrase instead of "effect of X predictor"
+
+-   ~~NEED CROSS VALIDATION IN THIS BOOK! - DONE~~
+
+-   What does it mean to write this book using a "data science" approach?
+
+-   Consider writing the answers to the "Your turn" questions within the text (e.g. how it is in [Bayes Rules](https://www.bayesrulesbook.com/chapter-3#ch3-bbmodel) or move them down to exercises)
+
+-   Do I want to use "statistically discernible" instead of "statistically significant"?
+
+-   <del>Do I want to use $n - p$ (and include the intercept) instead of $n - p  - 1$ ?</del>
+
+    -   I will use $p - 1$, because it's easier to differentiate what $p$ means when indexing a coefficient and the matrix dimensions.
+
+-   Index predictors multiple linear regression as $x_{ip}$ where $i$ is the observation and $p$ is the predictor.
+
+-   Be consistent on how to write functions, do I write it `lm` or `lm()`?
+
+-   Capital $X$ and $Y$ versus lower case when writing out the models.
+
+-   Do I use the terminology "statistically significant" or "statistically discernible? (credit to Jeff Witmer) or some other term.
+
+    -   Maybe the ASA has some literature on this in their p-value papers?
+
+-   Be consistent on "Normal" or "normal" distribution.
+
+-   Be consistent with using P() or Pr() for probability (noticed this in Chapter 5, inference for slr, but is it elsewhere)?
+
+-   Do I need to cite R packages every time I mention them, or could I just cite them in the packages needed section or the first mention?
+
+-   Be mindful not to call it a regression line for multiple linear regression.
+
+-   Are the learning outcomes correctly specified as outcomes?
+
+-   Do I want to spend so much time on simple linear regression? Should I move much of this to an MLR framework?
+
+-   Think about AI in the context of all this
+
+    -   Maybe an example on building an AI?
+    -   How to use AI?
+    -   Think about assessments in light of AI?
+
+-   Am I calling these model conditions or assumptions? Or specifying that we use check conditions to assess the model assumptions?
+
+-   "predicted" or "fitted" values?
+
+## call out boxes
+
+-   Your turn: {.yourturn latex = ""}
+
+-   Analysis in practice: {.analysis_in_practice latex = ""}
+
+-   New terms: Purple {.terms latex = ""}
+
+-   Analysis objective {.objective latex = ""}
+
+-   Math rules / details {.math_rules latex = ""}
+
+## Data sets
+
+-   Health survey for England: <https://digital.nhs.uk/data-and-information/publications/statistical/health-survey-for-england>
+-   UK Biobank - Health data: <https://www.ukbiobank.ac.uk/>
+    -   Used in this paper: <https://www.pnas.org/doi/10.1073/pnas.2405924121>
+-   NCAA expenditures data set from STA 221 notes: <https://sta221-sp25.netlify.app/slides/08-inference#/title-slide>
+-   Pudding GitHub Repo: <https://github.com/the-pudding/data>
+-   Linear regression:
+    -   LEGOs: <https://sta210-fa23.netlify.app/hw/hw-03>
+    -   World bank indicators: <https://data.worldbank.org/indicator>
+    -   Perceived threat of covid (standardized variables): <https://sta210-fa22.netlify.app/hw/hw-02>
+    -   Airbnbs in Asheville: <https://www2.stat.duke.edu/courses/Spring19/sta210.001/schedule.html>
+        -   Transformed response variable
+    -   Updated coffee test: <https://github.com/rfordatascience/tidytuesday/blob/master/data/2024/2024-05-14/readme.md>
+    -   life expectancy paper and data set from SLR in STA 210 and STA 221
+-   Use some sort of linguistics example?
+-   CIA fact book data: <https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-10-22/readme.md>
+-   Childcare costs: <https://github.com/rfordatascience/tidytuesday/blob/main/data/2023/2023-05-09/readme.md>
+-   union data: <https://github.com/rfordatascience/tidytuesday/blob/main/data/2023/2023-09-05/readme.md>
+-   Logistic regression - paper with data on high schools that offer financial education: <https://www.cambridge.org/core/journals/journal-of-financial-literacy-and-wellbeing/article/high-school-financial-education-courses-in-the-united-states-what-is-the-importance-of-setting-state-policies/ABD577136362C0289884C41676341271>
+-   Urban Institute Education Data Explorer: <https://educationdata.urban.org/data-explorer>
+-   PEW american waves surveys: <https://www.pewresearch.org/datasets/page/3/>
+-   Classifying extreme weather events: <https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-08-12/readme.md>
+-   2018 paper on Sedentary lifestyle and brain imaging - linear model with log-transformed variables, data available: <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0195549#sec007>
+
+Life expectancy data
+
+```{r}
+#| eval: false
+library(tidyverse)
+library(tidymodels)
+library(readxl)
+
+life_exp <- read_excel("data/life-expectancy-data.xlsx", sheet = 1)
+
+# make education indicator 
+
+life_exp <- life_exp |>
+  mutate(education_ind = if_else(Education_Index > median(Education_Index), "High", "Low")
+  )
+
+
+m1 <- lm( Life_expectancy_at_birth ~ Infants_lacking_immunization_DTP_pct_of_one_year_olds +
+           Infants_lacking_immunization_measles_pct_of_one_year_olds + 
+           Population_using_at_least_basic_sanitation_services_pct + 
+           Unemployment_total_pct_of_labour_force + 
+           Health_expenditure + 
+           Income_inequality_Gini_coefficient +
+           Old_age_dependency_ratio_old_age_65_and_older_per_100_people_ages_15_64 + education_ind, 
+         data = life_exp
+           )
+
+tidy(m1)
+```
+
+This data comes from this paper: <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0253450>
+
+-   Discussed in STA 210 notes: <https://sta210-sp25.netlify.app/slides/02-big-picture#/education-and-life-expectancy>
+
+Data on weather forecast accuracy: <https://github.com/rfordatascience/tidytuesday/tree/main/data/2022/2022-12-20>
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+
+
+tuesdata <- tidytuesdayR::tt_load('2022-12-20')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 51)
+
+weather_forecasts <- tuesdata$weather_forecasts
+cities <- tuesdata$cities
+outlook_meanings <- tuesdata$outlook_meanings
+
+set.seed(12345)
+weather_forecasts_sub <- weather_forecasts |>
+  filter(!is.na(observed_temp), !is.na(forecast_temp), 
+         !is.na(observed_precip)) |>
+  group_by(city, state) |> 
+  sample_n(1) |> 
+  ungroup() 
+
+# make difference in temps variable 
+weather_forecasts_sub <- weather_forecasts_sub |>
+  mutate(diff_temp = observed_temp - forecast_temp)
+
+ggplot(data = weather_forecasts_sub, aes(x = diff_temp)) + 
+  geom_histogram()
+
+ggplot(data = weather_forecasts_sub, aes(x = forecast_temp, y = diff_temp)) + 
+  geom_point()
+
+# join cities data
+weather_forecasts_sub <- weather_forecasts_sub |>
+  left_join(cities, by = c("city", "state"))
+
+# try a model 
+
+m <- lm(diff_temp ~ observed_precip + elevation + distance_to_coast + wind + avg_annual_precip, data = weather_forecasts_sub)
+```
+
+## papers
+
+-   Thoughts on why not to say "holding all else constant" : chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://journals.sagepub.com/doi/pdf/10.1177/1536867X1601600103
+
+-   Data ethics paper: https://www.tandfonline.com/doi/full/10.1080/26939169.2024.2394542#d1e196
+
+-   pudding.cool replication article: <https://pudding.cool/2022/04/random/>
+
+-   Logistic regression - sleep quality paper
+
+# Chapter labels + data
+
+-   Chapter 1: @sec-ch-intro
+
+-   Chapter 2: Reproducibility and r review @sec-ch-computing
+
+-   Chapter 3: EDA @sec-ch-eda
+
+-   Chapter 4: Simple linear regression @sec-ch-slr
+
+    -   Rotten tomatoes: critics vs audience score (`movies_scores.csv`)
+
+-   Chapter 5: Inference for SLC @sec-ch-slr-inf
+
+    -   Public trust data set - city expenditure on residents vs. playground access (`parks.csv`)
+
+-   Chapter 6: SLR conditions and diagnostics @sec-ch-slr-conditions
+
+    -   Coffee data: aroma vs. flavor grade
+
+-   Chapter 7: Multiple linear regression @sec-ch-mlr
+
+    -   Lemurs (24 months old or less) (`lemurs-sample-young.csv`)
+
+-   Chapter 8: MLR inference @sec-ch-mlr-inf
+
+    -   Lemurs (24 months old or less) - repeat from Chapter 7 (`lemurs-sample-young.csv`)
+
+-   Chapter 9 (?): Transformations: @sec-ch-transformations
+
+    -   NCAA expenditure data set (`ncaa-basketball-DI-2023-2024.csv`)
+
+-   Chapter 10 (?): Model evaluation and comparison: @sec-ch-model-eval
+
+    -   Spotify song characteristics data (`spotify-songs-sample.csv`)
+
+-   Chapter 11: Logistic regression @sec-ch-logistic
+
+    -   General Social Survey - comfort with driverless cars ??
+
+-   Chapter 12: Logistic regression: Prediction and assessment @sec-ch-logistic-prediction
+
+    -   General Social Survey - comfort with driverless cars
+
+-   Chapter 13 - Special topics @sec-ch-special-topics
+
+## Author resources:
+
+-   Resources from CRC Press: https://routledgetextbooks.com/textbooks/development/development.php#reports
+-   Robin Lloyd-Starkes is a production editor
+
+# Funding
+
+-   <del>Sloan foundation grant: <https://sloan.org/programs/public-understanding/books></del>
+
+    -   Doesn't seem to support textbooks
+
+-   <del>Apply for a competitive dean's leave for Fall 2025?</del>
+
+    <https://admin.trinity.duke.edu/faculty-affairs/policy/competitive-deans-leaves>
+
+    -   I applied and got it for the Fall!!! 🎉
+
+# Acknowledgements
+
+-   Provided feedback / reviewed
+
+    -   Elijah Meyer
+    -   Lara from CRC press
+
+-   Wes Cowley - developmental edit on Chapters 4 - 6
+
+-   Formatting things:
+
+    -   Telling stories with data for the learning goals and R packages
+
+    -   Intro to Modern Statistics 2nd ED for the footnoted exercises
 
 ## Learner persona: Mia
 
@@ -29,43 +837,10 @@
 -   Reviewer III: Add tree-based models and consider more predictive analytics
     -   See https://mdsr-book.github.io/mdsr2e/ch-modeling.html
 
-# Chapter notes
+## Regression course websites (besides mine)
 
-## Chapter 3: EDA
+-   Allison: <https://atheobold.github.io/stat-313-website/>
 
-Katherine Dunham dance data. Here is the description from the August 23 Data Is Plural email\
-\
-***Katherine Dunham.**[Dunham's Data](https://urldefense.com/v3/__https://dunhamsdata.org/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZplwuRNJQ$), a project led by [Kate Elswit](https://urldefense.com/v3/__https://www.kateelswit.org/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqguWsqOw$) and [Harmony Bench](https://urldefense.com/v3/__https://dance.osu.edu/people/bench.9__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqS2H48_w$), "explores the kinds of questions and problems that make the analysis and visualization of data meaningful for dance history, through the case study of 20th century African American choreographer Katherine Dunham" ([1909--2006](https://urldefense.com/v3/__https://en.wikipedia.org/wiki/Katherine_Dunham__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZpWlbolWw$)). Drawing on materials "held by seven archives across the United States," the team has built [three core datasets](https://urldefense.com/v3/__https://dunhamsdata.org/portfolio/datasets__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZq6eOSqxg$), accompanied by [essays](https://urldefense.com/v3/__https://dunhamsdata.org/index.php/portfolio/essays__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZpVD9wgvQ$), [visualizations](https://urldefense.com/v3/__https://dunhamsdata.org/index.php/portfolio/visualizations__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZrlDROe4A$), and [code repositories](https://urldefense.com/v3/__https://dunhamsdata.org/blog/code-tutorial-release__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZo43HrkLg$). They "document the daily itinerary of Dunham's touring and travel from the 1930s-60s; the over 300 dancers, drummers, and singers who appeared with her; and the shifting configurations of the nearly 300 repertory entities they performed." \[h/t [Selena Chau](https://urldefense.com/v3/__https://www.linkedin.com/in/selenachau/__;!!OToaGQ!o7_5kwNw89gYnArErxoU1IZPfDdT0B6fGeo2DeftftvDWcljQf61CJowe-Ytuh8mtd39p8OZ33RykjWtrV5clwmd90HQaZqERnu8Ww$)\]*
+-   Lucy: <https://sta-112-s24.github.io/website/schedule.html>
 
--   Show different types of plots (e.g., histogram vs. density plot vs. map). What do you learn from each one? What are advantages / disadvantages of each?
--   Add something about data types when loading a data set - is the data type what you expect
-
-## Chapter 4: Simple Linear Regression
-
--   Stick with "predictor" or use another term?
-
-    -   The concern is that it creates a disconnect with the purpose of $X$ when doing inference.
-
-    -   What other books use:
-
-        -   IMS: predictor
-
-        -   Modern Dive: explanatory
-
-        -   Modern Data Science with R: inputs (calls it "predictive modeling"), not focused on regression
-
-        -   Telling Stories with Data: predictor
-
-        -   Stat2: ??
-
--   Stick with the movies data example? Concern is that these data are percentages, so there is an obvious upper and lower bound.
-
-    -   the parks data may be a good alternative?
-
--   Move the partitioning variability + $R^2$ + model evaluation to the end of this chapter.
-
--   Reference notes:
-
-    -   Fall 2021: https://sta210-fa21.netlify.app/slides/03-slr-intro.html
-
-    -   Fall 2022: https://sta210-fa22.netlify.app/slides/02-slr-intro.html#/title-slide
+-   Yue: <https://www2.stat.duke.edu/courses/Spring24/sta210.001/index.html>

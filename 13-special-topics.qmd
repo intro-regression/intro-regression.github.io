@@ -39,6 +39,9 @@ lemurs <- read_csv("data/lemurs-repeated-measures.csv")
 ## recipes data
 recipes <- read_csv("data/recipes.csv")
 
+## recipes subset for missing data chapter 
+recipes_sub <- read_csv("data/recipes-sub.csv")
+
 # color palette
 sunset2 <- PNWColors::pnw_palette("Sunset2",2)
 sunset3 <- PNWColors::pnw_palette("Sunset2",3)
@@ -51,14 +54,15 @@ sunset4 <- PNWColors::pnw_palette("Sunset2",4)
 
 This chapter introduces readers to a collection to models that are extensions of linear and logistic regression. The goal is to provide an introduction to the topic along with resources for those interested in learning more. The following topics are introduced:
 
+- Missing data
 - Multinomial logistic regression
 - Random intercepts models
 - Decision trees for regression and classification
 - Causal inference using propensity score models
 
-## Missing data
+## Missing data {#sec-missing-data}
 
-In @sec-ch-eda, we presented exploratory data analysis, one of the first steps in the data science workflow <!--# reference the chapter 1 diagram?--> One of the main purposes of exploratory data analysis is to understand the distributions of the variables in the data set, and as part of that identify special features in the data such as outliers or missing data before moving on to modeling. We introduced strategies for dealing with outliers in \[ insert chapter references\], and in this section we will discuss some strategies for dealing with missing data.
+In @sec-ch-eda, we presented exploratory data analysis, one of the first steps in the data science workflow (see @fig-data-science-workflow). One of the main purposes of exploratory data analysis is to understand the distributions of the variables in the data set, and as part of that identify special features in the data such as outliers or missing data before moving on to modeling. We introduced strategies for dealing with outliers that impact regression modeling in @sec-outliers-impact and , and in this section we will discuss some strategies for dealing with missing data.
 
 <!--# notes for reference: https://www2.stat.duke.edu/courses/Fall19/sta210.001/slides/lec-slides/23-model-val-missing.html#31-->
 
@@ -66,11 +70,11 @@ In @sec-ch-eda, we presented exploratory data analysis, one of the first steps i
 
 <!--# Link to Gelman book - See Chapter 25-->
 
-### Data: Recipes
+### Data: Recipes {#sec-missing-data-dataset}
 
-In @sec-ch-eda, we introduced a data set containing details about the nutrition, preparation and cooking time, and the reviews and ratings for recipes on the Allrecipes.com data set. As we conducted exploratory data analysis, we observed that some observations had missing values for one or more variables we were interested in analyzing. Here, we will look at the different types of missingness in the data and introduce some basic strategies for handling missing data.
+We will return to the `recipes` data from @sec-ch-eda that contains details about the nutrition, preparation and cooking time, and the reviews and ratings for recipes on Allrecipes.com. As we conducted exploratory data analysis in @sec-ch-eda, we observed that some observations had missing values for one or more variables we were interested in analyzing. Here, we will look at the different types of missingness in the data and introduce some strategies for handling missing data.
 
-The data was adapted from the `cuisines` data frame in the **tastyR** R package [@tastyR]. We will primarily focus on the nutrition and ratings information in this section. The variable definitions are below.
+The data set was adapted from the `cuisines` data frame in the **tastyR** package [@tastyR]. We will primarily focus on the nutrition and ratings information in this section and work with the data set `recipes_sub`. The variable definitions in `recipes_sub` are below.
 
 - `names`: Recipe title
 
@@ -84,104 +88,127 @@ The data was adapted from the `cuisines` data frame in the **tastyR** R package 
 
 - `reviews`: Number of reviews
 
-See the **tastyR** documentation [@tastyR] for the full codebook.
+Our analysis objective is to use the various recipe characteristics to explain variability in the average rating. Here we will focus on handling missing data while using the analysis objective to inform our analysis decisions.
+
+```{r}
+#| eval: false
+
+## Make recipes_sub data frame
+recipes_sub <- recipes |> 
+  select(name, calories, fat, carbs, protein, avg_rating, total_ratings, reviews)
+
+recipes_sub |> write_csv("data/recipes-sub.csv")
+```
 
 ### Identifying missingness {#sec-missing-data-identify}
 
-We begin by observing how missingness appears in the data set. @tbl-missing-example shows examples of five recipes from the `recipes` data frame, each of which have different types and levels of missingness. For the sake of illustration, we will only consider whether there is missingness for the subset of variables analyzed in this section, not the entire `recipes` data set.
+We begin by observing how missingness appears in the data set. @tbl-missing-example shows examples of five recipes from the `recipes_sub` data frame, each of which have different types of missingness. Let's take a look at this subset of recipes and what we observe about the missingness in each.
 
 ```{r}
 #| label: tbl-missing-example
 #| tbl-cap: "Examples of missingness in the `recipes` data"
 
+options(knitr.kable.NA = 'NA')
 
 recipes_use <- c("Danish Butter Cookies", 
                  "Brazilian Quentao",
                  "Rose Water Turkish Delight", 
                  "Chicken Adobo Tacos",
                  "Chef John's Nashville Hot Chicken")
-recipes |> 
+recipes_sub |> 
   select(name, calories, fat, carbs, protein, avg_rating, total_ratings, reviews) |> 
-  filter(name %in% recipes_use)
+  filter(name %in% recipes_use) |>
+  kable()
 ```
 
-Let's take a look at this subset of recipes and what we observe about the missingness in each.
+- Chef John's Nashville Hot Chicken is an example of a complete case. A **complete case** is an observation that has values for all variables in the analysis. These observations have no missing values, so they are ready for analysis without applying the methods in this section.
 
-Chef John's Nashville Hot Chicken is an example of acomplete case. A **complete case** is an observation that has values for all variables in the analysis. These types of observations have no missing values, so they are ready for analysis without applying the methods in this section.
+- Rose Water Turkish Delight has a missing value for one variable, `fat`, but has data for all other variables.
 
-Rose Water Turkish Delight only has a missing value for the variable `fat` but has data for all other variables. We impute the missing value by filling in the missing data using observed values of `fat` from other recipes. We discuss imputation strategies in @sec-missing-data-strategies.
+- The Brazilian Quentao recipe has missing values for all the variables related to nutrition information (`calories`, `fat`, `carbs`, and `protein`). This is a recipe for mulled wine, a type of drink; therefore, the missingness is logical in this case. These nutrition variables are most relevant to food dishes, so it is not surprising that such information is not available for this drink recipe.
 
-The Brazilian Quentao recipe has missing values for all the variables related to nutrition information (`calories`, `fat`, `carbs`, and `protein`). This is a recipe for mulled wine, a type of drink; therefore, the missingness is logical in this case. These nutrition variables are most relevant to food dishes, so it is not surprising that such information is not available for this drink recipe. We can consider if there are logical values to impute for this missing data or exclude drink recipes from the analysis. We discuss these options further in @sec-missing-data-strategies.
+- The Danish Butter Cookies has missing values for the variables related to the user reviews (`avg_rating`, `total_ratings`, `reviews`). Upon looking at the webpage for this recipe, we observe that this recipe has no reviews. Because the data are scraped from the website, it is logical that these values appear as missing in the data set. One consideration for the analysis is how to deal with the missing data for `avg_rating`, because it is the response variable on interest based on the analysis objective in @sec-missing-data-dataset. One option is to narrow the scope of the analysis to recipes that have at least some minimum number of ratings or reviews.
 
-The Danish Butter Cookies is missing data related to the user reviews (`avg_rating`, `total_ratings`, `reviews`). Upon looking at the webpage for this recipe, we observe that this recipe has no reviews. Thus, we could logically impute 0 for the `total_ratings` and `reviews`. It is less clear, however, how to impute the missing data for `avg_rating`. Depending on the analysis goals, we might narrow the scope of the analysis to recipes that have at least some minimum number of ratings or reviews.
-
-Lastly, the Chicken Adobo Tacos recipe has missing values for all variables of interest. This observation is not currently usable for the analysis, because it does not have any observed values that can inform the data exploration and modeling. We could go to the recipe's page on Allrecipes.com and manually impute any values we see on the page now that weren't available when the data were originally collected. Depending the number of observations in the data that have such volume of missingness, this type of manual imputation could be unfeasible in practice.
+- The Chicken Adobo Tacos recipe has missing values for all variables of interest. This observation is not currently usable for the analysis, because it does not have any observed values that can inform the data exploration and modeling. We may consider removing this observation from the analysis given the lack of useful information. We discuss how this type of analysis decision could impact the results in @sec-missing-data-types.
 
 These recipes have illustrated the two ways missingness can occur in the data: item non-response and unit non-response. **Item non-response** occurs when an observation has missing values for one variable or a small subset of variables. This is was the case with the Rose Water Turkish Delight, Brazilian Quentao, and Danish Butter Cookie recipes. Depending on the reason for missingness, we can use one of various imputation strategies to fill in the missing values. **Unit non-response** occurs when an observation has so many missing values that is not useful for the analysis. This is the case with the Chicken Adobo Tacos recipe that is missing values for every variable except `name`.
 
-### Types of missingness
+### Types of missingness {#sec-missing-data-types}
 
-<!--# could this be combined with the previous section-->
+In @sec-missing-data-identify, we observed how missingness can appear in the data and provided potential explanations for some of the patterns of missingness. Now instead of looking at individual observations, let's look at the patterns of missingness within a single variable. There are three patterns of missingness within a single variable: missing completely at random, missing at random, and missing not at random.
 
-In @sec-missing-data-identify, we observed how missingness can appear in the data and provided some preliminary strategies for dealing with the missingness depending on what we knew about the observation. Now instead of looking at individual observations, let's look at the patterns of missingness within an individual variable. There are three patterns of missingness for a given variable: missing completely at random, missing at random, and missing not at random.
+A variable has observations **missing completely at random (MCAR)** if there is no explanable pattern to the missingness. This means there is no explainable pattern to the missingness. A variable is **missing at random (MAR)** if the pattern of missingness depends on other variables, but not the variable itself. For example, in the `recipes` data, missingness for the `avg_rating` variable is due to a recipe having no ratings (`total_ratings = 0`), not due to something about the average rating for the recipe. The last type of missing is **missing not at random (MNAR).** A variable has observations MNAR if the pattern of missingness depends on the variable itself. For example, in the recipes data `total_ratings` is MNAR, because a missing value for this variable means a recipe has 0 ratings.
 
-A variable is **missing completely at random (MCAR)** if the pattern of missingness is completely random. This means there is no explainable pattern to the missingness. A variable is **missing at random (MAR)** if the pattern of missingness depends on other variables, but not the variable itself. For example, in the `recipes` data, missingness for the `avg_rating` variable is due to a recipe having no ratings (`total_ratings = 0`), not due to something about a given average rating for the recipe. The last type of missing is **missing not at random (MNAR).** A variable is MNAR if the pattern of missingness depends on the variable itself. For example, in the recipes data `total_ratings` is MNAR, because a missing value for this variable means a recipe has 0 ratings.
-
-It is important to understand the pattern of missingness, because it helps us understand the potential impact of the strategy we use to deal with the missingness in terms of potential bias to the analysis. We'll briefly discuss these impacts as we introduce strategies for handling missing data in @sec-missing-data-strategies
+It is important to understand the pattern of missingness, because it helps us understand how our approach for handling the missing values may bias the analysis results. We'll briefly discuss these impacts as we introduce strategies for handling missing data in @sec-missing-data-strategies
 
 ### Strategies for handling missing data {#sec-missing-data-strategies}
 
-Now that we understand how to identify missingness in the data and patterns of missingness, let's discuss some strategies for handling missing values. We introduce some basic strategies here and direct the reader to the texts in @sec-missing-data-further-reading for a more in-depth discussion about missing data.
+Now that we understand how to identify missingness in the data and patterns of missingness, let's discuss some strategies for handling missing values. We introduce some strategies here and direct the reader to @sec-missing-data-further-reading for a more in-depth discussion about missing data.
 
 #### Complete case analysis
 
-Perhaps the easiest way to deal with missingness is to do a **complete case analysis** in which we remove observations that have any missing values for the variables of interest.[^13-special-topics-1] This is the approach used in many R functions. For example, when creating visualizations using **ggplot2** [@ggplot2], the visualization only includes observations that have observed values for all the variables in the visualization. There is a warning produced that indicates how many observations were excluded from the visualization. The regression functions `lm()` and `glm()` also excluded observations that have missing values for the response variable or any of the predictor variables. Unlike **ggplot2**, however, there is no warning produced. Therefore, it is imperative to conduct exploratory data analysis to identify and handle the missingness before any modeling.
+Perhaps the easiest way to deal with missingness is to do a **complete case analysis**, in which observations with any missing values are removed from the analysis.[^13-special-topics-1] This is the approach used in many R functions. For example, when creating visualizations using **ggplot2** [@ggplot2], only observations that have observed values for all the variables in the visualization are included. There is a warning produced that indicates how many observations were excluded from the visualization. The regression functions `lm()` and `glm()` also exclude observations that have missing values for the response variable or any of the predictor variables. Unlike **ggplot2**, however, there is no warning produced. Therefore, it is imperative to conduct exploratory data analysis to identify and handle the missingness before any modeling.
 
 [^13-special-topics-1]: This has been the primary approach used in the book, since our focus has been on introducing regression methods.
 
-Complete case analysis provides a good example of the importance of understanding the pattern of missingness. If the missingness is MCAR, then we could reasonably assume removing observations with missingness does not systematically bias the data since the missingness is random. If the missingness is MAR or MNAR, however, simply removing observations with missingness could potentially bias the data. For example, if we removed observations with missing values for `avg_rating` from an analysis of the `recipes` data, we would be systematically excluding recipes with no ratings. These could be newer recipes that haven't been on the site for long or recipes that are generally not popular. It could be fine to narrow the scope of the analysis to exclude new and unpopular recipes, but it is important that we are aware of this limitation and clearly communicate it as we interpret results from the analysis.
+Complete case analysis provides a good example of the importance of understanding the pattern of missingness. If the missingness is MCAR, then we could reasonably assume removing observations with missingness does not systematically bias the data, because the missingness is random. If the missingness is MAR or MNAR, however, simply removing observations with missingness could potentially bias the data. For example, if we removed observations with missing values for `avg_rating` from an analysis of the `recipes` data, we would be systematically excluding recipes with no ratings. These could be newer recipes that haven't been on the site for long or recipes that are generally not popular. It could be fine to narrow the scope of the analysis to exclude new and unpopular recipes, but it is important that we are aware of this limitation and clearly communicate it as we interpret results from the analysis.
 
 #### Imputation
 
-In general, the alternative to complete case analysis is **imputation**, a systematic approach for filling in the missing values. By filling in the missing values, we are able to retain all the observations for the analysis and thus avoid some of the potential biases from complete case analysis. In @sec-missing-data-identify, we introduced one imputation method for the missing values of `total_ratings`. We proposed imputing the missing values using a logical rule <!--# does this term need to be cited--> that recipes that had missing data for total ratings, in fact had no ratings; thus, we can impute missing values of `total_ratings` with `0`. Here we will introduce some additional imputation strategies and direct the reader to the texts in @sec-missing-data-further-reading for more advanced imputation methods.
+In general, the alternative to complete case analysis is **imputation**, a systematic approach for filling in the missing values. By filling in the missing values, we are able to retain all the observations for the analysis and thus avoid some of the potential biases from complete case analysis. The most straightforward imputation is based on a logical rule <!--# does logical rule need to be cited?-->. If the missingness is logical, such as the missingness for `total_ratings`, we can impute the missing values using a logical rule. For example, recipes that had missing data for `total_ratings`, in fact had no ratings; thus, we can impute missing values of `total_ratings` with `0`.
 
-If we are imputing missing values for a cateogrical predictor, we can fill in the missing values with `Missing` or some other label that indicates the values are missing. By doing this, we create a new level of the categorical predictor that identifies the missing observations. This is similar to the `No Response` or `Refused to respond` level on surveys to denote questions in which the paritcipate did not provide a response. If we use the variable as a predictor in a regression model, an indicator variable is created for the new `Missing` level, in addition to the other existing levels (with the exception of the baseline level). If the indicator for `Missing` is statistically significant, then we may conclude that the observations with missing data for that observation are statistically different from the baseline category. This could indicate the missingness is not completely random, and in fact, represents a subset of the population. <!--# make sure this is correct.-->
+If we are imputing missing values for a categorical predictor, we can fill in the missing values with `Missing` or a similar informative label. By doing this, we create a new level of the categorical predictor that identifies the missing observations. This is similar to the `No Response` or `Refused to respond` level on surveys to denote questions in which the participate did not provide a response. If we use the variable as a predictor in a regression model, an indicator variable is created for the new `Missing` level in addition to the other existing levels (with the exception of the baseline level). If the indicator for `Missing` is statistically significant, then we may conclude that the observations with missing data for that variable are statistically different from the baseline category. This could indicate the missingness is not completely random, but in fact, represents a subset of the population. <!--# make sure this is correct.-->
 
-There is a vast array of methods for imputing missing values for quantitative variables. One commonly used approach is **mean imputation**, in which the missing values are imputed using the mean value computed from the observed values of that variable. The primary advantages to this method are that it is easy to execute and easy to understand and explain to others. The primary disadvantage is that imputing all the missing values using the mean can result in a distorted <!--# need different word so it's not the same--> distribution of the variable, in which an out-sized proportion of the distribution is concentrated at the mean value. If this is the case, we can underestimate the variability in the variable and thus potentially compute inaccurate regression coefficients and inferential statistics if the imputed variable is used as a predictor or response variable in a regression model. Therefore, we should interpret results with caution if a large proportion of observations were imputed using the mean.
+There is a vast array of methods for imputing missing values for quantitative variables. One commonly used approach is **mean imputation**, in which the missing values are imputed using the mean value computed from the observed values of that variable. The primary advantages to this method are that it is easy to execute and easy to understand and explain to others. The primary disadvantage is that imputing all the missing values using the mean can result in a distorted <!--# need different word so it's not the same--> distribution of the variable, in which an out-sized proportion of the distribution is concentrated at the mean value. If this is the case, we can underestimate the variability in the variable and thus potentially compute inaccurate regression coefficients and inferential statistics. Therefore, we should interpret results with caution if a large proportion of observations were imputed using the mean.
 
-A more informed approach for imputing missing values is by using **nearest neighbor imputation**, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called **hot deck imputation**, or by using other observations in an external data set, called **cold deck imputation**. By using the more informed approach to filling in missing data, we reduce some of the limitations of imputation that occur with mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics [@gelman2007data].
+A more informed approach for imputing missing values is by using **nearest neighbor imputation**, in which the missing values are imputed using values from observations that look similar to the one with missing data. This can be done using other observations within the data set, called **hot deck imputation**, or by using observations from an external data set, called **cold deck imputation**. By using the more informed approach to filling in missing data, we reduce some of the limitations of mean imputation. There is still the potential to underestimate the variability of the imputed variable, but there is generally little impact to the regression coefficients and inferential statistics [@gelman2007data].
 
-These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy to mitigate the effects of these biases is **multiple imputation** [@rubin1978multiple; @rubin1987multiple] in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In @sec-missing-data-r, we show code for conducting multiple imputation in R We point the reader to the texts in @sec-missing-data-further-reading for more details about multiple imputation. <!--# do i need to cite something?-->
+These and any imputation methods can potentially result in biased data that does not accurately reflect the underlying population. A strategy to mitigate the effects of these biases is **multiple imputation** [@rubin1978multiple; @rubin1987multiple] in which multiple data sets are created using different imputation methods, then the results are averaged across the imputed data sets. In @sec-missing-data-r, we show code for conducting multiple imputation in R, and we point the reader to the texts in @sec-missing-data-further-reading for more detail about multiple imputation. <!--# do i need to cite something?-->
 
 ::: {.analysis_in_practice latex="1"}
 If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.
 :::
 
-### Handling missing data in R
+### Missing data in R
 
 The first step to identifying missingness is identifying where it occurs in the data set. Presumably, we could visually inspect the data, as in @sec-missing-data-identify, but this approach is tedious and unreliable when the data set has a lot of observations and/or variables. There are multiple functions in R that produce variable summaries, including the proportion of missing observations.
 
-The first is `summary()`, a base R function. To get a summary of all columns of a data frame, we input the name of the data frame in the function, e.g., `summary(recipes)`. We can also specify which columns to include in the summary, as shown below.
+#### Variable summaries
+
+The first is `summary()`, a base R function. To get a summary of all columns of a data frame, we input the name of the data frame in the function, e.g., `summary(recipes_sub)`. We can also use `summary()` and `select()` in a pipeline to specify a subset of variables to include in the summary.
 
 ```{r}
-recipes |>
-  select(name, calories, fat, carbs, protein,
-         avg_rating, total_ratings, reviews) |>
-  summary()
+#| echo: true
+
+summary(recipes_sub)
 ```
 
-Another option for variable summaries is `skim()` from the **skimr** R package [@skimr-2]. Similar to `summary()`, we can put the name of the data frame in the `skim()` function to produce a summary for every column. Otherwise, we can the variables to include in the data summary.
+Another option for variable summaries is `skim()` from the **skimr** package [@skimr-2] introduced in @sec-eda-data-summaries. The code and output produced by `skim()` are in @tbl-missing-data-skim. The first part of the output is an overall summary of the data, and the second part are the individual variable summaries, organized by variable type. For the purposes of this section, the most important information is in the `n_missing` and `complete_rate` columns, specifying the number of observations with missing values and the percent of observations with values, respectively.
 
 ```{r}
+echo: true
+eval: false
 
-recipes |>
-  skim(name, calories, fat, carbs, protein,
-       avg_rating, total_ratings, reviews)
+skim(recipes_sub)
 ```
 
-We can "manually" impute missing values using a logical rule or mean imputation utilizing `if_else()` from the **dplyr R package** [@dplyr]. Below is code to use mean imputation for the missing values of `reviews`.
+```{r}
+#| label: tbl-missing-data-skim
+#| tbl-cap: "Subset of output from `skim()`"
+#| echo: false
+
+skim(recipes_sub) |> 
+  select(-numeric.hist)
+```
+
+#### Imputation
+
+We can "manually" impute missing values using a logical rule or mean imputation utilizing `if_else()` in the **dplyr** package [@dplyr]. Below is code to use mean imputation for the missing values of `reviews`.
+
+<!--# maybe change this to a logical imputation to more conceptually align with previous text.-->
 
 ```{r}
+#| echo: true 
 
 # get mean of observed data
 mean_reviews <- mean(recipes$reviews, na.rm = TRUE)
@@ -192,65 +219,92 @@ recipes <- recipes |>
   )
 ```
 
-The summary statistics for `reviews_imputed` with missing data handled using mean imputation are below.
+The summary statistics for `reviews_imputed` with missing data handled using mean imputation are in @tbl-missing-data-skim-reviews-imputed.
 
 ```{r}
-recipes |>
+#|echo: true
+#|eval: false
+
+recipes_sub |>
   skim(reviews_imputed)
 ```
 
-Hot deck imputation can be done using `hotdeck()` from the **VIM** R package[@VIM]Observations are arranged best of one to three specified ordering variables, the missing values are imputed based on the values from "nearest neighbor" observations. Below is the code to impute the missing values for `calories` using hot deck imputation, where the nearest neighbors are defined based on the other nutrition variables: `fat`, `carbs`, and `protein`.
-
 ```{r}
-recipes <- hotdeck(recipes, variable = "calories",  ord_var = c("fat", "carbs", "protein"))
+#| echo: false
+#| label: tbl-missing-data-skim-reviews-imputed
+#| tbl-cap: "Summary of `reviews` with imputed values"
+recipes_sub |>
+  skim(reviews_imputed) |>
+  select(-numeric.hist)
 ```
 
-This function imputes the missing values and creates a new logical variable with the suffix `_imp` that is `TRUE` if the value was imputed and `FALSE` otherwise. The summary statistics for the variable `calories` with the missing values imputed are below.
+Hot deck imputation is done using `hotdeck()` from the **VIM** package[@VIM]. Observations are arranged based on one to three specified ordering variables, and the missing values are imputed based on the values from "nearest neighbor" observations. Below is the code to impute the missing values for `calories` using hot deck imputation, where the nearest neighbors are defined based on the other nutrition variables: `fat`, `carbs`, and `protein`.
 
 ```{r}
+#| echo: true
+
+
+recipes_sub <- hotdeck(recipes_sub, variable = "calories",  ord_var = c("fat", "carbs", "protein"))
+```
+
+This function imputes the missing values and creates a new logical variable with the suffix `_imp` that is `TRUE` if the value was imputed and `FALSE` otherwise. The summary statistics for the variable `calories` with the missing values imputed are in table @tbl-missing-data-calories-imputed.
+
+```{r}
+#| label: tbl-missing-data-calories-imputed
+#| tbl-cap: "Summary of `calories` with imputed values"
 recipes |>
-  skim(calories)
+  skim(calories) |>
+  select(-numeric.hist)
 ```
 
-We can conduct multiple mutation using the `mice()` in the **mice** package[@mice]. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is `m = 5`. We save the results as a new data frame.
+Multipel imputation is conducted using `mice()` in the **mice** package[@mice]. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is `m = 5`. The argument `printFlag = FALSE` suppress output about each iteration. We save the results as a new data frame, `recipes_sub_mice`.
 
 ```{r}
-recipes_subset <- recipes |> 
-  select(name, calories, fat, carbs, protein, avg_rating, total_ratings, reviews)
-
-recipes_mice <- mice(recipes_subset, m = 5)
+#| echo: false 
+recipes_sub_mice <- mice(recipes_sub, m = 5, printFlag = FALSE)
 ```
 
-We use `complete()` to view the completed data frames. In the code below, we view the first complete data frame.
+The `complete()` function is used to view the completed data frames. In the code below, we view the first complete data frame and provide a summary of the variables in the completed data frame.
 
 ```{r}
-recipes_mice_1 <- complete(recipes_mice, 1)
+#| echo: true
+#| eval: false
 
-recipes_mice_1 |> 
-  skim()
+recipes_sub_mice_1 <- complete(recipes_sub_mice, 1)
 
+skim(recipes_sub_mice_1)
 ```
 
-Use `ggmice()` from the **ggmice** package [@ggmice] to visualize the distribution of the imputed values for each new data frame created by `mice()`. In the code below, we view the distribution of `reviews` for the observed data and each imputed data set. The imputed data sets are defined by the variable `.imp`.
+```{r}
+#| echo: false
+
+recipes_sub_mice_1 <- complete(recipes_sub_mice, 1)
+
+skim(recipes_sub_mice_1) |>
+  select(-numeric.hist)
+```
+
+It is often helpful to visualize the imputed data in additon to the examining the summary statistics. The function `ggmice()` from the **ggmice** package [@ggmice] to visualize the distribution of the imputed values for each new data frame created by `mice()`. It follows **ggplot2** syntax, so we can use the regular **ggplot2** customization options. In the code below, we view the distribution of `reviews` for the observed data and each imputed data set. The imputed data sets are defined by the variable `.imp`.
 
 ```{r}
 #| label: fig-ggmice-reviews
 #| fig-cap: "Distribution of `reviews` for observed (blue) and imputed (red) data"
+#| echo: true
 
 library(ggmice)
+
 ggmice(recipes_mice, aes(x = .imp, y = reviews)) +
   geom_boxplot() +
   labs(x = "Imputation number",
        y = "Number of reviews")
 ```
 
-Since our ultimately analysis goal is modeling, we can evaluate whether the imputed data has a similar relationship between the response and predictor variable. For example, if we wish to use the data to explain variability in the average rating, we can look at the relationship.
-
-First we look at the relationship between the number of reviews and average ratings using `ggmice()`. The function will automatically identify the observed versus imputed observations.
+Because the ultimate analysis goal is modeling `avg_rating`, we can evaluate whether the observations in the imputed data have a similar relationship between the response and predictor variable as the observed data. For example, let's look at the relationship between the number of reviews and average ratings using `ggmice()`. The function will automatically identify the observed versus imputed observations.
 
 ```{r}
 #| label: fig-ggmice-reviews-v-rating
-#| fig-cap: "Relationship betwen `reviews` and `avg_rating` for observed and imputed data"
+#| fig-cap: "Relationship betwen `reviews` and `avg_rating` for observed and imputed data. Note that `avg_rating` has missing data, so imputed data could be mputed for either variable or both variables."
+#| echo: true
 
 ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
   geom_point() + 
@@ -258,19 +312,22 @@ ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
        y = "Average rating")
 ```
 
-The plot in @fig-ggmice-reviews-v-rating puts the values from all imputed data frames on the sample plot, so a given imputed observation is represented multiple times on the plot. If we wish to look at the relationship between two variables separately for the observed data and each imputed data set, we can facet by the imputation number (`.imp`).
+The plot in @fig-ggmice-reviews-v-rating puts the values from all imputed data frames on the sample plot, so a given imputed observation is represented multiple times on the plot. If we wish to look at the relationship between two variables separately for the observed data and each imputed data set, we can facet by the imputation number (`.imp`) as in `fig-ggmice-reviews-v-rating-facet`.
 
 ```{r}
 #| label: fig-ggmice-reviews-v-rating-facet
 #| fig-cap:  "Relationship betwen `reviews` and `avg_rating` faceted by imputation number"
+#| echo: true
+
+
 ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
   geom_jitter() + 
   facet_wrap(~ .imp)
 ```
 
-### Further reading
+### Further reading {#sec-missing-data-further-reading}
 
-We have just provided a brief introduction to handling missing data, but there is a wide variety of research and strategies for dealing with such data in an analysis. To learn more more about strategies for handling missingness and the analysis implications, see @little2019statistical and chapter 25 of @gelman2007data.
+This section provided a short introduction to working with missing data, but there is a large body of research and strategies for dealing with such data in an analysis. For more a more detailed introduction to working with missing data and the analysis implications of missingness, see @little2019statistical and chapter 25 of @gelman2007data.
 
 ## Multinomial logistic regression {#sec-multinomial}
 

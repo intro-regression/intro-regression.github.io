@@ -1,0 +1,115 @@
+---
+title: "Notation"
+format: pdf
+---
+
+# Notation glossary
+
+-   $n$: number of observations
+-   $p$: number of terms for predictors in the model (doesn't include intercept)
+-   $k$: Number of categories in a categorical predictor <!--# intro to modern statistics uses both-->
+-   $Y$: response variable
+-   $X$: predictor
+-   $\mu_{Y|X}$: Mean of $Y$ given $X$
+-   $\beta_0$: intercept
+-   $\beta_*$ coefficient
+-   $\epsilon$: error term in regression model
+-   $N()$: Normal distribution
+-   $\sigma^2_{\epsilon}$: variance of error terms
+-   $\hat{\sigma}_{\epsilon}$: regression standard error
+-   $e_i$: residual for $i^{th}$ observation
+-   $r$: correlation
+-   $\bar{x}$: mean of $x$
+-   $s_x$: sample standard deviation of $x$ ($s^2_x$ = variance)
+-   $\bar{y}$: mean of $y$
+-   $s_y$: sample standard deviation of $y$ ($s^2_y$ = variance)
+-   $C\%$: Confidence level (takes value of 0 to 100)
+-   $\alpha$: decision-making threshold for hypothesis testing
+-   $H_0:$ null hypothesis
+-   $H_a:$ alternative hypothesis
+-   $SE_{\hat{\beta}_j}$: Standard error of coefficient $\beta_j$
+-   $t_{df}$: $t$ distribution with $df$ degrees of freedom
+-   $Pr()$: probability
+-   $t^*$: critical value for confidence interval
+-   $h_i$: leverage for $i^{th}$ observation
+-   $SE_{e_i}$: standard error of $i^{th}$ residual
+-   $std.resid_i$: standardize residual for $i^{th}$ observation
+-   $D_i$: Cook's distance for $i^{th}$ observation
+-   $\mathbf{y}$: vector of responses
+-   $\mathbf{X}$: design matrix
+-   $\boldsymbol{\beta}$: vector of coefficients
+-   $\boldsymbol{\epsilon}$: vector of error terms
+-   $\mathbf{e}$: vector of residuals
+-   $C$: constant (confidence levels, centering, mxultiplicative factor)
+-   $x_{cent}$: Centered value of predictor $X$
+-   $x_{std}$: Standardized value of predictor $X$
+-   $\log(y)$: log transformation of $y$
+-   $L$: Likelihood
+-   $\log L$: log likelihood
+-   $v$: number of folds in cross validation
+-   $p$: Probability $Y=1$ in logistic regression <!--# maybe change this to $\pi$?-->
+-   $\hat{p}_i$: Estimated probability $y_i = 1$ in logistic regression
+-   $Z$: test statistic for coefficient in logistic regression
+-   $logit(p) = \log \Big(\frac{p}{1-p}\Big)$
+-   $K$: number of classes in multinomial logistic regression
+-   $m$: denotes node of decision tree
+
+# Abbreviations
+
+-   EDA: Exploratory data anlaysis
+-   $RMSE$: Root Mean Square Error
+-   $SST$: Sum of squares total
+-   $SSM$: Sum of squares model
+-   $SSR$: Sum of squares residuals
+-   $df$: degrees of freedom
+-   $AIC$: Akaike Information Criterion
+-   $BIC$: Schwarz's Bayesian Information Criterion
+-   ROC curve: Receive Operation Characteristic Curve
+-   $AUC$: Area Under the Curve
+
+# Equations
+
+## General idea of regression
+
+-   $Y = \text{Model} + \text{Error}$
+
+-   $Y = f(X) + \epsilon$ (simple linear regression)
+
+-   $Y = f(X_1, \ldots, X_k) + \epsilon$ (multiple linear regression)
+
+## Simple linear regression
+
+-   $Y = \beta_0 + \beta_1X + \epsilon, \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$ (theoretical model)
+
+-   $y_i = \beta_0 + \beta_1x_i + \epsilon_i, \epsilon_i \sim N(0, \sigma^2_{\epsilon})$ (population level model in terms of data)
+
+-   $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1x$ (fitted model)
+
+-   $Y|X \sim N(\beta_0 + \beta_1X, \sigma^2_{\epsilon})$ (distribution of $Y$ in linear regression)
+
+## Multiple linear regression
+
+-   $Y = \beta_0 + \beta_1X_1 + \dots + \beta_kX_k + \epsilon, \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$ (theoretical model)
+
+-   $y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_{k}x_{ik} + \epsilon_i, \epsilon_i \sim N(0, \sigma^2_{\epsilon})$ (population-level model in terms of data)
+
+-   $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1x_{i1} + \dots + \hat{\beta}_{k}x_{ik}$ (fitted model)
+
+-   $Y|X_1, X_2, \ldots, X_k \sim N(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_kX_k, \sigma^2_{\epsilon})$ (distribution of $Y$ in linear regression)
+
+## Linear regression statistics
+
+-   $R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}$
+-   $RMSE = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}}$
+-   Test statistic for coefficient: $T = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}$
+-   Confidence interval for coefficient: $\hat{\beta}_j \pm t^* \times SE_{\hat{\beta}_j}$
+
+## Logistic regression
+
+$\text{logit}(p) = \log\Big(\frac{p}{1-p}\Big) = \beta_0 + \beta_1x_1 + \beta_2x_2+ \dots + \beta_k x_k$
+
+where $p = Pr(y = 1)$
+
+## Random intercepts model
+
+$y_{ij} = \beta_0 + \beta_1x_{ij1} + \dots + \beta_kx_{ijk}+ u_i + \epsilon_{ij} \hspace{8mm} u_i \sim N(0, \sigma^2_{u}), \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})$
