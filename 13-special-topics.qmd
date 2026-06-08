@@ -137,7 +137,7 @@ These recipes have illustrated the two ways missingness can occur in the data: i
 
 In @sec-missing-data-identify, we observed how missingness can appear in the data and provided potential explanations for some of the patterns of missingness. Now instead of looking at individual observations, let's look at the patterns of missingness within a single variable. There are three patterns of missingness within a single variable: missing completely at random, missing at random, and missing not at random.
 
-A variable has observations **missing completely at random (MCAR)** if there is no explanable pattern to the missingness. This means there is no explainable pattern to the missingness. A variable is **missing at random (MAR)** if the pattern of missingness depends on other variables, but not the variable itself. For example, in the `recipes` data, missingness for the `avg_rating` variable is due to a recipe having no ratings (`total_ratings = 0`), not due to something about the average rating for the recipe. The last type of missing is **missing not at random (MNAR).** A variable has observations MNAR if the pattern of missingness depends on the variable itself. For example, in the recipes data `total_ratings` is MNAR, because a missing value for this variable means a recipe has 0 ratings.
+A variable has observations **missing completely at random (MCAR)** if there is no explainable pattern to the missingness. This means there is no explainable pattern to the missingness. A variable is **missing at random (MAR)** if the pattern of missingness depends on other variables, but not the variable itself. For example, in the `recipes` data, missingness for the `avg_rating` variable is due to a recipe having no ratings (`total_ratings = 0`), not due to something about the average rating for the recipe. The last type of missing is **missing not at random (MNAR).** A variable has observations MNAR if the pattern of missingness depends on the variable itself. For example, in the recipes data `total_ratings` is MNAR, because a missing value for this variable means a recipe has 0 ratings.
 
 It is important to understand the pattern of missingness, because it helps us understand how our approach for handling the missing values may bias the analysis results. We'll briefly discuss these impacts as we introduce strategies for handling missing data in @sec-missing-data-strategies
 
@@ -169,7 +169,7 @@ These and any imputation methods can potentially result in biased data that does
 If a variable has a high proportion of missing values, then the variable may not be useful for the analysis even after imputation. If this is the case, consider if there is another variable or combination of variables in the data set at provide similar information as the with one with substantial missingness.
 :::
 
-### Missing data in R
+### Missing data in R {#sec-missing-data-r}
 
 The first step to identifying missingness is identifying where it occurs in the data set. Presumably, we could visually inspect the data, as in @sec-missing-data-identify, but this approach is tedious and unreliable when the data set has a lot of observations and/or variables. There are multiple functions in R that produce variable summaries, including the proportion of missing observations.
 
@@ -186,8 +186,8 @@ summary(recipes_sub)
 Another option for variable summaries is `skim()` from the **skimr** package [@skimr-2] introduced in @sec-eda-data-summaries. The code and output produced by `skim()` are in @tbl-missing-data-skim. The first part of the output is an overall summary of the data, and the second part are the individual variable summaries, organized by variable type. For the purposes of this section, the most important information is in the `n_missing` and `complete_rate` columns, specifying the number of observations with missing values and the percent of observations with values, respectively.
 
 ```{r}
-echo: true
-eval: false
+#| echo: true
+#| eval: false
 
 skim(recipes_sub)
 ```
@@ -214,7 +214,7 @@ We can "manually" impute missing values using a logical rule or mean imputation 
 mean_reviews <- mean(recipes$reviews, na.rm = TRUE)
 
 # impute missing values with mean
-recipes <- recipes |>
+recipes_sub <- recipes_sub |>
   mutate(reviews_imputed = if_else(is.na(reviews), mean_reviews, reviews)
   )
 ```
@@ -257,7 +257,7 @@ recipes |>
   select(-numeric.hist)
 ```
 
-Multipel imputation is conducted using `mice()` in the **mice** package[@mice]. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is `m = 5`. The argument `printFlag = FALSE` suppress output about each iteration. We save the results as a new data frame, `recipes_sub_mice`.
+Multiple imputation is conducted using `mice()` in the **mice** package[@mice]. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is `m = 5`. The argument `printFlag = FALSE` suppress output about each iteration. We save the results as a new data frame, `recipes_sub_mice`.
 
 ```{r}
 #| echo: false 
@@ -284,7 +284,7 @@ skim(recipes_sub_mice_1) |>
   select(-numeric.hist)
 ```
 
-It is often helpful to visualize the imputed data in additon to the examining the summary statistics. The function `ggmice()` from the **ggmice** package [@ggmice] to visualize the distribution of the imputed values for each new data frame created by `mice()`. It follows **ggplot2** syntax, so we can use the regular **ggplot2** customization options. In the code below, we view the distribution of `reviews` for the observed data and each imputed data set. The imputed data sets are defined by the variable `.imp`.
+It is often helpful to visualize the imputed data in addition to the examining the summary statistics. The function `ggmice()` from the **ggmice** package [@ggmice] to visualize the distribution of the imputed values for each new data frame created by `mice()`. It follows **ggplot2** syntax, so we can use the regular **ggplot2** customization options. In the code below, we view the distribution of `reviews` for the observed data and each imputed data set. The imputed data sets are defined by the variable `.imp`.
 
 ```{r}
 #| label: fig-ggmice-reviews
@@ -293,7 +293,7 @@ It is often helpful to visualize the imputed data in additon to the examining th
 
 library(ggmice)
 
-ggmice(recipes_mice, aes(x = .imp, y = reviews)) +
+ggmice(recipes_sub_mice, aes(x = .imp, y = reviews)) +
   geom_boxplot() +
   labs(x = "Imputation number",
        y = "Number of reviews")
@@ -306,7 +306,7 @@ Because the ultimate analysis goal is modeling `avg_rating`, we can evaluate whe
 #| fig-cap: "Relationship betwen `reviews` and `avg_rating` for observed and imputed data. Note that `avg_rating` has missing data, so imputed data could be mputed for either variable or both variables."
 #| echo: true
 
-ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
+ggmice(recipes_sub_mice, aes(x = reviews, y = avg_rating)) +
   geom_point() + 
   labs(x = "Number of reviews",
        y = "Average rating")
@@ -320,7 +320,7 @@ The plot in @fig-ggmice-reviews-v-rating puts the values from all imputed data f
 #| echo: true
 
 
-ggmice(recipes_mice, aes(x = reviews, y = avg_rating)) +
+ggmice(recipes_sub_mice, aes(x = reviews, y = avg_rating)) +
   geom_jitter() + 
   facet_wrap(~ .imp)
 ```
