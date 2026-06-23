@@ -421,13 +421,14 @@ window.Quarto = {
   <li><a href="#sec-estimate-reg-std-err" id="toc-sec-estimate-reg-std-err" class="nav-link" data-scroll-target="#sec-estimate-reg-std-err"><span class="header-section-number">5.9.2</span> Estimating <span class="math inline">\(\sigma_{\epsilon}\)</span></a></li>
   <li><a href="#sec-slr-inf-clt-hypothesis-test" id="toc-sec-slr-inf-clt-hypothesis-test" class="nav-link" data-scroll-target="#sec-slr-inf-clt-hypothesis-test"><span class="header-section-number">5.9.3</span> Hypothesis tests for the slope</a></li>
   <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">5.9.4</span> Confidence intervals</a></li>
+  <li><a href="#prediction-intervals-1" id="toc-prediction-intervals-1" class="nav-link" data-scroll-target="#prediction-intervals-1"><span class="header-section-number">5.9.5</span> Prediction intervals</a></li>
   </ul></li>
   <li><a href="#inference-in-r" id="toc-inference-in-r" class="nav-link" data-scroll-target="#inference-in-r"><span class="header-section-number">5.10</span> Inference in R</a>
   <ul class="collapse">
-  <li><a href="#sec-slr-bootstrap-r" id="toc-sec-slr-bootstrap-r" class="nav-link" data-scroll-target="#sec-slr-bootstrap-r"><span class="header-section-number">5.10.1</span> Bootstrap confidence intervals in R</a></li>
-  <li><a href="#sec-slr-permutation-r" id="toc-sec-slr-permutation-r" class="nav-link" data-scroll-target="#sec-slr-permutation-r"><span class="header-section-number">5.10.2</span> Permutation tests in R</a></li>
-  <li><a href="#bootstrap-prediction-intervals-in-r" id="toc-bootstrap-prediction-intervals-in-r" class="nav-link" data-scroll-target="#bootstrap-prediction-intervals-in-r"><span class="header-section-number">5.10.3</span> Bootstrap prediction intervals in R</a></li>
-  <li><a href="#sec-theory-inf-r" id="toc-sec-theory-inf-r" class="nav-link" data-scroll-target="#sec-theory-inf-r"><span class="header-section-number">5.10.4</span> Theory-based inference in R</a></li>
+  <li><a href="#sec-slr-bootstrap-r" id="toc-sec-slr-bootstrap-r" class="nav-link" data-scroll-target="#sec-slr-bootstrap-r"><span class="header-section-number">5.10.1</span> Bootstrap confidence interval for <span class="math inline">\(\beta_1\)</span></a></li>
+  <li><a href="#sec-slr-permutation-r" id="toc-sec-slr-permutation-r" class="nav-link" data-scroll-target="#sec-slr-permutation-r"><span class="header-section-number">5.10.2</span> Permutation tests for <span class="math inline">\(\beta_1\)</span></a></li>
+  <li><a href="#sec-theory-inf-r" id="toc-sec-theory-inf-r" class="nav-link" data-scroll-target="#sec-theory-inf-r"><span class="header-section-number">5.10.3</span> Theory-based inference for <span class="math inline">\(\beta_1\)</span></a></li>
+  <li><a href="#prediction-intervals-2" id="toc-prediction-intervals-2" class="nav-link" data-scroll-target="#prediction-intervals-2"><span class="header-section-number">5.10.4</span> Prediction intervals</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5.11</span> Summary</a></li>
   </ul>
@@ -1597,7 +1598,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <p><span class="math display">\[\hat{\beta}_1 \pm t^* \times SE_{\hat{\beta}_1}\]</span> {#eq-conf-int-beta}</p>
 <p>where <span class="math inline">\(t^* \sim t_{n - 2}\)</span>.</p>
 <p>In <a href="#sec-slr-clt" class="quarto-xref"><span>Section 5.9.1</span></a>, we discussed <span class="math inline">\(\hat{\beta}_1\)</span> and its standard error <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>. Now we’ll focus on <span class="math inline">\(t^*\)</span>, known as the critical value.</p>
-<p>The <strong>critical value</strong> is the point on the <span class="math inline">\(t_{n-2}\)</span> distribution such that the probability of being between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span> is <span class="math inline">\(C\%\)</span>. Thinking about this visually, this is the point such that the <span class="math inline">\(C\%\)</span> of the area under the curve is between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span>. Note that we are still using a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - 2\)</span> degrees of freedom, the same distribution used to calculate the p-value in the hypothesis tests. The critical value can be calculated from modern statistical software or using online apps (more on this in <a href="#sec-theory-inf-r" class="quarto-xref"><span>Section 5.10.4</span></a>).</p>
+<p>The <strong>critical value</strong> is the point on the <span class="math inline">\(t_{n-2}\)</span> distribution such that the probability of being between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span> is <span class="math inline">\(C\%\)</span>. Thinking about this visually, this is the point such that the <span class="math inline">\(C\%\)</span> of the area under the curve is between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span>. Note that we are still using a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - 2\)</span> degrees of freedom, the same distribution used to calculate the p-value in the hypothesis tests. The critical value can be calculated from modern statistical software or using online apps (more on this in <a href="#sec-theory-inf-r" class="quarto-xref"><span>Section 5.10.3</span></a>).</p>
 <!--# add illustration of the critical value-->
 <p>Let’s calculate the 95% confidence interval for the slope of <code>per_capita_spend</code>. There are 97 observations, so we use the <span class="math inline">\(t\)</span> distribution with 95 degrees of freedom. The critical value on the <span class="math inline">\(t_{95}\)</span> distribution is 1.985. Plugging these values into <span class="quarto-unresolved-ref">?eq-conf-int-beta</span>, the 95% confidence interval is</p>
 <p><span class="math display">\[\begin{aligned}
@@ -1607,11 +1608,57 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 \end{aligned}\]</span> {#eq-parks-ci}</p>
 <p>The interpretation is the same as before: We are 95% confident that the interval 0.0001 to 0.0065 contains the true slope for <code>per_capita_expend</code>. This means we are 95% confident that for each additional dollar increase in per capita expenditure, there are 0.0001 to 0.0065 more playgrounds per 10,000 residents, on average.</p>
 </section>
+<section id="prediction-intervals-1" class="level3" data-number="5.9.5">
+<h3 data-number="5.9.5" class="anchored" data-anchor-id="prediction-intervals-1"><span class="header-section-number">5.9.5</span> Prediction intervals</h3>
+<ul>
+<li><p>in [SEC] we introduced intervals to quantify uncertainty. As with the inference for model coefficients, there are theory-based approaches that provide equations for computing prediction intervals.</p></li>
+<li><p>The advantage of these methods is that they are very quick, since they do not rely on simulating data.</p></li>
+<li><p>The primary disadvantage is that they require that certain assumptions are met. We discuss this more in [ChAP REf].</p></li>
+<li><p>As introduced in [CI- SEC], intervals for prediction take the same format as all other intervals estimate +/- critical value * SE.</p></li>
+<li><p>The estimate is the predicted value <span class="math inline">\(\hat{y}\)</span> that is obtained by plugging in the value of the predictor.</p></li>
+<li><p>We compute the critical value in the same way as discussed in [SEC].</p></li>
+<li><p>Thus, lets spend some time on the standard error.</p></li>
+<li><p>There are two types of intervals for predictions - (1) the interval around the estimated mean response at a given value of the predictor and (2) the interval for the predicted value for an individual observation.</p></li>
+<li><p>Your turn. which interval do you expect to be wider - interval for the mean response or interval for the prediction of a individual response? why?</p></li>
+<li><p>Based on theoretical results, the equation for the estimated mean response is [INSERT EQUATION].</p></li>
+<li><p>The equation for the prediction for an individual response is [INSERT EQUATION].</p></li>
+<li><p>Note that hte standard error for the interval for an individual respose has the additional +1. This is to account for the additional variabiltiy in the distribution of the respose around the regression line.</p></li>
+</ul>
+<p>Lets take a look at the intervals for the mean response for cities with expediture of $150 and the interval for a individual city with expendutre of $150.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Type</th>
+<th style="text-align: right;">Lower bound</th>
+<th style="text-align: right;">Upper bound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1…1</td>
+<td style="text-align: right;">2.91</td>
+<td style="text-align: right;">2.656</td>
+<td style="text-align: right;">3.17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1…2</td>
+<td style="text-align: right;">2.91</td>
+<td style="text-align: right;">0.654</td>
+<td style="text-align: right;">5.17</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
 </section>
 <section id="inference-in-r" class="level2" data-number="5.10">
 <h2 data-number="5.10" class="anchored" data-anchor-id="inference-in-r"><span class="header-section-number">5.10</span> Inference in R</h2>
 <section id="sec-slr-bootstrap-r" class="level3" data-number="5.10.1">
-<h3 data-number="5.10.1" class="anchored" data-anchor-id="sec-slr-bootstrap-r"><span class="header-section-number">5.10.1</span> Bootstrap confidence intervals in R</h3>
+<h3 data-number="5.10.1" class="anchored" data-anchor-id="sec-slr-bootstrap-r"><span class="header-section-number">5.10.1</span> Bootstrap confidence interval for <span class="math inline">\(\beta_1\)</span></h3>
 <p>The bootstrap distribution and confidence interval are computed using the <strong>infer</strong> package <span class="citation" data-cites="infer-2">(<a href="references.html#ref-infer-2" role="doc-biblioref">Couch et al. 2021</a>)</span>. Because bootstrapping is a random sampling process, the code begins with <code>set.seed()</code> to ensure the results are reproducible. Any integer value can go inside the <code>set.seed</code> function.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
@@ -1660,7 +1707,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="05-slr-inference_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1681,7 +1728,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 </div>
 </section>
 <section id="sec-slr-permutation-r" class="level3" data-number="5.10.2">
-<h3 data-number="5.10.2" class="anchored" data-anchor-id="sec-slr-permutation-r"><span class="header-section-number">5.10.2</span> Permutation tests in R</h3>
+<h3 data-number="5.10.2" class="anchored" data-anchor-id="sec-slr-permutation-r"><span class="header-section-number">5.10.2</span> Permutation tests for <span class="math inline">\(\beta_1\)</span></h3>
 <p>The null distribution and p-value for the permutation test are computed using the <strong>infer</strong> package <span class="citation" data-cites="infer-2">(<a href="references.html#ref-infer-2" role="doc-biblioref">Couch et al. 2021</a>)</span>. Much of the code to generate the null distribution is similar to the code for the bootstrap distribution. Because permutation sampling is a random process, the code starts with <code>set.seed()</code> to ensure the results are reproducible.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
@@ -1731,7 +1778,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="05-slr-inference_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1755,49 +1802,14 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 </div>
 <!--# Callout box about gettig pvalue exactly equal to 0. May be confusing here, because we didnt get a pvalue of 0. When using permutation tests, the software may output a p-value of 0, as in this example. Note that the true theoretical p-value is <u>not</u> exactly 0; it is just so small that we did not observe a slope at least as extreme as the slope estimated from the sample data in the r niter permutation samples used to generate the null distribution. We will calculate the exact p-value in @sec-slr-inf-clt-hypothesis-test when we conduct hypothesis testing using theory-based inference methods.-->
 </section>
-<section id="bootstrap-prediction-intervals-in-r" class="level3" data-number="5.10.3">
-<h3 data-number="5.10.3" class="anchored" data-anchor-id="bootstrap-prediction-intervals-in-r"><span class="header-section-number">5.10.3</span> Bootstrap prediction intervals in R</h3>
-<ul>
-<li><p>The code for simulation-based prediction intervals are an extension to the code for bootstrapped intervals.</p></li>
-<li><p>We compute the slope and intercept from each bootstrap sample, then we need to <code>pivot</code> the data so that there is a separate column for the slope and intercept.</p></li>
-<li><p>Then we use mutate to compute the predicted values.</p></li>
-<li><p>Similar to bootstrap confidence intervals, we use <code>quantile()</code> to compute the lower and upper bounds.</p></li>
-<li><p>The full pipeline is below</p></li>
-</ul>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">=</span> <span class="dv">1000</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="ot">&lt;-</span> parks <span class="sc">|&gt;</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(playgrounds <span class="sc">~</span> per_capita_expend) <span class="sc">|&gt;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> niter, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> term,</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> estimate</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prediction =</span> intercept <span class="sc">+</span> per_capita_expend <span class="sc">*</span> <span class="dv">150</span>) </span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="sc">|&gt;</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">boot_pred_lb =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.025</span>),</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">boot_pred_ub =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  boot_pred_lb boot_pred_ub
-         &lt;dbl&gt;        &lt;dbl&gt;
-1         2.67         3.23</code></pre>
-</div>
-</div>
-</section>
-<section id="sec-theory-inf-r" class="level3" data-number="5.10.4">
-<h3 data-number="5.10.4" class="anchored" data-anchor-id="sec-theory-inf-r"><span class="header-section-number">5.10.4</span> Theory-based inference in R</h3>
+<section id="sec-theory-inf-r" class="level3" data-number="5.10.3">
+<h3 data-number="5.10.3" class="anchored" data-anchor-id="sec-theory-inf-r"><span class="header-section-number">5.10.3</span> Theory-based inference for <span class="math inline">\(\beta_1\)</span></h3>
 <p>The output from <code>lm()</code> contains the statistics discussed in this section to conduct theory-based inference. The p-value in the output corresponds to the two-sided alternative hypothesis <span class="math inline">\(H_a: \beta_1 \neq 0\)</span>.</p>
 <p>The confidence interval does not display by default, but can be added using the <code>conf.int</code> argument in the <code>tidy</code> function. The default confidence level is 95%; it can be adjusted using the <code>conf.level</code> argument in <code>tidy()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>parks_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(playgrounds <span class="sc">~</span> per_capita_expend, <span class="at">data =</span> parks)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(parks_fit, <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level=</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>parks_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(playgrounds <span class="sc">~</span> per_capita_expend, <span class="at">data =</span> parks)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(parks_fit, <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level=</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
   term              estimate std.error statistic  p.value conf.low conf.high
@@ -1812,6 +1824,68 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <pre><code>[1] 1.99</code></pre>
 </div>
 </div>
+</section>
+<section id="prediction-intervals-2" class="level3" data-number="5.10.4">
+<h3 data-number="5.10.4" class="anchored" data-anchor-id="prediction-intervals-2"><span class="header-section-number">5.10.4</span> Prediction intervals</h3>
+<section id="bootstrap-intervals-for-the-mean-response" class="level4" data-number="5.10.4.1">
+<h4 data-number="5.10.4.1" class="anchored" data-anchor-id="bootstrap-intervals-for-the-mean-response"><span class="header-section-number">5.10.4.1</span> Bootstrap intervals for the mean response</h4>
+<ul>
+<li><p>The code for simulation-based prediction intervals are an extension to the code for bootstrapped intervals.</p></li>
+<li><p>We compute the slope and intercept from each bootstrap sample, then we need to <code>pivot</code> the data so that there is a separate column for the slope and intercept.</p></li>
+<li><p>Then we use mutate to compute the predicted values.</p></li>
+<li><p>Similar to bootstrap confidence intervals, we use <code>quantile()</code> to compute the lower and upper bounds.</p></li>
+<li><p>The full pipeline is below</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="ot">&lt;-</span> parks <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(playgrounds <span class="sc">~</span> per_capita_expend) <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> niter, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> term,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> estimate</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prediction =</span> intercept <span class="sc">+</span> per_capita_expend <span class="sc">*</span> <span class="dv">150</span>) </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="sc">|&gt;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">boot_pred_lb =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.025</span>),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">boot_pred_ub =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  boot_pred_lb boot_pred_ub
+         &lt;dbl&gt;        &lt;dbl&gt;
+1         2.67         3.23</code></pre>
+</div>
+</div>
+</section>
+<section id="theory-based-intervals" class="level4" data-number="5.10.4.2">
+<h4 data-number="5.10.4.2" class="anchored" data-anchor-id="theory-based-intervals"><span class="header-section-number">5.10.4.2</span> Theory-based intervals</h4>
+<p>Use <code>predict()</code> introduced in [REF - chap 4?]. code is shown below.</p>
+<ul>
+<li><p>Make a tibble with the new value.</p></li>
+<li><p>Argument <code>interval =</code> takes value <code>confidence</code> for the interval for the mean response and <code>prediction</code> for the interval for an individual response.</p></li>
+<li><p><code>level</code> is the is a value 0 to 1 that specifies the confidence level.</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interval for mean response</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(parks_model, new_city_expend, <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   fit  lwr  upr
+1 2.91 2.66 3.17</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interval for individual response</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(parks_model, new_city_expend, <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   fit   lwr  upr
+1 2.91 0.654 5.17</code></pre>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="summary" class="level2" data-number="5.11">

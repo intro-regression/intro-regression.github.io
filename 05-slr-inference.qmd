@@ -1016,9 +1016,50 @@ $$\begin{aligned}
 
 The interpretation is the same as before: We are 95% confident that the interval 0.0001 to 0.0065 contains the true slope for `per_capita_expend`. This means we are 95% confident that for each additional dollar increase in per capita expenditure, there are 0.0001 to 0.0065 more playgrounds per 10,000 residents, on average.
 
+### Prediction intervals 
+
+- in \[SEC\] we introduced intervals to quantify uncertainty. As with the inference for model coefficients, there are theory-based approaches that provide equations for computing prediction intervals.
+
+- The advantage of these methods is that they are very quick, since they do not rely on simulating data.
+
+- The primary disadvantage is that they require that certain assumptions are met. We discuss this more in \[ChAP REf\].
+
+- As introduced in \[CI- SEC\], intervals for prediction take the same format as all other intervals estimate +/- critical value \* SE.
+
+- The estimate is the predicted value $\hat{y}$ that is obtained by plugging in the value of the predictor.
+
+- We compute the critical value in the same way as discussed in \[SEC\].
+
+- Thus, lets spend some time on the standard error.
+
+- There are two types of intervals for predictions - (1) the interval around the estimated mean response at a given value of the predictor and (2) the interval for the predicted value for an individual observation.
+
+- Your turn. which interval do you expect to be wider - interval for the mean response or interval for the prediction of a individual response? why?
+
+- Based on theoretical results, the equation for the estimated mean response is \[INSERT EQUATION\].
+
+- The equation for the prediction for an individual response is \[INSERT EQUATION\].
+
+- Note that hte standard error for the interval for an individual respose has the additional +1. This is to account for the additional variabiltiy in the distribution of the respose around the regression line.
+
+Lets take a look at the intervals for the mean response for cities with expediture of \$150 and the interval for a individual city with expendutre of \$150.
+
+```{r}
+new_city_expend <- tibble(per_capita_expend = 150)
+
+mean_predict <- as.data.frame(predict(parks_model, new_city_expend, interval = "confidence", level = 0.95))
+
+individual_predict <- as.data.frame(predict(parks_model, new_city_expend, interval = "prediction", level = 0.95))
+
+bind_rows(mean_predict, individual_predict)  |>
+  mutate(type = c("Mean response", "Individual response"), .before = 1) |>
+  select(fit, lwr, upr) |>
+  kable(digits = 3, col.names = c("Type", "Lower bound", "Upper bound"))
+```
+
 ## Inference in R
 
-### Bootstrap confidence intervals in R {#sec-slr-bootstrap-r}
+### Bootstrap confidence interval for $\beta_1$  {#sec-slr-bootstrap-r}
 
 The bootstrap distribution and confidence interval are computed using the **infer** package [@infer-2]. Because bootstrapping is a random sampling process, the code begins with `set.seed()` to ensure the results are reproducible. Any integer value can go inside the `set.seed` function.
 
@@ -1065,7 +1106,7 @@ boot_dist |>
             ub = quantile(estimate, 0.975))
 ```
 
-### Permutation tests in R {#sec-slr-permutation-r}
+### Permutation tests for $\beta_1$  {#sec-slr-permutation-r}
 
 The null distribution and p-value for the permutation test are computed using the **infer** package [@infer-2]. Much of the code to generate the null distribution is similar to the code for the bootstrap distribution. Because permutation sampling is a random process, the code starts with `set.seed()` to ensure the results are reproducible.
 
@@ -1119,7 +1160,28 @@ get_p_value(null_dist, estimated_slope, direction = "both") |>
 
 <!--# Callout box about gettig pvalue exactly equal to 0. May be confusing here, because we didnt get a pvalue of 0. When using permutation tests, the software may output a p-value of 0, as in this example. Note that the true theoretical p-value is <u>not</u> exactly 0; it is just so small that we did not observe a slope at least as extreme as the slope estimated from the sample data in the r niter permutation samples used to generate the null distribution. We will calculate the exact p-value in @sec-slr-inf-clt-hypothesis-test when we conduct hypothesis testing using theory-based inference methods.-->
 
-### Bootstrap prediction intervals in R
+### Theory-based inference for $\beta_1$  {#sec-theory-inf-r}
+
+The output from `lm()` contains the statistics discussed in this section to conduct theory-based inference. The p-value in the output corresponds to the two-sided alternative hypothesis $H_a: \beta_1 \neq 0$.
+
+The confidence interval does not display by default, but can be added using the `conf.int` argument in the `tidy` function. The default confidence level is 95%; it can be adjusted using the `conf.level` argument in `tidy()`.
+
+```{r}
+#| echo: true
+parks_fit <- lm(playgrounds ~ per_capita_expend, data = parks)
+
+tidy(parks_fit, conf.int = TRUE, conf.level= 0.95)
+```
+
+In practice, we use the output from `tidy()` to get the confidence interval. To compute the confidence interval directly from the formula in @eq-conf-int-beta, we get $\hat{\beta}_1$ from the `estimate` column of the `tidy()` output and $SE_{\hat{\beta}_1}$ from the `std.error` column. The critical value is computed using the `qt` function. the first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in @eq-parks-ci is
+
+```{r}
+qt(0.975, 95)
+```
+
+### Prediction intervals 
+
+#### Bootstrap intervals for the mean response
 
 - The code for simulation-based prediction intervals are an extension to the code for bootstrapped intervals.
 
@@ -1155,23 +1217,27 @@ boot_prediction |>
               boot_pred_ub = quantile(prediction, 0.975))
 ```
 
-### Theory-based inference in R {#sec-theory-inf-r}
+#### Theory-based intervals 
 
-The output from `lm()` contains the statistics discussed in this section to conduct theory-based inference. The p-value in the output corresponds to the two-sided alternative hypothesis $H_a: \beta_1 \neq 0$.
+Use `predict()` introduced in \[REF - chap 4?\]. code is shown below.
 
-The confidence interval does not display by default, but can be added using the `conf.int` argument in the `tidy` function. The default confidence level is 95%; it can be adjusted using the `conf.level` argument in `tidy()`.
+- Make a tibble with the new value.
+
+- Argument `interval =` takes value `confidence` for the interval for the mean response and `prediction` for the interval for an individual response.
+
+- `level` is the is a value 0 to 1 that specifies the confidence level.
 
 ```{r}
 #| echo: true
-parks_fit <- lm(playgrounds ~ per_capita_expend, data = parks)
 
-tidy(parks_fit, conf.int = TRUE, conf.level= 0.95)
-```
+# interval for mean response
+predict(parks_model, new_city_expend, interval = "confidence", level = 0.95)
 
-In practice, we use the output from `tidy()` to get the confidence interval. To compute the confidence interval directly from the formula in @eq-conf-int-beta, we get $\hat{\beta}_1$ from the `estimate` column of the `tidy()` output and $SE_{\hat{\beta}_1}$ from the `std.error` column. The critical value is computed using the `qt` function. the first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in @eq-parks-ci is
 
-```{r}
-qt(0.975, 95)
+# interval for individual response
+
+predict(parks_model, new_city_expend, interval = "prediction", level = 0.95)
+
 ```
 
 ## Summary
