@@ -1119,7 +1119,41 @@ get_p_value(null_dist, estimated_slope, direction = "both") |>
 
 <!--# Callout box about gettig pvalue exactly equal to 0. May be confusing here, because we didnt get a pvalue of 0. When using permutation tests, the software may output a p-value of 0, as in this example. Note that the true theoretical p-value is <u>not</u> exactly 0; it is just so small that we did not observe a slope at least as extreme as the slope estimated from the sample data in the r niter permutation samples used to generate the null distribution. We will calculate the exact p-value in @sec-slr-inf-clt-hypothesis-test when we conduct hypothesis testing using theory-based inference methods.-->
 
-### Prediction intervals in R
+### Bootstrap prediction intervals in R
+
+- The code for simulation-based prediction intervals are an extension to the code for bootstrapped intervals.
+
+- We compute the slope and intercept from each bootstrap sample, then we need to `pivot` the data so that there is a separate column for the slope and intercept.
+
+- Then we use mutate to compute the predicted values.
+
+- Similar to bootstrap confidence intervals, we use `quantile()` to compute the lower and upper bounds.
+
+- The full pipeline is below
+
+```{r}
+#| echo: true 
+
+
+
+set.seed(12345)
+
+niter = 1000
+boot_prediction <- parks |>
+  specify(playgrounds ~ per_capita_expend) |>
+  generate(reps = niter, type = "bootstrap") |>
+  fit() |>
+  ungroup() |>
+  pivot_wider(
+    names_from = term,
+    values_from = estimate
+  ) |>
+  mutate(prediction = intercept + per_capita_expend * 150) 
+
+boot_prediction |>
+  summarise(boot_pred_lb = quantile(prediction, 0.025),
+              boot_pred_ub = quantile(prediction, 0.975))
+```
 
 ### Theory-based inference in R {#sec-theory-inf-r}
 
