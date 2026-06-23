@@ -414,20 +414,22 @@ window.Quarto = {
   <li><a href="#type-i-and-type-ii-error" id="toc-type-i-and-type-ii-error" class="nav-link" data-scroll-target="#type-i-and-type-ii-error"><span class="header-section-number">5.6.5</span> Type I and Type II error</a></li>
   </ul></li>
   <li><a href="#sec-slr-inf-relationship-ci-test" id="toc-sec-slr-inf-relationship-ci-test" class="nav-link" data-scroll-target="#sec-slr-inf-relationship-ci-test"><span class="header-section-number">5.7</span> Relationship between confidence intervals and hypothesis tests</a></li>
-  <li><a href="#sec-slr-inf-clt" id="toc-sec-slr-inf-clt" class="nav-link" data-scroll-target="#sec-slr-inf-clt"><span class="header-section-number">5.8</span> Theory-based inference</a>
+  <li><a href="#prediction-intervals" id="toc-prediction-intervals" class="nav-link" data-scroll-target="#prediction-intervals"><span class="header-section-number">5.8</span> Prediction intervals</a></li>
+  <li><a href="#sec-slr-inf-clt" id="toc-sec-slr-inf-clt" class="nav-link" data-scroll-target="#sec-slr-inf-clt"><span class="header-section-number">5.9</span> Theory-based inference</a>
   <ul class="collapse">
-  <li><a href="#sec-slr-clt" id="toc-sec-slr-clt" class="nav-link" data-scroll-target="#sec-slr-clt"><span class="header-section-number">5.8.1</span> Central Limit Theorem</a></li>
-  <li><a href="#sec-estimate-reg-std-err" id="toc-sec-estimate-reg-std-err" class="nav-link" data-scroll-target="#sec-estimate-reg-std-err"><span class="header-section-number">5.8.2</span> Estimating <span class="math inline">\(\sigma_{\epsilon}\)</span></a></li>
-  <li><a href="#sec-slr-inf-clt-hypothesis-test" id="toc-sec-slr-inf-clt-hypothesis-test" class="nav-link" data-scroll-target="#sec-slr-inf-clt-hypothesis-test"><span class="header-section-number">5.8.3</span> Hypothesis test for the slope</a></li>
-  <li><a href="#confidence-interval" id="toc-confidence-interval" class="nav-link" data-scroll-target="#confidence-interval"><span class="header-section-number">5.8.4</span> Confidence interval</a></li>
+  <li><a href="#sec-slr-clt" id="toc-sec-slr-clt" class="nav-link" data-scroll-target="#sec-slr-clt"><span class="header-section-number">5.9.1</span> Central Limit Theorem</a></li>
+  <li><a href="#sec-estimate-reg-std-err" id="toc-sec-estimate-reg-std-err" class="nav-link" data-scroll-target="#sec-estimate-reg-std-err"><span class="header-section-number">5.9.2</span> Estimating <span class="math inline">\(\sigma_{\epsilon}\)</span></a></li>
+  <li><a href="#sec-slr-inf-clt-hypothesis-test" id="toc-sec-slr-inf-clt-hypothesis-test" class="nav-link" data-scroll-target="#sec-slr-inf-clt-hypothesis-test"><span class="header-section-number">5.9.3</span> Hypothesis tests for the slope</a></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">5.9.4</span> Confidence intervals</a></li>
   </ul></li>
-  <li><a href="#inference-in-r" id="toc-inference-in-r" class="nav-link" data-scroll-target="#inference-in-r"><span class="header-section-number">5.9</span> Inference in R</a>
+  <li><a href="#inference-in-r" id="toc-inference-in-r" class="nav-link" data-scroll-target="#inference-in-r"><span class="header-section-number">5.10</span> Inference in R</a>
   <ul class="collapse">
-  <li><a href="#sec-slr-bootstrap-r" id="toc-sec-slr-bootstrap-r" class="nav-link" data-scroll-target="#sec-slr-bootstrap-r"><span class="header-section-number">5.9.1</span> Bootstrap confidence intervals in R</a></li>
-  <li><a href="#sec-slr-permutation-r" id="toc-sec-slr-permutation-r" class="nav-link" data-scroll-target="#sec-slr-permutation-r"><span class="header-section-number">5.9.2</span> Permutation tests in R</a></li>
-  <li><a href="#sec-theory-inf-r" id="toc-sec-theory-inf-r" class="nav-link" data-scroll-target="#sec-theory-inf-r"><span class="header-section-number">5.9.3</span> Theory-based inference in R</a></li>
+  <li><a href="#sec-slr-bootstrap-r" id="toc-sec-slr-bootstrap-r" class="nav-link" data-scroll-target="#sec-slr-bootstrap-r"><span class="header-section-number">5.10.1</span> Bootstrap confidence intervals in R</a></li>
+  <li><a href="#sec-slr-permutation-r" id="toc-sec-slr-permutation-r" class="nav-link" data-scroll-target="#sec-slr-permutation-r"><span class="header-section-number">5.10.2</span> Permutation tests in R</a></li>
+  <li><a href="#prediction-intervals-in-r" id="toc-prediction-intervals-in-r" class="nav-link" data-scroll-target="#prediction-intervals-in-r"><span class="header-section-number">5.10.3</span> Prediction intervals in R</a></li>
+  <li><a href="#sec-theory-inf-r" id="toc-sec-theory-inf-r" class="nav-link" data-scroll-target="#sec-theory-inf-r"><span class="header-section-number">5.10.4</span> Theory-based inference in R</a></li>
   </ul></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5.10</span> Summary</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5.11</span> Summary</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -464,6 +466,7 @@ window.Quarto = {
 <li>Interpret results from statistical inference in the context of the data</li>
 <li>Explain the connection between hypothesis tests and confidence intervals</li>
 </ul>
+<!--# add something about prediction intervals-->
 </section>
 <section id="sec-slr-inf-data" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="sec-slr-inf-data"><span class="header-section-number">5.1</span> Introduction: Access to playgrounds</h2>
@@ -608,9 +611,7 @@ Figure&nbsp;5.2: Bivariate exploratory data analysis of <code>playgrounds</code>
 <section id="linear-regression-model" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="linear-regression-model">Linear regression model</h4>
 <p>To better explore this relationship, we fit a simple linear regression model of the form</p>
-<p><span id="eq-parks-stat-model"><span class="math display">\[
-\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-\tag{5.1}\]</span></span></p>
+<p><span class="math display">\[\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-parks-stat-model}</p>
 <p>The output of the fitted regression model is <a href="#tbl-parks-model" class="quarto-xref">Table&nbsp;<span>5.2</span></a>.</p>
 <div class="cell">
 <div id="tbl-parks-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -652,9 +653,7 @@ Table&nbsp;5.2: Linear regression model <code>per_capita_expend</code> and <code
 </figure>
 </div>
 </div>
-<p><span id="eq-parks-model"><span class="math display">\[
-\widehat{\text{playgrounds}} = 2.418 + 0.003 \times \text{per\_capita\_expend}
-\tag{5.2}\]</span></span></p>
+<p><span class="math display">\[\widehat{\text{playgrounds}} = 2.418 + 0.003 \times \text{per\_capita\_expend}\]</span> {#eq-parks-model}</p>
 <div class="yourturn">
 <ul>
 <li>Interpret the slope in the context of the data.</li>
@@ -683,7 +682,7 @@ Table&nbsp;5.2: Linear regression model <code>per_capita_expend</code> and <code
 <li><p><strong>Simulation-based methods</strong>: Quantify the sampling variability by generating a sampling distribution directly from the data</p></li>
 <li><p><strong>Theory-based methods:</strong> Quantify the sampling variability using mathematical models based on the Central Limit Theorem</p></li>
 </ul>
-<p><a href="#sec-bootstrap-ci" class="quarto-xref"><span>Section 5.4</span></a> and <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> introduce statistical inference using simulation-based methods, and <a href="#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.8</span></a> introduces inference using theory-based methods. Before we get into those details, however, let’s introduce more of the foundational ideas underlying simple linear regression and how they relate to statistical inference.</p>
+<p><a href="#sec-bootstrap-ci" class="quarto-xref"><span>Section 5.4</span></a> and <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> introduce statistical inference using simulation-based methods, and <a href="#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.9</span></a> introduces inference using theory-based methods. Before we get into those details, however, let’s introduce more of the foundational ideas underlying simple linear regression and how they relate to statistical inference.</p>
 <!--# key terms box?-->
 <!--# Statistical inference: Using sample data to draw conclusions about a population.-->
 <!--# Population parameter: Quantitative measure of a feature of the population (for example, the slope for the population)-->
@@ -695,19 +694,17 @@ Table&nbsp;5.2: Linear regression model <code>per_capita_expend</code> and <code
 <section id="sec-slr-foundation" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="sec-slr-foundation"><span class="header-section-number">5.3</span> Foundations of simple linear regression</h2>
 <!--# does this section need to be here or could it be somewhere else?-->
-<p>In <a href="04-slr.html#sec-slr-specify" class="quarto-xref"><span>Section 4.3.1</span></a>, we introduced the statistical model for simple linear regression <span id="eq-slr-model-ch5"><span class="math display">\[
-Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-\tag{5.3}\]</span></span></p>
-<p>such that <span class="math inline">\(Y\)</span> is the response variable, <span class="math inline">\(X\)</span> is the predictor variable, and <span class="math inline">\(\epsilon\)</span> is the error term. <a href="#eq-slr-model-ch5" class="quarto-xref">Equation&nbsp;<span>5.3</span></a> can be rewritten in terms of the distribution of the response variable <span class="math inline">\(Y\)</span> given the predictor <span class="math inline">\(X\)</span>. It is represented as <span class="math inline">\(Y|X\)</span> ( “<span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>”)</p>
-<p><span id="eq-slr-dist"><span class="math display">\[Y|X \sim N(\beta_0 + \beta_1X , \sigma^2_\epsilon) \tag{5.4}\]</span></span></p>
-<p><a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.4</span></a> is the assumed distribution of the response variable conditional on the predictor variable under the simple linear regression model. Therefore, we conduct simple linear regression assuming <a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.4</span></a> is true. <!--# @fig-slr-assumptions is a visual representation of this equation.--> Based on the equation <!--# and figure --> we specify the assumptions that are made when we do simple linear regression. More specifically, the following assumptions are made based on <a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.4</span></a>:</p>
+<p>In <a href="04-slr.html#sec-slr-specify" class="quarto-xref"><span>Section 4.3.1</span></a>, we introduced the statistical model for simple linear regression <span class="math display">\[Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-slr-model-ch5}</p>
+<p>such that <span class="math inline">\(Y\)</span> is the response variable, <span class="math inline">\(X\)</span> is the predictor variable, and <span class="math inline">\(\epsilon\)</span> is the error term. <span class="quarto-unresolved-ref">?eq-slr-model-ch5</span> can be rewritten in terms of the distribution of the response variable <span class="math inline">\(Y\)</span> given the predictor <span class="math inline">\(X\)</span>. It is represented as <span class="math inline">\(Y|X\)</span> ( “<span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>”)</p>
+<p><span id="eq-slr-dist"><span class="math display">\[Y|X \sim N(\beta_0 + \beta_1X , \sigma^2_\epsilon) \tag{5.1}\]</span></span></p>
+<p><a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> is the assumed distribution of the response variable conditional on the predictor variable under the simple linear regression model. Therefore, we conduct simple linear regression assuming <a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> is true. <!--# @fig-slr-assumptions is a visual representation of this equation.--> Based on the equation <!--# and figure --> we specify the assumptions that are made when we do simple linear regression. More specifically, the following assumptions are made based on <a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>:</p>
 <!--# Insert replica of favorite picture #fig-slr-assumptions-->
 <!--# reorder these assumptions to put normal as #3-->
 <ol type="1">
 <li><p>The distribution of the response <span class="math inline">\(Y\)</span> is normal for a given value of the predictor <span class="math inline">\(X\)</span>.</p></li>
 <li><p>The expected value (mean) of <span class="math inline">\(Y|X\)</span> is <span class="math inline">\(\beta_0 + \beta_1 X\)</span>. There is a linear relationship between the response and predictor variable.</p></li>
 <li><p>The variance <span class="math inline">\(Y|X\)</span> is <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. This variance is equal for all values of <span class="math inline">\(X\)</span> and thus does not depend on <span class="math inline">\(X\)</span>.</p></li>
-<li><p>The error terms for each observation, <span class="math inline">\(\epsilon\)</span> in <a href="#eq-slr-model-ch5" class="quarto-xref">Equation&nbsp;<span>5.3</span></a>, are independent. This also means the values of the response variable, and observations more generally, are independent.</p></li>
+<li><p>The error terms for each observation, <span class="math inline">\(\epsilon\)</span> in <span class="quarto-unresolved-ref">?eq-slr-model-ch5</span>, are independent. This also means the values of the response variable, and observations more generally, are independent.</p></li>
 </ol>
 <!--# Add an appendix that goes into some of those, for example #4-->
 <p>Whenever we fit linear regression models and conduct inference on the slope, we do so under the assumption that some or all of these four statements hold. In <a href="06-slr-conditions.html" class="quarto-xref"><span>Chapter 6</span></a>, we will discuss how to check if these assumptions hold in a given analysis. As we might expect, these assumptions do not always perfectly hold in practice, so we will also discuss circumstances in which an assumption is necessary versus when an assumption can be relaxed. For the remainder of this chapter, however, we will proceed as if all four assumptions hold.</p>
@@ -722,7 +719,7 @@ Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\ep
 </section>
 <section id="sec-bootstrap-ci" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="sec-bootstrap-ci"><span class="header-section-number">5.4</span> Bootstrap confidence intervals</h2>
-<p>We’ll begin by looking at simulation-based methods for statistical inference: bootstrap confidence intervals and permutation tests (<a href="#sec-slr-permutation-r" class="quarto-xref"><span>Section 5.9.2</span></a>). In these procedures, we use the sample data to construct a simulated sampling distribution to quantify the sample-to-sample variability in <span class="math inline">\(\hat{\beta}_1\)</span>. Let’s start with the simulation-based approach to construct confidence intervals.</p>
+<p>We’ll begin by looking at simulation-based methods for statistical inference: bootstrap confidence intervals and permutation tests (<a href="#sec-slr-permutation-r" class="quarto-xref"><span>Section 5.10.2</span></a>). In these procedures, we use the sample data to construct a simulated sampling distribution to quantify the sample-to-sample variability in <span class="math inline">\(\hat{\beta}_1\)</span>. Let’s start with the simulation-based approach to construct confidence intervals.</p>
 <p>A <strong>confidence interval</strong> is a range of values the population-level slope <span class="math inline">\(\beta_1\)</span> may reasonably take. Though we have <span class="math inline">\(\hat{\beta}_1\)</span>, the best guess for the population slope (called a <em>point estimate</em>) , we are more likely to capture the value of the true population slope by computing a range of plausible values than by solely relying on a single estimate. We get this range by constructing <span class="math inline">\(C\%\)</span> confidence intervals, where <span class="math inline">\(C\%\)</span> is how confident we are the interval contains <span class="math inline">\(\beta_1\)</span> based on the statistical methods.</p>
 <p>In order to obtain this range of values we must understand the sampling variability of the statistic. Suppose we repeatedly take samples of size <span class="math inline">\(n\)</span> (the same size as the sample data) and fit regression models to compute <span class="math inline">\(\hat{\beta}_1\)</span>, the estimated slope. Recall that the sampling variability is the variability in these estimated slopes. In practice, it is generally not feasible to collect multiple samples from the population, so we use our sample data to simulate the process of obtaining new samples. We generate these new samples by <strong>bootstrapping</strong>, a simulation process in which we generate a sample of size <span class="math inline">\(n\)</span> by sampling with replacement from the current data. <!--# Add the origin of calling this bootstrap?--></p>
 <p>We then fit the regression model and compute <span class="math inline">\(\hat{\beta}_1\)</span> for each bootstrap sample. These <span class="math inline">\(\hat{\beta}_1\)</span> estimated from the bootstrap samples make up the <strong>bootstrap distribution</strong>, i.e., the simulated sampling distribution. The variability in this distribution is the sampling variability we need to construct the confidence intervals.</p>
@@ -735,7 +732,7 @@ Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\ep
 <!--# does this need to be code forward? How do I show / teach the code for infer here, or is there a section for this?-->
 <p>A bootstrap confidence interval for the population slope, <span class="math inline">\(\beta_1\)</span>, is constructed using the following steps:</p>
 <ol type="1">
-<li>Generate <span class="math inline">\(n_{iter}\)</span> bootstrap samples, where <span class="math inline">\(n_{iter}\)</span> is the number of iterations. We typically want to use at least 1000 iterations in order to construct a sampling distribution that is close to the theoretical distribution of <span class="math inline">\(\hat{\beta}_1\)</span> defined in <a href="#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.8</span></a>. <!--# add a citation for this 1000 number--></li>
+<li>Generate <span class="math inline">\(n_{iter}\)</span> bootstrap samples, where <span class="math inline">\(n_{iter}\)</span> is the number of iterations. We typically want to use at least 1000 iterations in order to construct a sampling distribution that is close to the theoretical distribution of <span class="math inline">\(\hat{\beta}_1\)</span> defined in <a href="#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.9</span></a>. <!--# add a citation for this 1000 number--></li>
 <li>Fit the linear regression model to each of the <span class="math inline">\(n_{iter}\)</span> bootstrap samples to obtain <span class="math inline">\(n_{iter}\)</span> values of <span class="math inline">\(\hat{\beta}_1\)</span>, the estimated slope. There will also be <span class="math inline">\(n_{iter}\)</span> values of the estimated intercept, <span class="math inline">\(\hat{\beta}_0\)</span>, but we will ignore those for now because we are not focusing on inference for the intercept.</li>
 <li>Collect the <span class="math inline">\(n_{iter}\)</span> values of <span class="math inline">\(\hat{\beta}_1\)</span> from the previous step to obtain the <strong>bootstrapped sampling distribution</strong>. It is an approximation of the sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span>, and thus provides information about sample-to-sample variability of <span class="math inline">\(\hat{\beta}_1\)</span>.</li>
 <li>Use the distribution from the previous step to calculate the <span class="math inline">\(C\%\)</span> confidence interval. The lower and upper bounds of the interval are the points in the distribution that mark the middle <span class="math inline">\(C\%\)</span> of the distribution.</li>
@@ -822,7 +819,7 @@ Table&nbsp;5.3: First 10 rows of the first bootstrap sample. The replicate colum
 <p>Why are there 97 observations in each bootstrap sample?<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </div>
 <ol start="2" type="1">
-<li><p>Next, we fit a linear model of the form in <a href="#eq-parks-stat-model" class="quarto-xref">Equation&nbsp;<span>5.1</span></a> to each of the 1000 bootstrap samples. The estimated slopes and intercepts for the first three bootstrap samples are shown in <a href="#tbl-parks-boot-slopes" class="quarto-xref">Table&nbsp;<span>5.4</span></a>.</p>
+<li><p>Next, we fit a linear model of the form in <span class="quarto-unresolved-ref">?eq-parks-stat-model</span> to each of the 1000 bootstrap samples. The estimated slopes and intercepts for the first three bootstrap samples are shown in <a href="#tbl-parks-boot-slopes" class="quarto-xref">Table&nbsp;<span>5.4</span></a>.</p>
 <div class="cell">
 <div id="tbl-parks-boot-slopes" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1023,7 +1020,7 @@ Table&nbsp;5.6: 95% confidence interval for the slope
 <h3 data-number="5.5.2" class="anchored" data-anchor-id="evaluate-the-evidence"><span class="header-section-number">5.5.2</span> Evaluate the evidence</h3>
 <p>The primary component of trial (or hypothesis test) is a presenting and evaluating the evidence. In a trial, this is the point when the evidence is presented and it is evaluated under the assumption the null hypothesis (defendant is not guilty) is true. Thus, the lens in which the evidence is being evaluated is “given the defendant is not guilty, how likely is it that this evidence would exist?”</p>
 <p>For example, suppose an individual is on trial for a robbery at a jewelry store. The null hypothesis is that they are not guilty and did not rob the jewelry store. The alternative hypothesis is they are guilty and did rob the jewelry store. If there is evidence that the person was in a different city during the time of the jewelry store robbery, the evidence would be more in support of the null hypothesis of innocence. It seems plausible the individual could have been in a different city at the time of the robbery if the null hypothesis is true. Alternatively, if some of the missing jewelry was found in the individual’s car, the evidence would seem to be strongly in support of the alternative hypothesis. If the null hypothesis is true, it does not seem likely that the individual would have the missing jewelry in their car.</p>
-<p>In hypothesis testing, the “evidence” being assessed is the analysis of the sample data. Thus we are considering the question “given the null hypothesis is true, how likely is it to observe the results seen in the sample data?” We will introduce approaches to address this question using simulation-based methods in <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> and theory-based methods in <a href="#sec-slr-inf-clt-hypothesis-test" class="quarto-xref"><span>Section 5.8.3</span></a>.</p>
+<p>In hypothesis testing, the “evidence” being assessed is the analysis of the sample data. Thus we are considering the question “given the null hypothesis is true, how likely is it to observe the results seen in the sample data?” We will introduce approaches to address this question using simulation-based methods in <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> and theory-based methods in <a href="#sec-slr-inf-clt-hypothesis-test" class="quarto-xref"><span>Section 5.9.3</span></a>.</p>
 </section>
 <section id="make-a-conclusion" class="level3" data-number="5.5.3">
 <h3 data-number="5.5.3" class="anchored" data-anchor-id="make-a-conclusion"><span class="header-section-number">5.5.3</span> Make a conclusion</h3>
@@ -1041,7 +1038,7 @@ Table&nbsp;5.6: 95% confidence interval for the slope
 <li>Calculate the p-value.</li>
 <li>Draw a conclusion.</li>
 </ol>
-<p>These steps are described in detail in the context of the hypothesis test for the slope in <a href="#eq-parks-stat-model" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>.</p>
+<p>These steps are described in detail in the context of the hypothesis test for the slope in <span class="quarto-unresolved-ref">?eq-parks-stat-model</span>.</p>
 <section id="sec-slr-inf-hypotheses" class="level3" data-number="5.6.1">
 <h3 data-number="5.6.1" class="anchored" data-anchor-id="sec-slr-inf-hypotheses"><span class="header-section-number">5.6.1</span> State the hypotheses</h3>
 <p>As defined in <a href="#sec-hypothesis-test-overview" class="quarto-xref"><span>Section 5.5</span></a> the <strong>null hypothesis</strong> (<span class="math inline">\(H_0\)</span>) is the baseline condition, and the <strong>alternative hypothesis</strong> (<span class="math inline">\(H_a\)</span>) is defined by the claim being tested. Recall from <a href="#sec-slr-inf-data" class="quarto-xref"><span>Section 5.1</span></a> that one objective for the analysis in this chapter is to investigate whether per capita expenditure is useful in understanding variability in playground access in US cities. In terms of the linear regression model, the claim being tested is whether there is a linear relationship between <code>per_capita_expend</code> and <code>playgrounds</code>. The null hypothesis is the baseline condition of there being no linear relationship between the two variables. We use this claim to define the alternative hypothesis.</p>
@@ -1056,20 +1053,16 @@ Table&nbsp;5.6: 95% confidence interval for the slope
 <div class="math_rules">
 <p><strong>Mathematical statement of hypotheses for</strong> <span class="math inline">\(\beta_1\)</span></p>
 <p>Suppose there is a response variable <span class="math inline">\(Y\)</span> and a predictor variable <span class="math inline">\(X\)</span> such that</p>
-<p><span class="math display">\[
-Y = \beta_0 + \beta_1X + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_\epsilon)
-\]</span></p>
+<p><span class="math display">\[Y = \beta_0 + \beta_1X + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_\epsilon)\]</span></p>
 <p>The hypotheses for testing whether there is a linear relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> in the population are</p>
-<p><span id="eq-slr-hypotheses"><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 &amp;H_0: \beta_1 = 0\\
 &amp;H_a: \beta_1 \neq 0
-\end{aligned}
-\tag{5.5}\]</span></span></p>
+\end{aligned}\]</span> {#eq-slr-hypotheses}</p>
 </div>
 <section id="one-vs.-two-sided-hypotheses" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="one-vs.-two-sided-hypotheses">One vs.&nbsp;two-sided hypotheses</h4>
-<p>The alternative hypothesis defined in <a href="#eq-slr-hypotheses" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> is “not equal to 0”. This is the alternative hypothesis corresponding to a <em>two-sided</em> hypothesis test, because it includes the scenarios in which <span class="math inline">\(\beta_1\)</span> is less than or greater than 0. There are two other options for defining the alternative hypothesis, “<span class="math inline">\(\beta_1\)</span> is less than 0” (<span class="math inline">\(H_a: \beta_1 &lt; 0\)</span>) and “<span class="math inline">\(\beta_1\)</span> is greater than 0” (<span class="math inline">\(H_a: \beta_1 &gt; 0\)</span>). These are <em>one-sided hypothesis tests</em>, as they only consider the alternative scenario in which <span class="math inline">\(\beta_1\)</span> is either less than or greater than 0, respectively.</p>
+<p>The alternative hypothesis defined in <span class="quarto-unresolved-ref">?eq-slr-hypotheses</span> is “not equal to 0”. This is the alternative hypothesis corresponding to a <em>two-sided</em> hypothesis test, because it includes the scenarios in which <span class="math inline">\(\beta_1\)</span> is less than or greater than 0. There are two other options for defining the alternative hypothesis, “<span class="math inline">\(\beta_1\)</span> is less than 0” (<span class="math inline">\(H_a: \beta_1 &lt; 0\)</span>) and “<span class="math inline">\(\beta_1\)</span> is greater than 0” (<span class="math inline">\(H_a: \beta_1 &gt; 0\)</span>). These are <em>one-sided hypothesis tests</em>, as they only consider the alternative scenario in which <span class="math inline">\(\beta_1\)</span> is either less than or greater than 0, respectively.</p>
 <p>A one-sided hypothesis test imposes some information about the direction of the parameter, that is positive (<span class="math inline">\(&gt; 0\)</span>) or negative ( <span class="math inline">\(&lt; 0\)</span>). Given this additional information imposed by the direction of the alternative hypothesis, it requires less evidence to reject the null hypothesis in favor of the alternative. Therefore, it is best to use a one-sided hypothesis only if (1) there is some indication from previous knowledge or research that the relationship between the response variable and the predictor variable is in a particular direction, or (2) only one direction of the relationship between the response and predictor variables is relevant in practice. Outside of these two scenarios, it is not advisable to use the one-sided hypothesis, as there could appear to be a statistically significant relationship between the two variables merely by chance of how the hypotheses were constructed.</p>
 <p>Because a two-sided hypothesis test makes no assumption about the direction of the relationship between the response variable and predictor variable. It is a good starting point for drawing conclusions about the relationship between the two variables. From the two-sided hypothesis, we will conclude whether there is or is not sufficient statistical evidence of a linear relationship between the response and predictor. With this conclusion, we cannot determine if the relationship between the variables is positive or negative without additional analysis. We use a confidence interval (<a href="#sec-bootstrap-ci" class="quarto-xref"><span>Section 5.4</span></a>) to make specific conclusions about the direction and magnitude of the relationship.</p>
 </section>
@@ -1081,11 +1074,11 @@ Y = \beta_0 + \beta_1X + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_\eps
 <p>In <strong>permutation sampling</strong> the values of the predictor variable are randomly shuffled and paired with values of the response, thus generating a new sample of the same size as the original data. The process of randomly pairing the values of the response and the predictor variables simulates the null hypothesized condition that there is no linear relationship between the two variables.</p>
 <p>The steps for simulating the null distribution using permutation sampling are the following:</p>
 <ol type="1">
-<li>Generate <span class="math inline">\(n_{iter}\)</span> permutation samples, where <span class="math inline">\(n_{iter}\)</span> is the number of iterations. We ideally use at least 1,000 iterations in order to construct a distribution that is close to the theoretical null distribution defined in <a href="#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.8</span></a>.</li>
+<li>Generate <span class="math inline">\(n_{iter}\)</span> permutation samples, where <span class="math inline">\(n_{iter}\)</span> is the number of iterations. We ideally use at least 1,000 iterations in order to construct a distribution that is close to the theoretical null distribution defined in <a href="#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.9</span></a>.</li>
 <li>Fit the linear regression model to each of the <span class="math inline">\(n_{iter}\)</span> permutation samples to obtain <span class="math inline">\(n_{iter}\)</span> values of <span class="math inline">\(\hat{\beta}_1\)</span>, the estimated slope. There will also be <span class="math inline">\(n_{iter}\)</span> values of <span class="math inline">\(\hat{\beta}_0\)</span> the estimated intercepts; we will ignore those for now because we are focused on inference for the slope.</li>
 <li>Collect the <span class="math inline">\(n_{iter}\)</span> values of <span class="math inline">\(\hat{\beta}_1\)</span> from the previous step to make the <strong>simulated null distribution</strong>. This is an approximation of the distribution of <span class="math inline">\(\hat{\beta}_1\)</span> values if we were to repeatedly take samples the same size as the original data and fit the linear regression model to each sample, under the assumption that the null hypothesis is true.</li>
 </ol>
-<p>Let’s simulate the null distribution to test the hypotheses in <a href="#eq-slr-hypotheses" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> for the parks data.</p>
+<p>Let’s simulate the null distribution to test the hypotheses in <span class="quarto-unresolved-ref">?eq-slr-hypotheses</span> for the parks data.</p>
 <ol type="1">
 <li>First we generate 1,000 permutation samples, such that in each sample, we permute the values of <code>per_capita_expend</code>, randomly pairing each to a value of <code>playgrounds</code>. This is to simulate the scenario in which there is no linear relationship between <code>per_capita_expend</code> and <code>playgrounds</code>. The first 10 rows of the first permutation sample are in <a href="#tbl-slr-permute-samp" class="quarto-xref">Table&nbsp;<span>5.7</span></a>.</li>
 </ol>
@@ -1357,15 +1350,10 @@ Figure&nbsp;5.6: Simulated null distribution with p-value represented by the sha
 <section id="type-i-and-type-ii-error" class="level3" data-number="5.6.5">
 <h3 data-number="5.6.5" class="anchored" data-anchor-id="type-i-and-type-ii-error"><span class="header-section-number">5.6.5</span> Type I and Type II error</h3>
 <p>Regardless of the conclusion that is drawn (reject or fail to reject the null hypothesis), we have not determined that the null or alternative hypothesis are definitive truth. We have just concluded that the evidence (the data) has provided more evidence in favor of one conclusion versus the other. As with any statistical procedure, there is the possibility of making an error, more specifically a Type I or Type II error. Because we don’t know the value of the population slope, we will not know for certain whether we have made an error; however, understanding the potential errors that can be made can help inform the decision-making threshold <span class="math inline">\(\alpha\)</span> and make a more informed assessment about the implication of these results in practice.</p>
-<p><a href="#tbl-errors" class="quarto-xref">Table&nbsp;<span>5.10</span></a> shows how Type I and Type II errors correspond to the (unknown) truth and the conclusion drawn from the hypothesis test.</p>
+<p><span class="quarto-unresolved-ref">?tbl-errors</span> shows how Type I and Type II errors correspond to the (unknown) truth and the conclusion drawn from the hypothesis test.</p>
 <!--# figure out how to better format this table, so decision and truth are in the middle-->
-<div id="tbl-errors" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.10: Type I and Type II error
-</figcaption>
-<div aria-describedby="tbl-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
+<caption>Type I and Type II error</caption>
 <colgroup>
 <col style="width: 25%">
 <col style="width: 25%">
@@ -1401,9 +1389,6 @@ Table&nbsp;5.10: Type I and Type II error
 </tr>
 </tbody>
 </table>
-</div>
-</figure>
-</div>
 <p>A <strong>Type I error</strong> has occurred if the null hypothesis is actually true, but the p-value is small enough to reject the null hypothesis. The probability of making this type of error is the decision-making threshold <span class="math inline">\(\alpha\)</span>. This is because <span class="math inline">\(P(\text{reject }H_0 | H_0 \text{ true}) = \alpha\)</span>, meaning the probability of rejecting the null hypothesis given the null is true is <span class="math inline">\(\alpha\)</span>.</p>
 <p>A <strong>Type II error</strong> has occurred if the alternative hypothesis is actually true, but we fail to reject the null hypothesis, because the p-value is large. Computing the probability of making this type of error is less straightforward. It is calculated as <span class="math inline">\(1 - Power\)</span> , where the <span class="math inline">\(Power = P(\text{reject }H_0 | H_a \text{ true})\)</span>. <!--# insert some discussion of the power, or is this a rabbit hole?--></p>
 <p>In the context of the parks data, a Type I error is concluding that there is a linear relationship between per capita expenditure and playgrounds per 10,000 residents in the model, when there actually isn’t one in the population. A Type II error is concluding there is no linear relationship between per capita expenditure and playgrounds per 10,000 residents when in fact there is.</p>
@@ -1426,39 +1411,125 @@ Table&nbsp;5.10: Type I and Type II error
 </div>
 <!--# do i want to talk about effect size?-->
 </section>
-<section id="sec-slr-inf-clt" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="sec-slr-inf-clt"><span class="header-section-number">5.8</span> Theory-based inference</h2>
+<section id="prediction-intervals" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="prediction-intervals"><span class="header-section-number">5.8</span> Prediction intervals</h2>
+<ul>
+<li><p>Recall from [SEC] that we can use the model to compute predictions for different values of the predictor.</p></li>
+<li><p>As we’ve discussed in this chapter, because we are working with sample data, there is uncertainty in the estimated coefficients.</p></li>
+<li><p>Because we’re using the estimated coefficients to compute predictions, then there is naturally uncertainty in the model predictions as well.</p></li>
+<li><p>Similar to how we share intervals around the coefficient estimates, we can compute intervals around the predictions.</p></li>
+<li><p>We will use the bootstrapped samples along with the coefficients produced by each bootstrapped sample to compute the predictions.</p></li>
+<li><p>Similar to bootstrapped intervals, for a given value of the predictor, the <span class="math inline">\(C\%\)</span> interval is made from the middle <span class="math inline">\(C\%\)</span> of the distribution.</p></li>
+<li><p>Let’s use the bootstrap data from [SEC] and look at the predicted number of playgrounds per 10,000 residents when the spending per resident is $150.</p></li>
+</ul>
+<p>Table X shows the predictions from the first five bootstrap samples.</p>
+<div class="cell">
+<div id="tbl-bootstrap-pred-150" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.10: Estimated slope, intercept, and prediction for <code>spend = 150</code> from first five bootstrap samples
+</figcaption>
+<div aria-describedby="tbl-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">replicate</th>
+<th style="text-align: right;">intercept</th>
+<th style="text-align: right;">per_capita_expend</th>
+<th style="text-align: right;">prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.38</td>
+<td style="text-align: right;">0.005</td>
+<td style="text-align: right;">3.12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2.54</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">2.90</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2.39</td>
+<td style="text-align: right;">0.005</td>
+<td style="text-align: right;">3.07</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2.38</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">2.97</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">2.21</td>
+<td style="text-align: right;">0.005</td>
+<td style="text-align: right;">3.01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>The distribution of the predictions with the bounds for the 95% interval shown below.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-bootstrap-pred-150" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="05-slr-inference_files/figure-html/fig-bootstrap-pred-150-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5.7: Bootstrap distribution of predictions when spend = 150 with bounds for the 95% interval"><img src="05-slr-inference_files/figure-html/fig-bootstrap-pred-150-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.7: Bootstrap distribution of predictions when <code>spend = 150</code> with bounds for the 95% interval
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The bounds for the 95% interval of predictions when <code>spend = 150</code> is 2.674 to 3.228. The interpretation is as follows:</p>
+<blockquote class="blockquote">
+<p>We are 95% confident there are between 2.674 and 3.228 playgrounds per 10,000 residents in a city with expenditure of $150.</p>
+</blockquote>
+<ul>
+<li>Note that this interval is for the predicted mean among all cities with expenditure equal to $150. In other words, we are predicting the value on the line , but recall from [SEC] that there is a distribution of the response for each value of the predictor. We need to account for this extra variability when computing the predictions for individual observations. WE’ll take more about this in [SEC - prediction theory section].</li>
+</ul>
+</section>
+<section id="sec-slr-inf-clt" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="sec-slr-inf-clt"><span class="header-section-number">5.9</span> Theory-based inference</h2>
 <!--# maybe i rename this as inference using theoretical modes and just remove CLT-->
 <!--# figure out how to use pictures to illustrate concepts here-->
 <p>Thus far we have approached inference using simulation-based methods (bootstrapping and permutation) to generate sampling distributions and null distributions. When certain conditions are met, however, we can use theoretical results about the sampling distribution to understand the variability in <span class="math inline">\(\hat{\beta}_1\)</span>. In this section, we present that theory, then use it to conduct statistical inference for the population slope. Notice as we go through this section is that the inferential procedures and conclusions are very similar as before. The primary difference is in how we understand the sampling variability in <span class="math inline">\(\hat{\beta}_1\)</span> and obtain the null distribution.</p>
-<section id="sec-slr-clt" class="level3" data-number="5.8.1">
-<h3 data-number="5.8.1" class="anchored" data-anchor-id="sec-slr-clt"><span class="header-section-number">5.8.1</span> Central Limit Theorem</h3>
+<section id="sec-slr-clt" class="level3" data-number="5.9.1">
+<h3 data-number="5.9.1" class="anchored" data-anchor-id="sec-slr-clt"><span class="header-section-number">5.9.1</span> Central Limit Theorem</h3>
 <!--# maybe add something in the appendix that the CLT is not needed if we have normal errors-->
 <p>The <strong>Central Limit Theorem (CLT)</strong> is a foundational theorem in statistics about the distribution of a statistic and the associated mathematical properties of that distribution. <!--# find a source for a good statement of CLT-->For the purposes of this text, we will focus on what the Central Limit Theorem says the distribution of an estimated slope <span class="math inline">\(\hat{\beta}_1\)</span>, but note that this theorem applies to statistics other than the slope. We will also focus on the results of the theorem and less so on derivations or advanced mathematical details of the Central Limit Theorem.<!--# Texts such as [insert references] or the appendix may be of interest to those seeking more detail about the theorem.--></p>
-<p>By the Central Limit Theorem, we know under certain conditions (more on these conditions in the <a href="06-slr-conditions.html" class="quarto-xref"><span>Chapter 6</span></a>) <span id="eq-slope-dist-clt"><span class="math display">\[\hat{\beta}_1 \sim N(\beta_1, SE_{\hat{\beta}_1}) \tag{5.6}\]</span></span></p>
-<p><a href="#eq-slope-dist-clt" class="quarto-xref">Equation&nbsp;<span>5.6</span></a> means that by the Central Limit Theorem, we know that the sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span> is (1) normal, (2) with a expected value at the true slope <span class="math inline">\(\beta_1\)</span>, and (3) a standard error of <span class="math inline">\(SE_{\hat{\beta}_1}\)</span><a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. The center of this distribution <span class="math inline">\(\beta_1\)</span> is unknown; the purpose of statistical inference is to draw conclusions about <span class="math inline">\(\beta_1\)</span>. The standard error of this distribution <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> is</p>
-<p><span id="eq-slr-se"><span class="math display">\[
-SE_{\hat{\beta}_1} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{(n-1)s_X^2}}
-\tag{5.7}\]</span></span></p>
-<p>where <span class="math inline">\(n\)</span> is the number of observations, <span class="math inline">\(s_X^2\)</span> is the variance of the predictor variable <span class="math inline">\(X\)</span>, and <span class="math inline">\(\hat{\sigma}_{\epsilon}\)</span> is the <strong>regression standard error</strong>, the variability of the observations around the regression line. The regression error is introduced in more detail in <a href="#sec-estimate-reg-std-err" class="quarto-xref"><span>Section 5.8.2</span></a>. The details of how this formula is derived is beyond the scope of this text, but let’s take a moment to think about what we know about the sampling variability of <span class="math inline">\(\hat{\beta}_1\)</span> from <a href="#eq-slr-se" class="quarto-xref">Equation&nbsp;<span>5.7</span></a>.</p>
+<p>By the Central Limit Theorem, we know under certain conditions (more on these conditions in the <a href="06-slr-conditions.html" class="quarto-xref"><span>Chapter 6</span></a>) <span id="eq-slope-dist-clt"><span class="math display">\[\hat{\beta}_1 \sim N(\beta_1, SE_{\hat{\beta}_1}) \tag{5.2}\]</span></span></p>
+<p><a href="#eq-slope-dist-clt" class="quarto-xref">Equation&nbsp;<span>5.2</span></a> means that by the Central Limit Theorem, we know that the sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span> is (1) normal, (2) with a expected value at the true slope <span class="math inline">\(\beta_1\)</span>, and (3) a standard error of <span class="math inline">\(SE_{\hat{\beta}_1}\)</span><a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. The center of this distribution <span class="math inline">\(\beta_1\)</span> is unknown; the purpose of statistical inference is to draw conclusions about <span class="math inline">\(\beta_1\)</span>. The standard error of this distribution <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> is</p>
+<p><span class="math display">\[SE_{\hat{\beta}_1} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{(n-1)s_X^2}}\]</span> {#eq-slr-se}</p>
+<p>where <span class="math inline">\(n\)</span> is the number of observations, <span class="math inline">\(s_X^2\)</span> is the variance of the predictor variable <span class="math inline">\(X\)</span>, and <span class="math inline">\(\hat{\sigma}_{\epsilon}\)</span> is the <strong>regression standard error</strong>, the variability of the observations around the regression line. The regression error is introduced in more detail in <a href="#sec-estimate-reg-std-err" class="quarto-xref"><span>Section 5.9.2</span></a>. The details of how this formula is derived is beyond the scope of this text, but let’s take a moment to think about what we know about the sampling variability of <span class="math inline">\(\hat{\beta}_1\)</span> from <span class="quarto-unresolved-ref">?eq-slr-se</span>.</p>
 <p>The regression standard error <span class="math inline">\(\hat{\sigma}_\epsilon\)</span> is in the numerator, indicating one would expect more variability in <span class="math inline">\(\hat{\beta}_1\)</span> when there is more variability in the data about the regression line. The variability in the predictor variable <span class="math inline">\(s_X^2\)</span> is in the denominator, indicating we expect more variability in <span class="math inline">\(\hat{\beta}_1\)</span> when there is less variability in the values of the predictor. Therefore, <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> is the balance between the variability about the regression line and the variability in the predictor variable itself.</p>
 <p>As you will see in the following sections, we will use this estimate of the sampling variability in the estimated slope to draw conclusions about the true relationship between the response and predictor variables based on hypothesis testing and confidence intervals.</p>
 </section>
-<section id="sec-estimate-reg-std-err" class="level3" data-number="5.8.2">
-<h3 data-number="5.8.2" class="anchored" data-anchor-id="sec-estimate-reg-std-err"><span class="header-section-number">5.8.2</span> Estimating <span class="math inline">\(\sigma_{\epsilon}\)</span></h3>
+<section id="sec-estimate-reg-std-err" class="level3" data-number="5.9.2">
+<h3 data-number="5.9.2" class="anchored" data-anchor-id="sec-estimate-reg-std-err"><span class="header-section-number">5.9.2</span> Estimating <span class="math inline">\(\sigma_{\epsilon}\)</span></h3>
 <p>As discussed in <a href="04-slr.html#sec-slr-specify" class="quarto-xref"><span>Section 4.3.1</span></a>, there are three parameters that need to be estimated for simple linear regression <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\sigma_{\epsilon}\)</span>. <a href="04-slr.html#sec-slr-estimation" class="quarto-xref"><span>Section 4.4</span></a> introduced least squares regression, a method for deriving <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> the estimates for intercept and slope, respectively. Now, we turn to the estimation of <span class="math inline">\(\sigma_\epsilon\)</span>, also known as the <strong>regression standard error<em>.</em></strong></p>
 <!--# maybe add a little aside here about standard deviation versus standard error-->
-<p>By obtaining the estimates <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>, we have the equation of the regression line and therefore can estimate the expected value <span class="math inline">\(Y\)</span> given a value of the predictor <span class="math inline">\(X\)</span>. We can then use the residuals (<span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>) to estimate the variability of the distribution of the response variable about the regression line (see <a href="#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a>). The regression standard error is the estimate of this variability as it is the estimated standard deviation of the distribution of the errors (<a href="#eq-slr-model-ch5" class="quarto-xref">Equation&nbsp;<span>5.3</span></a>). The equation for the regression standard error is shown in <a href="#eq-slr-reg-se" class="quarto-xref">Equation&nbsp;<span>5.8</span></a> <a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>.</p>
-<p><span id="eq-slr-reg-se"><span class="math display">\[
-\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i = 1}^ne_i^2}{n - 2}} = \sqrt{\frac{\sum_{i = 1}^n(y_i - \hat{y}_i)^2}{n - 2}}
-\tag{5.8}\]</span></span></p>
+<p>By obtaining the estimates <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>, we have the equation of the regression line and therefore can estimate the expected value <span class="math inline">\(Y\)</span> given a value of the predictor <span class="math inline">\(X\)</span>. We can then use the residuals (<span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>) to estimate the variability of the distribution of the response variable about the regression line (see <a href="#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a>). The regression standard error is the estimate of this variability as it is the estimated standard deviation of the distribution of the errors (<span class="quarto-unresolved-ref">?eq-slr-model-ch5</span>). The equation for the regression standard error is shown in <span class="quarto-unresolved-ref">?eq-slr-reg-se</span> <a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>.</p>
+<p><span class="math display">\[\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i = 1}^ne_i^2}{n - 2}} = \sqrt{\frac{\sum_{i = 1}^n(y_i - \hat{y}_i)^2}{n - 2}}\]</span> {#eq-slr-reg-se}</p>
 <div class="math_rules">
-<p>You may have noticed that the denominator in <a href="#eq-slr-reg-se" class="quarto-xref">Equation&nbsp;<span>5.8</span></a> is <span class="math inline">\(n - 2\)</span> not <span class="math inline">\(n\)</span> or <span class="math inline">\(n-1\)</span>. The value <span class="math inline">\(n - 2\)</span> is called the <strong>degrees of freedom (df)</strong>. The degrees of freedom are how many observations are available to understand variability about the regression line. We need at a minimum two observations to estimate the equation for the simple linear regression line, i.e., it takes at a minimum two points to make a line. The remaining <span class="math inline">\(n-2\)</span> observations help us understand variability about the line. We will talk more about how we use degrees of freedom as we define the distribution used to compute confidence intervals and conduct hypothesis tests. <!--# consider an illlustration here--></p>
+<p>You may have noticed that the denominator in <span class="quarto-unresolved-ref">?eq-slr-reg-se</span> is <span class="math inline">\(n - 2\)</span> not <span class="math inline">\(n\)</span> or <span class="math inline">\(n-1\)</span>. The value <span class="math inline">\(n - 2\)</span> is called the <strong>degrees of freedom (df)</strong>. The degrees of freedom are how many observations are available to understand variability about the regression line. We need at a minimum two observations to estimate the equation for the simple linear regression line, i.e., it takes at a minimum two points to make a line. The remaining <span class="math inline">\(n-2\)</span> observations help us understand variability about the line. We will talk more about how we use degrees of freedom as we define the distribution used to compute confidence intervals and conduct hypothesis tests. <!--# consider an illlustration here--></p>
 </div>
-<p>Recall that the standard deviation is the average distance between each observation and the mean of the distribution. Similarly, the regression standard error can be thought of as the average distance the observed value the response is from the regression line. The regression standard error <span class="math inline">\(\hat{\sigma}_{\epsilon}\)</span> is used to quantify the sampling variability in the estimated slope <span class="math inline">\(\hat{\beta}_1\)</span> (<a href="#eq-slr-se" class="quarto-xref">Equation&nbsp;<span>5.7</span></a>), so we will use this value as we conduct inference on the slope.</p>
+<p>Recall that the standard deviation is the average distance between each observation and the mean of the distribution. Similarly, the regression standard error can be thought of as the average distance the observed value the response is from the regression line. The regression standard error <span class="math inline">\(\hat{\sigma}_{\epsilon}\)</span> is used to quantify the sampling variability in the estimated slope <span class="math inline">\(\hat{\beta}_1\)</span> (<span class="quarto-unresolved-ref">?eq-slr-se</span>), so we will use this value as we conduct inference on the slope.</p>
 </section>
-<section id="sec-slr-inf-clt-hypothesis-test" class="level3" data-number="5.8.3">
-<h3 data-number="5.8.3" class="anchored" data-anchor-id="sec-slr-inf-clt-hypothesis-test"><span class="header-section-number">5.8.3</span> Hypothesis test for the slope</h3>
+<section id="sec-slr-inf-clt-hypothesis-test" class="level3" data-number="5.9.3">
+<h3 data-number="5.9.3" class="anchored" data-anchor-id="sec-slr-inf-clt-hypothesis-test"><span class="header-section-number">5.9.3</span> Hypothesis tests for the slope</h3>
 <p>The overall goals of hypothesis tests for a population slope are the same when using theory-based methods as previously described in <a href="#sec-hypothesis-test-overview" class="quarto-xref"><span>Section 5.5</span></a>. We define a null and alternative hypothesis, conduct testing assuming the null hypothesis is true, and draw a conclusion based on an evaluation of the strength of evidence against the null hypothesis. The main difference from the simulation-based approach in <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> is in how we quantify the variability in <span class="math inline">\(\hat{\beta}_1\)</span> and thus obtain the null distribution. In <a href="#sec-slr-inf-permutation" class="quarto-xref"><span>Section 5.6.2</span></a> we used permutation sampling to generate the null distribution. We’ll see that by the Central Limit Theorem we have results that specify exactly how the null distribution is defined.</p>
 <p>The steps for conducting a hypothesis test based on the Central Limit Theorem are the following:</p>
 <ol type="1">
@@ -1467,29 +1538,23 @@ SE_{\hat{\beta}_1} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{(n-1)s_X^2}}
 <li>Calculate a p-value.</li>
 <li>Draw a conclusion.</li>
 </ol>
-<p>As in <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of “not equal to 0”. Therefore, the null and alternative hypotheses are the same as defined in <a href="#eq-slr-hypotheses" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> <span class="math display">\[
-\begin{aligned}
+<p>As in <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of “not equal to 0”. Therefore, the null and alternative hypotheses are the same as defined in <span class="quarto-unresolved-ref">?eq-slr-hypotheses</span> <span class="math display">\[\begin{aligned}
 H_0: \beta_1 = 0 \\
 H_a: \beta_1 \neq 0 \\
-\end{aligned}
-\]</span></p>
+\end{aligned}\]</span></p>
 <p>The next step is to calculate a test statistic. Similar to a <span class="math inline">\(z\)</span>-score in the Normal distribution, the test statistic tells us how far the observed slope is from the hypothesized center of the distribution. The general form of a test statistic is</p>
-<p><span class="math display">\[
-T = \frac{\text{estimate } - \text{ hypothesized}}{\text{standard error}}
-\]</span></p>
+<p><span class="math display">\[T = \frac{\text{estimate } - \text{ hypothesized}}{\text{standard error}}\]</span></p>
 <p>More specifically, in the hypothesis test for <span class="math inline">\(\beta_1\)</span>, the test statistic is</p>
-<p><span id="eq-test-stat"><span class="math display">\[
-T = \frac{\hat{\beta}_1 - 0}{SE_{\hat{\beta}_1}}
-\tag{5.9}\]</span></span></p>
+<p><span class="math display">\[T = \frac{\hat{\beta}_1 - 0}{SE_{\hat{\beta}_1}}\]</span> {#eq-test-stat}</p>
 <p>To calculate the test statistic, the estimated slope is shifted by the mean, and then rescaled by the standard error. Let’s consider what we learn from the test statistic. Recall that by the Central Limit Theorem, the distribution of <span class="math inline">\(\hat{\beta}_1\)</span> is <span class="math inline">\(N(\beta_1, SE_{\hat{\beta}_1})\)</span>. Because we conduct hypothesis testing under the assumption the null hypothesis is true, we are assuming that the mean of this distribution of <span class="math inline">\(\beta_1= 0\)</span>.</p>
-<p>Since the hypothesized mean is <span class="math inline">\(\beta_1 = 0\)</span>, we shift by 0 and rescale by <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>, defined in <a href="#eq-slr-se" class="quarto-xref">Equation&nbsp;<span>5.7</span></a>. Thus, the test statistic is the number of standard errors the estimated slope is from the hypothesized mean of the sampling distribution. The magnitude of the test statistic <span class="math inline">\(|T|\)</span> provides a measure of how far the observed slope is from the center of the distribution, and the sign of <span class="math inline">\(T\)</span> indicates whether the observed slope is above (positive sign) or below (negative sign) the hypothesized mean of 0.</p>
+<p>Since the hypothesized mean is <span class="math inline">\(\beta_1 = 0\)</span>, we shift by 0 and rescale by <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>, defined in <span class="quarto-unresolved-ref">?eq-slr-se</span>. Thus, the test statistic is the number of standard errors the estimated slope is from the hypothesized mean of the sampling distribution. The magnitude of the test statistic <span class="math inline">\(|T|\)</span> provides a measure of how far the observed slope is from the center of the distribution, and the sign of <span class="math inline">\(T\)</span> indicates whether the observed slope is above (positive sign) or below (negative sign) the hypothesized mean of 0.</p>
 <div class="yourturn">
 <p>Consider the magnitude of the test statistic, <span class="math inline">\(|T|\)</span>. Do you think test statistics with small magnitude provide evidence in support or against the null hypothesis? What about test statistics with large magnitude?<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
 </div>
 <p>Next, we use the test statistic to calculate a p-value and we will ultimately use the p-value to draw a conclusion about the strength of the evidence against the null hypothesis, as before. The test statistic, <span class="math inline">\(T\)</span>, follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n -2\)</span> degrees of freedom, denoted as <span class="math inline">\(T \sim t_{n-2}\)</span> . Similar to the simulated null distribution in <a href="#sec-slr-inf-permutation" class="quarto-xref"><span>Section 5.6.2</span></a>, we use this <span class="math inline">\(t_{n-2}\)</span> distribution to evaluate how far the estimated slope is from what we would expect given the null hypothesis is true.</p>
-<p>Though the sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span> is normal by the Central Limit Theorem (<a href="#eq-slope-dist-clt" class="quarto-xref">Equation&nbsp;<span>5.6</span></a>), the test statistic follows a <span class="math inline">\(t\)</span> distribution. The <span class="math inline">\(t\)</span> distribution is used, because the value <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> in the test statistic is calculated using the regression standard error, <span class="math inline">\(\hat{\sigma}_\epsilon\)</span> (see <a href="#eq-slr-se" class="quarto-xref">Equation&nbsp;<span>5.7</span></a>) We know the estimates <span class="math inline">\(\hat{\sigma}_\epsilon\)</span> and <span class="math inline">\(SE_{\hat{\beta}_1 }\)</span> are likely not equal to the true population values, so we need a distribution that allows for a bit more variability when calculating the p-value. The <span class="math inline">\(t\)</span> distribution better accounts for this extra variability compared to the standard normal distribution.</p>
+<p>Though the sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span> is normal by the Central Limit Theorem (<a href="#eq-slope-dist-clt" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>), the test statistic follows a <span class="math inline">\(t\)</span> distribution. The <span class="math inline">\(t\)</span> distribution is used, because the value <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> in the test statistic is calculated using the regression standard error, <span class="math inline">\(\hat{\sigma}_\epsilon\)</span> (see <span class="quarto-unresolved-ref">?eq-slr-se</span>) We know the estimates <span class="math inline">\(\hat{\sigma}_\epsilon\)</span> and <span class="math inline">\(SE_{\hat{\beta}_1 }\)</span> are likely not equal to the true population values, so we need a distribution that allows for a bit more variability when calculating the p-value. The <span class="math inline">\(t\)</span> distribution better accounts for this extra variability compared to the standard normal distribution.</p>
 <div class="math_rules">
-<p><a href="#fig-normal-t-curves" class="quarto-xref">Figure&nbsp;<span>5.7</span></a> shows the standard normal distribution <span class="math inline">\(N(0,1)\)</span> and the <span class="math inline">\(t\)</span> distribution for different degrees of freedom. The <span class="math inline">\(t\)</span> distribution is very similar to the standard normal distribution: they are both centered at 0 and have a shape that is unimodal and symmetric. In other words, they both look like “bell curves” centered at 0. The difference is that the <span class="math inline">\(t\)</span> distribution allows for more variability than what is expected in the standard normal distribution. This is also referred to as having “heavier tails”. The <span class="math inline">\(t\)</span> distribution has more area under the curve in the tails (or more extreme values) of the distribution, meaning that more extreme values are more likely under the <span class="math inline">\(t\)</span> distribution than under the <span class="math inline">\(N(0,1)\)</span> distribution. This is most clearly seen by th comparing the height of tails for <span class="math inline">\(t_2\)</span> and <span class="math inline">\(N(0,1)\)</span>. As the degrees of freedom increase, the <span class="math inline">\(t\)</span> distribution becomes closer to the the standard normal distribution.<br>
+<p><a href="#fig-normal-t-curves" class="quarto-xref">Figure&nbsp;<span>5.8</span></a> shows the standard normal distribution <span class="math inline">\(N(0,1)\)</span> and the <span class="math inline">\(t\)</span> distribution for different degrees of freedom. The <span class="math inline">\(t\)</span> distribution is very similar to the standard normal distribution: they are both centered at 0 and have a shape that is unimodal and symmetric. In other words, they both look like “bell curves” centered at 0. The difference is that the <span class="math inline">\(t\)</span> distribution allows for more variability than what is expected in the standard normal distribution. This is also referred to as having “heavier tails”. The <span class="math inline">\(t\)</span> distribution has more area under the curve in the tails (or more extreme values) of the distribution, meaning that more extreme values are more likely under the <span class="math inline">\(t\)</span> distribution than under the <span class="math inline">\(N(0,1)\)</span> distribution. This is most clearly seen by th comparing the height of tails for <span class="math inline">\(t_2\)</span> and <span class="math inline">\(N(0,1)\)</span>. As the degrees of freedom increase, the <span class="math inline">\(t\)</span> distribution becomes closer to the the standard normal distribution.<br>
 </p>
 <!--# consider making this graph a bit easier to read-->
 <div class="cell">
@@ -1497,66 +1562,56 @@ T = \frac{\hat{\beta}_1 - 0}{SE_{\hat{\beta}_1}}
 <div id="fig-normal-t-curves" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-normal-t-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5.7: Standard normal vs.&nbsp;t distributions"><img src="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions"><img src="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-normal-t-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.7: Standard normal vs.&nbsp;t distributions
+Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<p>As described in <a href="#sec-calc-pvalue" class="quarto-xref"><span>Section 5.6.3</span></a>, because the alternative hypothesis is “not equal to”, the p-value is calculated on both the high and low extremes of the distribution as shown in <a href="#eq-pvalue-two-sided" class="quarto-xref">Equation&nbsp;<span>5.10</span></a>.</p>
-<p><span id="eq-pvalue-two-sided"><span class="math display">\[
-\begin{aligned}
+<p>As described in <a href="#sec-calc-pvalue" class="quarto-xref"><span>Section 5.6.3</span></a>, because the alternative hypothesis is “not equal to”, the p-value is calculated on both the high and low extremes of the distribution as shown in <span class="quarto-unresolved-ref">?eq-pvalue-two-sided</span>.</p>
+<p><span class="math display">\[\begin{aligned}
 &amp;\text{p-value} = Pr(|t| &gt; |T|) = Pr(t &lt; -|T| \text{ or } t &gt; |T|) \\[5pt]
 &amp;\text{where } t \sim t_{n-2}
-\end{aligned}
-\tag{5.10}\]</span></span></p>
+\end{aligned} \]</span> {#eq-pvalue-two-sided}</p>
 <p>We compare the p-value to a decision-making threshold <span class="math inline">\(\alpha\)</span> to draw final conclusions. If <span class="math inline">\(\text{p-value} &lt; \alpha\)</span> , we reject the null hypothesis and conclude the alternative. Otherwise, we fail to reject the null hypothesis. See <a href="#sec-slr-inf-conclusion" class="quarto-xref"><span>Section 5.6.4</span></a> for more detail about using the <span class="math inline">\(\alpha\)</span>-level and p-value to draw conclusions.</p>
 <p>Now let’s apply this process to test whether there is evidence of a linear relationship between per capita expenditure and the number of playgrounds per 10,000 residents. As before, the null and and alternative hypotheses are</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 &amp;H_0: \beta_{1} = 0 \\
 &amp;H_a: \beta_{1} \neq 0
-\end{aligned}
-\]</span></p>
+\end{aligned}\]</span></p>
 <p>where <span class="math inline">\(\beta_1\)</span> is the true slope between <code>per_capita_expend</code> and <code>playgrounds</code>. The observed slope from <a href="#tbl-parks-model" class="quarto-xref">Table&nbsp;<span>5.2</span></a>, we know the observed slope <span class="math inline">\(\hat{\beta}_{1}\)</span> is 0.003 and the estimated standard error <span class="math inline">\(SE_{\hat{\beta}_{1}}\)</span> is 0.002. The test statistic is</p>
-<p><span class="math display">\[
-T = \frac{0.0033 - 0}{0.0016} = 2.063
-\]</span></p>
+<p><span class="math display">\[T = \frac{0.0033 - 0}{0.0016} = 2.063\]</span></p>
 <p>This test statistic means that assuming the true slope of <code>per_capita_expend</code> in this model is 0 and thus the mean of the distribution of <span class="math inline">\(\hat{\beta}_{1}\)</span> is 0, the observed slope of 0.003 is 2.063 standard errors above this hypothesized mean. It’s difficult to determine whether or not this is really “far enough” away from the center of the distribution, but we can calculate a p-value to determine the probability of observing a slope at least this far given the null hypothesis is true.</p>
 <p>Given there are <span class="math inline">\(n\)</span> = 97 observations, the test statistic follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(97 - 2 =\)</span> 95 degrees of freedom. The p-value, is <span class="math inline">\(Pr(t &lt; - |2.063| \text{ or } t &gt; |2.063|) =\)</span> 0.042.</p>
 <p>Using a decision-making threshold <span class="math inline">\(\alpha = 0.05\)</span>, the p-value <span class="math inline">\(0.042\)</span> is sufficiently small, so we reject the null hypothesis. The data provide sufficient evidence that the coefficient of <code>per_capita_expend</code> is not 0 in this model and that there is a statistically significant linear relationship between a city’s per capita expenditure and playgrounds per 10,000 residents in US cities.</p>
 <p>Note that this conclusion is the same as in <a href="#sec-slr-inf-conclusion" class="quarto-xref"><span>Section 5.6.4</span></a> using a simulation-based approach (even with small differences in the p-value). This is what we would expect, given these are the two different approaches for conducting the same inferential process. We are also conducting the tests under the same assumptions that the null hypothesis is true. The difference is in the methods available to quantify <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>, simulation-based versus theory-based.</p>
 </section>
-<section id="confidence-interval" class="level3" data-number="5.8.4">
-<h3 data-number="5.8.4" class="anchored" data-anchor-id="confidence-interval"><span class="header-section-number">5.8.4</span> Confidence interval</h3>
+<section id="confidence-intervals" class="level3" data-number="5.9.4">
+<h3 data-number="5.9.4" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">5.9.4</span> Confidence intervals</h3>
 <p>As with simulation-based inference, a confidence interval calculated based on the results from the Central Limit Theorem is an estimated range of the values that <span class="math inline">\(\beta_1\)</span> can reasonably take. The purpose, interpretation, and conclusions drawn from confidence intervals are the same as described before in <a href="#sec-bootstrap-ci" class="quarto-xref"><span>Section 5.4</span></a>. What differs, however, is how the interval is calculated. In simulation-based inference, we used bootstrapping to construct a sampling distribution to understand sample-to-sample variability in <span class="math inline">\(\beta_1\)</span>. By the Central Limit Theorem, we know exactly how to quantify the sample-to-sample variability in <span class="math inline">\(\hat{\beta}_1\)</span> using theoretical results.</p>
 <p>The equation for a <span class="math inline">\(C\%\)</span> confidence interval for <span class="math inline">\(\beta_1\)</span> is</p>
-<p><span id="eq-conf-int-beta"><span class="math display">\[
-\hat{\beta}_1 \pm t^* \times SE_{\hat{\beta}_1}
-\tag{5.11}\]</span></span></p>
+<p><span class="math display">\[\hat{\beta}_1 \pm t^* \times SE_{\hat{\beta}_1}\]</span> {#eq-conf-int-beta}</p>
 <p>where <span class="math inline">\(t^* \sim t_{n - 2}\)</span>.</p>
-<p>In <a href="#sec-slr-clt" class="quarto-xref"><span>Section 5.8.1</span></a>, we discussed <span class="math inline">\(\hat{\beta}_1\)</span> and its standard error <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>. Now we’ll focus on <span class="math inline">\(t^*\)</span>, known as the critical value.</p>
-<p>The <strong>critical value</strong> is the point on the <span class="math inline">\(t_{n-2}\)</span> distribution such that the probability of being between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span> is <span class="math inline">\(C\%\)</span>. Thinking about this visually, this is the point such that the <span class="math inline">\(C\%\)</span> of the area under the curve is between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span>. Note that we are still using a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - 2\)</span> degrees of freedom, the same distribution used to calculate the p-value in the hypothesis tests. The critical value can be calculated from modern statistical software or using online apps (more on this in <a href="#sec-theory-inf-r" class="quarto-xref"><span>Section 5.9.3</span></a>).</p>
+<p>In <a href="#sec-slr-clt" class="quarto-xref"><span>Section 5.9.1</span></a>, we discussed <span class="math inline">\(\hat{\beta}_1\)</span> and its standard error <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>. Now we’ll focus on <span class="math inline">\(t^*\)</span>, known as the critical value.</p>
+<p>The <strong>critical value</strong> is the point on the <span class="math inline">\(t_{n-2}\)</span> distribution such that the probability of being between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span> is <span class="math inline">\(C\%\)</span>. Thinking about this visually, this is the point such that the <span class="math inline">\(C\%\)</span> of the area under the curve is between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span>. Note that we are still using a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - 2\)</span> degrees of freedom, the same distribution used to calculate the p-value in the hypothesis tests. The critical value can be calculated from modern statistical software or using online apps (more on this in <a href="#sec-theory-inf-r" class="quarto-xref"><span>Section 5.10.4</span></a>).</p>
 <!--# add illustration of the critical value-->
-<p>Let’s calculate the 95% confidence interval for the slope of <code>per_capita_spend</code>. There are 97 observations, so we use the <span class="math inline">\(t\)</span> distribution with 95 degrees of freedom. The critical value on the <span class="math inline">\(t_{95}\)</span> distribution is 1.985. Plugging these values into <a href="#eq-conf-int-beta" class="quarto-xref">Equation&nbsp;<span>5.11</span></a>, the 95% confidence interval is</p>
-<p><span id="eq-parks-ci"><span class="math display">\[
-\begin{aligned}
+<p>Let’s calculate the 95% confidence interval for the slope of <code>per_capita_spend</code>. There are 97 observations, so we use the <span class="math inline">\(t\)</span> distribution with 95 degrees of freedom. The critical value on the <span class="math inline">\(t_{95}\)</span> distribution is 1.985. Plugging these values into <span class="quarto-unresolved-ref">?eq-conf-int-beta</span>, the 95% confidence interval is</p>
+<p><span class="math display">\[\begin{aligned}
 0.0033 \pm 1.985 \times 0.0016 \\
 0.0033 \pm 0.0032 \\
 [0.0001, 0.0065]
-\end{aligned}
-\tag{5.12}\]</span></span></p>
+\end{aligned}\]</span> {#eq-parks-ci}</p>
 <p>The interpretation is the same as before: We are 95% confident that the interval 0.0001 to 0.0065 contains the true slope for <code>per_capita_expend</code>. This means we are 95% confident that for each additional dollar increase in per capita expenditure, there are 0.0001 to 0.0065 more playgrounds per 10,000 residents, on average.</p>
 </section>
 </section>
-<section id="inference-in-r" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="inference-in-r"><span class="header-section-number">5.9</span> Inference in R</h2>
-<section id="sec-slr-bootstrap-r" class="level3" data-number="5.9.1">
-<h3 data-number="5.9.1" class="anchored" data-anchor-id="sec-slr-bootstrap-r"><span class="header-section-number">5.9.1</span> Bootstrap confidence intervals in R</h3>
+<section id="inference-in-r" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="inference-in-r"><span class="header-section-number">5.10</span> Inference in R</h2>
+<section id="sec-slr-bootstrap-r" class="level3" data-number="5.10.1">
+<h3 data-number="5.10.1" class="anchored" data-anchor-id="sec-slr-bootstrap-r"><span class="header-section-number">5.10.1</span> Bootstrap confidence intervals in R</h3>
 <p>The bootstrap distribution and confidence interval are computed using the <strong>infer</strong> package <span class="citation" data-cites="infer-2">(<a href="references.html#ref-infer-2" role="doc-biblioref">Couch et al. 2021</a>)</span>. Because bootstrapping is a random sampling process, the code begins with <code>set.seed()</code> to ensure the results are reproducible. Any integer value can go inside the <code>set.seed</code> function.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
@@ -1605,7 +1660,7 @@ T = \frac{0.0033 - 0}{0.0016} = 2.063
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1625,8 +1680,8 @@ T = \frac{0.0033 - 0}{0.0016} = 2.063
 </div>
 </div>
 </section>
-<section id="sec-slr-permutation-r" class="level3" data-number="5.9.2">
-<h3 data-number="5.9.2" class="anchored" data-anchor-id="sec-slr-permutation-r"><span class="header-section-number">5.9.2</span> Permutation tests in R</h3>
+<section id="sec-slr-permutation-r" class="level3" data-number="5.10.2">
+<h3 data-number="5.10.2" class="anchored" data-anchor-id="sec-slr-permutation-r"><span class="header-section-number">5.10.2</span> Permutation tests in R</h3>
 <p>The null distribution and p-value for the permutation test are computed using the <strong>infer</strong> package <span class="citation" data-cites="infer-2">(<a href="references.html#ref-infer-2" role="doc-biblioref">Couch et al. 2021</a>)</span>. Much of the code to generate the null distribution is similar to the code for the bootstrap distribution. Because permutation sampling is a random process, the code starts with <code>set.seed()</code> to ensure the results are reproducible.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
@@ -1676,7 +1731,7 @@ T = \frac{0.0033 - 0}{0.0016} = 2.063
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1700,8 +1755,11 @@ T = \frac{0.0033 - 0}{0.0016} = 2.063
 </div>
 <!--# Callout box about gettig pvalue exactly equal to 0. May be confusing here, because we didnt get a pvalue of 0. When using permutation tests, the software may output a p-value of 0, as in this example. Note that the true theoretical p-value is <u>not</u> exactly 0; it is just so small that we did not observe a slope at least as extreme as the slope estimated from the sample data in the r niter permutation samples used to generate the null distribution. We will calculate the exact p-value in @sec-slr-inf-clt-hypothesis-test when we conduct hypothesis testing using theory-based inference methods.-->
 </section>
-<section id="sec-theory-inf-r" class="level3" data-number="5.9.3">
-<h3 data-number="5.9.3" class="anchored" data-anchor-id="sec-theory-inf-r"><span class="header-section-number">5.9.3</span> Theory-based inference in R</h3>
+<section id="prediction-intervals-in-r" class="level3" data-number="5.10.3">
+<h3 data-number="5.10.3" class="anchored" data-anchor-id="prediction-intervals-in-r"><span class="header-section-number">5.10.3</span> Prediction intervals in R</h3>
+</section>
+<section id="sec-theory-inf-r" class="level3" data-number="5.10.4">
+<h3 data-number="5.10.4" class="anchored" data-anchor-id="sec-theory-inf-r"><span class="header-section-number">5.10.4</span> Theory-based inference in R</h3>
 <p>The output from <code>lm()</code> contains the statistics discussed in this section to conduct theory-based inference. The p-value in the output corresponds to the two-sided alternative hypothesis <span class="math inline">\(H_a: \beta_1 \neq 0\)</span>.</p>
 <p>The confidence interval does not display by default, but can be added using the <code>conf.int</code> argument in the <code>tidy</code> function. The default confidence level is 95%; it can be adjusted using the <code>conf.level</code> argument in <code>tidy()</code>.</p>
 <div class="cell">
@@ -1716,7 +1774,7 @@ T = \frac{0.0033 - 0}{0.0016} = 2.063
 2 per_capita_expend  0.00330   0.00160      2.06 4.24e- 2 0.000115   0.00648</code></pre>
 </div>
 </div>
-<p>In practice, we use the output from <code>tidy()</code> to get the confidence interval. To compute the confidence interval directly from the formula in <a href="#eq-conf-int-beta" class="quarto-xref">Equation&nbsp;<span>5.11</span></a>, we get <span class="math inline">\(\hat{\beta}_1\)</span> from the <code>estimate</code> column of the <code>tidy()</code> output and <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> from the <code>std.error</code> column. The critical value is computed using the <code>qt</code> function. the first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in <a href="#eq-parks-ci" class="quarto-xref">Equation&nbsp;<span>5.12</span></a> is</p>
+<p>In practice, we use the output from <code>tidy()</code> to get the confidence interval. To compute the confidence interval directly from the formula in <span class="quarto-unresolved-ref">?eq-conf-int-beta</span>, we get <span class="math inline">\(\hat{\beta}_1\)</span> from the <code>estimate</code> column of the <code>tidy()</code> output and <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> from the <code>std.error</code> column. The critical value is computed using the <code>qt</code> function. the first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in <span class="quarto-unresolved-ref">?eq-parks-ci</span> is</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.99</code></pre>
@@ -1724,8 +1782,8 @@ T = \frac{0.0033 - 0}{0.0016} = 2.063
 </div>
 </section>
 </section>
-<section id="summary" class="level2" data-number="5.10">
-<h2 data-number="5.10" class="anchored" data-anchor-id="summary"><span class="header-section-number">5.10</span> Summary</h2>
+<section id="summary" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="summary"><span class="header-section-number">5.11</span> Summary</h2>
 <p>In this chapter we introduced two approaches for conducting statistical inference to draw conclusions about a population slope, simulation-based methods and theory-based methods. The standard error, test statistic, p-value and confidence interval we calculated using the mathematical models from the Central Limit Theorem align with what it seen from the output produced by statistical software in <a href="#tbl-parks-model" class="quarto-xref">Table&nbsp;<span>5.2</span></a>. Modern statistical software will produce these values for you, so in practice you will not typically derive these values “manually” as we did in this chapter. As the data scientist your role will be to interpret the output and use it to draw conclusions. It’s still valuable, however, to have an understanding of where these values come from in order to interpret and apply them accurately. As more software has embedded artificial intelligence features, understanding how the values are computed also helps us check if the software’s output makes sense given the data, analysis objective, and methods.</p>
 <p>Which of these two methods is preferred to use in practice? In the next chapter, we will discuss the model assumptions from <a href="#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a> and the conditions we use to evaluate whether the assumptions hold for our data. We will use these conditions in conjunction with other statistical and practical considerations to determine when we might prefer simulation-based methods or theory-based methods for inference.</p>
 <!--# Exercises-->

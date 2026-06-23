@@ -14,13 +14,15 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Explain how statistical inference is used to draw conclusions about a population model coefficient
--   Construct confidence intervals using bootstrap simulation
--   Conduct hypothesis tests using permutation
--   Explain how the Central Limit Theorem is applied to inference for the model coefficient
--   Conduct statistical inference using mathematical models based on the Central Limit Theorem
--   Interpret results from statistical inference in the context of the data
--   Explain the connection between hypothesis tests and confidence intervals
+- Explain how statistical inference is used to draw conclusions about a population model coefficient
+- Construct confidence intervals using bootstrap simulation
+- Conduct hypothesis tests using permutation
+- Explain how the Central Limit Theorem is applied to inference for the model coefficient
+- Conduct statistical inference using mathematical models based on the Central Limit Theorem
+- Interpret results from statistical inference in the context of the data
+- Explain the connection between hypothesis tests and confidence intervals
+
+<!--# add something about prediction intervals-->
 
 ```{r}
 #| include: false
@@ -53,16 +55,16 @@ The data includes information on 97 of the most populated cities in the United S
 
 <!--# rescale this to spending per 10000 residents...maybe in 100s or 1000s of dollars?-->
 
--   `per_capita_expend`: Total amount the city government spent per resident in 2020 in US dollars (USD). This is a measure of how much a city invests in services and facilities for its residents. We refer to it as a city's "per capita expenditure".
+- `per_capita_expend`: Total amount the city government spent per resident in 2020 in US dollars (USD). This is a measure of how much a city invests in services and facilities for its residents. We refer to it as a city's "per capita expenditure".
 
--   `playgrounds` : Number of playgrounds per 10,000 residents in 2020
+- `playgrounds` : Number of playgrounds per 10,000 residents in 2020
 
 ::: {.yourturn latex=""}
 Which of the following do you think best describes the relationship between `per_capita_expend` and `playgrounds`?[^05-slr-inference-1]
 
--   The relationship is positive.
--   The relationship is negative.
--   There is no relationship.
+- The relationship is positive.
+- The relationship is negative.
+- There is no relationship.
 :::
 
 [^05-slr-inference-1]: Example: I think the relationship is positive. I predict that if the city spends more per resident, some of the funding is used for facilities like playgrounds.
@@ -161,9 +163,8 @@ From @fig-parks-bivariate-eda there appears to be a positive relationship betwee
 
 To better explore this relationship, we fit a simple linear regression model of the form
 
-$$
-\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-parks-stat-model}
+$$\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-parks-stat-model}
 
 The output of the fitted regression model is @tbl-parks-model.
 
@@ -183,13 +184,12 @@ spend_slope <- parks_model_tidy |> filter (term == "per_capita_expend") |> selec
 spend_se <- parks_model_tidy |> filter (term == "per_capita_expend") |> select(std.error)
 ```
 
-$$
-\widehat{\text{playgrounds}} = 2.418 + 0.003 \times \text{per\_capita\_expend}
-$$ {#eq-parks-model}
+$$\widehat{\text{playgrounds}} = 2.418 + 0.003 \times \text{per\_capita\_expend}$$
+ {#eq-parks-model}
 
 ::: {.yourturn latex=""}
--   Interpret the slope in the context of the data.
--   Does the intercept have a meaningful interpretation? [^05-slr-inference-2]
+- Interpret the slope in the context of the data.
+- Does the intercept have a meaningful interpretation? [^05-slr-inference-2]
 :::
 
 [^05-slr-inference-2]: Slope: For each additional dollar a city spends per resident, is expected to be 0.003 more playgrounds per 10,000 residents, on average.\
@@ -209,8 +209,8 @@ The estimate `r round(parks_model_tidy$estimate[2],3)` is the "best guess" of th
 
 There are two types of statistical inference procedures:
 
--   **Hypothesis tests:** Test a specific claim about the population-level slope
--   **Confidence intervals**: A range of values that the population-level slope may reasonably take
+- **Hypothesis tests:** Test a specific claim about the population-level slope
+- **Confidence intervals**: A range of values that the population-level slope may reasonably take
 
 This chapter focuses on statistical inference for the slope $\beta_1$, but the concepts introduced here can be applied to inference on the population-level intercept $\beta_0$ and other population-level parameters.
 
@@ -218,9 +218,9 @@ As we'll see throughout the chapter, a key component of statistical inference is
 
 While the process described above would be an approach for constructing the sampling distribution, it is not feasible to collect a lot of new samples in practice. Instead, there are two approaches for obtaining the sampling distribution, in order to quantify the variability in the estimated slopes and conduct statistical inference.
 
--   **Simulation-based methods**: Quantify the sampling variability by generating a sampling distribution directly from the data
+- **Simulation-based methods**: Quantify the sampling variability by generating a sampling distribution directly from the data
 
--   **Theory-based methods:** Quantify the sampling variability using mathematical models based on the Central Limit Theorem
+- **Theory-based methods:** Quantify the sampling variability using mathematical models based on the Central Limit Theorem
 
 @sec-bootstrap-ci and @sec-slr-testing-sim introduce statistical inference using simulation-based methods, and @sec-slr-inf-clt introduces inference using theory-based methods. Before we get into those details, however, let's introduce more of the foundational ideas underlying simple linear regression and how they relate to statistical inference.
 
@@ -242,9 +242,9 @@ While the process described above would be an approach for constructing the samp
 
 <!--# does this section need to be here or could it be somewhere else?-->
 
-In @sec-slr-specify, we introduced the statistical model for simple linear regression $$
-Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-slr-model-ch5}
+In @sec-slr-specify, we introduced the statistical model for simple linear regression
+$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-slr-model-ch5}
 
 such that $Y$ is the response variable, $X$ is the predictor variable, and $\epsilon$ is the error term. @eq-slr-model-ch5 can be rewritten in terms of the distribution of the response variable $Y$ given the predictor $X$. It is represented as $Y|X$ ( "$Y$ given $X$")
 
@@ -432,8 +432,8 @@ The 95% bootstrapped confidence interval for $\beta_1$, the slope of `per_capita
 ::: {.yourturn latex=""}
 The points at what percentiles in the bootstrap distribution mark the lower and upper bounds for a
 
--   90% confidence interval?
--   98% confidence interval?[^05-slr-inference-6]
+- 90% confidence interval?
+- 98% confidence interval?[^05-slr-inference-6]
 :::
 
 [^05-slr-inference-6]: The points at the $5^{th}$ and $95^{th}$ percentiles make the bounds for the 95% confidence interval. The points at the $1^{st}$ and $99^{th}$ percentiles mark the lower and upper bounds for a 98% confidence interval.
@@ -511,9 +511,9 @@ These steps are described in detail in the context of the hypothesis test for th
 
 As defined in @sec-hypothesis-test-overview the **null hypothesis** ($H_0$) is the baseline condition, and the **alternative hypothesis** ($H_a$) is defined by the claim being tested. Recall from @sec-slr-inf-data that one objective for the analysis in this chapter is to investigate whether per capita expenditure is useful in understanding variability in playground access in US cities. In terms of the linear regression model, the claim being tested is whether there is a linear relationship between `per_capita_expend` and `playgrounds`. The null hypothesis is the baseline condition of there being no linear relationship between the two variables. We use this claim to define the alternative hypothesis.
 
--   **Null hypothesis:** There is no linear relationship between playgrounds per 10,000 residents and per capita expenditure. The slope of `per_capita_expend` is equal to 0. $(H_0: \beta_1 = 0)$
--   **Alternative hypothesis:** There is a linear relationship between playgrounds per 10,000 residents and per capita expenditure. The coefficient of `per_capita_expend` is not equal to 0. $(H_a: \beta_1 \neq 0)$
-    -   Note that we have not hypothesized whether the slope is positive or negative.
+- **Null hypothesis:** There is no linear relationship between playgrounds per 10,000 residents and per capita expenditure. The slope of `per_capita_expend` is equal to 0. $(H_0: \beta_1 = 0)$
+- **Alternative hypothesis:** There is a linear relationship between playgrounds per 10,000 residents and per capita expenditure. The coefficient of `per_capita_expend` is not equal to 0. $(H_a: \beta_1 \neq 0)$
+  - Note that we have not hypothesized whether the slope is positive or negative.
 
 The hypotheses are defined specifically in terms of the [**linear**]{.underline} relationship between the two variables, because we are ultimately drawing conclusions about the slope $\beta_1$.
 
@@ -522,18 +522,15 @@ The hypotheses are defined specifically in terms of the [**linear**]{.underline}
 
 Suppose there is a response variable $Y$ and a predictor variable $X$ such that
 
-$$
-Y = \beta_0 + \beta_1X + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_\epsilon)
-$$
+$$Y = \beta_0 + \beta_1X + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_\epsilon)$$
 
 The hypotheses for testing whether there is a linear relationship between $X$ and $Y$ in the population are
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 &H_0: \beta_1 = 0\\
 &H_a: \beta_1 \neq 0
-\end{aligned}
-$$ {#eq-slr-hypotheses}
+\end{aligned}$$
+ {#eq-slr-hypotheses}
 :::
 
 #### One vs. two-sided hypotheses {.unnumbered}
@@ -649,11 +646,11 @@ This comparison is quantified using a p-value. The **p-value** is the probabilit
 
 In the context of statistical inference, the phrase "more extreme" means the area between the estimated value ( $\hat{\beta}_1$ in our case), and the outer tail(s) of the simulated null distribution. The alternative hypothesis determines which tail(s) to include when calculating the p-value.
 
--   If $H_a: \beta_1 > 0$, the p-value is the probability of obtaining a value in the null distribution that is greater than or equal to $\hat{\beta}_1$.
+- If $H_a: \beta_1 > 0$, the p-value is the probability of obtaining a value in the null distribution that is greater than or equal to $\hat{\beta}_1$.
 
--   If $H_a: \beta_1 < 0$, the p-value is the probability of obtaining a value in the null distribution that is less than or equal to $\hat{\beta}_1$.
+- If $H_a: \beta_1 < 0$, the p-value is the probability of obtaining a value in the null distribution that is less than or equal to $\hat{\beta}_1$.
 
--   If $H_a: \beta_1 \neq 0$, the p-value is the probability of obtaining a value in the null distribution whose absolute value is greater than or equal to $\hat{\beta}_1$ . This includes values that are greater than or equal to $|\hat{\beta}_1|$ or less than or equal to $-|\hat{\beta}_1|$.
+- If $H_a: \beta_1 \neq 0$, the p-value is the probability of obtaining a value in the null distribution whose absolute value is greater than or equal to $\hat{\beta}_1$ . This includes values that are greater than or equal to $|\hat{\beta}_1|$ or less than or equal to $-|\hat{\beta}_1|$.
 
 <!--# Include a figure to illustrate this-->
 
@@ -702,16 +699,16 @@ Use the definition of the p-value at the beginning of this section to interpret 
 
 We ultimately want to evaluate the strength of evidence against the null hypothesis. The p-value is a measure of the strength of that evidence and is used to draw one of the following conclusions:
 
--   If the p-value is "sufficiently small", there is strong evidence against the null hypothesis. We **reject the null hypothesis,** $H_0$, and conclude the alternative $H_a$.
--   If the p-value is not "sufficiently small", there is not strong enough evidence against the null hypothesis. We **fail to reject the null hypothesis**, $H_0$, and stay with the null hypothesis.
+- If the p-value is "sufficiently small", there is strong evidence against the null hypothesis. We **reject the null hypothesis,** $H_0$, and conclude the alternative $H_a$.
+- If the p-value is not "sufficiently small", there is not strong enough evidence against the null hypothesis. We **fail to reject the null hypothesis**, $H_0$, and stay with the null hypothesis.
 
 <!--# add questions about whether conclusions are generalizable?-->
 
 We use a predetermined decision-making threshold called an $\boldsymbol{\alpha}$**-level** to determine if a p-value is sufficiently small enough to reject the null hypothesis.
 
--   If $\text{p-value} < \alpha$, then reject $H_0$
+- If $\text{p-value} < \alpha$, then reject $H_0$
 
--   If $\text{p-value} \geq \alpha$, then fail to reject $H_0$.
+- If $\text{p-value} \geq \alpha$, then fail to reject $H_0$.
 
 A commonly used threshold is $\alpha = 0.05$. If stronger evidence is required to reject the null hypothesis,<!--# Maybe explain why this might be the case--> then a lower threshold can be used to make a conclusion. If such strong evidence is not required (this may be the case in analyses with very small sample sizes), then a threshold can be used. It is general convention to use a threshold 0.1 or less, so any p-value 0.1 is considered large enough to fail to reject the null hypothesis.
 
@@ -728,12 +725,12 @@ Regardless of the conclusion that is drawn (reject or fail to reject the null hy
 <!--# figure out how to better format this table, so decision and truth are in the middle-->
 
 |   |   | **Truth** |   |
-|----|----|----|----|
+|------------------|------------------|------------------|------------------|
 |  |  | $H_0$ **true** | $H_a$ **true** |
 | **Hypothesis test decision** | **Fail to reject** $H_0$ | Correct decision | Type II error |
 |  | **Reject** $H_0$ | Type I error | Correct decision |
 
-: Type I and Type II error {#tbl-errors}
+: Type I and Type II error
 
 A **Type I error** has occurred if the null hypothesis is actually true, but the p-value is small enough to reject the null hypothesis. The probability of making this type of error is the decision-making threshold $\alpha$. This is because $P(\text{reject }H_0 | H_0 \text{ true}) = \alpha$, meaning the probability of rejecting the null hypothesis given the null is true is $\alpha$.
 
@@ -753,9 +750,9 @@ At this point, we might wonder whether there is any connection between the confi
 
 Testing a claim with the two-sided alternative $H_a: \beta_1 \neq 0$ and decision-making threshold $\alpha$ is equivalent to using the $C\%$ confidence interval to evaluate the claim, where $C = (1 - \alpha)\times100$. This means we can also use confidence intervals to evaluate two-sided hypotheses. When using a confidence interval to draw conclusions about a claim, we use the following guide:
 
--   If the null hypothesized value ( $0$ based on the tests defined in @sec-slr-inf-hypotheses ) is within the range of the confidence interval, *fail to reject* $H_0$ at the $\alpha$-level.
+- If the null hypothesized value ( $0$ based on the tests defined in @sec-slr-inf-hypotheses ) is within the range of the confidence interval, *fail to reject* $H_0$ at the $\alpha$-level.
 
--   If the null hypothesized value is not within the range of the confidence interval, *reject* $H_0$ at the $\alpha$-level.
+- If the null hypothesized value is not within the range of the confidence interval, *reject* $H_0$ at the $\alpha$-level.
 
 This illustrates the power of confidence intervals; they can not only be used to draw a conclusion about a claim (reject or fail to reject $H_0$), but they also give the range values that the population slope may take. Thus, it is good practice to always report the confidence interval, because the confidence interval provides more detail about a population slope $\beta_1$ beyond the reject/fail to reject conclusion of the hypothesis test.
 
@@ -764,6 +761,72 @@ When we reject a null hypothesis, we conclude that there is a statistically sign
 :::
 
 <!--# do i want to talk about effect size?-->
+
+## Prediction intervals 
+
+- Recall from \[SEC\] that we can use the model to compute predictions for different values of the predictor.
+
+- As we've discussed in this chapter, because we are working with sample data, there is uncertainty in the estimated coefficients.
+
+- Because we're using the estimated coefficients to compute predictions, then there is naturally uncertainty in the model predictions as well.
+
+- Similar to how we share intervals around the coefficient estimates, we can compute intervals around the predictions.
+
+- We will use the bootstrapped samples along with the coefficients produced by each bootstrapped sample to compute the predictions.
+
+- Similar to bootstrapped intervals, for a given value of the predictor, the $C\%$ interval is made from the middle $C\%$ of the distribution.
+
+- Let's use the bootstrap data from \[SEC\] and look at the predicted number of playgrounds per 10,000 residents when the spending per resident is \$150.
+
+Table X shows the predictions from the first five bootstrap samples.
+
+```{r}
+#| label: tbl-bootstrap-pred-150
+#| tbl-cap: "Estimated slope, intercept, and prediction for `spend = 150` from first five bootstrap samples"
+
+set.seed(12345)
+
+niter = 1000
+boot_prediction <- parks |>
+  specify(playgrounds ~ per_capita_expend) |>
+  generate(reps = niter, type = "bootstrap") |>
+  fit() |>
+  pivot_wider(
+    names_from = term,
+    values_from = estimate
+  ) |>
+  mutate(prediction = intercept + per_capita_expend * 150) |>
+ungroup()
+
+boot_prediction |> 
+  slice(1:5) |>
+  kable(digits = 3)
+```
+
+The distribution of the predictions with the bounds for the 95% interval shown below.
+
+```{r}
+#| label: fig-bootstrap-pred-150
+#| fig-cap: "Bootstrap distribution of predictions when `spend = 150` with bounds for the 95% interval"
+
+boot_pred_lb <- quantile(boot_prediction$prediction, 0.025)
+boot_pred_ub <- quantile(boot_prediction$prediction, 0.975)
+
+ggplot(data = boot_prediction, aes(x = prediction)) + 
+  geom_histogram(fill = "darkcyan", color = 'white') + 
+  geom_vline(xintercept = boot_pred_lb, linetype = 2 , color = "red") + 
+  geom_vline(xintercept = boot_pred_ub, linetype = 2, color = "red") +
+  labs(x = "Predicted values", 
+       title = "", 
+       subtitle = "") +
+  theme_bw()
+```
+
+The bounds for the 95% interval of predictions when `spend = 150` is `r round(boot_pred_lb, 3)` to `r round(boot_pred_ub, 3)`. The interpretation is as follows:
+
+> We are 95% confident there are between `r round(boot_pred_lb, 3)` and `r round(boot_pred_ub, 3)` playgrounds per 10,000 residents in a city with expenditure of \$150.
+
+- Note that this interval is for the predicted mean among all cities with expenditure equal to \$150. In other words, we are predicting the value on the line , but recall from \[SEC\] that there is a distribution of the response for each value of the predictor. We need to account for this extra variability when computing the predictions for individual observations. WE'll take more about this in \[SEC - prediction theory section\].
 
 ## Theory-based inference {#sec-slr-inf-clt}
 
@@ -785,9 +848,8 @@ By the Central Limit Theorem, we know under certain conditions (more on these co
 
 [^05-slr-inference-10]: *Standard error* is the term used for the standard deviation of a sampling distribution.
 
-$$
-SE_{\hat{\beta}_1} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{(n-1)s_X^2}}
-$$ {#eq-slr-se}
+$$SE_{\hat{\beta}_1} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{(n-1)s_X^2}}$$
+ {#eq-slr-se}
 
 where $n$ is the number of observations, $s_X^2$ is the variance of the predictor variable $X$, and $\hat{\sigma}_{\epsilon}$ is the **regression standard error**, the variability of the observations around the regression line. The regression error is introduced in more detail in @sec-estimate-reg-std-err. The details of how this formula is derived is beyond the scope of this text, but let's take a moment to think about what we know about the sampling variability of $\hat{\beta}_1$ from @eq-slr-se.
 
@@ -805,9 +867,8 @@ By obtaining the estimates $\hat{\beta}_0$ and $\hat{\beta}_1$, we have the equa
 
 [^05-slr-inference-11]: Note its similarities to the general equation for sample standard deviation, $s = \sqrt{\frac{\sum_{i=1}^n(y_i - \bar{y})^2}{n-1}}$
 
-$$
-\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i = 1}^ne_i^2}{n - 2}} = \sqrt{\frac{\sum_{i = 1}^n(y_i - \hat{y}_i)^2}{n - 2}}
-$$ {#eq-slr-reg-se}
+$$\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i = 1}^ne_i^2}{n - 2}} = \sqrt{\frac{\sum_{i = 1}^n(y_i - \hat{y}_i)^2}{n - 2}}$$
+ {#eq-slr-reg-se}
 
 ::: {.math_rules latex=""}
 You may have noticed that the denominator in @eq-slr-reg-se is $n - 2$ not $n$ or $n-1$. The value $n - 2$ is called the **degrees of freedom (df)**. The degrees of freedom are how many observations are available to understand variability about the regression line. We need at a minimum two observations to estimate the equation for the simple linear regression line, i.e., it takes at a minimum two points to make a line. The remaining $n-2$ observations help us understand variability about the line. We will talk more about how we use degrees of freedom as we define the distribution used to compute confidence intervals and conduct hypothesis tests. <!--# consider an illlustration here-->
@@ -815,7 +876,7 @@ You may have noticed that the denominator in @eq-slr-reg-se is $n - 2$ not $n$ o
 
 Recall that the standard deviation is the average distance between each observation and the mean of the distribution. Similarly, the regression standard error can be thought of as the average distance the observed value the response is from the regression line. The regression standard error $\hat{\sigma}_{\epsilon}$ is used to quantify the sampling variability in the estimated slope $\hat{\beta}_1$ (@eq-slr-se), so we will use this value as we conduct inference on the slope.
 
-### Hypothesis test for the slope {#sec-slr-inf-clt-hypothesis-test}
+### Hypothesis tests for the slope {#sec-slr-inf-clt-hypothesis-test}
 
 The overall goals of hypothesis tests for a population slope are the same when using theory-based methods as previously described in @sec-hypothesis-test-overview. We define a null and alternative hypothesis, conduct testing assuming the null hypothesis is true, and draw a conclusion based on an evaluation of the strength of evidence against the null hypothesis. The main difference from the simulation-based approach in @sec-slr-testing-sim is in how we quantify the variability in $\hat{\beta}_1$ and thus obtain the null distribution. In @sec-slr-inf-permutation we used permutation sampling to generate the null distribution. We'll see that by the Central Limit Theorem we have results that specify exactly how the null distribution is defined.
 
@@ -826,24 +887,20 @@ The steps for conducting a hypothesis test based on the Central Limit Theorem ar
 3.  Calculate a p-value.
 4.  Draw a conclusion.
 
-As in @sec-slr-testing-sim the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of "not equal to 0". Therefore, the null and alternative hypotheses are the same as defined in @eq-slr-hypotheses $$
-\begin{aligned}
+As in @sec-slr-testing-sim the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of "not equal to 0". Therefore, the null and alternative hypotheses are the same as defined in @eq-slr-hypotheses
+$$\begin{aligned}
 H_0: \beta_1 = 0 \\
 H_a: \beta_1 \neq 0 \\
-\end{aligned}
-$$
+\end{aligned}$$
 
 The next step is to calculate a test statistic. Similar to a $z$-score in the Normal distribution, the test statistic tells us how far the observed slope is from the hypothesized center of the distribution. The general form of a test statistic is
 
-$$
-T = \frac{\text{estimate } - \text{ hypothesized}}{\text{standard error}}
-$$
+$$T = \frac{\text{estimate } - \text{ hypothesized}}{\text{standard error}}$$
 
 More specifically, in the hypothesis test for $\beta_1$, the test statistic is
 
-$$
-T = \frac{\hat{\beta}_1 - 0}{SE_{\hat{\beta}_1}}
-$$ {#eq-test-stat}
+$$T = \frac{\hat{\beta}_1 - 0}{SE_{\hat{\beta}_1}}$$
+ {#eq-test-stat}
 
 To calculate the test statistic, the estimated slope is shifted by the mean, and then rescaled by the standard error. Let's consider what we learn from the test statistic. Recall that by the Central Limit Theorem, the distribution of $\hat{\beta}_1$ is $N(\beta_1, SE_{\hat{\beta}_1})$. Because we conduct hypothesis testing under the assumption the null hypothesis is true, we are assuming that the mean of this distribution of $\beta_1= 0$.
 
@@ -890,29 +947,24 @@ ggplot() +
 
 As described in @sec-calc-pvalue, because the alternative hypothesis is "not equal to", the p-value is calculated on both the high and low extremes of the distribution as shown in @eq-pvalue-two-sided.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 &\text{p-value} = Pr(|t| > |T|) = Pr(t < -|T| \text{ or } t > |T|) \\[5pt]
 &\text{where } t \sim t_{n-2}
-\end{aligned} 
-$$ {#eq-pvalue-two-sided}
+\end{aligned} $$
+ {#eq-pvalue-two-sided}
 
 We compare the p-value to a decision-making threshold $\alpha$ to draw final conclusions. If $\text{p-value} < \alpha$ , we reject the null hypothesis and conclude the alternative. Otherwise, we fail to reject the null hypothesis. See @sec-slr-inf-conclusion for more detail about using the $\alpha$-level and p-value to draw conclusions.
 
 Now let's apply this process to test whether there is evidence of a linear relationship between per capita expenditure and the number of playgrounds per 10,000 residents. As before, the null and and alternative hypotheses are
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 &H_0: \beta_{1} = 0 \\
 &H_a: \beta_{1} \neq 0
-\end{aligned}
-$$
+\end{aligned}$$
 
 where $\beta_1$ is the true slope between `per_capita_expend` and `playgrounds`. The observed slope from @tbl-parks-model, we know the observed slope $\hat{\beta}_{1}$ is `r round(spend_slope, 4)` and the estimated standard error $SE_{\hat{\beta}_{1}}$ is `r round(spend_se, 4)`. The test statistic is
 
-$$
-T = \frac{0.0033 - 0}{0.0016} = 2.063
-$$
+$$T = \frac{0.0033 - 0}{0.0016} = 2.063$$
 
 This test statistic means that assuming the true slope of `per_capita_expend` in this model is 0 and thus the mean of the distribution of $\hat{\beta}_{1}$ is 0, the observed slope of `r round(spend_slope, 3)` is 2.063 standard errors above this hypothesized mean. It's difficult to determine whether or not this is really "far enough" away from the center of the distribution, but we can calculate a p-value to determine the probability of observing a slope at least this far given the null hypothesis is true.
 
@@ -936,15 +988,14 @@ Using a decision-making threshold $\alpha = 0.05$, the p-value $0.042$ is suffic
 
 Note that this conclusion is the same as in @sec-slr-inf-conclusion using a simulation-based approach (even with small differences in the p-value). This is what we would expect, given these are the two different approaches for conducting the same inferential process. We are also conducting the tests under the same assumptions that the null hypothesis is true. The difference is in the methods available to quantify $SE_{\hat{\beta}_1}$, simulation-based versus theory-based.
 
-### Confidence interval
+### Confidence intervals
 
 As with simulation-based inference, a confidence interval calculated based on the results from the Central Limit Theorem is an estimated range of the values that $\beta_1$ can reasonably take. The purpose, interpretation, and conclusions drawn from confidence intervals are the same as described before in @sec-bootstrap-ci. What differs, however, is how the interval is calculated. In simulation-based inference, we used bootstrapping to construct a sampling distribution to understand sample-to-sample variability in $\beta_1$. By the Central Limit Theorem, we know exactly how to quantify the sample-to-sample variability in $\hat{\beta}_1$ using theoretical results.
 
 The equation for a $C\%$ confidence interval for $\beta_1$ is
 
-$$
-\hat{\beta}_1 \pm t^* \times SE_{\hat{\beta}_1}
-$$ {#eq-conf-int-beta}
+$$\hat{\beta}_1 \pm t^* \times SE_{\hat{\beta}_1}$$
+ {#eq-conf-int-beta}
 
 where $t^* \sim t_{n - 2}$.
 
@@ -956,13 +1007,12 @@ The **critical value** is the point on the $t_{n-2}$ distribution such that the 
 
 Let's calculate the 95% confidence interval for the slope of `per_capita_spend`. There are 97 observations, so we use the $t$ distribution with 95 degrees of freedom. The critical value on the $t_{95}$ distribution is 1.985. Plugging these values into @eq-conf-int-beta, the 95% confidence interval is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
  0.0033 \pm 1.985 \times 0.0016 \\
 0.0033 \pm 0.0032 \\
 [0.0001, 0.0065]
-\end{aligned}
-$$ {#eq-parks-ci}
+\end{aligned}$$
+ {#eq-parks-ci}
 
 The interpretation is the same as before: We are 95% confident that the interval 0.0001 to 0.0065 contains the true slope for `per_capita_expend`. This means we are 95% confident that for each additional dollar increase in per capita expenditure, there are 0.0001 to 0.0065 more playgrounds per 10,000 residents, on average.
 
@@ -1068,6 +1118,8 @@ get_p_value(null_dist, estimated_slope, direction = "both") |>
 ```
 
 <!--# Callout box about gettig pvalue exactly equal to 0. May be confusing here, because we didnt get a pvalue of 0. When using permutation tests, the software may output a p-value of 0, as in this example. Note that the true theoretical p-value is <u>not</u> exactly 0; it is just so small that we did not observe a slope at least as extreme as the slope estimated from the sample data in the r niter permutation samples used to generate the null distribution. We will calculate the exact p-value in @sec-slr-inf-clt-hypothesis-test when we conduct hypothesis testing using theory-based inference methods.-->
+
+### Prediction intervals in R
 
 ### Theory-based inference in R {#sec-theory-inf-r}
 
