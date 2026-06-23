@@ -1624,10 +1624,16 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <li><p>The equation for the prediction for an individual response is [INSERT EQUATION].</p></li>
 <li><p>Note that hte standard error for the interval for an individual respose has the additional +1. This is to account for the additional variabiltiy in the distribution of the respose around the regression line.</p></li>
 </ul>
-<p>Lets take a look at the intervals for the mean response for cities with expediture of $150 and the interval for a individual city with expendutre of $150.</p>
+<p>Lets take a look at the intervals for the mean response for cities with expediture of $150 and the interval for a individual city with expendutre of $150. Note that the interval for the mean response in <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.11</span></a> is very similar to the prediction interval produced by bootstrapping in [REF for bootstrap interval]</p>
 <div class="cell">
+<div id="tbl-prediction-intervals" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.11: Intervals for the mean response and individual response when <code>per_capita_expend = 150</code>
+</figcaption>
+<div aria-describedby="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -1653,6 +1659,14 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 </table>
 </div>
 </div>
+</figure>
+</div>
+</div>
+<p>The interpretations for the intervals in <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.11</span></a> are as follows:</p>
+<blockquote class="blockquote">
+<p>We are 95% confident that the mean number of playgrounds per 10,000 residents in cities that have per capita expenditure of \$150 is between 2.656 to 3.169.</p>
+<p>We are 95% confident the number of playgrounds per 10,000 residents in an individual city with per capita expenditure of \$150 is between 0.654 to 5.172.</p>
+</blockquote>
 </section>
 </section>
 <section id="inference-in-r" class="level2" data-number="5.10">
@@ -1707,7 +1721,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="05-slr-inference_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1778,7 +1792,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="05-slr-inference_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1827,33 +1841,30 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 </section>
 <section id="prediction-intervals-2" class="level3" data-number="5.10.4">
 <h3 data-number="5.10.4" class="anchored" data-anchor-id="prediction-intervals-2"><span class="header-section-number">5.10.4</span> Prediction intervals</h3>
-<section id="bootstrap-intervals-for-the-mean-response" class="level4" data-number="5.10.4.1">
-<h4 data-number="5.10.4.1" class="anchored" data-anchor-id="bootstrap-intervals-for-the-mean-response"><span class="header-section-number">5.10.4.1</span> Bootstrap intervals for the mean response</h4>
-<ul>
-<li><p>The code for simulation-based prediction intervals are an extension to the code for bootstrapped intervals.</p></li>
-<li><p>We compute the slope and intercept from each bootstrap sample, then we need to <code>pivot</code> the data so that there is a separate column for the slope and intercept.</p></li>
-<li><p>Then we use mutate to compute the predicted values.</p></li>
-<li><p>Similar to bootstrap confidence intervals, we use <code>quantile()</code> to compute the lower and upper bounds.</p></li>
-<li><p>The full pipeline is below</p></li>
-</ul>
+<p>The code for computing prediction intervals largely builds upon code we’ve seen in previous sections.</p>
+<section id="simulation-based-intervals-for-prediction" class="level4" data-number="5.10.4.1">
+<h4 data-number="5.10.4.1" class="anchored" data-anchor-id="simulation-based-intervals-for-prediction"><span class="header-section-number">5.10.4.1</span> Simulation-based intervals for prediction</h4>
+<p>The code for computing bootstrapped prediction intervals is below. We use the code from <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a> to generate the bootstrap samples and fit the model for each sample. Because the resulting output is in long format, we pivot the data to wide format using <code>pivot_wider()</code> in the <strong>tidyr</strong> package <span class="citation" data-cites="tidyr">(<a href="references.html#ref-tidyr" role="doc-biblioref"><strong>tidyr?</strong></a>)</span> (part of <strong>tidyverse</strong>). This results in a data frame such that the bootstrapped intercepts and bootstrapped slopes are in separate columns.</p>
+<p>We then use <code>mutate()</code> from <strong>dplyr</strong> <span class="citation" data-cites="dplyr">(<a href="references.html#ref-dplyr" role="doc-biblioref">Wickham et al. 2023</a>)</span>to compute the predictions from each bootstrap sample. The bounds of the prediction interval are computed using <code>quantile()</code> as with the bounds of the bootstrap confidence intervals in <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">=</span> <span class="dv">1000</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="ot">&lt;-</span> parks <span class="sc">|&gt;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(playgrounds <span class="sc">~</span> per_capita_expend) <span class="sc">|&gt;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> niter, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> term,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> estimate</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prediction =</span> intercept <span class="sc">+</span> per_capita_expend <span class="sc">*</span> <span class="dv">150</span>) </span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="sc">|&gt;</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">boot_pred_lb =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.025</span>),</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">boot_pred_ub =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span>  <span class="dv">1000</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="ot">&lt;-</span> parks <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(playgrounds <span class="sc">~</span> per_capita_expend) <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> niter, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> term,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> estimate</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prediction =</span> intercept <span class="sc">+</span> per_capita_expend <span class="sc">*</span> <span class="dv">150</span>) </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>boot_prediction <span class="sc">|&gt;</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">boot_pred_lb =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.025</span>),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">boot_pred_ub =</span> <span class="fu">quantile</span>(prediction, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   boot_pred_lb boot_pred_ub
@@ -1907,6 +1918,9 @@ Couch, Simon P., Andrew P. Bray, Chester Ismay, Evgeni Chasnovski, Benjamin S. B
 </div>
 <div id="ref-publicland" class="csl-entry" role="listitem">
 The Trust for Public Land. 2021. <span>“Parks and an Equitable Recovery.”</span> Online.
+</div>
+<div id="ref-dplyr" class="csl-entry" role="listitem">
+Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <span>“Dplyr: A Grammar of Data Manipulation.”</span> <a href="https://doi.org/10.32614/CRAN.package.dplyr">https://doi.org/10.32614/CRAN.package.dplyr</a>.
 </div>
 </div>
 </section>

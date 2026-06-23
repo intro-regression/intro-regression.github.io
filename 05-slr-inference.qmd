@@ -1042,9 +1042,13 @@ The interpretation is the same as before: We are 95% confident that the interval
 
 - Note that hte standard error for the interval for an individual respose has the additional +1. This is to account for the additional variabiltiy in the distribution of the respose around the regression line.
 
-Lets take a look at the intervals for the mean response for cities with expediture of \$150 and the interval for a individual city with expendutre of \$150.
+Lets take a look at the intervals for the mean response for cities with expediture of \$150 and the interval for a individual city with expendutre of \$150. Note that the interval for the mean response in @tbl-prediction-intervals is very similar to the prediction interval produced by bootstrapping in \[REF for bootstrap interval\]
 
 ```{r}
+#| label: tbl-prediction-intervals
+#| tbl-cap: "Intervals for the mean response and individual response when `per_capita_expend = 150`" 
+
+
 new_city_expend <- tibble(per_capita_expend = 150)
 
 mean_predict <- as.data.frame(predict(parks_model, new_city_expend, interval = "confidence", level = 0.95))
@@ -1056,6 +1060,12 @@ bind_rows(mean_predict, individual_predict)  |>
   select(fit, lwr, upr) |>
   kable(digits = 3, col.names = c("Type", "Lower bound", "Upper bound"))
 ```
+
+The interpretations for the intervals in @tbl-prediction-intervals are as follows:
+
+> We are 95% confident that the mean number of playgrounds per 10,000 residents in cities that have per capita expenditure of \\\$150 is between `r round(mean_predict$lwr, 3)` to `r round(mean_predict$upr, 3)`.
+>
+> We are 95% confident the number of playgrounds per 10,000 residents in an individual city with per capita expenditure of \\\$150 is between `r round(individual_predict$lwr, 3)` to `r round(individual_predict$upr, 3)`.
 
 ## Inference in R
 
@@ -1181,26 +1191,21 @@ qt(0.975, 95)
 
 ### Prediction intervals 
 
-#### Bootstrap intervals for the mean response
+The code for computing prediction intervals largely builds upon code we've seen in previous sections.
 
-- The code for simulation-based prediction intervals are an extension to the code for bootstrapped intervals.
+#### Simulation-based intervals for prediction
 
-- We compute the slope and intercept from each bootstrap sample, then we need to `pivot` the data so that there is a separate column for the slope and intercept.
+The code for computing bootstrapped prediction intervals is below. We use the code from @sec-slr-bootstrap-r to generate the bootstrap samples and fit the model for each sample. Because the resulting output is in long format, we pivot the data to wide format using `pivot_wider()` in the **tidyr** package [@tidyr] (part of **tidyverse**). This results in a data frame such that the bootstrapped intercepts and bootstrapped slopes are in separate columns.
 
-- Then we use mutate to compute the predicted values.
-
-- Similar to bootstrap confidence intervals, we use `quantile()` to compute the lower and upper bounds.
-
-- The full pipeline is below
+We then use `mutate()` from **dplyr** [@dplyr]to compute the predictions from each bootstrap sample. The bounds of the prediction interval are computed using `quantile()` as with the bounds of the bootstrap confidence intervals in @sec-slr-bootstrap-r.
 
 ```{r}
 #| echo: true 
 
-
-
 set.seed(12345)
 
-niter = 1000
+niter <-  1000
+
 boot_prediction <- parks |>
   specify(playgrounds ~ per_capita_expend) |>
   generate(reps = niter, type = "bootstrap") |>
