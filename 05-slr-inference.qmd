@@ -163,8 +163,7 @@ From @fig-parks-bivariate-eda there appears to be a positive relationship betwee
 
 To better explore this relationship, we fit a simple linear regression model of the form
 
-$$\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
- {#eq-parks-stat-model}
+$$\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-parks-stat-model}
 
 The output of the fitted regression model is @tbl-parks-model.
 
@@ -184,8 +183,7 @@ spend_slope <- parks_model_tidy |> filter (term == "per_capita_expend") |> selec
 spend_se <- parks_model_tidy |> filter (term == "per_capita_expend") |> select(std.error)
 ```
 
-$$\widehat{\text{playgrounds}} = 2.418 + 0.003 \times \text{per\_capita\_expend}$$
- {#eq-parks-model}
+$$\widehat{\text{playgrounds}} = 2.418 + 0.003 \times \text{per\_capita\_expend}$$ {#eq-parks-model}
 
 ::: {.yourturn latex=""}
 - Interpret the slope in the context of the data.
@@ -242,9 +240,7 @@ While the process described above would be an approach for constructing the samp
 
 <!--# does this section need to be here or could it be somewhere else?-->
 
-In @sec-slr-specify, we introduced the statistical model for simple linear regression
-$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
- {#eq-slr-model-ch5}
+In @sec-slr-specify, we introduced the statistical model for simple linear regression $$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-slr-model-ch5}
 
 such that $Y$ is the response variable, $X$ is the predictor variable, and $\epsilon$ is the error term. @eq-slr-model-ch5 can be rewritten in terms of the distribution of the response variable $Y$ given the predictor $X$. It is represented as $Y|X$ ( "$Y$ given $X$")
 
@@ -529,8 +525,7 @@ The hypotheses for testing whether there is a linear relationship between $X$ an
 $$\begin{aligned}
 &H_0: \beta_1 = 0\\
 &H_a: \beta_1 \neq 0
-\end{aligned}$$
- {#eq-slr-hypotheses}
+\end{aligned}$$ {#eq-slr-hypotheses}
 :::
 
 #### One vs. two-sided hypotheses {.unnumbered}
@@ -762,23 +757,21 @@ When we reject a null hypothesis, we conclude that there is a statistically sign
 
 <!--# do i want to talk about effect size?-->
 
-## Prediction intervals 
+## Prediction intervals
 
-- Recall from \[SEC\] that we can use the model to compute predictions for different values of the predictor.
+In @sec-slr-predict , we use the linear regression model to compute predicted values of the response variable for a given value of the predictor. Because the regression model is fit using sample data, there is variability in the estimated model coefficients (slope and intercept) used to compute the predicted value. Given this uncertainty in the model coefficients, there is naturally uncertainty in the predicted values as well. Thus, we will quantify the uncertainty in the predictions utilizing similar methods introduced in previous sections to quantify uncertainty in model coefficients.
 
-- As we've discussed in this chapter, because we are working with sample data, there is uncertainty in the estimated coefficients.
+In @sec-bootstrap-ci, we introduced bootstrap sampling to construct the sampling distribution of the slope, $\beta_1$. Similarly, we can use the bootstrap samples and the model estimated from each bootstrap sample to generate a distribution of predictions, $\hat{y}$ for a given value of the predictor, $x$. As with the bootstrap confidence interval for the slope, mark the bounds for the middle $C\%$ of the distribution as the interval for our prediction.
 
-- Because we're using the estimated coefficients to compute predictions, then there is naturally uncertainty in the model predictions as well.
+Given a particular value of the predictor, call it $x*$, the $C\%$ interval for the predicted values when $x = x*$ are as follows:
 
-- Similar to how we share intervals around the coefficient estimates, we can compute intervals around the predictions.
+1.  Generate $niter$ bootstrap samples. For each bootstrap sample:
+    1.  Fit the model.
+    2.  Use the estimated slope and intercept to compute the predicted response $\hat{y}$ when $x = x*$.
+2.  Use the $niter$ values of $\hat{y}$ to construct the distribution of predicted values when $x = x*$.
+3.  Mark the bounds for the middle $C\%$ of the distribution to construct the $C\%$ interval for the predicted value when $x = x*$.
 
-- We will use the bootstrapped samples along with the coefficients produced by each bootstrapped sample to compute the predictions.
-
-- Similar to bootstrapped intervals, for a given value of the predictor, the $C\%$ interval is made from the middle $C\%$ of the distribution.
-
-- Let's use the bootstrap data from \[SEC\] and look at the predicted number of playgrounds per 10,000 residents when the spending per resident is \$150.
-
-Table X shows the predictions from the first five bootstrap samples.
+To illustrate this, let's use the bootstrap samples from @sec-construct-bootstrap-ci to identify a plausible range of values for the predicted number of playgrounds per 10,000 residents when a city's per capita expenditure is is \$150. Table @tbl-bootstrap-pred-150 shows the estimated slope, intercept, and prediction for the first five bootstrap samples.
 
 ```{r}
 #| label: tbl-bootstrap-pred-150
@@ -803,7 +796,7 @@ boot_prediction |>
   kable(digits = 3)
 ```
 
-The distribution of the predictions with the bounds for the 95% interval shown below.
+Recall from @sec-construct-boostrap-ci, we generated 1000 bootstrap samples. The distribution of the predictions from the 1000 bootstrap samples when `per_capita_spend = 150` is in @fig-bootstrap-pred-150. The points on the distribution span the middle 95% of the distribution are marked on the visualization.
 
 ```{r}
 #| label: fig-bootstrap-pred-150
@@ -822,11 +815,11 @@ ggplot(data = boot_prediction, aes(x = prediction)) +
   theme_bw()
 ```
 
-The bounds for the 95% interval of predictions when `spend = 150` is `r round(boot_pred_lb, 3)` to `r round(boot_pred_ub, 3)`. The interpretation is as follows:
+The bounds for the 95% interval for the predicted number of playgrounds per 10,000 residents when `spend = 150` is `r round(boot_pred_lb, 3)` to `r round(boot_pred_ub, 3)`. Now that we have the interval, we can interpret it in the context of the analysis.
 
 > We are 95% confident there are between `r round(boot_pred_lb, 3)` and `r round(boot_pred_ub, 3)` playgrounds per 10,000 residents in a city with expenditure of \$150.
 
-- Note that this interval is for the predicted mean among all cities with expenditure equal to \$150. In other words, we are predicting the value on the line , but recall from \[SEC\] that there is a distribution of the response for each value of the predictor. We need to account for this extra variability when computing the predictions for individual observations. WE'll take more about this in \[SEC - prediction theory section\].
+Recall from @sec-slr-specify that the output of the linear regression model is the estimated mean value of the response given a value of the predictor. Therefore, we have quantified the uncertainty in the estimated [*mean number of playgrounds per 10,000 residents*]{.underline} among all cities with per capita expenditure of \$150. If we wish to compute an interval around the predicted value for an individual city, we need to account for some additional uncertainty. We discuss this more in @sec-slr-theory-predict.
 
 ## Theory-based inference {#sec-slr-inf-clt}
 
@@ -848,8 +841,7 @@ By the Central Limit Theorem, we know under certain conditions (more on these co
 
 [^05-slr-inference-10]: *Standard error* is the term used for the standard deviation of a sampling distribution.
 
-$$SE_{\hat{\beta}_1} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{(n-1)s_X^2}}$$
- {#eq-slr-se}
+$$SE_{\hat{\beta}_1} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{(n-1)s_X^2}}$$ {#eq-slr-se}
 
 where $n$ is the number of observations, $s_X^2$ is the variance of the predictor variable $X$, and $\hat{\sigma}_{\epsilon}$ is the **regression standard error**, the variability of the observations around the regression line. The regression error is introduced in more detail in @sec-estimate-reg-std-err. The details of how this formula is derived is beyond the scope of this text, but let's take a moment to think about what we know about the sampling variability of $\hat{\beta}_1$ from @eq-slr-se.
 
@@ -867,8 +859,7 @@ By obtaining the estimates $\hat{\beta}_0$ and $\hat{\beta}_1$, we have the equa
 
 [^05-slr-inference-11]: Note its similarities to the general equation for sample standard deviation, $s = \sqrt{\frac{\sum_{i=1}^n(y_i - \bar{y})^2}{n-1}}$
 
-$$\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i = 1}^ne_i^2}{n - 2}} = \sqrt{\frac{\sum_{i = 1}^n(y_i - \hat{y}_i)^2}{n - 2}}$$
- {#eq-slr-reg-se}
+$$\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i = 1}^ne_i^2}{n - 2}} = \sqrt{\frac{\sum_{i = 1}^n(y_i - \hat{y}_i)^2}{n - 2}}$$ {#eq-slr-reg-se}
 
 ::: {.math_rules latex=""}
 You may have noticed that the denominator in @eq-slr-reg-se is $n - 2$ not $n$ or $n-1$. The value $n - 2$ is called the **degrees of freedom (df)**. The degrees of freedom are how many observations are available to understand variability about the regression line. We need at a minimum two observations to estimate the equation for the simple linear regression line, i.e., it takes at a minimum two points to make a line. The remaining $n-2$ observations help us understand variability about the line. We will talk more about how we use degrees of freedom as we define the distribution used to compute confidence intervals and conduct hypothesis tests. <!--# consider an illlustration here-->
@@ -887,8 +878,7 @@ The steps for conducting a hypothesis test based on the Central Limit Theorem ar
 3.  Calculate a p-value.
 4.  Draw a conclusion.
 
-As in @sec-slr-testing-sim the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of "not equal to 0". Therefore, the null and alternative hypotheses are the same as defined in @eq-slr-hypotheses
-$$\begin{aligned}
+As in @sec-slr-testing-sim the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of "not equal to 0". Therefore, the null and alternative hypotheses are the same as defined in @eq-slr-hypotheses $$\begin{aligned}
 H_0: \beta_1 = 0 \\
 H_a: \beta_1 \neq 0 \\
 \end{aligned}$$
@@ -899,8 +889,7 @@ $$T = \frac{\text{estimate } - \text{ hypothesized}}{\text{standard error}}$$
 
 More specifically, in the hypothesis test for $\beta_1$, the test statistic is
 
-$$T = \frac{\hat{\beta}_1 - 0}{SE_{\hat{\beta}_1}}$$
- {#eq-test-stat}
+$$T = \frac{\hat{\beta}_1 - 0}{SE_{\hat{\beta}_1}}$$ {#eq-test-stat}
 
 To calculate the test statistic, the estimated slope is shifted by the mean, and then rescaled by the standard error. Let's consider what we learn from the test statistic. Recall that by the Central Limit Theorem, the distribution of $\hat{\beta}_1$ is $N(\beta_1, SE_{\hat{\beta}_1})$. Because we conduct hypothesis testing under the assumption the null hypothesis is true, we are assuming that the mean of this distribution of $\beta_1= 0$.
 
@@ -950,8 +939,7 @@ As described in @sec-calc-pvalue, because the alternative hypothesis is "not equ
 $$\begin{aligned}
 &\text{p-value} = Pr(|t| > |T|) = Pr(t < -|T| \text{ or } t > |T|) \\[5pt]
 &\text{where } t \sim t_{n-2}
-\end{aligned} $$
- {#eq-pvalue-two-sided}
+\end{aligned} $$ {#eq-pvalue-two-sided}
 
 We compare the p-value to a decision-making threshold $\alpha$ to draw final conclusions. If $\text{p-value} < \alpha$ , we reject the null hypothesis and conclude the alternative. Otherwise, we fail to reject the null hypothesis. See @sec-slr-inf-conclusion for more detail about using the $\alpha$-level and p-value to draw conclusions.
 
@@ -994,8 +982,7 @@ As with simulation-based inference, a confidence interval calculated based on th
 
 The equation for a $C\%$ confidence interval for $\beta_1$ is
 
-$$\hat{\beta}_1 \pm t^* \times SE_{\hat{\beta}_1}$$
- {#eq-conf-int-beta}
+$$\hat{\beta}_1 \pm t^* \times SE_{\hat{\beta}_1}$$ {#eq-conf-int-beta}
 
 where $t^* \sim t_{n - 2}$.
 
@@ -1011,12 +998,13 @@ $$\begin{aligned}
  0.0033 \pm 1.985 \times 0.0016 \\
 0.0033 \pm 0.0032 \\
 [0.0001, 0.0065]
-\end{aligned}$$
- {#eq-parks-ci}
+\end{aligned}$$ {#eq-parks-ci}
 
 The interpretation is the same as before: We are 95% confident that the interval 0.0001 to 0.0065 contains the true slope for `per_capita_expend`. This means we are 95% confident that for each additional dollar increase in per capita expenditure, there are 0.0001 to 0.0065 more playgrounds per 10,000 residents, on average.
 
-### Prediction intervals 
+### Prediction intervals {#sec-slr-theory-predict}
+
+In @sec-bootstrap-ci, we introduced confidence intervals for quantifying uncertaininty
 
 - in \[SEC\] we introduced intervals to quantify uncertainty. As with the inference for model coefficients, there are theory-based approaches that provide equations for computing prediction intervals.
 
@@ -1069,7 +1057,7 @@ The interpretations for the intervals in @tbl-prediction-intervals are as follow
 
 ## Inference in R
 
-### Bootstrap confidence interval for $\beta_1$  {#sec-slr-bootstrap-r}
+### Bootstrap confidence interval for $\beta_1$ {#sec-slr-bootstrap-r}
 
 The bootstrap distribution and confidence interval are computed using the **infer** package [@infer-2]. Because bootstrapping is a random sampling process, the code begins with `set.seed()` to ensure the results are reproducible. Any integer value can go inside the `set.seed` function.
 
@@ -1116,7 +1104,7 @@ boot_dist |>
             ub = quantile(estimate, 0.975))
 ```
 
-### Permutation tests for $\beta_1$  {#sec-slr-permutation-r}
+### Permutation tests for $\beta_1$ {#sec-slr-permutation-r}
 
 The null distribution and p-value for the permutation test are computed using the **infer** package [@infer-2]. Much of the code to generate the null distribution is similar to the code for the bootstrap distribution. Because permutation sampling is a random process, the code starts with `set.seed()` to ensure the results are reproducible.
 
@@ -1170,7 +1158,7 @@ get_p_value(null_dist, estimated_slope, direction = "both") |>
 
 <!--# Callout box about gettig pvalue exactly equal to 0. May be confusing here, because we didnt get a pvalue of 0. When using permutation tests, the software may output a p-value of 0, as in this example. Note that the true theoretical p-value is <u>not</u> exactly 0; it is just so small that we did not observe a slope at least as extreme as the slope estimated from the sample data in the r niter permutation samples used to generate the null distribution. We will calculate the exact p-value in @sec-slr-inf-clt-hypothesis-test when we conduct hypothesis testing using theory-based inference methods.-->
 
-### Theory-based inference for $\beta_1$  {#sec-theory-inf-r}
+### Theory-based inference for $\beta_1$ {#sec-theory-inf-r}
 
 The output from `lm()` contains the statistics discussed in this section to conduct theory-based inference. The p-value in the output corresponds to the two-sided alternative hypothesis $H_a: \beta_1 \neq 0$.
 
@@ -1189,7 +1177,7 @@ In practice, we use the output from `tidy()` to get the confidence interval. To 
 qt(0.975, 95)
 ```
 
-### Prediction intervals 
+### Prediction intervals
 
 The code for computing prediction intervals largely builds upon code we've seen in previous sections.
 
@@ -1222,7 +1210,7 @@ boot_prediction |>
               boot_pred_ub = quantile(prediction, 0.975))
 ```
 
-#### Theory-based intervals 
+#### Theory-based intervals
 
 Use `predict()` introduced in \[REF - chap 4?\]. code is shown below.
 
@@ -1258,3 +1246,5 @@ Which of these two methods is preferred to use in practice? In the next chapter,
 <!--# which alpha level requires more evidence-->
 
 <!--# practical vs. statistical significance-->
+
+<!--# how would you simulate the prediction interval for an individual observation-->
