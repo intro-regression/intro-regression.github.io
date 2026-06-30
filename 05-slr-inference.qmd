@@ -757,7 +757,7 @@ When we reject a null hypothesis, we conclude that there is a statistically sign
 
 <!--# do i want to talk about effect size?-->
 
-## Prediction intervals
+## Prediction intervals {#sec-slr-bootstrap-pred-intervals}
 
 In @sec-slr-predict , we use the linear regression model to compute predicted values of the response variable for a given value of the predictor. Because the regression model is fit using sample data, there is variability in the estimated model coefficients (slope and intercept) used to compute the predicted value. Given this uncertainty in the model coefficients, there is naturally uncertainty in the predicted values as well. Thus, we will quantify the uncertainty in the predictions utilizing similar methods introduced in previous sections to quantify uncertainty in model coefficients.
 
@@ -976,9 +976,11 @@ Using a decision-making threshold $\alpha = 0.05$, the p-value $0.042$ is suffic
 
 Note that this conclusion is the same as in @sec-slr-inf-conclusion using a simulation-based approach (even with small differences in the p-value). This is what we would expect, given these are the two different approaches for conducting the same inferential process. We are also conducting the tests under the same assumptions that the null hypothesis is true. The difference is in the methods available to quantify $SE_{\hat{\beta}_1}$, simulation-based versus theory-based.
 
-### Confidence intervals
+### Confidence intervals {#sec-slr-theory-ci}
 
 As with simulation-based inference, a confidence interval calculated based on the results from the Central Limit Theorem is an estimated range of the values that $\beta_1$ can reasonably take. The purpose, interpretation, and conclusions drawn from confidence intervals are the same as described before in @sec-bootstrap-ci. What differs, however, is how the interval is calculated. In simulation-based inference, we used bootstrapping to construct a sampling distribution to understand sample-to-sample variability in $\beta_1$. By the Central Limit Theorem, we know exactly how to quantify the sample-to-sample variability in $\hat{\beta}_1$ using theoretical results.
+
+<!--# add the general formula for a confidence interval-->
 
 The equation for a $C\%$ confidence interval for $\beta_1$ is
 
@@ -1004,50 +1006,84 @@ The interpretation is the same as before: We are 95% confident that the interval
 
 ### Prediction intervals {#sec-slr-theory-predict}
 
-In @sec-bootstrap-ci, we introduced confidence intervals for quantifying uncertaininty
+In @sec-slr-bootstrap-pred-intervals, we introduced simulation-based methods for constructing intervals around the predicted mean response given a value of the predictor. As with inference for model coefficients, we can quantify the uncertainty in model predictions used equations based on mathematical theory. The primary advantages of the intervals computed from mathematical equations are that they are more exact than the simulation-based intervals and the computational time needed to compute them is negligible. The primary disadvantage is that these intervals are only valid when certain assumptions about the data hold. We discuss these assumptions in @sec-ch-slr-conditions.
 
-- in \[SEC\] we introduced intervals to quantify uncertainty. As with the inference for model coefficients, there are theory-based approaches that provide equations for computing prediction intervals.
+$$\hat{y} \pm t^* \times SE$$
+ {#eq-pred-int-general}
 
-- The advantage of these methods is that they are very quick, since they do not rely on simulating data.
+where $t^* \sim t_{n-2}$ .
 
-- The primary disadvantage is that they require that certain assumptions are met. We discuss this more in \[ChAP REf\].
+@eq-pred-int-general is the general equation for quantifying uncertainty in predictions, such that $\hat{y}$ is the predicted value, $t^*$ is the critical value and $SE$ is the standard error for the prediction.
 
-- As introduced in \[CI- SEC\], intervals for prediction take the same format as all other intervals estimate +/- critical value \* SE.
+The predicted value $\hat{y}$ is the value output by the model given a particular value of the predictor variable. The critical value $t^*$ is determined by the confidence level as introduced in @sec-slr-theory-ci. It is the value on the $t$ distribution with $n-2$ degrees of freedom, such that $C\%$ of the area under the curve is between $-t^*$ and $t^*$.
 
-- The estimate is the predicted value $\hat{y}$ that is obtained by plugging in the value of the predictor.
+Recall that the model outputs the predicted value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions $(SE)$ , however, differ depending on the type of prediction we're making.
 
-- We compute the critical value in the same way as discussed in \[SEC\].
+::: {.yourturn latex="1"}
+Which type of prediction do you expect to have a wider interval:
 
-- Thus, lets spend some time on the standard error.
+- Prediction for the mean value of the response
 
-- There are two types of intervals for predictions - (1) the interval around the estimated mean response at a given value of the predictor and (2) the interval for the predicted value for an individual observation.
+<!-- -->
 
-- Your turn. which interval do you expect to be wider - interval for the mean response or interval for the prediction of a individual response? why?
+- Prediction for an individual observation ?
 
-- Based on theoretical results, the equation for the estimated mean response is \[INSERT EQUATION\].
+Briefly explain your choice.
+:::
 
-- The equation for the prediction for an individual response is \[INSERT EQUATION\].
+@eq-slr-pred-mean-se and @eq-slr-pred-indiv-se are the equations to compute the standard error for the mean response and an individual observation, respectively.
 
-- Note that hte standard error for the interval for an individual respose has the additional +1. This is to account for the additional variabiltiy in the distribution of the respose around the regression line.
+$$SE_{\hat{\mu}} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{n} + \frac{(x^* - \bar{x})}{\sum_{i=1}^n(x_i - \bar{x})^2}}$$
+ {#eq-slr-pred-mean-se}
 
-Lets take a look at the intervals for the mean response for cities with expediture of \$150 and the interval for a individual city with expendutre of \$150. Note that the interval for the mean response in @tbl-prediction-intervals is very similar to the prediction interval produced by bootstrapping in \[REF for bootstrap interval\]
+$$SE_{\hat{y}} = \hat{\sigma}_{\epsilon}\sqrt{1 + \frac{1}{n} + \frac{(x^* - \bar{x})}{\sum_{i=1}^n(x_i - \bar{x})^2}}$$
+ {#eq-slr-pred-indiv-se}
+
+where $x^*$ is the inputted value of the predictor, $\bar{x}$ is the mean value of the predictor across all observations and, $\sigma_{\epsilon}$ is the regression standard error. We plug one of these formulas in for $SE$ in @eq-slr-pred-int-general depending on the type of prediction we're doing.
+
+The details of the equations are beyond the scope of this text, but let's take a moment to compare the two intervals. The equations look very similar with the exception of the additional 1 in @eq-slr-pred-indiv-se. This is accounts for the fact that when quantifying uncertainty in the prediction for an individual observation, we not only take into account the variability about the regression line but also the variability in the distribution of the response for a given value of the predictor. Thus predictions for an individual observation result in wider intervals than intervals for the mean response.
+
+```{r}
+#| label: predicted-playgrounds-150
+#| 
+new_city_expend <- tibble(per_capita_expend = 150)
+pred_150 <- predict(parks_model, new_city_expend)
+```
+
+Let's take a look at the intervals around predictions given `per_capita_expend = 150`. <!--# do I have the model equation anywhere earlier?--> The predicted number of playgrounds per 10,000 residents when per capita spending is 150 is `r pred_150`. @tbl-prediction-intervals shows the standard error and 95% interval for predicting the mean number of playgrounds per 10,000 residents among all cities with per capita spend of \$150 and the interval for the predicted number of playgrounds for an individual city with per capita spend of \$150.
 
 ```{r}
 #| label: tbl-prediction-intervals
-#| tbl-cap: "Intervals for the mean response and individual response when `per_capita_expend = 150`" 
-
-
+#| tbl-cap: "Standard errors and intervals for the mean response and individual response when `per_capita_expend = 150`" 
+#| eval: false
 new_city_expend <- tibble(per_capita_expend = 150)
 
-mean_predict <- as.data.frame(predict(parks_model, new_city_expend, interval = "confidence", level = 0.95))
+#interval for mean response
 
-individual_predict <- as.data.frame(predict(parks_model, new_city_expend, interval = "prediction", level = 0.95))
+mean_predict <- predict(parks_model, new_city_expend, interval = "confidence", level = 0.95, se.fit = TRUE)
 
-bind_rows(mean_predict, individual_predict)  |>
+mean_predict_fit <- mean_predict$fit
+mean_predict_se <- mean_predict$se.fit
+
+mean_predict_all <- bind_cols(mean_predict_fit, mean_predict_se)
+
+names(mean_predict_all) <- c("y.hat", "Lower bound", "Upper bound", "Std. Error")
+
+# interval for individual response - START HERE , Remove eval - fALSE
+
+mean_predict <- mean_predict |>
+  select(se.fit, fit) |>
+  as.data.frame()
+
+#individual_predict <- as.data.frame(predict(parks_model, new_city_expend, interval = "prediction", level = 0.95, se.fit = TRUE))
+
+#bind_rows(mean_predict, individual_predict)  |>
   mutate(type = c("Mean response", "Individual response"), .before = 1) |>
   select(fit, lwr, upr) |>
   kable(digits = 3, col.names = c("Type", "Lower bound", "Upper bound"))
 ```
+
+Note that the interval for the mean response in @tbl-prediction-intervals is very similar to the prediction interval produced by bootstrapping in \[REF for bootstrap interval\]
 
 The interpretations for the intervals in @tbl-prediction-intervals are as follows:
 
