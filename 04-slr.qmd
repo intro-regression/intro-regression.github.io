@@ -7,12 +7,12 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Use exploratory data analysis to assess whether a simple linear regression is an appropriate model to describe the relationship between two variables
--   Estimate the slope and intercept for a simple linear regression model
--   Interpret the slope and intercept in the context of the data
--   Use the model to compute predictions and residuals
--   Evaluate model performance using RMSE and $R^2$
--   Conduct simple linear regression using R
+- Use exploratory data analysis to assess whether a simple linear regression is an appropriate model to describe the relationship between two variables
+- Estimate the slope and intercept for a simple linear regression model
+- Interpret the slope and intercept in the context of the data
+- Use the model to compute predictions and residuals
+- Evaluate model performance using RMSE and $R^2$
+- Conduct simple linear regression using R
 
 ## Introduction: Movie ratings {#sec-slr-intro}
 
@@ -48,15 +48,15 @@ To do so, we will analyze data that contains the critics scores and audience sco
 
 We will focus on two variables for this analysis:
 
--   `critics_score`: The percentage of critics who have a favorable review of the movie. This is known as the "Tomatometer" score on the Rotten Tomatoes website. The possible values are 0 - 100.
+- `critics_score`: The percentage of critics who have a favorable review of the movie. This is known as the "Tomatometer" score on the Rotten Tomatoes website. The possible values are 0 - 100.
 
--   `audience_score`: The percentage of users (regular movie-goers) on Rotten Tomatoes who have a favorable review of the movie. The possible values are 0 - 100.
+- `audience_score`: The percentage of users (regular movie-goers) on Rotten Tomatoes who have a favorable review of the movie. The possible values are 0 - 100.
 
 ::: {.objective latex=""}
 Our goal is to use simple linear regression to model the relationship between the critics score and audience score. We want to use the model to
 
--   describe how the audience score is expected to change as the critics score changes.
--   predict the audience score for a movie based on its critics score.
+- describe how the audience score is expected to change as the critics score changes.
+- predict the audience score for a movie based on its critics score.
 :::
 
 Recall from @sec-what-is-regression, the **response variable** is the outcome of interest, meaning the variable we are interested in predicting and understanding its variability. It is also known as the *outcome* or *dependent variable* and is represented as $Y$. The **predictor variable(s)** is the variable (or variables) used to understand variability in the response. It is also known as the *explanatory* or *independent variable* and represented as $X$. The observed values of the response and predictor are represented as $y_i$ and $x_i$, respectively.
@@ -143,22 +143,21 @@ There is a positive, linear relationship between the critics scores and audience
 
 In @sec-slr-eda, we used visualizations and summary statistics to describe the relationship between two variables. The exploratory data analysis, however, does not tell us what the audience score is predicted to be for a given value of the critics score or how much the audience score is expected to change as the critics score changes. Therefore, we will fit a linear regression model to quantify the relationship between the two variables. Recall the general form of the linear regression model in @eq-parametric-model. More specifically, when we have one predictor variable, we will fit a model of the form
 
-$$
-Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-slr}
+$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-slr}
 
 @eq-slr, called a **simple linear regression (SLR) model**, is the equation to model the relationship between one quantitative response variable and one predictor variable. For now we will focus on models with one quantitative predictor variable. In later chapters, we will introduce models with two or more predictors ([@sec-ch-mlr]), categorical predictors ([@sec-mlr-interpret-categorical]), and models with a categorical response variable ([@sec-ch-logistic]).
 
 We are generally interested in using regression models for two types of tasks:
 
--   **Prediction:** Finding the expected value of the response variable for given values of the predictor variable(s).
--   **Inference:** Drawing conclusions about the relationship between the response and predictor variables.
+- **Prediction:** Finding the expected value of the response variable for given values of the predictor variable(s).
+- **Inference:** Drawing conclusions about the relationship between the response and predictor variables.
 
 ::: {.yourturn latex=""}
 Suppose we fit a simple linear regression line to summarize the relationship between `critics_score` and `audience_scores` for movies.
 
--   What is an example of a **prediction** question that can be answered using a simple linear regression model?
--   What is an example of an **inference** question that can be answered using a simple linear regression model?[^04-slr-3]
+- What is an example of a **prediction** question that can be answered using a simple linear regression model?
+- What is an example of an **inference** question that can be answered using a simple linear regression model?[^04-slr-3]
 :::
 
 [^04-slr-3]: **Example prediction question:** What do we expect the audience score to be for movies with a critics score of 75?\
@@ -168,29 +167,25 @@ Suppose we fit a simple linear regression line to summarize the relationship bet
 
 We expand on the concepts introduced in @sec-what-is-regression for the simple linear regression model. Suppose there is a response variable $Y$ and a predictor variable $X$. The values of the response variable $Y$ can be generated in the following way:
 
-$$
-Y = \text{Model} + \text{Error}
-$$ {#eq-slr-step0}
+$$Y = \text{Model} + \text{Error}$$
+ {#eq-slr-step0}
 
 More specifically, we define the model as a function of the predictor $X$, $\text{Model} = f(X)$, and error $\epsilon$, such that
 
-$$
-Y = f(X) + \epsilon
-$$ {#eq-general-model-2}
+$$Y = f(X) + \epsilon$$
+ {#eq-general-model-2}
 
 The function $f(X)$ that describes the relationship between the response and predictor variables is the **regression model**. This is the model we will fit in later sections using equations and software. The error, $\epsilon$, is how much the actual value of the response $Y$ deviates from the value produced by the regression model, $f(X)$. <!--# Maybe add the piece from the glm book about stochastic part / random part?-->There is some randomness in $\epsilon$, because not all observations with the same value of $X$ have the same value of $Y$. For example, not all movies with a critics score of 70 have the same audience score.
 
 @eq-general-model-2 is the general form of the equation to generate values of $Y$ given values of $X$. In the context of simple linear regression, the function $f(X)$ in @eq-general-model-2 is
 
-$$
-f(X) = \mu_{Y|X} = \beta_0 + \beta_1X
-$$ {#eq-slr-function}
+$$f(X) = \mu_{Y|X} = \beta_0 + \beta_1X$$
+ {#eq-slr-function}
 
 where $\mu_{Y|X}$ is the mean value of $Y$ at a particular value of $X$, and $\beta_0$ and $\beta_1$ are the model coefficients. The error terms $\epsilon$ from @eq-general-model-2 are normally distributed with a mean of 0 and variance $\sigma_{\epsilon}^2$, represented as $N(0, \sigma^2_{\epsilon})$ (more on this in @sec-slr-foundation. The specification of the simple linear regression model written in terms of individual observations $(x_i, y_i)$ is
 
-$$
-y_i = \beta_0 + \beta_1 x_i + \epsilon_i \hspace{7mm} \epsilon_i \sim N(0, \sigma_{\epsilon}^2)
-$$ {#eq-slr-complete}
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i \hspace{7mm} \epsilon_i \sim N(0, \sigma_{\epsilon}^2)$$
+ {#eq-slr-complete}
 
 such that $y_i$ is the response for the $i^{th}$ observation, $x_i$ is he predictor for the $i^{th}$ observation, and $\epsilon_i$ is the error for the $i^{th}$ observation. @eq-slr-complete is the **statistical model**, also called the *data-generating model* or *population-level model*. It is the theoretical form of the model that describes exactly how to generate the values of the response $Y$ given values of the predictor in the population. The model coefficients are the intercept $\beta_0$ and the slope $\beta_1$. The$\sigma^2_{\epsilon}$ is called the standard error. In practice we don't know the exact values of $\beta_0$, $\beta_1$, and $\sigma_{\epsilon}^2$, so our goal is to use sample data to estimate these values. We will focus on the coefficients $\beta_0$ and $\beta_1$ in this chapter. We discuss estimating $\sigma^2_{\epsilon}$ in @sec-estimate-reg-std-err.
 
@@ -208,9 +203,9 @@ Before doing any more calculations, we need to determine if the simple linear re
 
 We can ask the following questions to evaluate whether simple linear regression is appropriate:
 
--   Will a linear regression model be practically useful? Does quantifying and interpreting the relationship between the variables make sense in this scenario?
--   Is the shape of the relationship reasonably linear?
--   Do the observations in the data represent the population of interest, or are there biases in the data that could limit conclusions drawn from the analysis? <!--# Differentiate this from the first two bullet points. Make clear if the first two points are violated, we definitely shouldn't do SLR. If this one is violated, we can still do SLR but need to be mindful about the scope of conclusions.-->
+- Will a linear regression model be practically useful? Does quantifying and interpreting the relationship between the variables make sense in this scenario?
+- Is the shape of the relationship reasonably linear?
+- Do the observations in the data represent the population of interest, or are there biases in the data that could limit conclusions drawn from the analysis? <!--# Differentiate this from the first two bullet points. Make clear if the first two points are violated, we definitely shouldn't do SLR. If this one is violated, we can still do SLR but need to be mindful about the scope of conclusions.-->
 
 Mathematical equations or statistical software can be used to fit a linear regression model between any two quantitative variables. Therefore it is upon the judgment of the data scientist to determine if it is reasonable to proceed with a linear regression model or if doing so might result in misleading conclusions about the data. If the answer is "no" to any of the questions above, consider if a different analysis technique is better for the data, or proceed with caution if using regression. If we proceed with regression, be transparent about some of the limitations of the conclusions.
 
@@ -218,9 +213,8 @@ From @sec-slr-intro, the goal of this analysis is understand the relationship be
 
 The form of the simple linear regression model for the movie scores data is
 
-$$
-\text{audience\_score} = \beta_0 + \beta_1~\text{critics\_score} + \epsilon, \hspace{5mm}\epsilon  \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-movies-stat-model}
+$$\text{audience\_score} = \beta_0 + \beta_1~\text{critics\_score} + \epsilon, \hspace{5mm}\epsilon  \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-movies-stat-model}
 
 Now that we have the form of the model, let's discuss how to estimate and interpret the model coefficients, the slope $\beta_1$ and the intercept $\beta_0$. We will estimate $\sigma^2_{\epsilon}$ in @sec-ch-slr-inf.
 
@@ -228,9 +222,8 @@ Now that we have the form of the model, let's discuss how to estimate and interp
 
 Ideally, we would have data from the entire population of movies rated on Rotten Tomatoes in order to calculate the exact values for $\beta_0$ and $\beta_1$. In reality we don't have access to the data from the entire population, but we can use the sample to obtain the estimated **regression equation** in @eq-regression
 
-$$
-\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1x_i
-$$ {#eq-regression}
+$$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1x_i$$
+ {#eq-regression}
 
 where $\hat{\beta}_0$ is the estimated intercept, $\hat{\beta}_1$ is the estimated slope, and $\hat{y}_i$ is the predicted (estimated) response.
 
@@ -246,9 +239,8 @@ slr_model <- lm(audience_score ~ critics_score, data = movie_scores)
 
 ```
 
-$$
-\widehat{\text{audience\_score}}_i = 32.316 + 0.519~\text{critics\_score}_i
-$$ {#eq-movies-slr}
+$$\widehat{\text{audience\_score}}_i = 32.316 + 0.519~\text{critics\_score}_i$$
+ {#eq-movies-slr}
 
 In this equation 32.316 is $\hat{\beta}_0$, the estimated value for the intercept, 0.519 is $\hat{\beta}_1$, the estimated value for the slope $\beta_1$, and $\widehat{\text{audience\_score}}_i$ is the expected audience score when the critics score is equal to $\text{critics\_score}_i$. Notice that @eq-regression and @eq-movies-slr do not have have error term, $\epsilon$. The output from the regression equation is $\hat{f(X)} = \hat{\mu}_{Y|X}$, the expected *mean* value of the response given a value of the predictor. Therefore, when we discuss the values of the response estimated using simple linear regression, what we are really talking about is what the value of the response variable is expected to be, *on average*, for a given value of the predictor variable.
 
@@ -273,21 +265,16 @@ Once we computed estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ for the regressio
 
 @eq-residual shows the equation of the residual for the $i^{th}$ observation.
 
-$$
-e_i = \text{observed}_i - \text{predicted}_i =  y_i - \hat{y}_i
-$$ {#eq-residual}
+$$e_i = \text{observed}_i - \text{predicted}_i =  y_i - \hat{y}_i$$
+ {#eq-residual}
 
 In the case of the movie scores data, the residual is the difference between the actual audience score and the audience score predicted by @eq-movies-slr. For example, the 2015 movie *Avengers: Age of Ultron* received a critics score of $y_i = 74$. Therefore, using @eq-movies-slr, the estimated (predicted) audience score is.
 
-$$
-\hat{y}_i = 32.316 + 0.519 \times 74 = 70.722.
-$$
+$$\hat{y}_i = 32.316 + 0.519 \times 74 = 70.722.$$
 
 The observed audience score is 86, so the residual is
 
-$$
-e_i = y_i - \hat{y}_i = 86 - 70.722 = 15.278
-$$
+$$e_i = y_i - \hat{y}_i = 86 - 70.722 = 15.278$$
 
 ::: {.yourturn latex=""}
 Would you rather see a movie that has a positive or negative residual? Explain your response.[^04-slr-5]
@@ -333,9 +320,8 @@ ggplot(data = movie_scores, mapping = aes(x = critics_score, y = audience_score)
 
 Instead of using the sum of the residuals, we will instead consider the sum of the squared residuals in @eq-sum-sq-resid
 
-$$
-\sum_{i=1}^n e_i^2 = e_1^2 + e_2^2 + \dots + e_n^2
-$$ {#eq-sum-sq-resid}
+$$\sum_{i=1}^n e_i^2 = e_1^2 + e_2^2 + \dots + e_n^2$$
+ {#eq-sum-sq-resid}
 
 where $n$ is the number of observations in the data. The line that "best" fits the data, then, is the line that minimizes @eq-sum-sq-resid. This is called the **least squares regression model.**
 
@@ -345,49 +331,45 @@ where $n$ is the number of observations in the data. The line that "best" fits t
 
 Let's expand @eq-sum-sq-resid. Recall that $e_i$, the residual of the $i^{th}$ observation, is $y_i - \hat{y}_i$ where $\hat{y}_i$ is the estimated response. Then,
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 e_i &= y_i - \hat{y}_i \\
 &= y_i - (\hat{\beta}_0 + \hat{\beta}_1x_i)
-\end{aligned}
-$$ {#eq-least-sq-pt1}
+\end{aligned}$$
+ {#eq-least-sq-pt1}
 
 Thus, putting @eq-least-sq-pt1 into @eq-sum-sq-resid, we have
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \sum_{i=1}^n e_i^2 &= e_1^2 + e_2^2 + \dots + e_n^2 \\
 &= [y_1 - (\hat{\beta}_0 + \hat{\beta}_1x_1)]^2 + [y_2 - (\hat{\beta}_0 + \hat{\beta}_1x_2)]^2 + & \\
 & \dots + [y_n - (\hat{\beta}_0 + \hat{\beta}_1x_n)]^2
-\end{aligned}
-$$ {#eq-least-sq-pt2}
+\end{aligned}$$
+ {#eq-least-sq-pt2}
 
 Using calculus, the $\hat{\beta}_0$ and $\hat{\beta}_1$ that minimize @eq-least-sq-pt2 are
 
-$$
-\hat{\beta}_1 = r\frac{s_Y}{s_X} \hspace{10mm} \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}
-$$ {#eq-least-sq-estimates}
+$$\hat{\beta}_1 = r\frac{s_Y}{s_X} \hspace{10mm} \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}$$
+ {#eq-least-sq-estimates}
 
 where $\bar{x}$ and $\bar{y}$ are the mean values of the predictor and response variables, respectively, $s_X$ and $s_Y$ are the standard deviations of the predictor and response variables, respectively, and $r$ is the correlation between the response and predictor variables. See [Appendix @sec-least-sq-math] for the full details of the derivation from @eq-least-sq-pt2 to @eq-least-sq-estimates.
 
 @eq-slr-computations show the calculations of slope and intercept for the movie scores model based on the summary statistics in @tbl-movies-univariate. Note that the small differences in the values compared to @eq-movies-slr are due to rounding (versus coefficients computed by software).
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \hat{\beta}_1 &= 0.78 \times \frac{20.0}{30.2} = 0.517 \\ \hat{\beta}_0 &=  63.9 - 0.517 \times  60.8 = 32.467
-\end{aligned}
-$$ {#eq-slr-computations}
+\end{aligned}$$
+ {#eq-slr-computations}
 
 ::: {.analysis_in_practice latex=""}
 Below are a few properties of least-squares regression models.
 
--   The regression line goes through the center of mass point, the coordinates corresponding to average $X$ and average $Y$: $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$
+- The regression line goes through the center of mass point, the coordinates corresponding to average $X$ and average $Y$: $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$
 
--   The slope has the same sign as the correlation coefficient: $\hat{\beta}_1 = r\frac{s_Y}{s_X}$
+- The slope has the same sign as the correlation coefficient: $\hat{\beta}_1 = r\frac{s_Y}{s_X}$
 
--   The sum of the residuals is zero: $\sum_{i=1}^n e_i = 0$
+- The sum of the residuals is zero: $\sum_{i=1}^n e_i = 0$
 
--   The residuals and values of the predictor are uncorrelated
+- The residuals and values of the predictor are uncorrelated
 :::
 
 ## Interpreting the model coefficients {#sec-slr-interpret-coef}
@@ -396,9 +378,9 @@ The **slope** $\hat{\beta}_1$ is the estimated change in the response for each u
 
 It is good practice to write the interpretation of the slope in the context of the data, so that it can be more easily understood by others reading the analysis results. "In the context of the data" means that the interpretation includes
 
--   meaningful descriptions of the variables, if the variable names would be unclear to an outside reader
--   units for each variable
--   an indication of the population for which the model applies.
+- meaningful descriptions of the variables, if the variable names would be unclear to an outside reader
+- units for each variable
+- an indication of the population for which the model applies.
 
 The slope in @eq-movies-slr of 0.519 is interpreted as the following:
 
@@ -437,12 +419,10 @@ One of the primary purposes of a regression model is to use for prediction. When
 
 The movie *Barbie* was released in theaters on July 21, 2023. This movie was widely praised by critics, and it has a critics score of 88 at the time the data were obtained. Based on @eq-movies-slr, the predicted audience score is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \widehat{\text{audience\_scores}} &= 32.316 + 0.519 \times 88 \\ 
 &= \textbf{77.988} \\
-\end{aligned}
-$$
+\end{aligned}$$
 
 From the snapshot of the Barbie Rotten Tomatoes page (@fig-barbie), we see the actual audience score is 83[^04-slr-7]. Therefore, the model under predicted the audience score by about 5 points (83 - 77.988). Perhaps this isn't surprising given this film's massive box office success! <!--# do i need a citation for this statement?-->
 
@@ -453,9 +433,9 @@ From the snapshot of the Barbie Rotten Tomatoes page (@fig-barbie), we see the a
 ::: {.yourturn latex=""}
 The movie *Asteroid City* was released in theaters on June 23, 2023. The critics score for this movie was 75[^04-slr-8].
 
--   What is the predicted audience score?
+- What is the predicted audience score?
 
--   The actual audience score is 62. Did the model over or under predict? What is the residual? [^04-slr-9]
+- The actual audience score is 62. Did the model over or under predict? What is the residual? [^04-slr-9]
 :::
 
 [^04-slr-8]: Source: https://www.rottentomatoes.com/m/asteroid_city Accessed on August 29, 2023.
@@ -478,9 +458,8 @@ We have shown how a simple linear regression model can be used to describe the r
 
 The **Root Mean Square Error (RMSE)**, shown in @eq-slr-rmse, is a measure of the average difference between the observed and predicted values of the response variable.
 
-$$
-RMSE = \sqrt{\frac{\sum_{i=1}^ne_i^2}{n}} = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}}
-$$ {#eq-slr-rmse}
+$$RMSE = \sqrt{\frac{\sum_{i=1}^ne_i^2}{n}} = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}}$$
+ {#eq-slr-rmse}
 
 This measure is especially useful if prediction is the primary modeling objective. The RMSE takes values from 0 to $\infty$ (infinity) and has the same units as the response variable.
 
@@ -512,9 +491,8 @@ The **coefficient of determination**, $R^2$, the percentage of variability in th
 
 There is variability in the response variable, as we see in the exploratory data analysis in @fig-movies-univariate and @tbl-movies-univariate. **Analysis of Variance (ANOVA)**, shown in @eq-anova, is the process of partitioning the various sources of variability.
 
-$$
-\text{Total variability} = \text{Explained variability} + \text{Unexplained variability}
-$$ {#eq-anova}
+$$\text{Total variability} = \text{Explained variability} + \text{Unexplained variability}$$
+ {#eq-anova}
 
 From @eq-anova, the variability in the response variable is from two sources:
 
@@ -526,12 +504,11 @@ The variability in the response variable and the contribution from each source i
 
 Let $SST$ = Sum of Squares Total, $SSM$ = Sum of Squares Model, and $SSR$ = Sum of Squares Residuals. Then,
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 SST &= SSM + SSR \\[10pt]
 \sum_{i=1}^n (y_i - \bar{y})^2 &= \sum_{i=1}^n(\hat{y}_i - \bar{y})^2 + \sum_{i=1}^n(y_i - \hat{y}_i)^2
-\end{aligned}
-$$ {#eq-anova-ss}
+\end{aligned}$$
+ {#eq-anova-ss}
 
 <!--# add link to appendix to see mathematically-->
 
@@ -543,9 +520,8 @@ Lastly, the **Sum of Squares Residual (SSR)** $= \sum_{i=1}^n(y_i - \hat{y}_i)^2
 
 We use the sum of squares to calculate the **coefficient of determination** $R^2$
 
-$$
-R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}
-$$ {#eq-rsq}
+$$R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}$$
+ {#eq-rsq}
 
 <!--# add images breaking down variability-->
 
@@ -607,7 +583,7 @@ tidy(movie_fit) |>
   kable(digits = 3)
 ```
 
-### Prediction
+### Prediction {#sec-slr-predict-R}
 
 Below is the code to predict the audience score for *Barbie* as shown earlier in the section. We create a tibble that contains the critics score for *Barbie*, then use `predict()` and the model object to compute the prediction.
 

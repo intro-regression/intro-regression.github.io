@@ -1858,8 +1858,8 @@ Table&nbsp;5.11: Standard errors and intervals for the mean response and individ
 <p>The code for computing prediction intervals largely builds upon code we’ve seen in previous sections.</p>
 <section id="simulation-based-intervals-for-prediction" class="level4" data-number="5.10.4.1">
 <h4 data-number="5.10.4.1" class="anchored" data-anchor-id="simulation-based-intervals-for-prediction"><span class="header-section-number">5.10.4.1</span> Simulation-based intervals for prediction</h4>
-<p>The code for computing bootstrapped prediction intervals is below. We use the code from <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a> to generate the bootstrap samples and fit the model for each sample. Because the resulting output is in long format, we pivot the data to wide format using <code>pivot_wider()</code> in the <strong>tidyr</strong> package <span class="citation" data-cites="tidyr">(<a href="references.html#ref-tidyr" role="doc-biblioref"><strong>tidyr?</strong></a>)</span> (part of <strong>tidyverse</strong>). This results in a data frame such that the bootstrapped intercepts and bootstrapped slopes are in separate columns.</p>
-<p>We then use <code>mutate()</code> from <strong>dplyr</strong> <span class="citation" data-cites="dplyr">(<a href="references.html#ref-dplyr" role="doc-biblioref">Wickham et al. 2023</a>)</span>to compute the predictions from each bootstrap sample. The bounds of the prediction interval are computed using <code>quantile()</code> as with the bounds of the bootstrap confidence intervals in <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a>.</p>
+<p>The code for computing bootstrapped prediction intervals is below. We use the code from <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a> to generate the bootstrap samples and fit the model for each sample. Because the resulting output is in long format, we pivot the data to wide format using <code>pivot_wider()</code> in the <strong>tidyr</strong> package <span class="citation" data-cites="tidyr">(<a href="references.html#ref-tidyr" role="doc-biblioref">Wickham, Vaughan, and Girlich 2025</a>)</span> (part of <strong>tidyverse</strong>). This results in a data frame such that the bootstrapped intercepts and bootstrapped slopes are in separate columns.</p>
+<p>We then use <code>mutate()</code> from <strong>dplyr</strong> <span class="citation" data-cites="dplyr">(<a href="references.html#ref-dplyr" role="doc-biblioref">Wickham et al. 2023</a>)</span> to compute the predictions from each bootstrap sample. The bounds of the prediction interval are computed using <code>quantile()</code> as with the bounds of the bootstrap confidence intervals in <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1889,27 +1889,26 @@ Table&nbsp;5.11: Standard errors and intervals for the mean response and individ
 </section>
 <section id="theory-based-intervals" class="level4" data-number="5.10.4.2">
 <h4 data-number="5.10.4.2" class="anchored" data-anchor-id="theory-based-intervals"><span class="header-section-number">5.10.4.2</span> Theory-based intervals</h4>
-<p>Use <code>predict()</code> introduced in [REF - chap 4?]. code is shown below.</p>
-<ul>
-<li><p>Make a tibble with the new value.</p></li>
-<li><p>Argument <code>interval =</code> takes value <code>confidence</code> for the interval for the mean response and <code>prediction</code> for the interval for an individual response.</p></li>
-<li><p><code>level</code> is the is a value 0 to 1 that specifies the confidence level.</p></li>
-</ul>
+<p>The <code>predict()</code> function introduced in <a href="04-slr.html#sec-slr-predict-R" class="quarto-xref"><span>Section 4.8.2</span></a> is used to compute the intervals for preditcted mean response or an individual observation. The argument <code>interval =</code> specifies the interval type, and the argument <code>level =</code> specifies the confidence level. The default level is 95%.</p>
+<p>Start by making a tibble of the value of the predictor that you wish to use to make predictions. Below is the code to specify that the predictor <code>per_capita_expend</code> is equal to 150.</p>
+<p>We can specify multiple values in the tibble to produce the predictions and respective intervals for multiple values of the predictor.</p>
+<p>The code to produce the 95% confidence interval for the predicted mean number of playgrounds per 10,000 residents for all cities with per capita spending of $150 is below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interval for mean response</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(parks_model, new_city_expend, <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(parks_model, new_city_expend, <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   fit  lwr  upr
 1 2.91 2.66 3.17</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interval for individual response</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(parks_model, new_city_expend, <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The code to produce the 95% confidence interval for the predicted number of playgrounds per 10,000 residents for a single city with per capita spending of $150 is below.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(parks_model, new_city_expend, <span class="at">interval =</span> <span class="st">"prediction"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   fit   lwr  upr
 1 2.91 0.654 5.17</code></pre>
 </div>
 </div>
+<p>In the output for each interval, <code>fit</code> is the predicted value, <span class="math inline">\(\hat{y}\)</span>, <code>lwr</code> is the interval’s lower bound, and <code>upr</code> is the interval’s upper bound.</p>
 </section>
 </section>
 </section>
@@ -1936,6 +1935,9 @@ The Trust for Public Land. 2021. <span>“Parks and an Equitable Recovery.”</s
 </div>
 <div id="ref-dplyr" class="csl-entry" role="listitem">
 Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <span>“Dplyr: A Grammar of Data Manipulation.”</span> <a href="https://doi.org/10.32614/CRAN.package.dplyr">https://doi.org/10.32614/CRAN.package.dplyr</a>.
+</div>
+<div id="ref-tidyr" class="csl-entry" role="listitem">
+Wickham, Hadley, Davis Vaughan, and Maximilian Girlich. 2025. <span>“Tidyr: Tidy Messy Data.”</span> <a href="https://doi.org/10.32614/CRAN.package.tidyr">https://doi.org/10.32614/CRAN.package.tidyr</a>.
 </div>
 </div>
 </section>
