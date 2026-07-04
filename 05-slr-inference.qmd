@@ -720,7 +720,7 @@ Regardless of the conclusion that is drawn (reject or fail to reject the null hy
 <!--# figure out how to better format this table, so decision and truth are in the middle-->
 
 |   |   | **Truth** |   |
-|------------------|------------------|------------------|------------------|
+|----|----|----|----|
 |  |  | $H_0$ **true** | $H_a$ **true** |
 | **Hypothesis test decision** | **Fail to reject** $H_0$ | Correct decision | Type II error |
 |  | **Reject** $H_0$ | Type I error | Correct decision |

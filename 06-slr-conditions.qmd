@@ -398,7 +398,9 @@ If the violations in the independence condition are not addressed, we must use c
 
 ### Normality
 
-By the Central Limit Theorem, we know the distribution of the estimate slope (the statistic of interest) is normal when the sample size is sufficiently large (see @sec-slr-inf-clt for more details), regardless of the distribution of the original data. Therefore, when the sample size is "large enough", we can be confident that the distribution of the estimated slope $\hat{\beta}_1$ is normal, even if the residuals (and thus the response variable) do not follow a normal distribution.
+By the Central Limit Theorem, we know the distribution of the estimate slope (the statistic of interest) is normal when the sample size is sufficiently large (see @sec-slr-inf-clt for more details), regardless of the distribution of the original data. Therefore, when the sample size is "large enough", we can be confident that the distribution of the estimated slope $\hat{\beta}_1$ is normal, even if the residuals (and thus the response variable) do not follow a normal distribution. This is also true when computing the interval for the estimated mean for a given value of the predictor, introduced in @sec-slr-theory-predict.
+
+The normality condition is more important, however, when computing the interval for the predicted value for an individual observation. Recall from @sec-slr-theory-predict, that the standard error for these intervals takes into account variability about the regression line (variability in $\mu_{Y|X}$) in addition to variability in the distribution of $Y$ for a the given value of $X$. We assume the shape of this distribution is normal, thus the calculations of $SE_{\hat{y}}$ may be misleading if there are large departures from normality.
 
 A common threshold for a "large enough" sample size is 30. This means if the sample has at least 30 observations (which is often the case for modern data sets!), we can use all the methods we've discussed to fit a simple linear regression model and draw conclusions from inference, even if the residuals are not normally distributed. Thus the inferential methods based on the Central Limit Theorem are considered robust to violations in the normality assumption, because we can feel confident about the conclusions from the inferential procedures even if the normality condition is not satisfied (given $n > 30$). One note of caution is that if the sample size is very close to 30, then the inferential methods based on the Central Limit Theorem are not robust to major departures form normality such as extreme skewness or outliers.
 
@@ -423,19 +425,19 @@ There are approaches for handling violations in the equal variance condition. Th
 
 @tbl-slr-conditions provides a summary of the model conditions and whether they must be satisfied to reliably conduct each modeling task.
 
-+-----------------+-----------------------+----------------------------+------------------------+
-| Model condition | Interpret and predict | Simulation-based inference | Theory-based inference |
-+=================+=======================+============================+========================+
-| Linearity       | Important             | Important                  | Important              |
-+-----------------+-----------------------+----------------------------+------------------------+
-| Independence    | Important             | Important                  | Important              |
-+-----------------+-----------------------+----------------------------+------------------------+
-| Normality       | Not needed            | Not needed                 | Not needed if $n > 30$ |
-|                 |                       |                            |                        |
-|                 |                       |                            | Important if $n < 30$  |
-+-----------------+-----------------------+----------------------------+------------------------+
-| Equal variance  | Not needed            | Not needed                 | Important              |
-+-----------------+-----------------------+----------------------------+------------------------+
++-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
+| Model condition | Interpret and predict | Simulation-based inference | Theory-based inference                                                              |
++=================+=======================+============================+=====================================================================================+
+| Linearity       | Important             | Important                  | Important                                                                           |
++-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
+| Independence    | Important             | Important                  | Important                                                                           |
++-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
+| Normality       | Not needed            | Not needed                 | Not needed if $n > 30$                                                              |
+|                 |                       |                            |                                                                                     |
+|                 |                       |                            | Important if $n < 30$ or computing prediction intervals for individual observations |
++-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
+| Equal variance  | Not needed            | Not needed                 | Important                                                                           |
++-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
 
 : Summary of necessary conditions for various analysis tasks on the slope
 
@@ -505,8 +507,7 @@ The **leverage** of the $i^{th}$ observation is a measure of the distance betwee
 
 When doing simple linear regression, an observation's leverage, denoted $h_i$, is calculated using @eq-slr-leverage.
 
-$$h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^n(x_j - \bar{x})^2}$$
- {#eq-slr-leverage}
+$$h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^n(x_j - \bar{x})^2}$$ {#eq-slr-leverage}
 
 <!--# Maybe provide more explanation about where this formula comes from?-->
 
@@ -578,8 +579,7 @@ The residual is an indication of how well the regression model predicts the valu
 
 The residuals have the same units as the response variable, so what is considered a residual with large magnitude depends on the scale and range of the response variable. This means what is considered a "large" residuals can be different for every analysis. We can address this by instead examining **standardized residuals**, defined as the residual divided by its standard error. @eq-std-resid shows the formula to calculate the standardized residual for the $i^{th}$ observation.
 
-$$std.resid_i = \frac{e_i}{SE_{e_i}} = \frac{e_i}{\hat{\sigma}_{\epsilon} \sqrt{1 - h_i}}$$
- {#eq-std-resid}
+$$std.resid_i = \frac{e_i}{SE_{e_i}} = \frac{e_i}{\hat{\sigma}_{\epsilon} \sqrt{1 - h_i}}$$ {#eq-std-resid}
 
 The residuals for every analysis are now on the same scale. Thus, we can use a common threshold to determine residuals that are considered to have large magnitude. An observation is an outlier in the response if it its standardized residual has a magnitude greater than two, $|std.resid_i| > 2$ ($std.resid_i < - 2 \hspace{1mm} \text{ or }\hspace{1mm} std.resid_i > 2$). For large data sets, we recommend a more restrictive threshold of 3, so there is not an overwhelming number of observations considered outliers that may require further evaluation.
 
@@ -676,8 +676,7 @@ At this point we have introduced a diagnostic to identify outliers in the predic
 
 **Cook's distance** is a measure of an observation's overall impact on the estimated model coefficients. In @eq-cooks-d, we see that Cook's distance takes into account an observation's leverage, $h_i$, the standardized residuals, $std.resid_i$, and the number of predictors in the model, $p$ ( $p=1$ for simple linear regression).
 
-$$D_i = \frac{1}{p}(std.resid_i)^2\Big(\frac{h_i}{1-h_i}\Big)$$
- {#eq-cooks-d}
+$$D_i = \frac{1}{p}(std.resid_i)^2\Big(\frac{h_i}{1-h_i}\Big)$$ {#eq-cooks-d}
 
 <!--# add something referring reader to the appendix-->
 
