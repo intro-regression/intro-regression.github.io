@@ -720,7 +720,7 @@ Regardless of the conclusion that is drawn (reject or fail to reject the null hy
 <!--# figure out how to better format this table, so decision and truth are in the middle-->
 
 |   |   | **Truth** |   |
-|----|----|----|----|
+|------------------|------------------|------------------|------------------|
 |  |  | $H_0$ **true** | $H_a$ **true** |
 | **Hypothesis test decision** | **Fail to reject** $H_0$ | Correct decision | Type II error |
 |  | **Reject** $H_0$ | Type I error | Correct decision |
@@ -1016,15 +1016,12 @@ where $t^* \sim t_{n-2}$ .
 
 The predicted value $\hat{y}$ is the value output by the model given a particular value of the predictor variable. The critical value $t^*$ is determined by the confidence level as introduced in @sec-slr-theory-ci. It is the value on the $t$ distribution with $n-2$ degrees of freedom, such that $C\%$ of the area under the curve is between $-t^*$ and $t^*$.
 
-Recall that the model outputs the predicted value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions $(SE)$ , however, differ depending on the type of prediction we're making.
+Recall that the model outputs the predicted mean value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions $(SE)$ , however, differ depending on the type of prediction we're making.
 
 ::: {.yourturn latex="1"}
 Which type of prediction do you expect to have a wider interval:
 
 - Prediction for the mean value of the response
-
-<!-- -->
-
 - Prediction for an individual observation ?
 
 Briefly explain your choice.

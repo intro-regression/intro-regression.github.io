@@ -373,6 +373,7 @@ window.Quarto = {
   <ul class="collapse">
 <li><a href="#sec-mlr-bootstrap-ci" id="toc-sec-mlr-bootstrap-ci" class="nav-link" data-scroll-target="#sec-mlr-bootstrap-ci"><span class="header-section-number">8.3.1</span> Bootstrap confidence intervals</a></li>
   <li><a href="#sec-mlr-permutation" id="toc-sec-mlr-permutation" class="nav-link" data-scroll-target="#sec-mlr-permutation"><span class="header-section-number">8.3.2</span> Permutation tests</a></li>
+  <li><a href="#prediction-intervals" id="toc-prediction-intervals" class="nav-link" data-scroll-target="#prediction-intervals"><span class="header-section-number">8.3.3</span> Prediction intervals</a></li>
   </ul>
 </li>
   <li>
@@ -380,7 +381,8 @@ window.Quarto = {
   <ul class="collapse">
 <li><a href="#sec-mlr-inf-foundation" id="toc-sec-mlr-inf-foundation" class="nav-link" data-scroll-target="#sec-mlr-inf-foundation"><span class="header-section-number">8.4.1</span> Foundations for inference</a></li>
   <li><a href="#sec-mlr-hypothesis-test" id="toc-sec-mlr-hypothesis-test" class="nav-link" data-scroll-target="#sec-mlr-hypothesis-test"><span class="header-section-number">8.4.2</span> Hypothesis tests</a></li>
-  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">8.4.3</span> Confidence intervals</a></li>
+  <li><a href="#sec-mlr-theory-ci" id="toc-sec-mlr-theory-ci" class="nav-link" data-scroll-target="#sec-mlr-theory-ci"><span class="header-section-number">8.4.3</span> Confidence intervals</a></li>
+  <li><a href="#sec-mlr-theory-predict" id="toc-sec-mlr-theory-predict" class="nav-link" data-scroll-target="#sec-mlr-theory-predict"><span class="header-section-number">8.4.4</span> Prediction intervals</a></li>
   </ul>
 </li>
   <li>
@@ -840,9 +842,7 @@ Figure&nbsp;8.2: Bootstrap sampling distribution for <code>age</code> with 95% c
 <strong>Alternative</strong>: There is a linear relationship between age and weight after accounting for sex, taxon, and number of lemurs in the litter.</li>
 </ul>
 <p>The hypotheses in mathematical notation are the following:</p>
-<p><span class="math display">\[
-H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0
-\]</span></p>
+<p><span class="math display">\[H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0\]</span></p>
 <p>In <a href="05-slr-inference.html#sec-hypothesis-test-overview" class="quarto-xref"><span>Section 5.5</span></a>, we explained how hypothesis tests are conducted assuming null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of <span class="math inline">\(\hat{\beta}_{age}\)</span> under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the <strong>null distribution</strong>, and we construct it using permutation sampling.</p>
 <p>Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., “new” samples. In this case, because we are conducting inference for a single predictor <code>age</code>, we will create new samples by shuffling the values of <code>age</code>, so that they are randomly paired with values of weight. We do <u><strong>not</strong></u> shuffle the columns of the other predictors, because we are evaluating the relationship between <code>age</code> and <code>weight</code> after accounting for the relationships between <code>weight</code> and the predictors <code>sex</code>, <code>taxon</code>, and <code>litter_size</code>. By shuffling the columns of <code>age</code>, we are simulating the null condition of no linear relationship between <code>age</code> and <code>weight</code>.</p>
 <div class="cell">
@@ -962,21 +962,123 @@ Figure&nbsp;8.3: Null distribution for <code>age</code> from 1000 permutation sa
 </li>
 </ul>
 </div>
+</section><section id="prediction-intervals" class="level3" data-number="8.3.3"><h3 data-number="8.3.3" class="anchored" data-anchor-id="prediction-intervals">
+<span class="header-section-number">8.3.3</span> Prediction intervals</h3>
+<p>In <a href="05-slr-inference.html#sec-slr-bootstrap-pred-intervals" class="quarto-xref"><span>Section 5.8</span></a>, we introduced a simulation-based approach for quantifying the uncertainty in predictions from a simple linear regression model. We use the same approach to quantify the uncertainty in predictions from multiple linear regression models. The primary difference is now we will quantify the uncertainty for the predicted value given a combination of values for the predictors in the model.</p>
+<p>In <span class="quarto-unresolved-ref">?sec-mlr-predict</span>, we found that the predicted weight for 10-month old male lemurs in the VRUB taxon who were born into a litter of 4 lemurs is 2282.931 grams. Given the uncertainty in the estimated coefficients used to compute this prediction, we expect the actual mean weight is not exactly but is close to this value. Thus, we can construct an interval to more specifically quantify this uncertainty and produce a plausible range of values we expect the actual mean weight to take.</p>
+<p>As in <a href="05-slr-inference.html#sec-slr-bootstrap-pred-intervals" class="quarto-xref"><span>Section 5.8</span></a>, we use bootstrap sampling to construct a distribution of predict values computed from the 1,000 bootstrap samples. We then use the distribution to compute the bounds for the interval. <a href="#tbl-bootstrap-lemur-pred" class="quarto-xref">Table&nbsp;<span>8.5</span></a> shows the estimated coefficients and predictions from the first five bootstrap samples.</p>
+<div class="cell">
+<div id="tbl-bootstrap-lemur-pred" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-bootstrap-lemur-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8.5: Estimated coefficienst and predictions in first five bootstrap samples
+</figcaption><div aria-describedby="tbl-bootstrap-lemur-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 5%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 16%">
+<col style="width: 14%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;">replicate</th>
+<th style="text-align: right;">intercept</th>
+<th style="text-align: right;">age</th>
+<th style="text-align: right;">sexM</th>
+<th style="text-align: right;">taxonPCOQ</th>
+<th style="text-align: right;">taxonVRUB</th>
+<th style="text-align: right;">litter_size</th>
+<th style="text-align: right;">prediction</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">80.73</td>
+<td style="text-align: right;">142</td>
+<td style="text-align: right;">-113.6</td>
+<td style="text-align: right;">451</td>
+<td style="text-align: right;">974</td>
+<td style="text-align: right;">-88.896</td>
+<td style="text-align: right;">2004</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">36.99</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">-131.6</td>
+<td style="text-align: right;">489</td>
+<td style="text-align: right;">891</td>
+<td style="text-align: right;">19.288</td>
+<td style="text-align: right;">2255</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">130.63</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">-178.6</td>
+<td style="text-align: right;">376</td>
+<td style="text-align: right;">960</td>
+<td style="text-align: right;">-4.860</td>
+<td style="text-align: right;">2252</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2.22</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">-52.6</td>
+<td style="text-align: right;">452</td>
+<td style="text-align: right;">1051</td>
+<td style="text-align: right;">-33.453</td>
+<td style="text-align: right;">2243</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">108.07</td>
+<td style="text-align: right;">148</td>
+<td style="text-align: right;">-198.1</td>
+<td style="text-align: right;">361</td>
+<td style="text-align: right;">822</td>
+<td style="text-align: right;">0.405</td>
+<td style="text-align: right;">2212</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>The distribution of the predicted weights from all 1,000 bootstrap samples with bounds for the 95% interval is <a href="#fig-bootstrap-lemur-pred" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>. Recall from <a href="05-slr-inference.html#sec-slr-bootstrap-pred-intervals" class="quarto-xref"><span>Section 5.8</span></a> that that this is the confidence interval for the predicted mean weight among all lemurs that have the specified combination of predictors. We discuss the prediction interval for an individual observation in <a href="#sec-mlr-theory-predict" class="quarto-xref"><span>Section 8.4.4</span></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-bootstrap-lemur-pred" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bootstrap-lemur-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="08-mlr-inference_files/figure-html/fig-bootstrap-lemur-pred-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;8.4: Bootstrap distribution of predictions with bounds for the 95% interval"><img src="08-mlr-inference_files/figure-html/fig-bootstrap-lemur-pred-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bootstrap-lemur-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.4: Bootstrap distribution of predictions with bounds for the 95% interval
+</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="yourturn">
+<p>The 95% confidence in <a href="#fig-bootstrap-lemur-pred" class="quarto-xref">Figure&nbsp;<span>8.4</span></a> is 1859.728 to 2642.688. Interpret this interval in the context of the data.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+</div>
 </section></section><section id="sec-mlr-theory-inf" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="sec-mlr-theory-inf">
 <span class="header-section-number">8.4</span> Theory-based inference</h2>
 <p>The other approach for inference is using theory-based methods based on mathematical models and the Central Limit Theorem. Theory-based methods have formulas to quantify the sampling variability in the estimated coefficient and uses distributions to compute exact confidence intervals and p-values. Because these methods rely on formulas rather than resampling methods, they are very computationally efficient. Results from theory-based inferential methods are displayed in the model output from most statistical software. For example, you can see the inferential results we’ll discuss in the model output in <a href="#tbl-lemur-model-inf" class="quarto-xref">Table&nbsp;<span>8.1</span></a>.</p>
 <p>Theory-based inference for coefficients in a multiple linear regression model is very similar to inference in simple linear regression. Therefore, this section will provide a brief description of these methods, show how they apply to answer the questions in <a href="#sec-mlr-inf-intro" class="quarto-xref"><span>Section 8.1</span></a>, and highlight differences from simple linear regression. See <a href="05-slr-inference.html#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.9</span></a> for a thorough introduction to these methods. The mathematical details utilize linear algebra and are found in <a href="appendix-linear.html#sec-assumptions-matrix" class="quarto-xref"><span>Section A.5</span></a> and <a href="appendix-linear.html#sec-beta-dist-matrix" class="quarto-xref"><span>Section A.6</span></a>.</p>
 <section id="sec-mlr-inf-foundation" class="level3" data-number="8.4.1"><h3 data-number="8.4.1" class="anchored" data-anchor-id="sec-mlr-inf-foundation">
 <span class="header-section-number">8.4.1</span> Foundations for inference</h3>
-<p>When doing multiple linear regression, we assume a model structure of the from in <a href="#eq-mlr-stat-model" class="quarto-xref">Equation&nbsp;<span>8.1</span></a>.</p>
-<p><span id="eq-mlr-stat-model"><span class="math display">\[
-Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-\tag{8.1}\]</span></span></p>
-<p>The equation written in terms of the distribution of <span class="math inline">\(Y\)</span> given a combination of predictors <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span> in <a href="#eq-mlr-dist-y" class="quarto-xref">Equation&nbsp;<span>8.2</span></a>.</p>
-<p><span id="eq-mlr-dist-y"><span class="math display">\[
-Y|X \sim N(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p, \sigma^2_{\epsilon})
-\tag{8.2}\]</span></span></p>
-<p>By <a href="#eq-mlr-dist-y" class="quarto-xref">Equation&nbsp;<span>8.2</span></a>, the distribution of the response variable <span class="math inline">\(Y\)</span> given a combination of predictors <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span> is normally distributed, centered at <span class="math inline">\(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p\)</span> with variance <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. Based on this distribution, the following assumptions are made when we conduct multiple linear regression:</p>
+<p>When doing multiple linear regression, we assume a model structure of the from in <span class="quarto-unresolved-ref">?eq-mlr-stat-model</span>.</p>
+<p><span class="math display">\[Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-mlr-stat-model}</p>
+<p>The equation written in terms of the distribution of <span class="math inline">\(Y\)</span> given a combination of predictors <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span> in <span class="quarto-unresolved-ref">?eq-mlr-dist-y</span>.</p>
+<p><span class="math display">\[Y|X \sim N(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p, \sigma^2_{\epsilon})\]</span> {#eq-mlr-dist-y}</p>
+<p>By <span class="quarto-unresolved-ref">?eq-mlr-dist-y</span>, the distribution of the response variable <span class="math inline">\(Y\)</span> given a combination of predictors <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span> is normally distributed, centered at <span class="math inline">\(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p\)</span> with variance <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. Based on this distribution, the following assumptions are made when we conduct multiple linear regression:</p>
 <ol type="1">
 <li><p>The distribution of the response <span class="math inline">\(Y\)</span> is normal for a given combination of the predictors<span class="math inline">\(X_1, X_2, \ldots, X_p\)</span>.</p></li>
 <li><p>The expected value (mean) of the distribution of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span> is <span class="math inline">\(\beta_0 + \beta_1 X_1 + \beta_2X_2 + \dots + \beta_pX_p\)</span>. There is a linear relationship between the response and the predictor variables.</p></li>
@@ -984,23 +1086,17 @@ Y|X \sim N(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p, \sigma^2_{\ep
 <li><p>The error terms <span class="math inline">\(\epsilon\)</span> are independent of one another. This also means the values of the response variable, and the observations more generally, are independent of one another.</p></li>
 </ol>
 <p>Notice that these assumptions are generally the ones for simple linear regression in <a href="05-slr-inference.html#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a>. The difference is that the assumptions about <span class="math inline">\(Y\)</span> are made for a combination of predictors rather than a single predictor.</p>
-<p>In <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>, we showed how to compute <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \hat{\beta}_2, \ldots, \hat{\beta}_p\)</span>, the estimated model coefficients. The remaining parameter <span class="math inline">\(\sigma_{\epsilon}\)</span>, called the regression standard error, is the variability of the observations about the regression line. The distance between the observed values and the regression line (the predicted value of <span class="math inline">\(Y\)</span> for a given combination of predictors) is the residual. <a href="#eq-mlr-sigma" class="quarto-xref">Equation&nbsp;<span>8.3</span></a> shows how we use the residuals to estimate the regression standard error.</p>
-<p><span id="eq-mlr-sigma"><span class="math display">\[
-\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i=1}^n e_i^2}{n - p -1 }} = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - p -1 }}
-\tag{8.3}\]</span></span></p>
+<p>In <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>, we showed how to compute <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \hat{\beta}_2, \ldots, \hat{\beta}_p\)</span>, the estimated model coefficients. The remaining parameter <span class="math inline">\(\sigma_{\epsilon}\)</span>, called the regression standard error, is the variability of the observations about the regression line. The distance between the observed values and the regression line (the predicted value of <span class="math inline">\(Y\)</span> for a given combination of predictors) is the residual. <span class="quarto-unresolved-ref">?eq-mlr-sigma</span> shows how we use the residuals to estimate the regression standard error.</p>
+<p><span class="math display">\[\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i=1}^n e_i^2}{n - p -1 }} = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - p -1 }}\]</span> {#eq-mlr-sigma}</p>
 <p>This is very similar to <a href="05-slr-inference.html#eq-slr-reg-se" class="quarto-xref">Equation&nbsp;<span>5.8</span></a>, the equation to estimate the regression standard error in simple linear regression. The difference is the denominator, <span class="math inline">\(n - p - 1\)</span>, where <span class="math inline">\(p\)</span> is the number of predictor terms. The value <span class="math inline">\(n - p - 1\)</span> is the degrees of freedom, the number of observations available to understand variability about the regression line. This stems from the fact that we “use” <span class="math inline">\(p+1\)</span> observations to estimate the model coefficients. In simple linear regression, there is one predictor, so <span class="math inline">\(p = 1\)</span>, and the degrees of freedom are <span class="math inline">\(n - 2\)</span> as shown in <a href="05-slr-inference.html#sec-estimate-reg-std-err" class="quarto-xref"><span>Section 5.9.2</span></a>. Let’s compute the degrees of freedom for the regression standard error associated with the model in <a href="#tbl-lemur-model-inf" class="quarto-xref">Table&nbsp;<span>8.1</span></a>. There are <span class="math inline">\(n =\)</span> 252 observations in the data and <span class="math inline">\(p = 5\)</span> terms for predictors in the model. (Note that even though <code>taxon</code> is a single predictor, we need to account for the fact there are two terms for <code>taxon</code> estimated in the model). The degrees of freedom are</p>
-<p><span class="math display">\[
-df = 252 - (5 + 1) = 252 - 5 - 1 = 246
-\]</span></p>
+<p><span class="math display">\[df = 252 - (5 + 1) = 252 - 5 - 1 = 246\]</span></p>
 <p>Thus, there are 246 degrees of freedom, i.e., observations available to understand variability about the regression line for the lemurs analysis.</p>
-<p>The goal is to conduct inference for a model coefficient <span class="math inline">\(\beta_j\)</span>, so we ultimately need to estimate the sampling variability in the estimated coefficients <span class="math inline">\(\hat{\beta}_j\)</span>. This variability is measured by <span class="math inline">\(SE_{\hat{\beta}_j}\)</span>, the standard error of <span class="math inline">\(\hat{\beta}_j\)</span>. The formula to compute <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> in <a href="#eq-mlr-se-beta" class="quarto-xref">Equation&nbsp;<span>8.4</span></a> is more complex than in the case of simple linear regression, because we need to understand the sampling variability of <span class="math inline">\(\hat{\beta}_j\)</span> in the context of a regression model that includes other predictors.</p>
-<p><span id="eq-mlr-se-beta"><span class="math display">\[
-Var_{\hat{\beta}_j} = j^{th} \text{diagonal element of }\hspace{2mm} \hat{\sigma}^2_{\epsilon}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}
-\tag{8.4}\]</span></span></p>
-<p>Mathematical details for <a href="#eq-mlr-se-beta" class="quarto-xref">Equation&nbsp;<span>8.4</span></a> are in <a href="appendix-linear.html#sec-beta-dist-matrix" class="quarto-xref"><span>Section A.6</span></a>. For now, we’ll focus on a conceptual understanding about why the standard error computed here may be different than the standard error for the same predictor variable in the case of simple linear regression. To illustrate this, let’s look at the standard error for <code>age</code> in a simple linear regression model and in the model in <a href="#tbl-lemur-model-inf" class="quarto-xref">Table&nbsp;<span>8.1</span></a>. The coefficient estimates and standard errors are printed side-by-side in <a href="#tbl-mlr-age-compare" class="quarto-xref">Table&nbsp;<span>8.5</span></a>.</p>
+<p>The goal is to conduct inference for a model coefficient <span class="math inline">\(\beta_j\)</span>, so we ultimately need to estimate the sampling variability in the estimated coefficients <span class="math inline">\(\hat{\beta}_j\)</span>. This variability is measured by <span class="math inline">\(SE_{\hat{\beta}_j}\)</span>, the standard error of <span class="math inline">\(\hat{\beta}_j\)</span>. The formula to compute <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> in <span class="quarto-unresolved-ref">?eq-mlr-se-beta</span> is more complex than in the case of simple linear regression, because we need to understand the sampling variability of <span class="math inline">\(\hat{\beta}_j\)</span> in the context of a regression model that includes other predictors.</p>
+<p><span class="math display">\[Var_{\hat{\beta}_j} = j^{th} \text{diagonal element of }\hspace{2mm} \hat{\sigma}^2_{\epsilon}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\]</span> {#eq-mlr-se-beta}</p>
+<p>Mathematical details for <span class="quarto-unresolved-ref">?eq-mlr-se-beta</span> are in <a href="appendix-linear.html#sec-beta-dist-matrix" class="quarto-xref"><span>Section A.6</span></a>. For now, we’ll focus on a conceptual understanding about why the standard error computed here may be different than the standard error for the same predictor variable in the case of simple linear regression. To illustrate this, let’s look at the standard error for <code>age</code> in a simple linear regression model and in the model in <a href="#tbl-lemur-model-inf" class="quarto-xref">Table&nbsp;<span>8.1</span></a>. The coefficient estimates and standard errors are printed side-by-side in <a href="#tbl-mlr-age-compare" class="quarto-xref">Table&nbsp;<span>8.6</span></a>.</p>
 <div id="tbl-mlr-age-compare" class="quarto-layout-panel anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mlr-age-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8.5: Comparison of standard error for <code>age</code> in simple and multiple linear regression modelss
+Table&nbsp;8.6: Comparison of standard error for <code>age</code> in simple and multiple linear regression modelss
 </figcaption><div aria-describedby="tbl-mlr-age-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
@@ -1069,11 +1165,9 @@ Table&nbsp;8.5: Comparison of standard error for <code>age</code> in simple and 
 </div>
 </figure>
 </div>
-<p>The estimated standard error for <code>age</code> in the simple linear regression model is 5.883 compared to 4.858 in the multiple linear regression model. In the case of multiple linear regression, the other predictors in the model are accounted for in two ways when computing <span class="math inline">\(SE_{\hat{\beta}{age}}\)</span> . First the other predictors are accounted for when computing <span class="math inline">\(\hat{\sigma}_\epsilon\)</span>, as they are used to compute the <span class="math inline">\(\hat{y}_i\)</span> in the <a href="#eq-mlr-sigma" class="quarto-xref">Equation&nbsp;<span>8.3</span></a>. Second, the other predictors are accounted for in <span class="math inline">\((\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\)</span>, as this matrix quantifies any relationship between the predictor variables (see <a href="appendix-linear.html#sec-beta-dist-matrix" class="quarto-xref"><span>Section A.6</span></a> for details). Thus, based on the models in <a href="#tbl-mlr-age-compare" class="quarto-xref">Table&nbsp;<span>8.5</span></a>, there is less sampling variability in <span class="math inline">\(\hat{\beta}_{age}\)</span> after we account for the other potential predictors of weight.</p>
-<p>In addition to estimating the sampling variability for model coefficients, by the Central Limit Theorem, we know the full sampling distribution of the model coefficient <span class="math inline">\(\hat{\beta}_j\)</span> is normally distributed, with a mean at the true population coefficient <span class="math inline">\(\beta_j\)</span> and variance <span class="math inline">\(SE_{\hat{\beta}_j}^2\)</span>, the standard error squared as shown in <a href="#eq-mlr-beta-dist" class="quarto-xref">Equation&nbsp;<span>8.5</span></a>. We use this distribution as the basis for conducting hypothesis tests and computing confidence intervals.</p>
-<p><span id="eq-mlr-beta-dist"><span class="math display">\[
-\hat{\beta}_j \sim N(\beta_j, SE_{\hat{\beta}_j}^2)
-\tag{8.5}\]</span></span></p>
+<p>The estimated standard error for <code>age</code> in the simple linear regression model is 5.883 compared to 4.858 in the multiple linear regression model. In the case of multiple linear regression, the other predictors in the model are accounted for in two ways when computing <span class="math inline">\(SE_{\hat{\beta}{age}}\)</span> . First the other predictors are accounted for when computing <span class="math inline">\(\hat{\sigma}_\epsilon\)</span>, as they are used to compute the <span class="math inline">\(\hat{y}_i\)</span> in the <span class="quarto-unresolved-ref">?eq-mlr-sigma</span>. Second, the other predictors are accounted for in <span class="math inline">\((\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\)</span>, as this matrix quantifies any relationship between the predictor variables (see <a href="appendix-linear.html#sec-beta-dist-matrix" class="quarto-xref"><span>Section A.6</span></a> for details). Thus, based on the models in <a href="#tbl-mlr-age-compare" class="quarto-xref">Table&nbsp;<span>8.6</span></a>, there is less sampling variability in <span class="math inline">\(\hat{\beta}_{age}\)</span> after we account for the other potential predictors of weight.</p>
+<p>In addition to estimating the sampling variability for model coefficients, by the Central Limit Theorem, we know the full sampling distribution of the model coefficient <span class="math inline">\(\hat{\beta}_j\)</span> is normally distributed, with a mean at the true population coefficient <span class="math inline">\(\beta_j\)</span> and variance <span class="math inline">\(SE_{\hat{\beta}_j}^2\)</span>, the standard error squared as shown in <span class="quarto-unresolved-ref">?eq-mlr-beta-dist</span>. We use this distribution as the basis for conducting hypothesis tests and computing confidence intervals.</p>
+<p><span class="math display">\[\hat{\beta}_j \sim N(\beta_j, SE_{\hat{\beta}_j}^2) \]</span> {#eq-mlr-beta-dist}</p>
 <!--# rectify this with SLR - SE squared seems weird, but need to use variance to stay consistent with normal notation. Or maybe change everything to standard deviation? -->
 </section><section id="sec-mlr-hypothesis-test" class="level3" data-number="8.4.2"><h3 data-number="8.4.2" class="anchored" data-anchor-id="sec-mlr-hypothesis-test">
 <span class="header-section-number">8.4.2</span> Hypothesis tests</h3>
@@ -1097,27 +1191,21 @@ Table&nbsp;8.5: Comparison of standard error for <code>age</code> in simple and 
 <strong>Alternative</strong>: There is a linear relationship between age and weight after accounting for sex, taxon, and number of lemurs in the litter.</li>
 </ul>
 <p>These hypothesis in mathematical notation are the following:</p>
-<p><span class="math display">\[
-H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0
-\]</span></p>
+<p><span class="math display">\[H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0\]</span></p>
 <p><strong>Step 2: Calculate a test statistic.</strong></p>
-<p>We conduct hypothesis testing assuming the null hypothesis is true. Applying this to <a href="#eq-mlr-beta-dist" class="quarto-xref">Equation&nbsp;<span>8.5</span></a>, we assume that <span class="math inline">\(\hat{\beta}_{age} \sim N(0, SE_{\hat{\beta}_{age}})\)</span>. Let’s use this to compute the test statistic, the number of standard errors <span class="math inline">\(\hat{\beta}_{age}\)</span>, the coefficient estimated from the data, is from the hypothesized center of the distribution 0.</p>
+<p>We conduct hypothesis testing assuming the null hypothesis is true. Applying this to <span class="quarto-unresolved-ref">?eq-mlr-beta-dist</span>, we assume that <span class="math inline">\(\hat{\beta}_{age} \sim N(0, SE_{\hat{\beta}_{age}})\)</span>. Let’s use this to compute the test statistic, the number of standard errors <span class="math inline">\(\hat{\beta}_{age}\)</span>, the coefficient estimated from the data, is from the hypothesized center of the distribution 0.</p>
 <p>The test statistic for <span class="math inline">\(\hat{\beta}_{age}\)</span> is</p>
-<p><span class="math display">\[
-T = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}} = \frac{136.903 - 0}{4.858} = 28.181
-\]</span></p>
+<p><span class="math display">\[T = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}} = \frac{136.903 - 0}{4.858} = 28.181\]</span></p>
 <p>This means that given the null hypothesis is true (<span class="math inline">\(\beta_{age} = 0\)</span>) , the coefficient estimated from the model 136.903 is about 28.181 standard errors above the mean of the distribution.</p>
 <div class="yourturn">
-<p>The test statistic is 28.181. Do you think this provides evidence in support of or against the null hypothesis?<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>The test statistic is 28.181. Do you think this provides evidence in support of or against the null hypothesis?<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 </div>
 <p><strong>Step 3: Calculate a p-value.</strong></p>
 <p>Sometimes the test statistic has a magnitude that is so small or so large that we can easily use it to draw conclusions about the test. There are many times, however, it is unclear what the conclusion should be based on the test statistic alone, so we compute a p-value and compare it to the decision-making threshold <span class="math inline">\(\alpha\)</span> to make a conclusion.</p>
 <p>The definition of the p-value is similar for theory-based inference as with simulation-based inference. The key difference is that we will compare the test statistic, instead of the estimated coefficient, against a distribution. Thus, the p-value is the probability of observing a test statistic in the distribution at least as extreme as the observed test statistic, assuming the null hypothesis is true.</p>
-<p>Under the null hypothesis, the test statistic follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n- p-1\)</span> degrees of freedom, <span class="math inline">\(T \sim t_{n-p-1}\)</span> . The <span class="math inline">\(t\)</span> distribution is used, instead of the standard normal distribution, to account for the extra variability that results from using the estimated regression standard error <span class="math inline">\(\hat{\sigma}_\epsilon\)</span> to compute the standard error of the coefficient in <a href="#eq-mlr-se-beta" class="quarto-xref">Equation&nbsp;<span>8.4</span></a> (see <a href="05-slr-inference.html#sec-slr-inf-hypotheses" class="quarto-xref"><span>Section 5.6.1</span></a> for more detail about <span class="math inline">\(t\)</span> distribution). Because the alternative hypothesis is not equal to, we conduct a two-sided test and compute the p-value as <span class="math inline">\(P(|t| &gt; |T|) = P(t &lt; -|T|) + P(t &gt; |T|)\)</span>, the probability of obtaining a test statistic with magnitude greater than the test statistic <span class="math inline">\(T\)</span>.</p>
+<p>Under the null hypothesis, the test statistic follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n- p-1\)</span> degrees of freedom, <span class="math inline">\(T \sim t_{n-p-1}\)</span> . The <span class="math inline">\(t\)</span> distribution is used, instead of the standard normal distribution, to account for the extra variability that results from using the estimated regression standard error <span class="math inline">\(\hat{\sigma}_\epsilon\)</span> to compute the standard error of the coefficient in <span class="quarto-unresolved-ref">?eq-mlr-se-beta</span> (see <a href="05-slr-inference.html#sec-slr-inf-hypotheses" class="quarto-xref"><span>Section 5.6.1</span></a> for more detail about <span class="math inline">\(t\)</span> distribution). Because the alternative hypothesis is not equal to, we conduct a two-sided test and compute the p-value as <span class="math inline">\(P(|t| &gt; |T|) = P(t &lt; -|T|) + P(t &gt; |T|)\)</span>, the probability of obtaining a test statistic with magnitude greater than the test statistic <span class="math inline">\(T\)</span>.</p>
 <p>In the hypothesis test for <span class="math inline">\(\beta_{age}\)</span>, the p-value is computed as</p>
-<p><span class="math display">\[
-P(|t| &gt; |28.181|) = P(t &lt; -28.181) + P(t &gt; 28.181)
-\]</span></p>
+<p><span class="math display">\[P(|t| &gt; |28.181|) = P(t &lt; -28.181) + P(t &gt; 28.181)\]</span></p>
 <p>using a <span class="math inline">\(t\)</span> distribution with 246 degrees of freedom. Using statistical software, the p-value is equal to 5.563^{-79} <span class="math inline">\(\approx 0\)</span>. Now we have an exact p-value that was estimated to be 0 using the permutation test in <a href="#sec-mlr-permutation" class="quarto-xref"><span>Section 8.3.2</span></a>.</p>
 <p><strong>Step 4: Draw a conclusion.</strong></p>
 <p>The final step is to make a conclusion by comparing the p-value to the predefined decision-making threshold, <span class="math inline">\(\alpha\)</span>. If the p-value is less than <span class="math inline">\(\alpha,\)</span> the evidence against the null is sufficiently strong, so we reject the null hypothesis and conclude the alternative. Otherwise, the evidence against the null hypothesis is not sufficiently strong, so we fail to reject the null hypothesis.</p>
@@ -1125,33 +1213,46 @@ P(|t| &gt; |28.181|) = P(t &lt; -28.181) + P(t &gt; 28.181)
 <blockquote class="blockquote">
 <p><em>The p-value is less than</em> <span class="math inline">\(\alpha = 0.05\)</span><em>, so we reject the null hypothesis. The data provide sufficient evidence of a linear relationship between age and weight, after accounting for sex, taxon, and number of lemurs in the litter.</em></p>
 </blockquote>
-</section><section id="confidence-intervals" class="level3" data-number="8.4.3"><h3 data-number="8.4.3" class="anchored" data-anchor-id="confidence-intervals">
+</section><section id="sec-mlr-theory-ci" class="level3" data-number="8.4.3"><h3 data-number="8.4.3" class="anchored" data-anchor-id="sec-mlr-theory-ci">
 <span class="header-section-number">8.4.3</span> Confidence intervals</h3>
 <p>In <a href="#sec-mlr-bootstrap-ci" class="quarto-xref"><span>Section 8.3.1</span></a>, we used bootstrapping to simulate the sampling distribution of <span class="math inline">\(\hat{\beta}_j\)</span>, and marked the bounds of the middle <span class="math inline">\(C\%\)</span> of the distribution to make the <span class="math inline">\(C\%\)</span> confidence interval. Here, we will use the mathematical results about the distribution of <span class="math inline">\(\hat{\beta}_j\)</span> and compute the confidence intervals using an equation of the form</p>
-<p><span id="eq-mlr-beta-ci"><span class="math display">\[
-\hat{\beta}_j \pm t^*_{n-p-1} \times SE_{\hat{\beta}_j}
-\tag{8.6}\]</span></span></p>
+<p><span class="math display">\[\hat{\beta}_j \pm t^*_{n-p-1} \times SE_{\hat{\beta}_j}\]</span> {#eq-mlr-beta-ci}</p>
 <p>where <span class="math inline">\(t^*_{n-p-1}\)</span> is the critical value marking the middle <span class="math inline">\(C\%\)</span> of the <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - p - 1\)</span> degrees of freedom. Let’s construct a 95% confidence interval for <code>age</code> to answer the question posed in <a href="#sec-mlr-inf-intro" class="quarto-xref"><span>Section 8.1</span></a> :</p>
 <blockquote class="blockquote">
 <p>After taking into account sex, taxon, and number of lemurs in the litter, about how much does a young lemur’s weight increase, on average, as they get older?</p>
 </blockquote>
 <p>We have previously computed <span class="math inline">\(\hat{\beta}_{age}\)</span> and <span class="math inline">\(SE_{\hat{\beta}_{age}}\)</span>, so we just need to compute the critical value <span class="math inline">\(t^*_{n-p-1}\)</span> using statistical software. This critical value is the point on the <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom such that 95% of the distribution (area under the curve) is between <span class="math inline">\(-t^*_{n-p-1}\)</span> and <span class="math inline">\(t^*_{n-p-1}\)</span>. In this analysis, the critical value to construct the 95% confidence interval for <span class="math inline">\(\beta_{age}\)</span> using a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom is 1.651. <!--# do i need a figure showing where the critical value is marked?--></p>
-<p>Now we have all the components needed to compute the confidence interval using <a href="#eq-mlr-beta-ci" class="quarto-xref">Equation&nbsp;<span>8.6</span></a>. By using the formula, we translate the interval from standardized values to the original units of the model coefficient by rescaling (multiplying) by <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> and shift by <span class="math inline">\(\hat{\beta}_j\)</span>. Thus to get the bounds of the confidence interval from <span class="math inline">\(\pm 1.651\)</span> to values in terms of grams of weight per month older, we have</p>
-<p><span class="math display">\[
-136.903 \pm 1.651 \times 4.858
-= [128.882, 144.924]
-\]</span></p>
+<p>Now we have all the components needed to compute the confidence interval using <span class="quarto-unresolved-ref">?eq-mlr-beta-ci</span>. By using the formula, we translate the interval from standardized values to the original units of the model coefficient by rescaling (multiplying) by <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> and shift by <span class="math inline">\(\hat{\beta}_j\)</span>. Thus to get the bounds of the confidence interval from <span class="math inline">\(\pm 1.651\)</span> to values in terms of grams of weight per month older, we have</p>
+<p><span class="math display">\[136.903 \pm 1.651 \times 4.858
+= [128.882, 144.924]\]</span></p>
 <!--# figure out why these intervals are not super close-->
 <!--# change back to 3 digits-->
-<p>Thus, we are 95% confident that the interval 128.882 to 144.924 contains <span class="math inline">\(\beta_{age}\)</span>, the true slope for age.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> More specifically in terms of the question, this means we are 95% confident that after accounting for sex, taxon, and number of lemurs in the litter, the weight of young lemurs increases between 128.882 to 144.924 grams, on average, as the age increases by one month. Recall that the “confidence” referenced here is our confidence in the statistical methods. That if we were to repeat the process of collecting 252 observations, fitting the same model, and making a confidence interval for the coefficient of age, about 95% of those intervals will actually contain the population coefficient. We cannot say for certain, however, whether this individual interval does or does not contain the true population coefficient for age.</p>
+<p>Thus, we are 95% confident that the interval 128.882 to 144.924 contains <span class="math inline">\(\beta_{age}\)</span>, the true slope for age.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> More specifically in terms of the question, this means we are 95% confident that after accounting for sex, taxon, and number of lemurs in the litter, the weight of young lemurs increases between 128.882 to 144.924 grams, on average, as the age increases by one month. Recall that the “confidence” referenced here is our confidence in the statistical methods. That if we were to repeat the process of collecting 252 observations, fitting the same model, and making a confidence interval for the coefficient of age, about 95% of those intervals will actually contain the population coefficient. We cannot say for certain, however, whether this individual interval does or does not contain the true population coefficient for age.</p>
 <div class="yourturn">
 <p>Confidence intervals typically have confidence levels between 90% and 99%. Suppose you are considering three possible confidence levels: 90%, 95%, and 99%.</p>
 <ul>
 <li><p>Which confidence level will you choose to get the most accurate interval?</p></li>
-<li><p>Which confidence level will you choose to get the most precise interval?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p></li>
+<li><p>Which confidence level will you choose to get the most precise interval?<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p></li>
 </ul>
 </div>
-</section></section><section id="sec-mlr-conditions-diagnositics" class="level2" data-number="8.5"><h2 data-number="8.5" class="anchored" data-anchor-id="sec-mlr-conditions-diagnositics">
+</section><section id="sec-mlr-theory-predict" class="level3" data-number="8.4.4"><h3 data-number="8.4.4" class="anchored" data-anchor-id="sec-mlr-theory-predict">
+<span class="header-section-number">8.4.4</span> Prediction intervals</h3>
+<p>In <a href="05-slr-inference.html#sec-slr-theory-predict" class="quarto-xref"><span>Section 5.9.5</span></a>, we introduced a theory-based approach to construct intervals to quantify the uncertainty in predictions. Intervals produced from mathematical equations are more exact and have much lower computational time compared to intervals computed using simulation-based methods. As with simple linear regression, however, we do require stricter adherence to the model conditions (<span class="quarto-unresolved-ref">?sec-mlr-conditions-diagnostics</span>).</p>
+<p>Similar to interval for simple linear regression, <a href="#eq-mlr-pred-int-general" class="quarto-xref">Equation&nbsp;<span>8.1</span></a> is the general form for the intervals used to quantify uncertainty in predictions.</p>
+<p><span id="eq-mlr-pred-int-general"><span class="math display">\[\hat{y} \pm t^* \times SE \tag{8.1}\]</span></span></p>
+<p>where <span class="math inline">\(t^* \sim t_{n-p-1}\)</span>.</p>
+<p>In this formula, <span class="math inline">\(\hat{y}\)</span> is the predicted value, <span class="math inline">\(t^*\)</span> is the critical value and <span class="math inline">\(SE\)</span> is the standard error for the prediction.</p>
+<p>The predicted value <span class="math inline">\(\hat{y}\)</span> is the value output by the model given a particular value of the predictor variable. The critical value <span class="math inline">\(t^*\)</span> is determined by the confidence level as introduced in <a href="#sec-mlr-theory-ci" class="quarto-xref"><span>Section 8.4.3</span></a>. It is the value on the <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom, such that <span class="math inline">\(C\%\)</span> of the area under the curve is between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span>.</p>
+<p>Recall that the model outputs the predicted mean value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions <span class="math inline">\((SE)\)</span> , however, differ depending on the type of prediction we’re making.</p>
+<!--# start here.-->
+<ul>
+<li><p>the equations utilize matrix notation, so we reserve the notation for the appendix. note that the comparison is the same as with simple linearregression if we are doing intervals for individual predictions or the mean preidiction.</p></li>
+<li><p>link to notes for equations: <a href="https://sta221-sp26.github.io/hw/hw-03.html#exercise-9" class="uri">https://sta221-sp26.github.io/hw/hw-03.html#exercise-9</a></p></li>
+<li><p>show the table with the SE and intervals</p></li>
+<li><p>your turn - whcih interval is wider, has larger standard error. is this what you expect?</p></li>
+<li><p>interpret the intervals.</p></li>
+<li><p>which interval is like the obotstrap interval? is this what you expect?</p></li>
+</ul></section></section><section id="sec-mlr-conditions-diagnositics" class="level2" data-number="8.5"><h2 data-number="8.5" class="anchored" data-anchor-id="sec-mlr-conditions-diagnositics">
 <span class="header-section-number">8.5</span> Model conditions and diagnostics</h2>
 <p>The simulation- and theory-based inference methods rely on a set of assumptions about the relationship between the response and predictor variables in the population (<a href="#sec-mlr-inf-foundation" class="quarto-xref"><span>Section 8.4.1</span></a>). We are unable to check whether these assumptions truly hold in the population, so we use the sample data to evaluate whether they hold in the data using model conditions. We also use model diagnostics to assess whether there are outliers in the data that are having an out-sized influence on the model results. These model conditions and diagnostics are the same the ones for simple linear regression (<a href="06-slr-conditions.html" class="quarto-xref"><span>Chapter 6</span></a>) with some additional considerations for the multiple predictor variables. Here we will show the conditions and diagnostics applied to the lemur model. See <a href="06-slr-conditions.html" class="quarto-xref"><span>Chapter 6</span></a> for a detailed introduction to these topics.</p>
 <section id="model-conditions" class="level3" data-number="8.5.1"><h3 data-number="8.5.1" class="anchored" data-anchor-id="model-conditions">
@@ -1174,15 +1275,15 @@ P(|t| &gt; |28.181|) = P(t &lt; -28.181) + P(t &gt; 28.181)
 <div class="cell-output-display">
 <div id="fig-mlr-resid-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-resid-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;8.4: Residuals versus predicted for lemurs model"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.5: Residuals versus predicted for lemurs model"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-resid-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.4: Residuals versus predicted for lemurs model
+Figure&nbsp;8.5: Residuals versus predicted for lemurs model
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p>Based on <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>, the linearity condition is <u><strong>satisfied</strong></u>. The scatterplot shows no discernible pattern and the points are randomly scattered around <span class="math inline">\(\text{residual } = 0\)</span>. There is one point that stands out as an outlier with a large magnitude residual around 3500 grams. We will use model diagnostics to determine whether this outlier is, in fact, an influential point.</p>
+<p>Based on <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>, the linearity condition is <u><strong>satisfied</strong></u>. The scatterplot shows no discernible pattern and the points are randomly scattered around <span class="math inline">\(\text{residual } = 0\)</span>. There is one point that stands out as an outlier with a large magnitude residual around 3500 grams. We will use model diagnostics to determine whether this outlier is, in fact, an influential point.</p>
 <p>When the plot of residuals versus fitted values is randomly scattered as the one in this analysis, it is often sufficient to stop there when evaluating the linearity condition. If the plot of residuals versus predicted values shows some discernible pattern (for example, a parabola), we need to more closely examine the residuals versus each predictor variable to determine which variable has a non-linear relationship with the response. We may also choose to evaluate the residuals versus each predictor for more information about how well the model captures the underlying relationship with each predictor.</p>
 <div id="fig-mlr-resid-plot-by-var" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-resid-plot-by-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1190,7 +1291,7 @@ Figure&nbsp;8.4: Residuals versus predicted for lemurs model
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-resid-plot-by-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-resid-plot-by-var-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-resid-plot-by-var-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-1.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.5&nbsp;(a): Residuals versus age"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-1.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.6&nbsp;(a): Residuals versus age"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-resid-plot-by-var-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Residuals versus age
@@ -1200,7 +1301,7 @@ Figure&nbsp;8.4: Residuals versus predicted for lemurs model
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-resid-plot-by-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-resid-plot-by-var-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-resid-plot-by-var-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-2.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.5&nbsp;(b): Residuals versus taxon"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-2.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.6&nbsp;(b): Residuals versus taxon"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-resid-plot-by-var-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Residuals versus taxon
@@ -1212,7 +1313,7 @@ Figure&nbsp;8.4: Residuals versus predicted for lemurs model
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-resid-plot-by-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-resid-plot-by-var-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-resid-plot-by-var-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-3.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.5&nbsp;(c): Residuals versus sex"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-3.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.6&nbsp;(c): Residuals versus sex"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-resid-plot-by-var-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (c) Residuals versus sex
@@ -1222,7 +1323,7 @@ Figure&nbsp;8.4: Residuals versus predicted for lemurs model
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-resid-plot-by-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-resid-plot-by-var-4" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-resid-plot-by-var-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-4.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.5&nbsp;(d): Residuals versus lemurs in litter"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-4.png" class="lightbox" data-gallery="fig-mlr-resid-plot-by-var" title="Figure&nbsp;8.6&nbsp;(d): Residuals versus lemurs in litter"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-by-var-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-resid-plot-by-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-resid-plot-by-var-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (d) Residuals versus lemurs in litter
@@ -1232,12 +1333,12 @@ Figure&nbsp;8.4: Residuals versus predicted for lemurs model
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-resid-plot-by-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.5: Residuals verus each predictor for lemurs model
+Figure&nbsp;8.6: Residuals verus each predictor for lemurs model
 </figcaption></figure>
 </div>
-<p><a href="#fig-mlr-resid-plot-by-var" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> shows plots of the residuals versus each of the four predictor variables. We use the same criteria when evaluating the plots of residuals versus quantitative predictors. For example, the plot of residuals versus <code>age</code> in <a href="#fig-mlr-resid-plot-by-var-1" class="quarto-xref">Figure&nbsp;<span>8.5 (a)</span></a> shows there may be a non-linear relationships between <code>age</code> and <code>weight</code>. This is the same non-linearity we observed in the EDA in <a href="07-mlr.html#sec-lemurs-intro" class="quarto-xref"><span>Section 7.1</span></a>. Thus, we may consider using a transformed version of <code>age</code> in the model that more accurately represents the change in weight as age increases (see <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>). We can then compare the model with the transformed age to the current model to determine which one is an overall better fit for the data. We discuss model comparison and selection in <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a>.</p>
-<p>We use boxplots to examine the relationship between the response variable and categorical predictors. We expect the boxplots to be mostly vertically centered around <span class="math inline">\(\text{residual }=0\)</span> for each category of a given predictor. For example, in the plot of <code>taxon</code> versus residual in <a href="#fig-mlr-resid-plot-by-var-2" class="quarto-xref">Figure&nbsp;<span>8.5 (b)</span></a>, we see the center of each boxplot is close (though not exactly) equal to 0 and that in general the boxes for each taxon are spread around 0. One way to think about it is given a particular taxon, PCOQ for example, we cannot determine with almost any confidence whether the residual will be positive or negative. Therefore, the model sufficiently captures the relationship between taxon and weight. The same is true for <code>sex</code> in <a href="#fig-mlr-resid-plot-by-var-3" class="quarto-xref">Figure&nbsp;<span>8.5 (c)</span></a>.</p>
-<p>The residuals versus <code>litter_size</code> in <a href="#fig-mlr-resid-plot-by-var-4" class="quarto-xref">Figure&nbsp;<span>8.5 (d)</span></a> is randomly scattered, so the relationship between <code>litter_size</code> and <code>weight</code> is adequately captured in the model.</p>
+<p><a href="#fig-mlr-resid-plot-by-var" class="quarto-xref">Figure&nbsp;<span>8.6</span></a> shows plots of the residuals versus each of the four predictor variables. We use the same criteria when evaluating the plots of residuals versus quantitative predictors. For example, the plot of residuals versus <code>age</code> in <a href="#fig-mlr-resid-plot-by-var-1" class="quarto-xref">Figure&nbsp;<span>8.6 (a)</span></a> shows there may be a non-linear relationships between <code>age</code> and <code>weight</code>. This is the same non-linearity we observed in the EDA in <a href="07-mlr.html#sec-lemurs-intro" class="quarto-xref"><span>Section 7.1</span></a>. Thus, we may consider using a transformed version of <code>age</code> in the model that more accurately represents the change in weight as age increases (see <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>). We can then compare the model with the transformed age to the current model to determine which one is an overall better fit for the data. We discuss model comparison and selection in <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a>.</p>
+<p>We use boxplots to examine the relationship between the response variable and categorical predictors. We expect the boxplots to be mostly vertically centered around <span class="math inline">\(\text{residual }=0\)</span> for each category of a given predictor. For example, in the plot of <code>taxon</code> versus residual in <a href="#fig-mlr-resid-plot-by-var-2" class="quarto-xref">Figure&nbsp;<span>8.6 (b)</span></a>, we see the center of each boxplot is close (though not exactly) equal to 0 and that in general the boxes for each taxon are spread around 0. One way to think about it is given a particular taxon, PCOQ for example, we cannot determine with almost any confidence whether the residual will be positive or negative. Therefore, the model sufficiently captures the relationship between taxon and weight. The same is true for <code>sex</code> in <a href="#fig-mlr-resid-plot-by-var-3" class="quarto-xref">Figure&nbsp;<span>8.6 (c)</span></a>.</p>
+<p>The residuals versus <code>litter_size</code> in <a href="#fig-mlr-resid-plot-by-var-4" class="quarto-xref">Figure&nbsp;<span>8.6 (d)</span></a> is randomly scattered, so the relationship between <code>litter_size</code> and <code>weight</code> is adequately captured in the model.</p>
 </section><section id="independence" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="independence">Independence</h4>
 <p>The next condition in LINE is independence. This condition is based on the assumption that the residuals are independent of one another; however, we often use information about the observations to evaluate this condition. As with simple linear regression, we use what we know about the subject matter and data collection process to evaluate whether it is reasonable to treat the observations as independent in the model. If the data have a time-ordered or spatial component, or were collected from subgroups not accounted for in the model, we can analyze the residuals to assess if there are violations in independence due to time or spatial correlation, or correlation with in a cluster.</p>
 <p>Based on what we know about the lemur data, we can conclude that the independence condition is <u><strong>satisfied</strong></u>, and the observations can reasonably be treated as independent of one another. This means that the residuals for one lemur do not provide information about the residuals of another lemur.</p>
@@ -1248,15 +1349,15 @@ Figure&nbsp;8.5: Residuals verus each predictor for lemurs model
 <div class="cell-output-display">
 <div id="fig-mlr-resid-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-resid-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;8.6: Distribution of residuals with normal density curve"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;8.7: Distribution of residuals with normal density curve"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-resid-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.6: Distribution of residuals with normal density curve
+Figure&nbsp;8.7: Distribution of residuals with normal density curve
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p>The distribution of the residuals with a normal curve applied is shown in <a href="#fig-mlr-resid-dist" class="quarto-xref">Figure&nbsp;<span>8.6</span></a>. We see the outlier with the large residual again in this plot. Focusing on the distribution without the outlier, the normal curve reasonably (though not perfectly) describes the distribution. Though not exactly, the distribution is approximately unimodal and symmetric, when the outlier is ignored. Therefore, we conclude the normality condition is <u><strong>satisfied</strong></u>.</p>
+<p>The distribution of the residuals with a normal curve applied is shown in <a href="#fig-mlr-resid-dist" class="quarto-xref">Figure&nbsp;<span>8.7</span></a>. We see the outlier with the large residual again in this plot. Focusing on the distribution without the outlier, the normal curve reasonably (though not perfectly) describes the distribution. Though not exactly, the distribution is approximately unimodal and symmetric, when the outlier is ignored. Therefore, we conclude the normality condition is <u><strong>satisfied</strong></u>.</p>
 <p>Simulation-based inference does not rely on any assumptions about the distribution of the residuals, so it is robust to violations in the normality condition. From the Central Limit Theorem, theory-based methods for inference on the model coefficient are also robust to violations in normality when the sample is large enough. Typically 30 is used as the threshold for a “large enough” sample, but this value should not be treated as absolute. Thus, the closer the sample size is to 30, the closer the distribution of residuals needs to fit a normal distribution for reliable inferential results.</p>
 </section><section id="equal-variance" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="equal-variance">Equal variance</h4>
 <p>The final model condition in LINE is the equal variance condition. This condition comes from the assumption about the distribution of the error terms, <span class="math inline">\(\epsilon_i \sim N(0, \sigma^2_{\epsilon})\)</span>, that the variance in this distribution, <span class="math inline">\(\sigma^2_{\epsilon}\)</span> is the same for all observations regardless of the values of the predictors. Thus, the variability of the residuals should be the same for all predicted values (combinations of predictors).</p>
@@ -1264,75 +1365,75 @@ Figure&nbsp;8.6: Distribution of residuals with normal density curve
 <div class="cell-output-display">
 <div id="fig-mlr-equal-var" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-equal-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;8.7: Residuals versus predicted with markers to check equal variance"><img src="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;8.8: Residuals versus predicted with markers to check equal variance"><img src="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-equal-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.7: Residuals versus predicted with markers to check equal variance
+Figure&nbsp;8.8: Residuals versus predicted with markers to check equal variance
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-mlr-equal-var" class="quarto-xref">Figure&nbsp;<span>8.7</span></a> shows a plot of th residuals versus predicted values, similar to <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>. As we move along the <span class="math inline">\(x\)</span>-axis, we are looking to see if the vertical spread is approximately equal for all observations. To help evaluate this, we have added vertical lines encompassing the majority of the data. Note as we move along the <span class="math inline">\(x\)</span>-axis, the vertical spread fo the residuals is largely captured in by these vertical lines. Thus, the equal variance condition is <u><strong>satisfied</strong></u>. As with other conditions, we can ignore the high outlier when assessing the condition. Additionally, we are looking for noticeable violations in the conditions rather than perfect adherence when making the determination.</p>
+<p><a href="#fig-mlr-equal-var" class="quarto-xref">Figure&nbsp;<span>8.8</span></a> shows a plot of th residuals versus predicted values, similar to <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>. As we move along the <span class="math inline">\(x\)</span>-axis, we are looking to see if the vertical spread is approximately equal for all observations. To help evaluate this, we have added vertical lines encompassing the majority of the data. Note as we move along the <span class="math inline">\(x\)</span>-axis, the vertical spread fo the residuals is largely captured in by these vertical lines. Thus, the equal variance condition is <u><strong>satisfied</strong></u>. As with other conditions, we can ignore the high outlier when assessing the condition. Additionally, we are looking for noticeable violations in the conditions rather than perfect adherence when making the determination.</p>
 <p>Simulation-based inference does not rely on any assumptions about the distribution of the residuals, so it is robust to violations in the equal variance condition. The regression standard error <span class="math inline">\(\hat{\sigma}_{\epsilon}\)</span> is used to compute <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> in theory-based inference, so violations in the equal variance condition could lead to unreliable inference results. Therefore, any violations should be addressed before moving forward with inference. <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a> introduces model transformations that can be used to address such violations.</p>
 </section></section><section id="model-diagnostics" class="level3" data-number="8.5.2"><h3 data-number="8.5.2" class="anchored" data-anchor-id="model-diagnostics">
 <span class="header-section-number">8.5.2</span> Model diagnostics</h3>
-<p>After checking the model conditions, we evaluate model diagnostics to identify whether there are observations that have out-sized influence on the model. In <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>, we observed the outlying observation with the very large residual. Using model diagnostics, we can assess whether this observation is merely an outlier or, in fact, an influential point.</p>
+<p>After checking the model conditions, we evaluate model diagnostics to identify whether there are observations that have out-sized influence on the model. In <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>, we observed the outlying observation with the very large residual. Using model diagnostics, we can assess whether this observation is merely an outlier or, in fact, an influential point.</p>
 <section id="cooks-distance" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="cooks-distance">Cook’s distance</h4>
 <p>We begin by using Cook’s distance to determine whether there are influential points in the data.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-mlr-cooks-d" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-cooks-d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;8.8: Cook’s distance for each observation in lemur analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;8.9: Cook’s distance for each observation in lemur analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-cooks-d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.8: Cook’s distance for each observation in lemur analysis
+Figure&nbsp;8.9: Cook’s distance for each observation in lemur analysis
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-mlr-cooks-d" class="quarto-xref">Figure&nbsp;<span>8.8</span></a> shows Cook’s distance for each observation. There is a horizontal line at <span class="math inline">\(\text{Cook's distance} = 1\)</span> marking the threshold for influential observations. In this analysis, all the values of Cook’s distance are well below 1 (the maximum value is 0.218), so there are no influential points in the data. Thus, even though we have identified the an outlier, this observations did not have an out-sized impact on the estimated model coefficients.</p>
+<p><a href="#fig-mlr-cooks-d" class="quarto-xref">Figure&nbsp;<span>8.9</span></a> shows Cook’s distance for each observation. There is a horizontal line at <span class="math inline">\(\text{Cook's distance} = 1\)</span> marking the threshold for influential observations. In this analysis, all the values of Cook’s distance are well below 1 (the maximum value is 0.218), so there are no influential points in the data. Thus, even though we have identified the an outlier, this observations did not have an out-sized impact on the estimated model coefficients.</p>
 <p>Using the modeling workflow outlined in <a href="06-slr-conditions.html#sec-model-in-practice" class="quarto-xref"><span>Section 6.5</span></a>, if we have no influential points, we do not need to examine the components of Cook’s distance, leverage and standardized residuals. If we do identify an influential point, however, we can use leverage and standardized residuals to better understand how a given observation differs from the general trend of the data.</p>
 <p>Though we did not find an influential point in this analysis, we will briefly discuss leverage and standardized residuals for multiple linear regression. See <a href="06-slr-conditions.html#sec-model-diagnostics" class="quarto-xref"><span>Section 6.4</span></a> for a introduction to these topics.</p>
 </section><section id="leverage" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="leverage">Leverage</h4>
 <p>In simple linear regression, an observation’s leverage is a measure of how far its value of the predictor is from the mean value of the predictor in the data. That definition is expanded in multiple linear regression, where an observation’s leverage is how far its combination of predictors is from the average (typical) combination of predictors. Mathematical details for computing leverage in multiple linear regression are in <a href="appendix-linear.html#sec-hat-matrix" class="quarto-xref"><span>Section A.4</span></a>.</p>
 <div class="yourturn">
-<p>Suppose we decide to fit a model using <code>taxon</code>, <code>age</code>, <code>sex</code>, and <code>litter_size</code> to predict the body length of young lemurs (instead of the weight)? How does the leverage for each observation compare in this model to the leverage in the model we’ve examined using these variables to predict weight?<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<p>Suppose we decide to fit a model using <code>taxon</code>, <code>age</code>, <code>sex</code>, and <code>litter_size</code> to predict the body length of young lemurs (instead of the weight)? How does the leverage for each observation compare in this model to the leverage in the model we’ve examined using these variables to predict weight?<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
 </div>
 <p>An observation has <strong>large leverage</strong> if its combination of predictors is far away from the typical combination in the data. We use a threshold of <span class="math inline">\(\frac{2(p+1)}{n}\)</span>, where <span class="math inline">\(p+1\)</span> is the number of terms in the model and <span class="math inline">\(n\)</span> is the sample size, to determine whether an observation has large leverage.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-mlr-leverage" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;8.9: Leverage for observations in lemurs analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;8.10: Leverage for observations in lemurs analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.9: Leverage for observations in lemurs analysis
+Figure&nbsp;8.10: Leverage for observations in lemurs analysis
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-mlr-leverage" class="quarto-xref">Figure&nbsp;<span>8.9</span></a> shows the leverage for each observation in the data. The leverage threshold 0.048 is marked on the graph. Based on this graph, there are 13 observations with large leverage. These are observations who have a combination of predictors that is far from the typical combination in the data. Given the multidimensionality of the data, it is not as straight forward to identify what makes these observations have large leverage as it was in simple linear regression. We can examine the data further to see what (if anything) these large leverage observations have in common and how they differ from the typical combination of predictors in the data. From Cook’s distance computed earlier; however, we know that these observations are not influential.</p>
+<p><a href="#fig-mlr-leverage" class="quarto-xref">Figure&nbsp;<span>8.10</span></a> shows the leverage for each observation in the data. The leverage threshold 0.048 is marked on the graph. Based on this graph, there are 13 observations with large leverage. These are observations who have a combination of predictors that is far from the typical combination in the data. Given the multidimensionality of the data, it is not as straight forward to identify what makes these observations have large leverage as it was in simple linear regression. We can examine the data further to see what (if anything) these large leverage observations have in common and how they differ from the typical combination of predictors in the data. From Cook’s distance computed earlier; however, we know that these observations are not influential.</p>
 </section><section id="standardized-residuals" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="standardized-residuals">Standardized residuals</h4>
-<p>Standardized residuals are used to identify observations that have large magnitude residuals and thus the model poorly fit. We already noticed such an observation in <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>, so why do we need standardized residuals? Recall that residuals are on the same scale and have the same units as the response variable. Thus, if we use the raw residuals, we would need to determine a new threshold for identifying outliers in each analysis. On the other hand, standardized residuals are on the same scale in every analysis (mean of 0 and standard deviation of 1) with no units, so we can use a universal threshold that applies to every analysis.</p>
+<p>Standardized residuals are used to identify observations that have large magnitude residuals and thus the model poorly fit. We already noticed such an observation in <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>, so why do we need standardized residuals? Recall that residuals are on the same scale and have the same units as the response variable. Thus, if we use the raw residuals, we would need to determine a new threshold for identifying outliers in each analysis. On the other hand, standardized residuals are on the same scale in every analysis (mean of 0 and standard deviation of 1) with no units, so we can use a universal threshold that applies to every analysis.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-mlr-std-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-std-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;8.10: Standardized residuals versus predicted values for lemur model"><img src="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;8.11: Standardized residuals versus predicted values for lemur model"><img src="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-std-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.10: Standardized residuals versus predicted values for lemur model
+Figure&nbsp;8.11: Standardized residuals versus predicted values for lemur model
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-mlr-std-resid" class="quarto-xref">Figure&nbsp;<span>8.10</span></a> shows the standardized residuals versus predicted values, with lines at -3 and 3, the thresholds for identifying outliers. There is one observation that is an outlier in the <span class="math inline">\(Y\)</span> direction with a standardized residual of 6.442. Though this observation is a noticeable outlier in the model performance, it is not an influential point based on Cook’s distance computed earlier.</p>
+<p><a href="#fig-mlr-std-resid" class="quarto-xref">Figure&nbsp;<span>8.11</span></a> shows the standardized residuals versus predicted values, with lines at -3 and 3, the thresholds for identifying outliers. There is one observation that is an outlier in the <span class="math inline">\(Y\)</span> direction with a standardized residual of 6.442. Though this observation is a noticeable outlier in the model performance, it is not an influential point based on Cook’s distance computed earlier.</p>
 <div class="yourturn">
 <p>Consider the outlier observation. The residual for this observation is 3380.42 and the standardized residual for this observation is 6.442.</p>
 <ul>
 <li>Explain what the value of the residual means in the context of the data.</li>
-<li>Explain what the value of the standardized residual means in the context of the data.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>
+<li>Explain what the value of the standardized residual means in the context of the data.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>
 </li>
 </ul>
 </div>
@@ -1342,16 +1443,14 @@ Figure&nbsp;8.10: Standardized residuals versus predicted values for lemur model
 <p>Ideally the predictors in a multiple linear regression model would be completely independent of one another, so knowing something about one predictor would not provide information other predictors. In practice, however, there is often some correlation between a subset of the predictors. This is why some data scientists prefer to interpret coefficients using the language “after adjusting for all other predictors” rather than “holding all else constant” (see <a href="07-mlr.html#sec-mlr-interpret" class="quarto-xref"><span>Section 7.4</span></a>). This is typically not an issue for the model, but issues may arise if two or more predictors are too highly correlated. High correlation among predictors is called <strong>multicollinearity</strong>. More specifically, multicollinearity means there is near-linear dependencies between the predictors. More details of the mathematics behind multicollinearity are in <a href="appendix-linear.html#sec-multicollinearity-matrix" class="quarto-xref"><span>Section A.7</span></a>.</p>
 <p>If two or more predictors are exactly correlated, then we are unable to compute estimates for some of the model coefficients. This will often show up as <code>NA</code> in the model output where the estimated coefficient should be, so software provides a clear signal when this is the case. The more challenging issue, then, is when predictors are strongly correlated, i.e., when there is multicollinearity. Though we are still able to obtain estimates for the model coefficients, there are other concerns with the associated inferential statistics.</p>
 <p>When multicollinearity is present, the standard errors for correlated predictors <span class="math inline">\((SE_{\hat{\beta}_j})\)</span> are very large (see <a href="appendix-linear.html#sec-multicollinearity-matrix" class="quarto-xref"><span>Section A.7</span></a> for mathematical details). This is because when there is multicollinearity, different combinations of the coefficient estimates produce equally good model fits. Therefore, it becomes less clear what combination of coefficient estimates result in the “best fit” model. This ultimately leads to unreliable inferential conclusions, because the confidence intervals and hypothesis tests in <a href="#sec-mlr-theory-inf" class="quarto-xref"><span>Section 8.4</span></a> rely on <span class="math inline">\(SE_{\hat{\beta}_j}\)</span>. Because the standard errors are inflated, we may conclude there is no statistically significant relationship between the response and a predictor, when, in fact, there is (i.e., make a Type 1 error).</p>
-<p>We detect multicollinearity using the <strong>variance inflation factor (VIF)</strong>. This is a measure of how much <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> for a predictor is inflated due to its correlation with other predictors. <a href="#eq-vif" class="quarto-xref">Equation&nbsp;<span>8.7</span></a> is the VIF for the <span class="math inline">\(j^{th}\)</span> predictor.</p>
-<p><span id="eq-vif"><span class="math display">\[
-VIF_j = \frac{1}{1 - R^2_j}
-\tag{8.7}\]</span></span></p>
+<p>We detect multicollinearity using the <strong>variance inflation factor (VIF)</strong>. This is a measure of how much <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> for a predictor is inflated due to its correlation with other predictors. <span class="quarto-unresolved-ref">?eq-vif</span> is the VIF for the <span class="math inline">\(j^{th}\)</span> predictor.</p>
+<p><span class="math display">\[VIF_j = \frac{1}{1 - R^2_j}\]</span> {#eq-vif}</p>
 <p>where <span class="math inline">\(R^2_j\)</span> is the proportion of variation in predictor <span class="math inline">\(X_j\)</span> that is explained by the other predictors. In other words, VIF considers not only if predictor <span class="math inline">\(X_j\)</span> is correlated with one other predictor, but also if it can explained as a linear combination of two or more other predictors.</p>
-<p>Because we expect at least some correlation between the predictors, we conclude that concerning multicollinearity exists if VIF is 10 or greater. <a href="#tbl-lemur-vif" class="quarto-xref">Table&nbsp;<span>8.6</span></a> are the VIF for the predictors in <a href="#tbl-lemur-model-inf" class="quarto-xref">Table&nbsp;<span>8.1</span></a>.</p>
+<p>Because we expect at least some correlation between the predictors, we conclude that concerning multicollinearity exists if VIF is 10 or greater. <a href="#tbl-lemur-vif" class="quarto-xref">Table&nbsp;<span>8.7</span></a> are the VIF for the predictors in <a href="#tbl-lemur-model-inf" class="quarto-xref">Table&nbsp;<span>8.1</span></a>.</p>
 <div class="cell">
 <div id="tbl-lemur-vif" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemur-vif-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8.6: VIF for predictors in <a href="#tbl-lemur-vif" class="quarto-xref">Table&nbsp;<span>8.6</span></a>
+Table&nbsp;8.7: VIF for predictors in <a href="#tbl-lemur-vif" class="quarto-xref">Table&nbsp;<span>8.7</span></a>
 </figcaption><div aria-describedby="tbl-lemur-vif-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1595,11 +1694,12 @@ Harrell Jr, Frank E. 2025. <span>“Rms: Regression Modeling Strategies.”</spa
 <a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a>
 </li>
 <li id="fn5"><p>It corresponds to a hypothesis test with <span class="math inline">\(\alpha = 0.05\)</span>. Yes, the interval is consistent, because the null hypothesized value 0 is not in the interval.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>This is a large test statistic, so it appears to provide evidence against the null hypothesis. We will complete the last two steps of hypothesis testing to see the conclusion.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Our calculations do not exactly match the confidence interval produced by software, because we have used rounded values of the estimated slope, critical value, and standard error.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>The confidence level 99% produces the most accurate interval. The confidence level 90% produces the most precise interval.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10"><p>The residual means that the observed weight for this lemur is 3380.42 grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is 6.442standard errors above the mean of the distribution of residuals.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>We are 95% confident that the mean weight among 10-month-old male lemurs from the VRUB taxon who were born into litters with 4 lemurs is 1859.728 to 2642.688 grams.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>This is a large test statistic, so it appears to provide evidence against the null hypothesis. We will complete the last two steps of hypothesis testing to see the conclusion.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Our calculations do not exactly match the confidence interval produced by software, because we have used rounded values of the estimated slope, critical value, and standard error.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>The confidence level 99% produces the most accurate interval. The confidence level 90% produces the most precise interval.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>The residual means that the observed weight for this lemur is 3380.42 grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is 6.442standard errors above the mean of the distribution of residuals.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
