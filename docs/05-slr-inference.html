@@ -1617,14 +1617,11 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <p>where <span class="math inline">\(t^* \sim t_{n-2}\)</span> .</p>
 <p><a href="#eq-pred-int-general" class="quarto-xref">Equation&nbsp;<span>5.13</span></a> is the general equation for quantifying uncertainty in predictions, such that <span class="math inline">\(\hat{y}\)</span> is the predicted value, <span class="math inline">\(t^*\)</span> is the critical value and <span class="math inline">\(SE\)</span> is the standard error for the prediction.</p>
 <p>The predicted value <span class="math inline">\(\hat{y}\)</span> is the value output by the model given a particular value of the predictor variable. The critical value <span class="math inline">\(t^*\)</span> is determined by the confidence level as introduced in <a href="#sec-slr-theory-ci" class="quarto-xref"><span>Section 5.9.4</span></a>. It is the value on the <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom, such that <span class="math inline">\(C\%\)</span> of the area under the curve is between <span class="math inline">\(-t^*\)</span> and <span class="math inline">\(t^*\)</span>.</p>
-<p>Recall that the model outputs the predicted value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions <span class="math inline">\((SE)\)</span> , however, differ depending on the type of prediction we’re making.</p>
+<p>Recall that the model outputs the predicted mean value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions <span class="math inline">\((SE)\)</span> , however, differ depending on the type of prediction we’re making.</p>
 <div class="yourturn">
 <p>Which type of prediction do you expect to have a wider interval:</p>
 <ul>
 <li>Prediction for the mean value of the response</li>
-</ul>
-<!-- -->
-<ul>
 <li>Prediction for an individual observation ?</li>
 </ul>
 <p>Briefly explain your choice.</p>
@@ -1639,7 +1636,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <div id="tbl-prediction-intervals" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.11: Standard errors and intervals for the mean response and individual response when <code>per_capita_expend = 150</code>
+Table&nbsp;5.11: Standard errors and intervals for the predicted mean response and individual response when <code>per_capita_expend = 150</code>
 </figcaption>
 <div aria-describedby="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">

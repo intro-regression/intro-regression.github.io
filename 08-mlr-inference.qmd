@@ -477,13 +477,11 @@ Theory-based inference for coefficients in a multiple linear regression model is
 
 When doing multiple linear regression, we assume a model structure of the from in @eq-mlr-stat-model.
 
-$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$
- {#eq-mlr-stat-model}
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-mlr-stat-model}
 
 The equation written in terms of the distribution of $Y$ given a combination of predictors $X_1, X_2, \ldots, X_p$ in @eq-mlr-dist-y.
 
-$$Y|X \sim N(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p, \sigma^2_{\epsilon})$$
- {#eq-mlr-dist-y}
+$$Y|X \sim N(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p, \sigma^2_{\epsilon})$$ {#eq-mlr-dist-y}
 
 By @eq-mlr-dist-y, the distribution of the response variable $Y$ given a combination of predictors $X_1, X_2, \ldots, X_p$ is normally distributed, centered at $\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p$ with variance $\sigma^2_{\epsilon}$. Based on this distribution, the following assumptions are made when we conduct multiple linear regression:
 
@@ -499,8 +497,7 @@ Notice that these assumptions are generally the ones for simple linear regressio
 
 In @sec-ch-mlr, we showed how to compute $\hat{\beta}_0, \hat{\beta}_1, \hat{\beta}_2, \ldots, \hat{\beta}_p$, the estimated model coefficients. The remaining parameter $\sigma_{\epsilon}$, called the regression standard error, is the variability of the observations about the regression line. The distance between the observed values and the regression line (the predicted value of $Y$ for a given combination of predictors) is the residual. @eq-mlr-sigma shows how we use the residuals to estimate the regression standard error.
 
-$$\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i=1}^n e_i^2}{n - p -1 }} = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - p -1 }}$$
- {#eq-mlr-sigma}
+$$\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i=1}^n e_i^2}{n - p -1 }} = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - p -1 }}$$ {#eq-mlr-sigma}
 
 This is very similar to @eq-slr-reg-se, the equation to estimate the regression standard error in simple linear regression. The difference is the denominator, $n - p - 1$, where $p$ is the number of predictor terms. The value $n - p - 1$ is the degrees of freedom, the number of observations available to understand variability about the regression line. This stems from the fact that we "use" $p+1$ observations to estimate the model coefficients. In simple linear regression, there is one predictor, so $p = 1$, and the degrees of freedom are $n - 2$ as shown in @sec-estimate-reg-std-err. Let's compute the degrees of freedom for the regression standard error associated with the model in @tbl-lemur-model-inf. There are $n =$ `r nrow(lemurs_sample_young)` observations in the data and $p = 5$ terms for predictors in the model. (Note that even though `taxon` is a single predictor, we need to account for the fact there are two terms for `taxon` estimated in the model). The degrees of freedom are
 
@@ -510,8 +507,7 @@ Thus, there are 246 degrees of freedom, i.e., observations available to understa
 
 The goal is to conduct inference for a model coefficient $\beta_j$, so we ultimately need to estimate the sampling variability in the estimated coefficients $\hat{\beta}_j$. This variability is measured by $SE_{\hat{\beta}_j}$, the standard error of $\hat{\beta}_j$. The formula to compute $SE_{\hat{\beta}_j}$ in @eq-mlr-se-beta is more complex than in the case of simple linear regression, because we need to understand the sampling variability of $\hat{\beta}_j$ in the context of a regression model that includes other predictors.
 
-$$Var_{\hat{\beta}_j} = j^{th} \text{diagonal element of }\hspace{2mm} \hat{\sigma}^2_{\epsilon}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}$$
- {#eq-mlr-se-beta}
+$$Var_{\hat{\beta}_j} = j^{th} \text{diagonal element of }\hspace{2mm} \hat{\sigma}^2_{\epsilon}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}$$ {#eq-mlr-se-beta}
 
 Mathematical details for @eq-mlr-se-beta are in @sec-beta-dist-matrix. For now, we'll focus on a conceptual understanding about why the standard error computed here may be different than the standard error for the same predictor variable in the case of simple linear regression. To illustrate this, let's look at the standard error for `age` in a simple linear regression model and in the model in @tbl-lemur-model-inf. The coefficient estimates and standard errors are printed side-by-side in @tbl-mlr-age-compare.
 
@@ -535,8 +531,7 @@ The estimated standard error for `age` in the simple linear regression model is 
 
 In addition to estimating the sampling variability for model coefficients, by the Central Limit Theorem, we know the full sampling distribution of the model coefficient $\hat{\beta}_j$ is normally distributed, with a mean at the true population coefficient $\beta_j$ and variance $SE_{\hat{\beta}_j}^2$, the standard error squared as shown in @eq-mlr-beta-dist. We use this distribution as the basis for conducting hypothesis tests and computing confidence intervals.
 
-$$\hat{\beta}_j \sim N(\beta_j, SE_{\hat{\beta}_j}^2) $$
- {#eq-mlr-beta-dist}
+$$\hat{\beta}_j \sim N(\beta_j, SE_{\hat{\beta}_j}^2) $$ {#eq-mlr-beta-dist}
 
 <!--# rectify this with SLR - SE squared seems weird, but need to use variance to stay consistent with normal notation. Or maybe change everything to standard deviation? -->
 
@@ -606,8 +601,7 @@ When writing the conclusion, we indicate whether to reject or fail to reject the
 
 In @sec-mlr-bootstrap-ci, we used bootstrapping to simulate the sampling distribution of $\hat{\beta}_j$, and marked the bounds of the middle $C\%$ of the distribution to make the $C\%$ confidence interval. Here, we will use the mathematical results about the distribution of $\hat{\beta}_j$ and compute the confidence intervals using an equation of the form
 
-$$\hat{\beta}_j \pm t^*_{n-p-1} \times SE_{\hat{\beta}_j}$$
- {#eq-mlr-beta-ci}
+$$\hat{\beta}_j \pm t^*_{n-p-1} \times SE_{\hat{\beta}_j}$$ {#eq-mlr-beta-ci}
 
 where $t^*_{n-p-1}$ is the critical value marking the middle $C\%$ of the $t$ distribution with $n - p - 1$ degrees of freedom. Let's construct a 95% confidence interval for `age` to answer the question posed in @sec-mlr-inf-intro :
 
@@ -654,19 +648,59 @@ The predicted value $\hat{y}$ is the value output by the model given a particula
 
 Recall that the model outputs the predicted mean value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions $(SE)$ , however, differ depending on the type of prediction we're making.
 
-<!--# start here.-->
+The formulas for standard error utilize the matrix notation for regression, so we present those in Appendix \[INSERT REF\]. @tbl-lemur-prediction-intervals shows the standard errors and intervals for the two types of predictions for a 10-month old male lemur from the VRUB taxon who was born in a litter of 4 lemurs.
 
-- the equations utilize matrix notation, so we reserve the notation for the appendix. note that the comparison is the same as with simple linearregression if we are doing intervals for individual predictions or the mean preidiction.
+```{r}
+#| label: tbl-lemur-prediction-intervals
+#| tbl-cap:  "Standard errors and 95% intervals for the predicted mean response and individual response"
+
+new_lemur <- tibble(age = 10,
+                    taxon = "VRUB",
+                    sex = "M",
+                    litter_size = 4)
+
+#interval for mean response
+
+mean_predict <- predict(lemurs_model, new_lemur, interval = "confidence", level = 0.95, se.fit = TRUE)
+
+mean_predict_fit <- mean_predict$fit
+mean_predict_se <- mean_predict$se.fit
+
+mean_predict_all <- bind_cols(mean_predict_fit, mean_predict_se)
+
+names(mean_predict_all) <- c("Predicted", "Lower bound", "Upper bound", "Std. Error")
+
+# interval for individual response 
+
+indiv_predict <- predict(lemurs_model, new_lemur, interval = "prediction", level = 0.95, se.fit = TRUE)
+
+indiv_predict_fit <- indiv_predict$fit
+indiv_predict_se <- sqrt(indiv_predict$se.fit^2 + indiv_predict$residual.scale^2)
+
+indiv_predict_all <- bind_cols(indiv_predict_fit, indiv_predict_se)
+
+names(indiv_predict_all) <- c("Predicted", "Lower bound", "Upper bound", "Std. Error")
+
+bind_rows(mean_predict_all, indiv_predict_all)  |>
+  select(Predicted, `Std. Error`, `Lower bound`, `Upper bound`) |>
+  mutate(Type = c("Mean response", "Individual response"), .before = 1) |>
+  kable(digits = 3)
+
+```
+
+::: {.yourturn latex="1"}
+Use the intervals in @tbl-lemur-prediction-intervals.
+
+- Jackson is a 10-month old, male lemur from the VRUB taxon, who was born in a litter of 4 lemurs. We are 95% confident his weight is between what range of values?
+
+- Which interval corresponds to the interval constructed by bootstrapping in @sec-mlr-bootstrap-pred-intervals ?[^08-mlr-inference-10]
+:::
+
+[^08-mlr-inference-10]: We use the prediction interval for an individual observation. We are 95% confident Jackson's weight is between `r round(indiv_predict_fit[2], 3)` to `r round(indiv_predict_fit[3], 3)` grams.
+
+    The interval that corresponds with the interval constructed by bootstrapping is the interval for the estimated mean response, `r round(mean_predict_fit[2], 3)` to `r round(mean_predict_fit[3], 3)`
 
 - link to notes for equations: <https://sta221-sp26.github.io/hw/hw-03.html#exercise-9>
-
-- show the table with the SE and intervals
-
-- your turn - whcih interval is wider, has larger standard error. is this what you expect?
-
-- interpret the intervals.
-
-- which interval is like the obotstrap interval? is this what you expect?
 
 ## Model conditions and diagnostics {#sec-mlr-conditions-diagnositics}
 
@@ -859,10 +893,10 @@ Though we did not find an influential point in this analysis, we will briefly di
 In simple linear regression, an observation's leverage is a measure of how far its value of the predictor is from the mean value of the predictor in the data. That definition is expanded in multiple linear regression, where an observation's leverage is how far its combination of predictors is from the average (typical) combination of predictors. Mathematical details for computing leverage in multiple linear regression are in @sec-hat-matrix.
 
 ::: {.yourturn latex=""}
-Suppose we decide to fit a model using `taxon`, `age`, `sex`, and `litter_size` to predict the body length of young lemurs (instead of the weight)? How does the leverage for each observation compare in this model to the leverage in the model we've examined using these variables to predict weight?[^08-mlr-inference-10]
+Suppose we decide to fit a model using `taxon`, `age`, `sex`, and `litter_size` to predict the body length of young lemurs (instead of the weight)? How does the leverage for each observation compare in this model to the leverage in the model we've examined using these variables to predict weight?[^08-mlr-inference-11]
 :::
 
-[^08-mlr-inference-10]: The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.
+[^08-mlr-inference-11]: The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.
 
 An observation has **large leverage** if its combination of predictors is far away from the typical combination in the data. We use a threshold of $\frac{2(p+1)}{n}$, where $p+1$ is the number of terms in the model and $n$ is the sample size, to determine whether an observation has large leverage.
 
@@ -920,10 +954,10 @@ ggplot(data = lemurs_model_aug, aes(x = .fitted, y = .std.resid)) +
 Consider the outlier observation. The residual for this observation is `r round(max_resid, 3)` and the standardized residual for this observation is `r round(max_std_resid, 3)`.
 
 - Explain what the value of the residual means in the context of the data.
-- Explain what the value of the standardized residual means in the context of the data.[^08-mlr-inference-11]
+- Explain what the value of the standardized residual means in the context of the data.[^08-mlr-inference-12]
 :::
 
-[^08-mlr-inference-11]: The residual means that the observed weight for this lemur is `r round(max_resid, 3)` grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is `r round(max_std_resid,3)`standard errors above the mean of the distribution of residuals.
+[^08-mlr-inference-12]: The residual means that the observed weight for this lemur is `r round(max_resid, 3)` grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is `r round(max_std_resid,3)`standard errors above the mean of the distribution of residuals.
 
 We did not have any influential points in this analysis, but there will be times when do have such points in modeling. @sec-outliers-impact discuses strategies for handling influential points in modeling.
 
@@ -937,8 +971,7 @@ When multicollinearity is present, the standard errors for correlated predictors
 
 We detect multicollinearity using the **variance inflation factor (VIF)**. This is a measure of how much $SE_{\hat{\beta}_j}$ for a predictor is inflated due to its correlation with other predictors. @eq-vif is the VIF for the $j^{th}$ predictor.
 
-$$VIF_j = \frac{1}{1 - R^2_j}$$
- {#eq-vif}
+$$VIF_j = \frac{1}{1 - R^2_j}$$ {#eq-vif}
 
 where $R^2_j$ is the proportion of variation in predictor $X_j$ that is explained by the other predictors. In other words, VIF considers not only if predictor $X_j$ is correlated with one other predictor, but also if it can explained as a linear combination of two or more other predictors.
 

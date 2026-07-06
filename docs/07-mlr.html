@@ -393,7 +393,7 @@ window.Quarto = {
   <li><a href="#sec-intercept" id="toc-sec-intercept" class="nav-link" data-scroll-target="#sec-intercept"><span class="header-section-number">7.4.3</span> Interpreting the intercept</a></li>
   </ul>
 </li>
-  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="header-section-number">7.5</span> Prediction</a></li>
+  <li><a href="#sec-mlr-predict" id="toc-sec-mlr-predict" class="nav-link" data-scroll-target="#sec-mlr-predict"><span class="header-section-number">7.5</span> Prediction</a></li>
   <li>
 <a href="#sec-other-predictors" id="toc-sec-other-predictors" class="nav-link" data-scroll-target="#sec-other-predictors"><span class="header-section-number">7.6</span> Centered and standardized predictors</a>
   <ul class="collapse">
@@ -413,7 +413,7 @@ window.Quarto = {
 <a href="#multiple-linear-regression-in-r" id="toc-multiple-linear-regression-in-r" class="nav-link" data-scroll-target="#multiple-linear-regression-in-r"><span class="header-section-number">7.8</span> Multiple linear regression in R</a>
   <ul class="collapse">
 <li><a href="#sec-mlr-estimate-r" id="toc-sec-mlr-estimate-r" class="nav-link" data-scroll-target="#sec-mlr-estimate-r"><span class="header-section-number">7.8.1</span> Estimating coefficient using R</a></li>
-  <li><a href="#prediction-1" id="toc-prediction-1" class="nav-link" data-scroll-target="#prediction-1"><span class="header-section-number">7.8.2</span> Prediction</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="header-section-number">7.8.2</span> Prediction</a></li>
   <li><a href="#interaction-terms" id="toc-interaction-terms" class="nav-link" data-scroll-target="#interaction-terms"><span class="header-section-number">7.8.3</span> Interaction terms</a></li>
   </ul>
 </li>
@@ -739,27 +739,19 @@ Figure&nbsp;7.4: Bivariate exploratory data analysis
 <section id="statistical-model-for-multiple-linear-regression" class="level3" data-number="7.2.1"><h3 data-number="7.2.1" class="anchored" data-anchor-id="statistical-model-for-multiple-linear-regression">
 <span class="header-section-number">7.2.1</span> Statistical model for multiple linear regression</h3>
 <p>Recall from <a href="04-slr.html#sec-fit-regression" class="quarto-xref"><span>Section 4.3</span></a> that the general form of a model for a response variable <span class="math inline">\(Y\)</span> is</p>
-<p><span id="eq-general-model-recap"><span class="math display">\[
-Y = \text{Model} + \text{Error}
-\tag{7.1}\]</span></span></p>
+<p><span id="eq-general-model-recap"><span class="math display">\[Y = \text{Model} + \text{Error} \tag{7.1}\]</span></span></p>
 <p>In the case of simple linear regression, <span class="math inline">\(\text{Model} = f(X)\)</span> where <span class="math inline">\(X\)</span> is the predictor variable used to explain the variability in <span class="math inline">\(Y\)</span>. Now we will expand <a href="#eq-general-model-recap" class="quarto-xref">Equation&nbsp;<span>7.1</span></a> to the case in which multiple predictor variables, denoted <span class="math inline">\(\mathbf{X} = X_1, X_2, \ldots, X_p\)</span> are used in combination to explain variability in the response variable <span class="math inline">\(Y\)</span>. The values of the response variable <span class="math inline">\(Y\)</span> are generated based on the following equation</p>
-<p><span id="eq-general-model-mlr"><span class="math display">\[
-\begin{aligned}
+<p><span id="eq-general-model-mlr"><span class="math display">\[\begin{aligned}
 Y &amp;= \text{Model} + \text{Error} \\[5pt]
 &amp; = f(\mathbf{X}) + \epsilon \\[5pt]
 &amp; = f(X_1, X_2, \ldots, X_p) + \epsilon
-\end{aligned}
-\tag{7.2}\]</span></span></p>
+\end{aligned} \tag{7.2}\]</span></span></p>
 <p>where <span class="math inline">\(p\)</span> represents the number of predictor variables and <span class="math inline">\(\epsilon\)</span> is the error term quantifying the amount in which the actual value of <span class="math inline">\(Y\)</span> differs from what is expected from the model <span class="math inline">\(f(X_1, X_2, \ldots, X_p)\)</span>.</p>
 <p><a href="#eq-general-model-mlr" class="quarto-xref">Equation&nbsp;<span>7.2</span></a> is the general form of the model. As with simple linear regression, we know the form of <span class="math inline">\(f(X_1,  X_2, \ldots, X_p)\)</span> when we assume there is a linear relationship between the response and predictor variables. <a href="#eq-general-model-mlr" class="quarto-xref">Equation&nbsp;<span>7.2</span></a> can be more specifically written as a <strong>multiple linear regression model</strong> (MLR) of the form</p>
-<p><span id="eq-mlr-stat-model-1"><span class="math display">\[
-Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon, \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})
-\tag{7.3}\]</span></span></p>
+<p><span id="eq-mlr-stat-model-1"><span class="math display">\[Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon, \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon}) \tag{7.3}\]</span></span></p>
 <p>where <span class="math inline">\(\epsilon \sim N(0, \sigma^2_{\epsilon})\)</span> indicates the error terms are normally distributed with a mean of 0 and variance <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. <a href="#eq-mlr-stat-model-1" class="quarto-xref">Equation&nbsp;<span>7.3</span></a> is the population-level statistical model for multiple linear regression.</p>
 <p>Recall from <a href="04-slr.html#sec-slr-specify" class="quarto-xref"><span>Section 4.3.1</span></a>, the function <span class="math inline">\(f(X) = \mu_{Y|X}\)</span> is the expected value (mean) of <span class="math inline">\(Y\)</span> given a value of the predictor <span class="math inline">\(X\)</span>. Extending this to multiple linear regression, <span class="math inline">\(f(\mathbf{X}) = f(X_1, X_2, \ldots, X_p)\)</span> outputs the expected value of <span class="math inline">\(Y\)</span> for a combination of the predictors. Therefore,</p>
-<p><span id="eq-mlr-exp-y"><span class="math display">\[
-\mu_{Y|\mathbf{X}} = \mu_{Y|X_1, X_2, \ldots, X_p} = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p
-\tag{7.4}\]</span></span></p>
+<p><span id="eq-mlr-exp-y"><span class="math display">\[\mu_{Y|\mathbf{X}} = \mu_{Y|X_1, X_2, \ldots, X_p} = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p \tag{7.4}\]</span></span></p>
 <p>Thus, when we fit a multiple linear regression model, the output from the fitted model will be the predicted expected value of the response variable for a given combination of values of the predictor variables.</p>
 </section><section id="evaluating-whether-mlr-is-appropriate" class="level3" data-number="7.2.2"><h3 data-number="7.2.2" class="anchored" data-anchor-id="evaluating-whether-mlr-is-appropriate">
 <span class="header-section-number">7.2.2</span> Evaluating whether MLR is appropriate</h3>
@@ -775,46 +767,30 @@ Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon, \hspace{8
 </section></section><section id="sec-mlr-estimate-coef" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="sec-mlr-estimate-coef">
 <span class="header-section-number">7.3</span> Estimating the coefficients</h2>
 <p>The predicted value <span class="math inline">\(Y\)</span> for the <span class="math inline">\(i^{th}\)</span> observation output from the estimated multiple linear regression is shown in <a href="#eq-mlr-estimated-model" class="quarto-xref">Equation&nbsp;<span>7.5</span></a> is</p>
-<p><span id="eq-mlr-estimated-model"><span class="math display">\[
-\hat{y}_i = \hat{\mu}_{y_i|x_{i1},x_{i2}, \ldots, x_{ip}} = \hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2} + \dots + \hat{\beta}_px_{ip}
-\tag{7.5}\]</span></span></p>
+<p><span id="eq-mlr-estimated-model"><span class="math display">\[\hat{y}_i = \hat{\mu}_{y_i|x_{i1},x_{i2}, \ldots, x_{ip}} = \hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2} + \dots + \hat{\beta}_px_{ip} \tag{7.5}\]</span></span></p>
 <p>The error term for the <span class="math inline">\(i^{th}\)</span> observation, <span class="math inline">\(\epsilon_i\)</span>, is estimated by calculating the residuals as before, <span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>, the difference between what is observed in the data and what is expected from <a href="#eq-mlr-estimated-model" class="quarto-xref">Equation&nbsp;<span>7.5</span></a>. As with simple linear regression in <a href="04-slr.html#sec-slr-estimation" class="quarto-xref"><span>Section 4.4</span></a>, the coefficients are estimated using least-squares, finding <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span> that minimize the sum of square residuals shown in <a href="#eq-mlr-min-sse" class="quarto-xref">Equation&nbsp;<span>7.6</span></a></p>
-<p><span id="eq-mlr-min-sse"><span class="math display">\[
-\sum_{i=1}^{n}e_i^2 = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 = \sum_{i=1}^n(y_i - [\beta_0 + \beta_1x_{i1} + \dots+ \beta_px_{ip}])^2
-\tag{7.6}\]</span></span></p>
+<p><span id="eq-mlr-min-sse"><span class="math display">\[\sum_{i=1}^{n}e_i^2 = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 = \sum_{i=1}^n(y_i - [\beta_0 + \beta_1x_{i1} + \dots+ \beta_px_{ip}])^2 \tag{7.6}\]</span></span></p>
 <section id="optional-matrix-notation-for-multiple-linear-regression" class="level3" data-number="7.3.1"><h3 data-number="7.3.1" class="anchored" data-anchor-id="optional-matrix-notation-for-multiple-linear-regression">
 <span class="header-section-number">7.3.1</span> (Optional) Matrix notation for multiple linear regression</h3>
 <!--# is there a more obvious way to mark optional text?-->
 <!--# should all of this just go in the appendix?-->
 <p>The calculus required to find the values that minimize <a href="#eq-mlr-min-sse" class="quarto-xref">Equation&nbsp;<span>7.6</span></a> can become quite cumbersome, <!--# word here to indicate it's a lot of work not necessarily hard-->particularly if there are a lot of predictor variables. We can instead think of <a href="#eq-mlr-stat-model-1" class="quarto-xref">Equation&nbsp;<span>7.3</span></a> and <a href="#eq-mlr-estimated-model" class="quarto-xref">Equation&nbsp;<span>7.5</span></a> in terms of matrices and utilize linear algebra and matrix calculus <!--# are these the correct terms or can i say matrix algebra and calculus?--> to compute the estimated coefficients. Suppose there are <span class="math inline">\(n\)</span> observations and <span class="math inline">\(p\)</span> predictors, then</p>
-<p><span class="math display">\[
-\mathbf{Y} = \begin{bmatrix}y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix} \hspace{10mm}
-\mathbf{X} = \begin{bmatrix}1 &amp; x_{11} &amp; x_{12} &amp; \dots &amp; x_{1p} \\1&amp; x_{21} &amp; x_{22} &amp; \dots &amp; x_{2p} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\1&amp; x_{n1} &amp; x_{n2} &amp; \dots &amp; x_{np} \end{bmatrix}
-\]</span></p>
+<p><span class="math display">\[\mathbf{Y} = \begin{bmatrix}y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix} \hspace{10mm}
+\mathbf{X} = \begin{bmatrix}1 &amp; x_{11} &amp; x_{12} &amp; \dots &amp; x_{1p} \\1&amp; x_{21} &amp; x_{22} &amp; \dots &amp; x_{2p} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\1&amp; x_{n1} &amp; x_{n2} &amp; \dots &amp; x_{np} \end{bmatrix}\]</span></p>
 <p>where <span class="math inline">\(\mathbf{Y}\)</span> is an <span class="math inline">\(n \times 1\)</span> vector of the values of the response, and <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times (p + 1)\)</span> matrix called the <strong>design matrix</strong>. The first column of <span class="math inline">\(\mathbf{X}\)</span> is a vector of 1’s that correspond to the intercept <span class="math inline">\(\beta_0\)</span>. The remaining columns are the observed values for each predictor variable. For example, the row <span class="math inline">\(\begin{bmatrix} 1 &amp; x_{11}  &amp; x_{12} &amp;  \dots &amp; x_{1p} \end{bmatrix}\)</span> contains the observed values for the first observation, and</p>
 <p>the column <span class="math inline">\(\begin{bmatrix} x_{11}  &amp; x_{21} &amp;  \dots &amp; x_{n1} \end{bmatrix}^\mathsf{T}\)</span> is the column of observed values for predictor <span class="math inline">\(X_1\)</span>.</p>
 <p>Additionally, let</p>
-<p><span class="math display">\[
-\boldsymbol{\beta}= \begin{bmatrix}\beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{bmatrix} \hspace{5mm}\boldsymbol{\epsilon}= \begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{bmatrix}
-\]</span></p>
+<p><span class="math display">\[\boldsymbol{\beta}= \begin{bmatrix}\beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{bmatrix} \hspace{5mm}\boldsymbol{\epsilon}= \begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{bmatrix} \]</span></p>
 <p>such that <span class="math inline">\(\boldsymbol{\beta}\)</span> is a <span class="math inline">\((p + 1) \times 1\)</span> vector of the model coefficients and <span class="math inline">\(\boldsymbol{\epsilon}\)</span> is an <span class="math inline">\(n \times 1\)</span> vector of the error terms. <a href="#eq-mlr-stat-model-1" class="quarto-xref">Equation&nbsp;<span>7.3</span></a> written in matrix notation is</p>
-<p><span class="math display">\[
-\underbrace{\begin{bmatrix}y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix}}_{\mathbf{Y}} =
+<p><span class="math display">\[\underbrace{\begin{bmatrix}y_1 \\ y_2 \\ \vdots \\y_n\end{bmatrix}}_{\mathbf{Y}} =
 \underbrace{\begin{bmatrix}1 &amp; x_{11} &amp; x_{12} &amp; \dots &amp; x_{1p} \\1&amp; x_{21} &amp; x_{22} &amp; \dots &amp; x_{2p} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\1&amp; x_{n1} &amp; x_{n2} &amp; \dots &amp; x_{np} \end{bmatrix}}_{\mathbf{X}} \hspace{2mm}
 \underbrace{\begin{bmatrix}\beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{bmatrix}}_{\boldsymbol{\beta}}  +
-\underbrace{\begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{bmatrix}}_{\boldsymbol{\epsilon}}
-\]</span></p>
-<p><span id="eq-mlr-stat-model-matrix"><span class="math display">\[
-\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
-\tag{7.7}\]</span></span></p>
+\underbrace{\begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \vdots \\ \epsilon_n \end{bmatrix}}_{\boldsymbol{\epsilon}}\]</span></p>
+<p><span id="eq-mlr-stat-model-matrix"><span class="math display">\[\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon} \tag{7.7}\]</span></span></p>
 <p>Similarly, <a href="#eq-mlr-estimated-model" class="quarto-xref">Equation&nbsp;<span>7.5</span></a> in matrix notation is</p>
-<p><span class="math display">\[
-\hat{\mathbf{Y}} = \mathbf{X}\boldsymbol{\hat{\beta}}
-\]</span></p>
+<p><span class="math display">\[\hat{\mathbf{Y}} = \mathbf{X}\boldsymbol{\hat{\beta}}\]</span></p>
 <p>Applying the rules of linear algebra and matrix calculus, we find that the estimated coefficients <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span> can be found using <a href="#eq-mlr-est-beta-matrix" class="quarto-xref">Equation&nbsp;<span>7.8</span></a></p>
-<p><span id="eq-mlr-est-beta-matrix"><span class="math display">\[
-\boldsymbol{\hat{\beta}} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T} \mathbf{Y}
-\tag{7.8}\]</span></span></p>
+<p><span id="eq-mlr-est-beta-matrix"><span class="math display">\[\boldsymbol{\hat{\beta}} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T} \mathbf{Y} \tag{7.8}\]</span></span></p>
 <p>Details for using the matrix form of the model to find <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> in <a href="#eq-mlr-est-beta-matrix" class="quarto-xref">Equation&nbsp;<span>7.8</span></a> are in <a href="appendix-linear.html#sec-mlr-estimation-matrix" class="quarto-xref"><span>Section A.3</span></a>.</p>
 <div class="math_rules">
 <p><strong>Matrix form of simple linear regression</strong></p>
@@ -1074,16 +1050,14 @@ Figure&nbsp;7.5: Different intercepts for each taxon. Purple dotted line = ERUF,
 <div class="yourturn">
 <p>Based on these criteria, do you think the interpretation of the intercept is meaningful for the lemurs data? Why or why not?<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 </div>
-</section></section><section id="prediction" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="prediction">
+</section></section><section id="sec-mlr-predict" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="sec-mlr-predict">
 <span class="header-section-number">7.5</span> Prediction</h2>
 <p>The same process is used to predict for multiple linear regression as the one introduced in <a href="04-slr.html#sec-slr-predict" class="quarto-xref"><span>Section 4.6</span></a> for simple linear regression. Now that there are two or more predictor variables, we need to input a value for every predictor variable.</p>
 <p>For example, suppose we wish to use the model in <a href="#tbl-lemurs-model" class="quarto-xref">Table&nbsp;<span>7.3</span></a> to compute the predicted weight for a 10-month old male lemur in the VRUB taxon who was born into a litter of 4 lemurs. We compute this value by plugging in the value for the new observation into the model equation as shown in <a href="#eq-lemurs-predict" class="quarto-xref">Equation&nbsp;<span>7.9</span></a>.<br></p>
-<p><span id="eq-lemurs-predict"><span class="math display">\[
-\begin{aligned}
+<p><span id="eq-lemurs-predict"><span class="math display">\[\begin{aligned}
 \widehat{\text{weight\_g}} &amp;= 43.844 \\ &amp;+ 136.903 \times 10 \\ &amp;- 88.838 \times 1 \\ &amp;+ 471.715 \times 0 \\ &amp;+ 1037.323 \times 1 \\ &amp;- 19.607 \times 4 \\
 &amp; = 2282.931
-\end{aligned}
-\tag{7.9}\]</span></span></p>
+\end{aligned} \tag{7.9}\]</span></span></p>
 <div class="yourturn">
 <p>Use the equation in <a href="#tbl-lemurs-model" class="quarto-xref">Table&nbsp;<span>7.3</span></a> to compute the predicted value for a 14-month old female lemur in the ERUF taxon who was born into a litter of 2 lemurs. It should match the predicted value shown it the output above.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 </div>
@@ -1208,8 +1182,7 @@ Figure&nbsp;7.7: Weight versus original and centered values of litter size
 </figcaption></figure>
 </div>
 <p>A commonly used type of centering is <strong>mean-centering</strong>, in which <span class="math inline">\(C = \bar{X}\)</span>, meaning a quantitative predictor is shifted by its mean. Let’s mean-center <code>age</code>, so that the intercept does not represent lemurs who are 0 months old, but rather lemurs are who are the mean age in the data set.</p>
-<p><span class="math display">\[\text{age\_cent} = \text{age} - \text{mean(age)}
-\]</span></p>
+<p><span class="math display">\[\text{age\_cent} = \text{age} - \text{mean(age)}\]</span></p>
 <p><a href="#tbl-age-cent-summary" class="quarto-xref">Table&nbsp;<span>7.7</span></a> is a table of the summary statistics for the <code>age</code> and <code>age_cent</code>. As before, the location statistics have changed but the variability is the same.</p>
 <div class="cell">
 <div id="tbl-age-cent-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -1395,9 +1368,7 @@ Table&nbsp;7.9: Model coefficients for original model and model with centered qu
 <p>Thus far, we have interpreted the coefficients to understand the relationship between the response and each predictor variable. Sometimes, however, the primary objective of the analysis may be less focused on interpretation and more focused on identifying which predictors are most important in understanding variability in the response variable. When that is the case, we can fit a model using standardized values of the quantitative predictors.</p>
 <!--# Add something about why we can't compare across scales for original variables.-->
 <p><strong>Standardizing</strong> a variable is shifting every observation of that variable by its mean (as in mean-centering) and dividing by its standard deviation. Thus, given a quantitative predictor <span class="math inline">\(X\)</span>, the standardized value of <span class="math inline">\(X\)</span>, denoted <span class="math inline">\(X_{std}\)</span>, is</p>
-<p><span class="math display">\[
-X_{std} = \frac{X - \bar{X}}{s_X}
-\]</span></p>
+<p><span class="math display">\[X_{std} = \frac{X - \bar{X}}{s_X}\]</span></p>
 <p>where <span class="math inline">\(\bar{X}\)</span> is the mean of <span class="math inline">\(X\)</span> and <span class="math inline">\(s_{X}\)</span> is the standard deviation of <span class="math inline">\(X\)</span>. In addition to shifting the centered of the new distribution to be equal to 0, the standardized variable is rescaled such the standard deviation (and variance) of the standardized variable is 1. This is similar to computing a <span class="math inline">\(z\)</span>- score from the normal distribution.</p>
 <!--# Key term: Standardizing a variable is shifting it by its mean and dividing by its standard deviation-->
 <!--# $$
@@ -1900,7 +1871,7 @@ Table&nbsp;7.14: Output for regression model including interaction between <code
 <span>  <span class="fu">kable</span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>tidy</code> function structures the model output into a data data frame, and <code>kable()</code> is used to display the results as a neatly formatted table.</p>
-</section><section id="prediction-1" class="level3" data-number="7.8.2"><h3 data-number="7.8.2" class="anchored" data-anchor-id="prediction-1">
+</section><section id="prediction" class="level3" data-number="7.8.2"><h3 data-number="7.8.2" class="anchored" data-anchor-id="prediction">
 <span class="header-section-number">7.8.2</span> Prediction</h3>
 <p>We use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> to compute predicted values from multiple linear regression models. We begin by making a tibble that contains the values fo the new observation. The variable names in the tibble of new observations must match the column names in the original data exactly, including letter case. Additionally, the observed values of the categorical predictors are put in the tibble, not indicator variables. As with variable names, the values of the categorical predictors must be input exactly as they show in the data set (including case).</p>
 <div class="cell">

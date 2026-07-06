@@ -1048,7 +1048,7 @@ Let's take a look at the intervals around predictions given `per_capita_expend =
 
 ```{r}
 #| label: tbl-prediction-intervals
-#| tbl-cap: "Standard errors and intervals for the mean response and individual response when `per_capita_expend = 150`" 
+#| tbl-cap: "Standard errors and 95% intervals for the predicted mean response and individual response when `per_capita_expend = 150`" 
 
 new_city_expend <- tibble(per_capita_expend = 150)
 
