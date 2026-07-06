@@ -648,7 +648,7 @@ The predicted value $\hat{y}$ is the value output by the model given a particula
 
 Recall that the model outputs the predicted mean value of the response variable given a value of the predictor variable. We use this same model output if we wish to compute the predicted value for an individual observation. The standard error used to quantify the uncertainty in the predictions $(SE)$ , however, differ depending on the type of prediction we're making.
 
-The formulas for standard error utilize the matrix notation for regression, so we present those in Appendix \[INSERT REF\]. @tbl-lemur-prediction-intervals shows the standard errors and intervals for the two types of predictions for a 10-month old male lemur from the VRUB taxon who was born in a litter of 4 lemurs.
+The formulas for standard error utilize the matrix notation for regression, so we present those in @sec-predict-intervals-matrix. @tbl-lemur-prediction-intervals shows the standard errors and intervals for the two types of predictions for a 10-month old male lemur from the VRUB taxon who was born in a litter of 4 lemurs.
 
 ```{r}
 #| label: tbl-lemur-prediction-intervals
@@ -699,8 +699,6 @@ Use the intervals in @tbl-lemur-prediction-intervals.
 [^08-mlr-inference-10]: We use the prediction interval for an individual observation. We are 95% confident Jackson's weight is between `r round(indiv_predict_fit[2], 3)` to `r round(indiv_predict_fit[3], 3)` grams.
 
     The interval that corresponds with the interval constructed by bootstrapping is the interval for the estimated mean response, `r round(mean_predict_fit[2], 3)` to `r round(mean_predict_fit[3], 3)`
-
-- link to notes for equations: <https://sta221-sp26.github.io/hw/hw-03.html#exercise-9>
 
 ## Model conditions and diagnostics {#sec-mlr-conditions-diagnositics}
 
@@ -823,6 +821,8 @@ ggplot(data = lemurs_model_aug, aes(x = .resid)) +
 The distribution of the residuals with a normal curve applied is shown in @fig-mlr-resid-dist. We see the outlier with the large residual again in this plot. Focusing on the distribution without the outlier, the normal curve reasonably (though not perfectly) describes the distribution. Though not exactly, the distribution is approximately unimodal and symmetric, when the outlier is ignored. Therefore, we conclude the normality condition is [**satisfied**]{.underline}.
 
 Simulation-based inference does not rely on any assumptions about the distribution of the residuals, so it is robust to violations in the normality condition. From the Central Limit Theorem, theory-based methods for inference on the model coefficient are also robust to violations in normality when the sample is large enough. Typically 30 is used as the threshold for a "large enough" sample, but this value should not be treated as absolute. Thus, the closer the sample size is to 30, the closer the distribution of residuals needs to fit a normal distribution for reliable inferential results.
+
+The normality assumption is important when computing intervals for predictions of individual observations. Because these intervals take into account where an observation may lie in the distribution of the response variable about the regression line, it relies on the assumption that the shape is approximately normal, unimodal and symmetric.
 
 #### Equal variance {.unnumbered}
 
