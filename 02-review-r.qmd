@@ -14,16 +14,16 @@ source("_common.R")
 #| include: false
 
 
-library(tidyverse)
+#library(tidyverse)
 library(palmerpenguins)
 ```
 
 ## Learning goals {.unnumbered}
 
--   Wrangle and manipulate data using **dplyr**
--   Create visualizations using **ggplot2**
--   Customize **ggplot2** visualizations
--   Create reproducible documents using Quarto
+- Wrangle and manipulate data using **dplyr**
+- Create visualizations using **ggplot2**
+- Customize **ggplot2** visualizations
+- Create reproducible documents using Quarto
 
 ## Data: Palmer penguins {#sec-penguins-intro}
 
@@ -31,17 +31,17 @@ In this chapter, explore data about penguins collected at the Palmer Station in 
 
 We will use the following variables:
 
--   `species`: Penguins species (Adelie, Chinstrap, Gentoo)
+- `species`: Penguins species (Adelie, Chinstrap, Gentoo)
 
--   `island:` Island in Palmer Archipelago (Biscoe, Dream, Torgersen)
+- `island:` Island in Palmer Archipelago (Biscoe, Dream, Torgersen)
 
--   `bill_length_mm`: Bill length in millimeters
+- `bill_length_mm`: Bill length in millimeters
 
--   `flipper_length_mm` : Flipper length in millimeters
+- `flipper_length_mm` : Flipper length in millimeters
 
--   `sex` : Penguins sex (female, male)
+- `sex` : Penguins sex (female, male)
 
--   `year` : Study year (2007, 2008, 2009)
+- `year` : Study year (2007, 2008, 2009)
 
 See the [@palmerpenguins] for the full code book.
 
@@ -80,9 +80,9 @@ Packages that are not available on CRAN are typically available through a GitHub
 Packages only need to be installed [**once**]{.underline} on a given computer or virtual machine; however, we can periodically update them as new versions are released. Once the package is installed, we use the `library()` function to load it into R. Though we only install packages once, we need to load packages each time we have a new instance of R.
 
 ::: {.analysis_in_practice latex=""}
-Installing versus loading packages has been compared to the lights in the room. The light bulbs are installed once, but we still need to flip a switch to turn on the light each time we enter a room.
+A commonly used analogy for installing versus loading packages is that installing packages is like installing a light bulb in a room, and loading packages is like flipping a light switch.
 
-<!--# citation for this-->
+We only need to install packages once (like light bulbs), but we load packages each time we start a new instance of R (like flipping the light switch each time we enter the room). Therefore, `install.packages()` is run in the console and `library()` is included at the top of the R script or Quarto document (see @sec-quarto).
 :::
 
 ## Tidyverse {#sec-tidyverse}
@@ -130,11 +130,11 @@ penguins |>
 Let's use the criteria above to evaluate whether this is a tidy data frame.
 
 1.  *Each variable forms a column.*
-    -   Yes, the variables are stored in individual columns. There are no instances of multiple variables stored in a single column or a single variable stored across multiple columns.
+    - Yes, the variables are stored in individual columns. There are no instances of multiple variables stored in a single column or a single variable stored across multiple columns.
 2.  *Each observation forms a row.*
-    -   Yes, the information for one penguin (observation) is across a single row. There are no instances of multiple penguins represented on a single row or a single penguin represented across multiple rows.
+    - Yes, the information for one penguin (observation) is across a single row. There are no instances of multiple penguins represented on a single row or a single penguin represented across multiple rows.
 3.  *Each type of observational unit forms a table.*
-    -   Yes, the observational unit is the set of penguins included in the study. The data from these penguins makes up the data frame.
+    - Yes, the observational unit is the set of penguins included in the study. The data from these penguins makes up the data frame.
 
 **All the criteria are met, so `penguins` is a tidy data frame.**
 
@@ -691,13 +691,15 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm,
   scale_color_manual(values = pnw_palette("Bay", 3))
 ```
 
-We may also wish to create a color palette. For example, here we apply the palette `my_color_palette` that is defined using HTML hex codes.
+We may also wish to create a color palette. For example, here we apply the palette `my_color_palette` that is defined using HTML hex codes.[^02-review-r-11]
+
+[^02-review-r-11]: This color palette is inspired by the examples in @palmerpenguins.
 
 ```{r}
 #| label: fig-custom-color-palette
 #| fig-cap: Scatterplot with user-define color palette
 
-my_color_palette <- c("#993399", "#2B8181", "#CB4F04")
+my_color_palette <- c("#F87666", "#58B09C", "#7272AB")
 
 ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm, 
                             color = species)) + 
@@ -715,9 +717,9 @@ When choosing a color palette, it is important to consider the accessibility of 
 
 In @sec-ch-intro we introduced reproducibility, a key component of data science in which analysis is conducted in such a way that another person (or ourselves months later) can produce the same results given the same code and data set.
 
-Quarto is "an open-source scientific and technical publishing system" [@quarto2025] developed by Posit for conducting reproducible data science. Quarto documents can produce many different types of formats <!--# other word here--> including PDFs, Word documents, websites, books, and others using a consistent syntax and document structure.[^02-review-r-11] Quarto is not automatically included in RStudio, so it must be installed. It can be downloaded from [https://quarto.org/docs/get-started](https://quarto.org/docs/get-started/). It is automatically installed in Positron.
+Quarto is "an open-source scientific and technical publishing system" [@quarto2025] developed by Posit for conducting reproducible data science. Quarto documents can produce many different types of formats <!--# other word here--> including PDFs, Word documents, websites, books, and others using a consistent syntax and document structure.[^02-review-r-12] Quarto is not automatically included in RStudio, so it must be installed. It can be downloaded from [https://quarto.org/docs/get-started](https://quarto.org/docs/get-started/). It is automatically installed in Positron.
 
-[^02-review-r-11]: In fact, this book was written using Quarto in RStudio!
+[^02-review-r-12]: In fact, this book was written using Quarto in RStudio!
 
 ![Example Quarto document](images/02-quarto.jpg){#fig-quarto fig-align="center" width="75%"}
 
@@ -725,9 +727,9 @@ Quarto is "an open-source scientific and technical publishing system" [@quarto20
 
 The **YAML** ("Yet Another Markup Language" or "YAML Ain't Markup Language") is considered the "front matter" of the document. This is where we include content for the heading, such as title, author, and date. This is also where we specify the format type and other global features to be applied for the entire document. The YAML in @fig-quarto shows global code chunk options applied so that the code is displayed when the document is rendered `echo: true` , but all additional warnings and messages are suppressed `warning: false` and `message: false` <!--# or is this messages?-->
 
-The **code chunk** is where we put all code that is executed when the document is rendered. R code chunks[^02-review-r-12] can be added to the document by starting with ```` ```{r} ```` and ending with ```` ``` ````. They can also be added from the *Insert* menu in the tool bar of the visual editor. A variety of options can be applied to code chunks primarily to customize how they display code and results in the rendered document. Section 28.5 in *R for Data Science* [@wickham2023r] provides an extensive overview of code chunks and the set of options to customize them.
+The **code chunk** is where we put all code that is executed when the document is rendered. R code chunks[^02-review-r-13] can be added to the document by starting with ```` ```{r} ```` and ending with ```` ``` ````. They can also be added from the *Insert* menu in the tool bar of the visual editor. A variety of options can be applied to code chunks primarily to customize how they display code and results in the rendered document. Section 28.5 in *R for Data Science* [@wickham2023r] provides an extensive overview of code chunks and the set of options to customize them.
 
-[^02-review-r-12]: Quarto supports other coding languages such as Python and Julia.
+[^02-review-r-13]: Quarto supports other coding languages such as Python and Julia.
 
 The **narrative** is written in the white space of the document. The visual editor in RStudio and Positron makes formatting the narrative (e.g, making text bold or adding lists) similar to formatting in word processors such as Google Docs, Apple Pages, or Microsoft Word. The visual editor also makes it easy to add images and tables within the narrative.
 
