@@ -158,13 +158,7 @@ This book is about regression analysis, using statistical models to describe the
 
 In his 1977 book *Exploratory Data Analysis* , Statistician John Tukey described EDA as "looking at data to see what it seems to say" [@tukey1977exploratory, p. v]. This short definition emphasizes an important point about EDA. It is only used to glean initial insights from the data ("what it *seems* to say") [**not**]{.underline} to draw conclusions. We use statistical inference (@sec-ch-slr-inf and @sec-ch-mlr-inf) to draw conclusions from the data. Though we can't draw conclusions from EDA, it is still a critical step in th workflow. The insights gleaned from EDA help us more fully understand the implications of our results as we apply them in practice. It also helps us as data scientists better communicate the nuances in the data to collaborators and stakeholders. We typically don't publish all the results of EDA in a final report or presentation, but the knowledge gained from EDA is infused throughout any report or presentation as we describe the data, interpret results, and share conclusions. Simply put,
 
-> "Exploratory and confirmatory \[statistical inference\] can – and should - proceed side by side." [@tukey1977exploratory, p. vii]
-
-<!--# is this quote correct, did he not say "exploratoy and confirmatory statistics"? -->
-
-<!--# make sure confirmatory is referring only to inference-->
-
-<!--# is this the correct citation format?-->
+> "Today, exploratory and confirmatory \[methods\] can — and should — proceed side by side." [@tukey1977exploratory, p. vii]
 
 ![Exploratory data analysis workflow](images/03-eda-workflow.png){#fig-eda-workflow fig-align="center"}
 
@@ -208,9 +202,9 @@ In addition to knowing the variable type, we also need to know how it is stored 
 
 In general, quantitative variables are stored in columns with *double / floating point number* formats, which are formats for columns that contain real numbers with decimals. In the output above, this is coded by the software as `dbl`, but you may also see this denoted by `float64` or similar codes. The software treats columns with this format as numeric data. Examples of these columns in the `recipes` data set are `avg_rating` and `prep_time`. These are both quantitative variables and are being stored in the *double/floating point number* format in the software. Therefore, the column format aligns with the variable type and will be treated as we expect by the software as we do the analysis.
 
-Columns that contain categorical data are typically stored as *character* or *factor* formats. The software treats both of these formats as text rather than numeric data. The primary difference between character and factor types is that the data stored as factors also have an ordering applied. Let's take a look at some categorical variables in the `recipe` data . The variables `country` and and `author` are two categorical variables that are correctly stored in the software as character (`<chr>`) data formats.
+Columns that contain categorical data are typically stored as *character* or *factor* formats. The software treats both of these formats as text rather than numeric data. The primary difference between character and factor types is that the data stored as factors also have an ordering applied. Let's take a look at some categorical variables in the `recipe` data . The variables `country` and and `author` are two categorical variables that are correctly stored in the software as character (`<chr>`) data types.
 
-<!--# I might not need this? The variable season  is also a categorical stored as a character data format. By default, the software will arrange values of this variable in alphabetical order in graphs and analysis output. The seasons do have a specific calendar order that the software is unaware of currently. We can convert this variable to a factor data type and tell the software the calendar order.-->
+<!--# I might not need this? The variable season  is also a categorical stored as a character data type. By default, the software will arrange values of this variable in alphabetical order in graphs and analysis output. The seasons do have a specific calendar order that the software is unaware of currently. We can convert this variable to a factor data type and tell the software the calendar order.-->
 
 ```{r}
 #| label: make-season-factor
@@ -1327,14 +1321,15 @@ From @fig-multivar-eda, the relationship between `avg_rating` and `chef_john` is
 
 Much of the exploratory data analysis in this chapter is done using functions from the **dplyr** and **ggplot2** packages. We refer the reader to @sec-ch-computing for a more detailed introduction to those packages. Here we will focus on the new functions that were used in this chapter: `skim()` in @sec-univar-eda-quant, `waffle()` in @sec-univar-eda-cat, `geom_ridges()` in @sec-bivar-eda-quant-cat, and `geom_mosaic()` in @sec-bivar-eda-cat-cat.
 
-### Data summaries  {#sec-eda-data-summaries}
+### Data summaries {#sec-eda-data-summaries}
 
-The `skim()` function in the **skimr** R package [@skimr] provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data [@sec-initial-check] and univariate data analysis ([@sec-univar-eda]). The code below produces a summary for each column `recipes`. Different types of summary output is produced based on the column's data format.
+The `skim()` function in the **skimr** R package [@skimr] provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data [@sec-initial-check] and univariate data analysis ([@sec-univar-eda]). The code below produces a summary for each column `recipes`. Different types of summary output is produced based on the column's data type.
 
 ```{r}
 #| label: tbl-skim-recipes 
 #| tbl-cap: "`skim()` output for `recipes`"
 #| echo: true
+#| eval: false
 
 recipes |> 
   skim()
@@ -1342,15 +1337,18 @@ recipes |>
 
 If we are only interested in the summary for particular variables, we specify them in the `skim()` function. The code below produces the summaries for `avg_rating` and `season`.
 
+\scriptsize
+
 ```{r}
 #| label: tbl-skim-recipes-subset
 #| tbl-cap: "`skim()` output for `avg_rating` and `season`"
 #| echo: true
 
-
 recipes |>
   skim(avg_rating, season)
 ```
+
+\normalsize
 
 The output from `skim()` is a tibble, so we can apply the usual **dplyr** functions to the results. For example, we may not be interested in all the summary output, so we can use `select()` to choose certain columns. The code below shows the mean and standard deviation for `avg_rating`. The column names from the `skim()` output differ slightly from what is displayed, so use `glimpse()` or `names()` to see the underlying column names.
 

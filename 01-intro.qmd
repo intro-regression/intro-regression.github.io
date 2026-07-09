@@ -287,7 +287,7 @@ Once the analysis question has been defined, the next step is **collect.** This 
 
 Now it's time to start working with the data. We import it into the statistical software, then begin to **clean** (or preprocess) the data. This is the point we ensure the data has imported correctly and begin to check for potential errors or missingness in the data. We talk more about this step in @sec-initial-check.
 
-Next, we **wrangle** and **explore** the data, often called **exploratory data analysis*.*** This is the point in which we really begin to understand the observations in the data, distributions of the variables in the data, and relationships between variables. We begin to think about the regression modeling, so we may create new variables from existing ones, start to consider how to handle outliers or deal with missing observations. We talk about this step extensively in @sec-ch-eda.
+Next, we **wrangle** and **explore** the data in an iterative way. The processing of exploring the data is called **exploratory data analysis*.*** This is the point in which we really begin to understand the observations in the data, distributions of the variables in the data, and relationships between variables. We begin to think about the regression modeling, so we may create new variables from existing ones, start to consider how to handle outliers or deal with missing observations. We talk about exploratory data analysis and data wrangling extensively in @sec-ch-eda.
 
 ```{=html}
 <!--# key terms **Data consumers:** individuals who work with data that have already been collected [@gebru2021datasheets]
@@ -373,7 +373,7 @@ There are a few ways to do this in R. A rigorous approach is using the **renv** 
 
 > *"All sciences have much of art in their makeup."* @tukey1962future
 
-Doing regression analysis (and data science in general) requires a blend of art and science. Good regression analysis needs both rigorous theory-based methods and the judgment (the "artistry") of the data scientist as they make decisions throughout the analysis process. In the same way a chef relies on their knowledge to make decisions about how much seasoning to add to dish, a data scientist relies on their understanding of statistical methods to make decisions as they prepare, explore, model, and interpret data.
+Regression analysis (and data science in general) requires a blend of art and science. Good regression analysis needs both rigorous theory-based methods and the judgment (the "artistry") of the data scientist as they make decisions throughout the analysis process. In the same way a chef relies on their knowledge of food to make decisions about how much seasoning to add to dish, a data scientist relies on their understanding of statistical methods to make decisions as they prepare, explore, model, and interpret data. <!--# would like to add the jazz quote here-->
 
 @tukey1962future argues that data analysis (or regression analysis in our case) is not just an application of statistical theory with the sole objective to "optimize" but rather requires a "heavy emphasis on judgement." He goes on further to say that to analyze data well, "it must be a matter of judgment, and 'theory' whether statistical or non-statistical, will have to guide, not command" \[pp. 10\]. This judgment is not arbitrary, but come from three sources (summarized from @tukey1962future):
 
@@ -381,7 +381,7 @@ Doing regression analysis (and data science in general) requires a blend of art 
 - judgment based on knowledge statistical methods
 - judgment based on experience from analyzing a variety of data
 
-Throughout the book, we will demonstrate how judgment is used to make decisions in the analysis, particularly as the regression models become more complex in later chapters. As much as we will highlight parts of the decision-making process, using judgment and doing the "art" of regression analysis can't be learned by merely reading a textbook. It is a skill that is developed after consistent <!--# or a lot? or frequent?-->practice working with data. As the world becomes increasingly driven by artificial intelligence, it is this ability to infuse the "art" along with the science that will continue to make human data scientists indispensable. <!--# or irreplacable or invalulable?-->
+Throughout the book, we will demonstrate how judgment is used to make decisions in the analysis, particularly as the regression models become more complex in later chapters. As much as we will highlight parts of the decision-making process, using judgment and doing the "art" of regression analysis can't be learned by merely reading a textbook. It is a skill that is developed after consistent <!--# or a lot? or frequent?-->practice working with data. As the world becomes increasingly driven by artificial intelligence, it is this ability to infuse the "art" along with the science that will continue to make human data scientists indispensable. <!--# or irreplacable?-->
 
 ## Summary
 

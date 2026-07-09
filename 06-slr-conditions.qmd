@@ -46,6 +46,8 @@ library(skimr)
 
 ## Introduction: Coffee grades {#sec-coffee-intro}
 
+<!--# add definitions of aroma and flavor from salt, acid, fat, heat in the "how salt affects flavor section-->
+
 What makes a delicious cup of coffee? Is there a relationship between a coffee's aroma and its flavor? We will consider these questions by analyzing data from the Coffee Quality Database (<https://database.coffeeinstitute.org/>). The data set used in this analysis was curated by James LeDoux and was featured as part of the TidyTuesday weekly data visualization challenge in July 2020 [@tidytuesday]. It contains a variety of features and quality ratings for over 1,000 coffees scraped from the Coffee Quality Database in 2018.<!--# add something about how the grades are determined-->The data are in `coffee-grades.csv`. We will use the following variables in this chapter:
 
 - `aroma` : Aroma grade (0: worst aroma - 10: best aroma)

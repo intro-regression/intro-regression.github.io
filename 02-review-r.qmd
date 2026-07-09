@@ -140,7 +140,7 @@ Let's use the criteria above to evaluate whether this is a tidy data frame.
 
 All the data sets used in the book are tidy, so we can focus on regression analysis concepts and methods. In practice, we may need to "tidy" data before doing any analysis. @wickham2014tidy has recommendations for handling different issues that make data untidy.
 
-The data sets in the tidyverse are stored as tibbles. **Tibbles** are like data frames in R with some differences in the underlying features. As @wickham2023r puts it, a tibble is a data frame that modifies "some older behaviours to make life a little easier". One nice feature of tibbles is that they show summary information about the data set overall and for each variable. For example, in @tbl-penguins we see there are `r nrow(penguins)` rows (observations) and `r ncol(penguins)` columns (variables). We also see the format of each column, e.g. `species` is stored as a `<fct>` (factor). We talk more about data formats in @sec-initial-check.
+The data sets in the tidyverse are stored as tibbles. **Tibbles** are like data frames in R with some differences in the underlying features. As @wickham2023r puts it, a tibble is a data frame that modifies "some older behaviours to make life a little easier". One nice feature of tibbles is that they show summary information about the data set overall and for each variable. For example, in @tbl-penguins we see there are `r nrow(penguins)` rows (observations) and `r ncol(penguins)` columns (variables). We also see the type for each column, e.g. `species` is stored as a `<fct>` (factor). We talk more about data types in @sec-initial-check.
 
 ### **The pipe**
 
@@ -420,6 +420,12 @@ This section provided a short overview of the **dplyr** functions that are used 
 
 ## Data visualizations using ggplot2
 
+```{r}
+# override the theme and set back to default for this chapter
+
+theme_set(theme_gray())
+```
+
 **ggplot2** is the primary package for data visualizations in **tidyverse**. The code in **ggplot2** is designed to produce plots in layers, with each layer separated by `+`. This section is an overview of the package that largely follows the structure of Chapter 1 in *R for Data Science* [@wickham2023r]. We point readers there for a more detailed introduction to the package.
 
 The general structure of code to create a visualization is as follows
@@ -649,10 +655,7 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm,
 Note that `facet_grid()` creates a plot for every possible combination of the variables. The empty plots indicate combinations of `island` and `species` that do not exist in the data.
 
 ::: {.yourturn latex=""}
-Recreate the plot below of `flipper_length_mm` versus `species` faceted by `year`. [^02-review-r-10]
-:::
-
-[^02-review-r-10]: `ggplot(data = penguins, aes(x = species, y = flipper_length_mm, fill = species)) + geom_boxplot() + facet_wrap(vars(year))`
+Recreate the plot below of `flipper_length_mm` versus `species` faceted by `year`. [^02-review-r-10]\
 
 ```{r}
 #| label: fig-ggplot-yourturn
@@ -663,7 +666,11 @@ Recreate the plot below of `flipper_length_mm` versus `species` faceted by `year
 ggplot(data = penguins, aes(x = species, y = flipper_length_mm, fill = species)) +
   geom_boxplot() + 
   facet_wrap(vars(year))
+
 ```
+:::
+
+[^02-review-r-10]: `ggplot(data = penguins, aes(x = species, y = flipper_length_mm, fill = species)) + geom_boxplot() + facet_wrap(vars(year))`
 
 <!--# figure out how to get this in the callout box in latex-->
 
