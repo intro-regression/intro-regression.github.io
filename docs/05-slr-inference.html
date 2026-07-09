@@ -130,6 +130,8 @@ div.csl-indent {
   }
 }</script>
 <script defer="" data-domain="https://matackett.github.io/regression-book/" src="https://plausible.io/js/script.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -1327,7 +1329,6 @@ Figure&nbsp;5.6: Simulated null distribution with p-value represented by the sha
 <div class="yourturn">
 <p>Use the definition of the p-value at the beginning of this section to interpret the p-value of 0.046 in the context of the data.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 </div>
-<!--# add a practice?-->
 </section>
 <section id="sec-slr-inf-conclusion" class="level3" data-number="5.6.4">
 <h3 data-number="5.6.4" class="anchored" data-anchor-id="sec-slr-inf-conclusion"><span class="header-section-number">5.6.4</span> Draw conclusion</h3>
@@ -1351,45 +1352,52 @@ Figure&nbsp;5.6: Simulated null distribution with p-value represented by the sha
 <section id="type-i-and-type-ii-error" class="level3" data-number="5.6.5">
 <h3 data-number="5.6.5" class="anchored" data-anchor-id="type-i-and-type-ii-error"><span class="header-section-number">5.6.5</span> Type I and Type II error</h3>
 <p>Regardless of the conclusion that is drawn (reject or fail to reject the null hypothesis), we have not determined that the null or alternative hypothesis are definitive truth. We have just concluded that the evidence (the data) has provided more evidence in favor of one conclusion versus the other. As with any statistical procedure, there is the possibility of making an error, more specifically a Type I or Type II error. Because we don’t know the value of the population slope, we will not know for certain whether we have made an error; however, understanding the potential errors that can be made can help inform the decision-making threshold <span class="math inline">\(\alpha\)</span> and make a more informed assessment about the implication of these results in practice.</p>
-<p><span class="quarto-unresolved-ref">?tbl-errors</span> shows how Type I and Type II errors correspond to the (unknown) truth and the conclusion drawn from the hypothesis test.</p>
-<!--# figure out how to better format this table, so decision and truth are in the middle-->
-<table class="caption-top table">
-<caption>Type I and Type II error</caption>
+<p><a href="#tbl-errors" class="quarto-xref">Table&nbsp;<span>5.10</span></a> shows how Type I and Type II errors correspond to the (unknown) truth and the conclusion drawn from the hypothesis test.</p>
+<div class="cell">
+<div id="tbl-errors" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.10: Type I and Type II error
+</figcaption>
+<div aria-describedby="tbl-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th></th>
-<th></th>
-<th><strong>Truth</strong></th>
-<th></th>
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Truth
+</div></th>
+</tr>
+<tr class="even">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Decision</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">H<sub>0</sub> true</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">H<sub>0</sub> false</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
-<td></td>
-<td><span class="math inline">\(H_0\)</span> <strong>true</strong></td>
-<td><span class="math inline">\(H_a\)</span> <strong>true</strong></td>
+<td style="text-align: left;">Fail to reject H<sub>0</sub></td>
+<td style="text-align: center;">Correct</td>
+<td style="text-align: center;">Type II error</td>
 </tr>
 <tr class="even">
-<td><strong>Hypothesis test decision</strong></td>
-<td><strong>Fail to reject</strong> <span class="math inline">\(H_0\)</span></td>
-<td>Correct decision</td>
-<td>Type II error</td>
-</tr>
-<tr class="odd">
-<td></td>
-<td><strong>Reject</strong> <span class="math inline">\(H_0\)</span></td>
-<td>Type I error</td>
-<td>Correct decision</td>
+<td style="text-align: left;">Reject H<sub>0</sub></td>
+<td style="text-align: center;">Type I error</td>
+<td style="text-align: center;">Correct</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</figure>
+</div>
+</div>
 <p>A <strong>Type I error</strong> has occurred if the null hypothesis is actually true, but the p-value is small enough to reject the null hypothesis. The probability of making this type of error is the decision-making threshold <span class="math inline">\(\alpha\)</span>. This is because <span class="math inline">\(P(\text{reject }H_0 | H_0 \text{ true}) = \alpha\)</span>, meaning the probability of rejecting the null hypothesis given the null is true is <span class="math inline">\(\alpha\)</span>.</p>
 <p>A <strong>Type II error</strong> has occurred if the alternative hypothesis is actually true, but we fail to reject the null hypothesis, because the p-value is large. Computing the probability of making this type of error is less straightforward. It is calculated as <span class="math inline">\(1 - Power\)</span> , where the <span class="math inline">\(Power = P(\text{reject }H_0 | H_a \text{ true})\)</span>. <!--# insert some discussion of the power, or is this a rabbit hole?--></p>
 <p>In the context of the parks data, a Type I error is concluding that there is a linear relationship between per capita expenditure and playgrounds per 10,000 residents in the model, when there actually isn’t one in the population. A Type II error is concluding there is no linear relationship between per capita expenditure and playgrounds per 10,000 residents when in fact there is.</p>
@@ -1426,12 +1434,12 @@ Figure&nbsp;5.6: Simulated null distribution with p-value represented by the sha
 <li>Use the <span class="math inline">\(niter\)</span> values of <span class="math inline">\(\hat{y}\)</span> to construct the distribution of predicted values when <span class="math inline">\(x = x*\)</span>.</li>
 <li>Mark the bounds for the middle <span class="math inline">\(C\%\)</span> of the distribution to construct the <span class="math inline">\(C\%\)</span> interval for the predicted value when <span class="math inline">\(x = x*\)</span>.</li>
 </ol>
-<p>To illustrate this, let’s use the bootstrap samples from <a href="#sec-construct-bootstrap-ci" class="quarto-xref"><span>Section 5.4.1</span></a> to identify a plausible range of values for the predicted number of playgrounds per 10,000 residents when a city’s per capita expenditure is is $150. Table <a href="#tbl-bootstrap-pred-150" class="quarto-xref">Table&nbsp;<span>5.10</span></a> shows the estimated slope, intercept, and prediction for the first five bootstrap samples.</p>
+<p>To illustrate this, let’s use the bootstrap samples from <a href="#sec-construct-bootstrap-ci" class="quarto-xref"><span>Section 5.4.1</span></a> to identify a plausible range of values for the predicted number of playgrounds per 10,000 residents when a city’s per capita expenditure is is $150. Table <a href="#tbl-bootstrap-pred-150" class="quarto-xref">Table&nbsp;<span>5.11</span></a> shows the estimated slope, intercept, and prediction for the first five bootstrap samples.</p>
 <div class="cell">
 <div id="tbl-bootstrap-pred-150" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.10: Estimated slope, intercept, and prediction for <code>spend = 150</code> from first five bootstrap samples
+Table&nbsp;5.11: Estimated slope, intercept, and prediction for <code>spend = 150</code> from first five bootstrap samples
 </figcaption>
 <div aria-describedby="tbl-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1589,6 +1597,10 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <p><span class="math display">\[T = \frac{0.0033 - 0}{0.0016} = 2.063\]</span></p>
 <p>This test statistic means that assuming the true slope of <code>per_capita_expend</code> in this model is 0 and thus the mean of the distribution of <span class="math inline">\(\hat{\beta}_{1}\)</span> is 0, the observed slope of 0.003 is 2.063 standard errors above this hypothesized mean. It’s difficult to determine whether or not this is really “far enough” away from the center of the distribution, but we can calculate a p-value to determine the probability of observing a slope at least this far given the null hypothesis is true.</p>
 <p>Given there are <span class="math inline">\(n\)</span> = 97 observations, the test statistic follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(97 - 2 =\)</span> 95 degrees of freedom. The p-value, is <span class="math inline">\(Pr(t &lt; - |2.063| \text{ or } t &gt; |2.063|) =\)</span> 0.042.</p>
+<div class="yourturn">
+<p>A colleague makes the following statement:</p>
+<p><em>The p-value 0.042 means there is a 4.2 % chance the null hypothesis is true.</em> Is this interpretation of the p-value correct? If not, write the correct interpretation.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+</div>
 <p>Using a decision-making threshold <span class="math inline">\(\alpha = 0.05\)</span>, the p-value <span class="math inline">\(0.042\)</span> is sufficiently small, so we reject the null hypothesis. The data provide sufficient evidence that the coefficient of <code>per_capita_expend</code> is not 0 in this model and that there is a statistically significant linear relationship between a city’s per capita expenditure and playgrounds per 10,000 residents in US cities.</p>
 <p>Note that this conclusion is the same as in <a href="#sec-slr-inf-conclusion" class="quarto-xref"><span>Section 5.6.4</span></a> using a simulation-based approach (even with small differences in the p-value). This is what we would expect, given these are the two different approaches for conducting the same inferential process. We are also conducting the tests under the same assumptions that the null hypothesis is true. The difference is in the methods available to quantify <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>, simulation-based versus theory-based.</p>
 </section>
@@ -1631,12 +1643,12 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <p><span id="eq-slr-pred-indiv-se"><span class="math display">\[SE_{\hat{y}} = \hat{\sigma}_{\epsilon}\sqrt{1 + \frac{1}{n} + \frac{(x^* - \bar{x})}{\sum_{i=1}^n(x_i - \bar{x})^2}} \tag{5.15}\]</span></span></p>
 <p>where <span class="math inline">\(x^*\)</span> is the inputted value of the predictor, <span class="math inline">\(\bar{x}\)</span> is the mean value of the predictor across all observations and, <span class="math inline">\(\sigma_{\epsilon}\)</span> is the regression standard error. We plug one of these formulas in for <span class="math inline">\(SE\)</span> in <span class="quarto-unresolved-ref">?eq-slr-pred-int-general</span> depending on the type of prediction we’re doing.</p>
 <p>The details of the equations are beyond the scope of this text, but let’s take a moment to compare the two intervals. The equations look very similar with the exception of the additional 1 in <a href="#eq-slr-pred-indiv-se" class="quarto-xref">Equation&nbsp;<span>5.15</span></a>. This is accounts for the fact that when quantifying uncertainty in the prediction for an individual observation, we not only take into account the variability about the regression line but also the variability in the distribution of the response for a given value of the predictor. Thus predictions for an individual observation result in wider intervals than intervals for the mean response.</p>
-<p>Let’s take a look at the intervals around predictions given <code>per_capita_expend = 150</code>. <!--# do I have the model equation anywhere earlier?--> The predicted number of playgrounds per 10,000 residents when per capita spending is 150 is 2.913. <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.11</span></a> shows the standard error and 95% interval for predicting the mean number of playgrounds per 10,000 residents among all cities with per capita spend of $150 and the 95% interval for the predicted number of playgrounds for an individual city with per capita spend of $150.</p>
+<p>Let’s take a look at the intervals around predictions given <code>per_capita_expend = 150</code>. <!--# do I have the model equation anywhere earlier?--> The predicted number of playgrounds per 10,000 residents when per capita spending is 150 is 2.913. <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.12</span></a> shows the standard error and 95% interval for predicting the mean number of playgrounds per 10,000 residents among all cities with per capita spend of $150 and the 95% interval for the predicted number of playgrounds for an individual city with per capita spend of $150.</p>
 <div class="cell">
 <div id="tbl-prediction-intervals" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.11: Standard errors and 95% intervals for the predicted mean response and individual response when <code>per_capita_expend = 150</code>
+Table&nbsp;5.12: Standard errors and 95% intervals for the predicted mean response and individual response when <code>per_capita_expend = 150</code>
 </figcaption>
 <div aria-describedby="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1672,8 +1684,8 @@ Table&nbsp;5.11: Standard errors and 95% intervals for the predicted mean respon
 </figure>
 </div>
 </div>
-<p>The interval for the mean response in <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.11</span></a> is similar to the interval produced by bootstrapping in <a href="#sec-slr-bootstrap-pred-intervals" class="quarto-xref"><span>Section 5.8</span></a>.</p>
-<p>The interpretations for the intervals in <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.11</span></a> are as follows:</p>
+<p>The interval for the mean response in <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.12</span></a> is similar to the interval produced by bootstrapping in <a href="#sec-slr-bootstrap-pred-intervals" class="quarto-xref"><span>Section 5.8</span></a>.</p>
+<p>The interpretations for the intervals in <a href="#tbl-prediction-intervals" class="quarto-xref">Table&nbsp;<span>5.12</span></a> are as follows:</p>
 <blockquote class="blockquote">
 <p>We are 95% confident that the mean number of playgrounds per 10,000 residents in cities that have per capita expenditure of \$150 is between 2.656 to 3.169.</p>
 <p>We are 95% confident the number of playgrounds per 10,000 residents in an individual city with per capita expenditure of \$150 is between 0.654 to 5.172.</p>
@@ -1816,7 +1828,7 @@ Table&nbsp;5.11: Standard errors and 95% intervals for the predicted mean respon
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># compute p-value </span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">get_p_value</span>(null_dist, estimated_slope, <span class="at">direction =</span> <span class="st">"both"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">get_p_value</span>(null_dist, estimated_slope, <span class="at">direction =</span> <span class="st">"two-sided"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">"per_capita_expend"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
@@ -1825,6 +1837,8 @@ Table&nbsp;5.11: Standard errors and 95% intervals for the predicted mean respon
 1 per_capita_expend   0.054</code></pre>
 </div>
 </div>
+<p>This p-value is close but not the same as the p-value we computed in <a href="#sec-calc-pvalue" class="quarto-xref"><span>Section 5.6.3</span></a>. This is due to the way <code>get_p_value()</code> computes the p-value. In <a href="#sec-calc-pvalue" class="quarto-xref"><span>Section 5.6.3</span></a>, we computed the p-value by counting all estimated slopes that were less than -0.003 or greater than 0.003. In contrast, <code>get_p_value()</code> computes the p-value by counting the number of observations greater than 0.003 and multiplying by two. It makes use of the fact that the theoretical null distribution is symmetric (see <a href="#sec-slr-inf-clt-hypothesis-test" class="quarto-xref"><span>Section 5.9.3</span></a>), even if the simulated null distribution is not exactly symmetric.</p>
+<p>We can use either approach to compute the p-value. In this case, the p-value was so close to the standard cut off of 0.05, that the different approaches led to different inferential conclusions. This is an example of why it is not good practice to solely rely on a p-value and is important to take into account the magnitude of the estimated slope and confidence interval when making conclusions in practice.</p>
 <!--# Callout box about gettig pvalue exactly equal to 0. May be confusing here, because we didnt get a pvalue of 0. When using permutation tests, the software may output a p-value of 0, as in this example. Note that the true theoretical p-value is <u>not</u> exactly 0; it is just so small that we did not observe a slope at least as extreme as the slope estimated from the sample data in the r niter permutation samples used to generate the null distribution. We will calculate the exact p-value in @sec-slr-inf-clt-hypothesis-test when we conduct hypothesis testing using theory-based inference methods.-->
 </section>
 <section id="sec-theory-inf-r" class="level3" data-number="5.10.3">
@@ -1954,6 +1968,7 @@ Intercept: We would not expect a city to invest $0 on services and facilities fo
 <li id="fn10"><p><em>Standard error</em> is the term used for the standard deviation of a sampling distribution.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn11"><p>Note its similarities to the general equation for sample standard deviation, <span class="math inline">\(s = \sqrt{\frac{\sum_{i=1}^n(y_i - \bar{y})^2}{n-1}}\)</span><a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn12"><p>Test statistics with small magnitude provide evidence in support of the null hypothesis, as they are close to the hypothesized value. Conversely test statistics with large magnitude provide evidence against the null hypothesis, as they are very far away from the hypothesized value.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>This is incorrect and a common misinterpretation of the p-value. A correct interpretation is <em>given there is no relationship between a city’s per capita spending and number of playgrounds per 10,000 residents, the probability of observing a slope of 0.003 or more extreme is 0.042</em>.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
