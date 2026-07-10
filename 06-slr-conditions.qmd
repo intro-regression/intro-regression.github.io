@@ -340,7 +340,7 @@ augment(model) |>
 
 ```{r}
 #| label: fig-coffee-equal-var
-#| fig-cap: Plot of the residuals versus predicted values. The vertical spread is approximately for each predicted value, as shown by the residuals generally falling between the two dotted lines when moving along the $x$-axis.
+#| fig-cap: Plot of the residuals versus predicted values. The vertical spread is approximately equal for the majority of predicted values, as shown by the residuals generally falling between the two dotted lines when moving along the $x$-axis.
 #| echo: false
 ggplot(data = coffee_model_aug, aes(x = .fitted, y = .resid)) +
   geom_point() +
@@ -353,7 +353,7 @@ ggplot(data = coffee_model_aug, aes(x = .fitted, y = .resid)) +
        title = "Residuals versus predicted values")
 ```
 
-From @fig-coffee-equal-var, the vertical spread of the residuals is approximately equal, as the vast majority of the residuals are between the two dotted lines as we move along the $x$-axis. Therefore, **the equal variance condition is satisfied.**
+From @fig-coffee-equal-var, the vertical spread of the residuals is approximately equal, as the vast majority of the residuals are between the two dotted lines as we move along the $x$-axis. There appears to be less variability for very low and very high predicted value, but we note there are also few observations at these points. This is often the case at the extreme ends of the distribution of predicted values. Thus, we went evaluate the equal variance condition, we want to focus on the variability in the majority of the data. Given the approximately equal vertical spread of the residuals in the majority of the data, **the equal variance condition is satisfied.**
 
 <!--# Consider including a test or more robust way to assess equal variance.-->
 
