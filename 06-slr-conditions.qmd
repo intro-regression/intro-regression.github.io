@@ -181,7 +181,7 @@ Recall the assumptions from @sec-slr-foundation:
 
 The assumptions are based on population-level data, yet we work with sample data in practice. Therefore, we have a set of model conditions we can check using the data at hand to assess these assumptions.
 
-After fitting a simple linear regression model, we check four conditions to evaluate whether the data are consistent with the underlying assumptions. They are commonly referred to using the mnemonic LINE.<!--# is there a citation for the original use?--> These four conditions are the following:
+After fitting a simple linear regression model, we check four conditions to evaluate whether the data are consistent with the underlying assumptions. They are commonly referred to using the mnemonic LINE. These four conditions are the following:
 
 - **L**inearity: There is a linear relationship between the response and predictor variables.
 - **I**ndependence: The residuals are independent of one another. <!--# Is there a more useful way to describe independence? One residual does not inform another residual? -->
@@ -268,9 +268,11 @@ The first scenario in which independence is often violated is due to a **serial 
 
 <!--# do i need a graph illustrating this?-->
 
-The second common violation of independence is due to a **cluster effect**. <!--# does this term need to be cited?--> This is when there are subgroups present in the data that are not accounted for by the model. To check this condition, modify the plot of the residuals versus predicted by using color, shape, faceting, or visual features to differentiate the observations by the subgroup. Similar to checking the linearity condition, we expect the residuals to be randomly scattered above and below $y = 0$ for each subgroup. If this is not the case, there is indication that subgroup should be accounted for in the model. We will talk more about strategies for dealing with violations in the model conditions in @sec-conditions-not-satisfied and how to include categorical predictors in the model to account for subgroups in @sec-ch-mlr.
+The second common violation of independence is due to a **cluster effect**. <!--# does this term need to be cited?--> This is when there are subgroups present in the data that are not accounted for in the model. To check this condition, modify the plot of the residuals versus predicted by using color, shape, faceting, or visual features to differentiate the observations by the subgroup. Similar to checking the linearity condition, we expect the residuals to be randomly scattered above and below $y = 0$ for each subgroup. If this is not the case, there is indication that subgroup should be accounted for in the model.
 
-Based on the description of the coffee data, we conclude that the independence condition is satisfied. We do not have evidence of a serial or cluster effect in the data description.
+We will talk more about strategies for dealing with violations in the model conditions in @sec-conditions-not-satisfied and how to include categorical predictors in the model to account for subgroups in @sec-ch-mlr.
+
+In the coffee ratings data, we consider if there is a potential cluster effect based on where the coffee beans were grown. <!--# add graph for the distribution by country. Need to restructure the data--> Based on the description of the coffee data, we conclude that the independence condition is satisfied. We do not have evidence of a serial or cluster effect in the data description.
 
 <!--# add callout about spatial correlation. It's a type of sbugroup but a map is even more useful bc you can check correlation between neighboring areas-->
 
@@ -421,7 +423,7 @@ The equal variance condition is as assessment of whether the distribution of the
 
 Similar to the normality condition, the equal variance condition is not required for simulation-based inference, because $SE_{\hat{\beta}_1}$ is estimated from the sampling distribution simulated from the data.
 
-There are approaches for handling violations in the equal variance condition. These approaches typically involve performing a transformation on the response variable. We will discuss these further in \@\@sec-ch-transformations.
+There are approaches for handling violations in the equal variance condition. These approaches typically involve performing a transformation on the response variable. We will discuss these further in @sec-ch-transformations.
 
 ### Recap
 
