@@ -295,7 +295,7 @@ We then fit the regression model and compute $\hat{\beta}_1$ for each bootstrap 
 Why do we sample [with replacement]{.underline} when generating a bootstrap sample? How would a bootstrap sample compare to the original sample data if sampling is done *without* replacement?[^05-slr-inference-3]
 :::
 
-[^05-slr-inference-3]: We sample with replacement so that we get a new sample each time we bootstrap. If we sampled without replacement, we would always end up with a bootstrap sample is exactly the same as the original sample.
+[^05-slr-inference-3]: We sample with replacement so that we get a new sample of $x_i, y_i$ pairs each time we bootstrap. In each bootstrap sample, some $x_i, y_i$ pairs from original data may appear multiple times and some may be omitted. If we sampled without replacement, the resulting bootstrap samples would always be exactly the same as the original sample data.
 
 <!--# do i need to add an example here?-->
 
@@ -748,7 +748,7 @@ tab |>
 
 A **Type I error** has occurred if the null hypothesis is actually true, but the p-value is small enough to reject the null hypothesis. The probability of making this type of error is the decision-making threshold $\alpha$. This is because $P(\text{reject }H_0 | H_0 \text{ true}) = \alpha$, meaning the probability of rejecting the null hypothesis given the null is true is $\alpha$.
 
-A **Type II error** has occurred if the alternative hypothesis is actually true, but we fail to reject the null hypothesis, because the p-value is large. Computing the probability of making this type of error is less straightforward. It is calculated as $1 - Power$ , where the $Power = P(\text{reject }H_0 | H_a \text{ true})$. <!--# insert some discussion of the power, or is this a rabbit hole?-->
+A **Type II error** has occurred if the alternative hypothesis is actually true, but we fail to reject the null hypothesis, because the p-value is large. Computing the probability of making this type of error is less straightforward. It is computed as $1 - \text{Power}$. The **power** of a hypothesis test is the probability the null hypothesis is rejected given the alternative hypothesis is true, $P(\text{rejct }H_0 | H_a \text{ true})$. Power depends on the minimum effect size (magnitude of the slope) that would be meaningful for the analysis and the sample size. We often consider the power as we plan in the first step of the data science workflow (see @fig-ds-workflow). The details for computing power are beyond the scope of this text, but we note there are many online calculators and R packages, such as **pwr** [@pwr], that can be used compute power based on the specifications of the analysis.
 
 In the context of the parks data, a Type I error is concluding that there is a linear relationship between per capita expenditure and playgrounds per 10,000 residents in the model, when there actually isn't one in the population. A Type II error is concluding there is no linear relationship between per capita expenditure and playgrounds per 10,000 residents when in fact there is.
 
