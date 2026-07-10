@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/06-slr-conditions.html</loc>
-    <lastmod>2026-07-10T14:00:26.106Z</lastmod>
+    <lastmod>2026-07-10T14:34:21.488Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/07-mlr.html</loc>
@@ -75,5 +75,9 @@
   <url>
     <loc>https://introregressio.netlify.app/references.html</loc>
     <lastmod>2026-06-08T10:34:48.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://introregressio.netlify.app/Introduction-to-Regression-Analysis.pdf</loc>
+    <lastmod>2026-07-10T14:42:29.798Z</lastmod>
   </url>
 </urlset>

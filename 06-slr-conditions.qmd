@@ -54,6 +54,8 @@ What makes a delicious cup of coffee? Is there a relationship between a coffee's
 
 - `flavor`: Flavor grade (0: worst flavor - 10: best flavor)
 
+- `country_of_origin`: Country in which the coffee beans are grown
+
 ::: {.objective latex=""}
 The goal of the analysis is to use the aroma grade to understand variability in the flavor grade, and assess model conditions and diagnostics to evaluate whether regression analysis is suitable for drawing reliable conclusions from the data.
 :::
@@ -272,9 +274,37 @@ The second common violation of independence is due to a **cluster effect**. <!--
 
 We will talk more about strategies for dealing with violations in the model conditions in @sec-conditions-not-satisfied and how to include categorical predictors in the model to account for subgroups in @sec-ch-mlr.
 
-In the coffee ratings data, we consider if there is a potential cluster effect based on where the coffee beans were grown. <!--# add graph for the distribution by country. Need to restructure the data--> Based on the description of the coffee data, we conclude that the independence condition is satisfied. We do not have evidence of a serial or cluster effect in the data description.
+In the coffee ratings data, we consider if there is a potential cluster effect based on where the coffee beans were grown (`country_of_origin` in the data). This variable has `r coffee_ratings |> count(country_of_origin) |> nrow()` unique observations, so let's look at the distribution of residuals for the five countries with the most observations in the data.
 
-<!--# add callout about spatial correlation. It's a type of sbugroup but a map is even more useful bc you can check correlation between neighboring areas-->
+```{r}
+#| label: fig-indep-subgroup
+#| fig-cap: "Distribution of residuals for five countries with most observations in the data"
+
+# add country of origin to augmented data
+coffee_model_aug <- coffee_model_aug |>
+  mutate(country_of_origin = coffee_ratings$country_of_origin)
+
+# identify the countries with the most observations
+top_countries <- coffee_ratings |> 
+  count(country_of_origin) |> 
+  arrange(desc(n)) |>
+  slice(1:5) |>
+  pull(country_of_origin)
+  
+# make plot of residuals vs predicted
+coffee_model_aug |>
+  filter(country_of_origin %in% top_countries) |>
+  ggplot(aes(x = country_of_origin, y = .resid)) + 
+  geom_boxplot(fill = "steelblue", color = 'black', alpha = 0.5) +
+  geom_hline(yintercept = 0, color = "red", linetype = 2) +
+  labs(x = "Country of origin",
+       y = "Residuals") +
+  theme_bw() 
+```
+
+@fig-indep-subgroup shows the distribution of residuals for the five countries with the most observations in the data. The distribution of residuals for each country is approximately centered around zero. This indicates that the model is not systematically over- or underpredicting for a particular country (at least out of these five).[^06-slr-conditions-2] Thus, based on this analysis of subgroups and the description of the coffee data, we conclude that the [**independence condition is satisfied**]{.underline}. We do not have evidence of a serial or cluster effect in the data description.
+
+[^06-slr-conditions-2]: Here, we have analyzed the distribution of residuals for five countries to illustrate the independence condition. In practice, we may want to analyze the distribution of residuals for more countries in the data.
 
 ### Normality
 

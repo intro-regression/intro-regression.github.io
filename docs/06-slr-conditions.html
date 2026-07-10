@@ -443,6 +443,7 @@ window.Quarto = {
 <ul>
 <li><p><code>aroma</code> : Aroma grade (0: worst aroma - 10: best aroma)</p></li>
 <li><p><code>flavor</code>: Flavor grade (0: worst flavor - 10: best flavor)</p></li>
+<li><p><code>country_of_origin</code>: Country in which the coffee beans are grown</p></li>
 </ul>
 <div class="objective">
 <p>The goal of the analysis is to use the aroma grade to understand variability in the flavor grade, and assess model conditions and diagnostics to evaluate whether regression analysis is suitable for drawing reliable conclusions from the data.</p>
@@ -679,8 +680,20 @@ Figure&nbsp;6.3: Example of violation in linearity condition. The residuals are 
 <!--# do i need a graph illustrating this?-->
 <p>The second common violation of independence is due to a <strong>cluster effect</strong>. <!--# does this term need to be cited?--> This is when there are subgroups present in the data that are not accounted for in the model. To check this condition, modify the plot of the residuals versus predicted by using color, shape, faceting, or visual features to differentiate the observations by the subgroup. Similar to checking the linearity condition, we expect the residuals to be randomly scattered above and below <span class="math inline">\(y = 0\)</span> for each subgroup. If this is not the case, there is indication that subgroup should be accounted for in the model.</p>
 <p>We will talk more about strategies for dealing with violations in the model conditions in <a href="#sec-conditions-not-satisfied" class="quarto-xref"><span>Section 6.3</span></a> and how to include categorical predictors in the model to account for subgroups in <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
-<p>In the coffee ratings data, we consider if there is a potential cluster effect based on where the coffee beans were grown. <!--# add graph for the distribution by country. Need to restructure the data--> Based on the description of the coffee data, we conclude that the independence condition is satisfied. We do not have evidence of a serial or cluster effect in the data description.</p>
-<!--# add callout about spatial correlation. It's a type of sbugroup but a map is even more useful bc you can check correlation between neighboring areas-->
+<p>In the coffee ratings data, we consider if there is a potential cluster effect based on where the coffee beans were grown (<code>country_of_origin</code> in the data). This variable has 37 unique observations, so let’s look at the distribution of residuals for the five countries with the most observations in the data.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-indep-subgroup" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-indep-subgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06-slr-conditions_files/figure-html/fig-indep-subgroup-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6.4: Distribution of residuals for five countries with most observations in the data"><img src="06-slr-conditions_files/figure-html/fig-indep-subgroup-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-indep-subgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.4: Distribution of residuals for five countries with most observations in the data
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-indep-subgroup" class="quarto-xref">Figure&nbsp;<span>6.4</span></a> shows the distribution of residuals for the five countries with the most observations in the data. The distribution of residuals for each country is approximately centered around zero. This indicates that the model is not systematically over- or underpredicting for a particular country (at least out of these five).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Thus, based on this analysis of subgroups and the description of the coffee data, we conclude that the <u><strong>independence condition is satisfied</strong></u>. We do not have evidence of a serial or cluster effect in the data description.</p>
 </section><section id="normality" class="level3" data-number="6.2.4"><h3 data-number="6.2.4" class="anchored" data-anchor-id="normality">
 <span class="header-section-number">6.2.4</span> Normality</h3>
 <p>The next condition is <strong>normality</strong>, that the residuals are normally distributed. Though not explicitly part of the condition, we also know that the mean of the residuals, and thus the center of the distribution, is approximately 0. This condition arises from the assumption from <a href="05-slr-inference.html#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a> that the distribution of the response variable, and thus the residuals, at each value of the predictor variable is normal. In practice, it would be nearly impossible to check the distribution of the response or residuals for each possible value of the predictor, so we will look at the overall distribution of the residuals to check the normality condition.</p>
@@ -688,30 +701,30 @@ Figure&nbsp;6.3: Example of violation in linearity condition. The residuals are 
 <div class="cell-output-display">
 <div id="fig-coffee-normality" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-coffee-normality-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-coffee-normality-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6.4: The distribution of the residuals for model of flavor and aroma with normal density curve"><img src="06-slr-conditions_files/figure-html/fig-coffee-normality-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="06-slr-conditions_files/figure-html/fig-coffee-normality-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;6.5: The distribution of the residuals for model of flavor and aroma with normal density curve"><img src="06-slr-conditions_files/figure-html/fig-coffee-normality-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coffee-normality-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.4: The distribution of the residuals for model of <code>flavor</code> and <code>aroma</code> with normal density curve
+Figure&nbsp;6.5: The distribution of the residuals for model of <code>flavor</code> and <code>aroma</code> with normal density curve
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-coffee-normality" class="quarto-xref">Figure&nbsp;<span>6.4</span></a> shows the distribution of the residuals along with the theoretical curve for a normal distribution that is centered at 0 the mean of the residuals, and a standard deviation of 0.229, the standard deviation of the residuals. Similar to the other conditions, we are looking for obvious departures from normality when assessing this condition. This might include strong skewness, multiple modes, large outliers, or other major departures from normality.</p>
-<p>From <a href="#fig-coffee-normality" class="quarto-xref">Figure&nbsp;<span>6.4</span></a>, we see the distribution of the residuals is approximately normal, as the shape of the histogram is unimodal and symmetric, the general shape of the normal curve. Therefore, we conclude that <strong>the normality condition is satisfied</strong>.</p>
+<p><a href="#fig-coffee-normality" class="quarto-xref">Figure&nbsp;<span>6.5</span></a> shows the distribution of the residuals along with the theoretical curve for a normal distribution that is centered at 0 the mean of the residuals, and a standard deviation of 0.229, the standard deviation of the residuals. Similar to the other conditions, we are looking for obvious departures from normality when assessing this condition. This might include strong skewness, multiple modes, large outliers, or other major departures from normality.</p>
+<p>From <a href="#fig-coffee-normality" class="quarto-xref">Figure&nbsp;<span>6.5</span></a>, we see the distribution of the residuals is approximately normal, as the shape of the histogram is unimodal and symmetric, the general shape of the normal curve. Therefore, we conclude that <strong>the normality condition is satisfied</strong>.</p>
 <!--# Should I introduce a goodness-of-fit test here, or is this fine?-->
 <!--# Maybe move the point about sample size that comes later here-->
 </section><section id="equal-variance" class="level3" data-number="6.2.5"><h3 data-number="6.2.5" class="anchored" data-anchor-id="equal-variance">
 <span class="header-section-number">6.2.5</span> Equal variance</h3>
 <p>The last condition is <strong>equal variance</strong> (also called <em>constant variance</em>), that the variability of the residuals is approximately equal for each predicted value. This condition stems from the assumption in <a href="05-slr-inference.html#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a> that <span class="math inline">\(\sigma_{\epsilon}^2\)</span> is equal for all values of the predictor, and thus for all predicted values.</p>
-<p>To check this condition, we will go back to the plot of the residuals versus predicted values from <a href="#fig-coffee-linearity" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>. We look to see if the vertical spread of the residuals is approximately equal as we move along the <span class="math inline">\(x\)</span>-axis. Since we are working with sample data, we don’t expect the vertical spread of the residuals to be exactly equal as we move along the <span class="math inline">\(x\)</span>-axis (for example, there may be outliers). Therefore, similar to previous conditions, we are looking for obvious departures from equal variance to conclude that the condition is not met. <a href="#fig-equal-var-not-met" class="quarto-xref">Figure&nbsp;<span>6.5</span></a> shows an example using simulated data of plot of residuals versus fitted when the equal variance condition is not satisfied. There is a distinguishable “fan-shape” showing that the spread of the residuals increases as the predicted value increases. Additionally, keep in mind that we are examining the vertical spread for the majority of the data, not including outliers in the assessments as shown by the dotted lines in <a href="#fig-coffee-equal-var" class="quarto-xref">Figure&nbsp;<span>6.6</span></a> to serve as a guide as we assess equal variance.</p>
+<p>To check this condition, we will go back to the plot of the residuals versus predicted values from <a href="#fig-coffee-linearity" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>. We look to see if the vertical spread of the residuals is approximately equal as we move along the <span class="math inline">\(x\)</span>-axis. Since we are working with sample data, we don’t expect the vertical spread of the residuals to be exactly equal as we move along the <span class="math inline">\(x\)</span>-axis (for example, there may be outliers). Therefore, similar to previous conditions, we are looking for obvious departures from equal variance to conclude that the condition is not met. <a href="#fig-equal-var-not-met" class="quarto-xref">Figure&nbsp;<span>6.6</span></a> shows an example using simulated data of plot of residuals versus fitted when the equal variance condition is not satisfied. There is a distinguishable “fan-shape” showing that the spread of the residuals increases as the predicted value increases. Additionally, keep in mind that we are examining the vertical spread for the majority of the data, not including outliers in the assessments as shown by the dotted lines in <a href="#fig-coffee-equal-var" class="quarto-xref">Figure&nbsp;<span>6.7</span></a> to serve as a guide as we assess equal variance.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-equal-var-not-met" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-equal-var-not-met-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-equal-var-not-met-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;6.5: Example of residuals from simulated data that violate the equal variance condition. The vertical spread of the residuals increases as the predicted value increases."><img src="06-slr-conditions_files/figure-html/fig-equal-var-not-met-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="06-slr-conditions_files/figure-html/fig-equal-var-not-met-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;6.6: Example of residuals from simulated data that violate the equal variance condition. The vertical spread of the residuals increases as the predicted value increases."><img src="06-slr-conditions_files/figure-html/fig-equal-var-not-met-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-equal-var-not-met-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.5: Example of residuals from simulated data that violate the equal variance condition. The vertical spread of the residuals increases as the predicted value increases.
+Figure&nbsp;6.6: Example of residuals from simulated data that violate the equal variance condition. The vertical spread of the residuals increases as the predicted value increases.
 </figcaption></figure>
 </div>
 </div>
@@ -721,15 +734,15 @@ Figure&nbsp;6.5: Example of residuals from simulated data that violate the equal
 <div class="cell-output-display">
 <div id="fig-coffee-equal-var" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-coffee-equal-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-coffee-equal-var-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;6.6: Plot of the residuals versus predicted values. The vertical spread is approximately for each predicted value, as shown by the residuals generally falling between the two dotted lines when moving along the x-axis."><img src="06-slr-conditions_files/figure-html/fig-coffee-equal-var-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="06-slr-conditions_files/figure-html/fig-coffee-equal-var-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;6.7: Plot of the residuals versus predicted values. The vertical spread is approximately equal for the majority of predicted values, as shown by the residuals generally falling between the two dotted lines when moving along the x-axis."><img src="06-slr-conditions_files/figure-html/fig-coffee-equal-var-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coffee-equal-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.6: Plot of the residuals versus predicted values. The vertical spread is approximately for each predicted value, as shown by the residuals generally falling between the two dotted lines when moving along the <span class="math inline">\(x\)</span>-axis.
+Figure&nbsp;6.7: Plot of the residuals versus predicted values. The vertical spread is approximately equal for the majority of predicted values, as shown by the residuals generally falling between the two dotted lines when moving along the <span class="math inline">\(x\)</span>-axis.
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p>From <a href="#fig-coffee-equal-var" class="quarto-xref">Figure&nbsp;<span>6.6</span></a>, the vertical spread of the residuals is approximately equal, as the vast majority of the residuals are between the two dotted lines as we move along the <span class="math inline">\(x\)</span>-axis. Therefore, <strong>the equal variance condition is satisfied.</strong></p>
+<p>From <a href="#fig-coffee-equal-var" class="quarto-xref">Figure&nbsp;<span>6.7</span></a>, the vertical spread of the residuals is approximately equal, as the vast majority of the residuals are between the two dotted lines as we move along the <span class="math inline">\(x\)</span>-axis. There appears to be less variability for very low and very high predicted value, but we note there are also few observations at these points. This is often the case at the extreme ends of the distribution of predicted values. Thus, we went evaluate the equal variance condition, we want to focus on the variability in the majority of the data. Given the approximately equal vertical spread of the residuals in the majority of the data, <strong>the equal variance condition is satisfied.</strong></p>
 <!--# Consider including a test or more robust way to assess equal variance.-->
 <div class="analysis_in_practice">
 <p><strong>Checking model conditions</strong></p>
@@ -842,14 +855,14 @@ Figure&nbsp;6.6: Plot of the residuals versus predicted values. The vertical spr
 <p>A single observation could fall into multiple categories. For example look at the outlier identified in <a href="#fig-coffee-eda" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>. This observation is around the center of the distribution for the response variable <code>flavor</code> but has a low outlying value in terms of the predictor <code>aroma</code>. Therefore, it is an outlier as described by categories (1) and (3) above. There is a set of model diagnostics to assess if there are observations in the data that fall into one or more of these outlier scenarios, and more importantly, if any such outlying observations have an out-sized impact on the regression model.</p>
 <section id="influential-points" class="level3" data-number="6.4.1"><h3 data-number="6.4.1" class="anchored" data-anchor-id="influential-points">
 <span class="header-section-number">6.4.1</span> Influential points</h3>
-<p>An observation is considered an <strong>influential point</strong> if the estimated regression coefficients noticeably differ when the point is included in the data used to fit the model versus when it is not. <a href="#fig-influential-point" class="quarto-xref">Figure&nbsp;<span>6.7</span></a> illustrates the potential impact an influential point can have on the estimated regression line. Additionally, influential points can affect <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>, estimated standard error of the slope, which can result in unreliable inferential conclusions as described in the previous section.</p>
+<p>An observation is considered an <strong>influential point</strong> if the estimated regression coefficients noticeably differ when the point is included in the data used to fit the model versus when it is not. <a href="#fig-influential-point" class="quarto-xref">Figure&nbsp;<span>6.8</span></a> illustrates the potential impact an influential point can have on the estimated regression line. Additionally, influential points can affect <span class="math inline">\(SE_{\hat{\beta}_1}\)</span>, estimated standard error of the slope, which can result in unreliable inferential conclusions as described in the previous section.</p>
 <div id="fig-influential-point" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-influential-point-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-influential-point" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-influential-point-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-influential-point-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-influential-point-1.png" class="lightbox" data-gallery="fig-influential-point" title="Figure&nbsp;6.7&nbsp;(a): With influential point"><img src="06-slr-conditions_files/figure-html/fig-influential-point-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-influential-point"></a>
+<a href="06-slr-conditions_files/figure-html/fig-influential-point-1.png" class="lightbox" data-gallery="fig-influential-point" title="Figure&nbsp;6.8&nbsp;(a): With influential point"><img src="06-slr-conditions_files/figure-html/fig-influential-point-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-influential-point"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-influential-point-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) With influential point
@@ -859,7 +872,7 @@ Figure&nbsp;6.6: Plot of the residuals versus predicted values. The vertical spr
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-influential-point" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-influential-point-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-influential-point-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-influential-point-2.png" class="lightbox" data-gallery="fig-influential-point" title="Figure&nbsp;6.7&nbsp;(b): Without influential point"><img src="06-slr-conditions_files/figure-html/fig-influential-point-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-influential-point"></a>
+<a href="06-slr-conditions_files/figure-html/fig-influential-point-2.png" class="lightbox" data-gallery="fig-influential-point" title="Figure&nbsp;6.8&nbsp;(b): Without influential point"><img src="06-slr-conditions_files/figure-html/fig-influential-point-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-influential-point"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-influential-point-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Without influential point
@@ -869,7 +882,7 @@ Figure&nbsp;6.6: Plot of the residuals versus predicted values. The vertical spr
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-influential-point-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.7: Simulated data showing the effect of an infulential point representd by the red triangle. The slope of the line changes when the influential point is removed from the data set.
+Figure&nbsp;6.8: Simulated data showing the effect of an infulential point representd by the red triangle. The slope of the line changes when the influential point is removed from the data set.
 </figcaption></figure>
 </div>
 <p>Sometimes potential influential points can be identified in a scatterplot of the response versus predictor variable in the exploratory data analysis. In the EDA, we have called out these points as being outliers, as they are typically outside of the general trend of the relationship between the two variables. Identifying these points from the EDA can become more difficult, however, when there are multiple predictor variables (see <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>). Therefore, we will use a set of model diagnostics to identify observations that are outliers and perhaps more importantly, those that are influential.</p>
@@ -894,15 +907,15 @@ Figure&nbsp;6.7: Simulated data showing the effect of an infulential point repre
 <p>Leverage only depends on the values of the predictor variable(s). It does <u><strong>not</strong></u> depend on values of the response.</p>
 </div>
 <p>Let’s take a look at the leverage for the observations in the coffee ratings data set. There are 1338 observations in the data and one predictor variable, so the threshold for identifying observations with high leverage is <span class="math inline">\(\frac{2 \times 2}{1338} =\)</span> 0.003.</p>
-<p><a href="#fig-coffee-leverage" class="quarto-xref">Figure&nbsp;<span>6.8</span></a> is a visualization of the leverage for each observation in the data set. The red, horizontal dotted line marks the threshold for identifying points as having high leverage. There are 114 observations that have high leverage.</p>
+<p><a href="#fig-coffee-leverage" class="quarto-xref">Figure&nbsp;<span>6.9</span></a> is a visualization of the leverage for each observation in the data set. The red, horizontal dotted line marks the threshold for identifying points as having high leverage. There are 114 observations that have high leverage.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-coffee-leverage" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-coffee-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-coffee-leverage-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;6.8: Leverage for observations in the coffee ratings data"><img src="06-slr-conditions_files/figure-html/fig-coffee-leverage-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="06-slr-conditions_files/figure-html/fig-coffee-leverage-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;6.9: Leverage for observations in the coffee ratings data"><img src="06-slr-conditions_files/figure-html/fig-coffee-leverage-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coffee-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.8: Leverage for observations in the coffee ratings data
+Figure&nbsp;6.9: Leverage for observations in the coffee ratings data
 </figcaption></figure>
 </div>
 </div>
@@ -973,16 +986,16 @@ Table&nbsp;6.3: Observations with the top five highest values for leverage
 <div class="cell-output-display">
 <div id="fig-coffee-stdresid" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-coffee-stdresid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-coffee-stdresid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;6.9: Standardized residuals versus observation number for model of flavor and aroma"><img src="06-slr-conditions_files/figure-html/fig-coffee-stdresid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="06-slr-conditions_files/figure-html/fig-coffee-stdresid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;6.10: Standardized residuals versus observation number for model of flavor and aroma"><img src="06-slr-conditions_files/figure-html/fig-coffee-stdresid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coffee-stdresid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.9: Standardized residuals versus observation number for model of <code>flavor</code> and <code>aroma</code>
+Figure&nbsp;6.10: Standardized residuals versus observation number for model of <code>flavor</code> and <code>aroma</code>
 </figcaption></figure>
 </div>
 </div>
 </div>
 <!--# maybe use visualization to show why these have big std residuals-->
-<p><a href="#fig-coffee-stdresid" class="quarto-xref">Figure&nbsp;<span>6.9</span></a> shows 12 observations with large magnitude residuals based on the threshold <span class="math inline">\(\pm 3\)</span> . This includes observations that have positive residuals with large magnitude (indicating the model greatly underpredicted) and observations with negative residuals with large magnitude (indicating the model greatly overpredicted).</p>
+<p><a href="#fig-coffee-stdresid" class="quarto-xref">Figure&nbsp;<span>6.10</span></a> shows 12 observations with large magnitude residuals based on the threshold <span class="math inline">\(\pm 3\)</span> . This includes observations that have positive residuals with large magnitude (indicating the model greatly underpredicted) and observations with negative residuals with large magnitude (indicating the model greatly overpredicted).</p>
 <p>These five observations with the largest magnitude residuals are shown in <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.4</span></a>.</p>
 <!--# think of a way to visualize observations with large magnitude residuals-->
 <div class="cell">
@@ -1036,21 +1049,21 @@ Table&nbsp;6.4: Observations with large magnitude residuals
 </figure>
 </div>
 </div>
-<p>We see from <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.4</span></a> and <a href="#fig-coffee-large-resid" class="quarto-xref">Figure&nbsp;<span>6.10</span></a> that these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual that has a higher actual flavor rating than the model predicts based on its very low aroma rating.</p>
+<p>We see from <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.4</span></a> and <a href="#fig-coffee-large-resid" class="quarto-xref">Figure&nbsp;<span>6.11</span></a> that these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual that has a higher actual flavor rating than the model predicts based on its very low aroma rating.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-coffee-large-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-coffee-large-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-coffee-large-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;6.10: Flavor grade versus aroma grade. Points marked with a red triangle are the observations with large standardized residuals with magnitude > 3."><img src="06-slr-conditions_files/figure-html/fig-coffee-large-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="06-slr-conditions_files/figure-html/fig-coffee-large-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;6.11: Flavor grade versus aroma grade. Points marked with a red triangle are the observations with large standardized residuals with magnitude > 3."><img src="06-slr-conditions_files/figure-html/fig-coffee-large-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coffee-large-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.10: Flavor grade versus aroma grade. Points marked with a red triangle are the observations with large standardized residuals with magnitude &gt; 3.
+Figure&nbsp;6.11: Flavor grade versus aroma grade. Points marked with a red triangle are the observations with large standardized residuals with magnitude &gt; 3.
 </figcaption></figure>
 </div>
 </div>
 </div>
 <div class="analysis_in_practice">
-<p>We can use a plot of standardized residuals versus predicted values such as the one in <a href="#fig-coffee-stdresid" class="quarto-xref">Figure&nbsp;<span>6.9</span></a> to check the linearity and equal variance conditions from <a href="#sec-model-conditions" class="quarto-xref"><span>Section 6.2</span></a>.</p>
+<p>We can use a plot of standardized residuals versus predicted values such as the one in <a href="#fig-coffee-stdresid" class="quarto-xref">Figure&nbsp;<span>6.10</span></a> to check the linearity and equal variance conditions from <a href="#sec-model-conditions" class="quarto-xref"><span>Section 6.2</span></a>.</p>
 </div>
 <p>As with observations that have high leverage, we want to assess whether these points have out-sized influence on the model coefficients to help determine how to deal with these outliers (or if we need to do anything at all). To do so, we will look at the last diagnostic, Cook’s distance.</p>
 </section><section id="sec-cooks-distance" class="level3" data-number="6.4.4"><h3 data-number="6.4.4" class="anchored" data-anchor-id="sec-cooks-distance">
@@ -1065,15 +1078,15 @@ Figure&nbsp;6.10: Flavor grade versus aroma grade. Points marked with a red tria
 <div class="cell-output-display">
 <div id="fig-coffee-cooksd" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-coffee-cooksd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="06-slr-conditions_files/figure-html/fig-coffee-cooksd-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;6.11: Cook’s distance versus observation number for coffee ratings data"><img src="06-slr-conditions_files/figure-html/fig-coffee-cooksd-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="06-slr-conditions_files/figure-html/fig-coffee-cooksd-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;6.12: Cook’s distance versus observation number for coffee ratings data"><img src="06-slr-conditions_files/figure-html/fig-coffee-cooksd-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coffee-cooksd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.11: Cook’s distance versus observation number for coffee ratings data
+Figure&nbsp;6.12: Cook’s distance versus observation number for coffee ratings data
 </figcaption></figure>
 </div>
 </div>
 </div>
-<p><a href="#fig-coffee-cooksd" class="quarto-xref">Figure&nbsp;<span>6.11</span></a> shows the values of Cook’s distance for the observations in the data set. It includes a horizontal line at 1 marking the threshold for determining if an observation is influential. There is one observation in the data that has a value of Cook’s distance greater than 1; its value is 2.432. This is the observation with an aroma grade of <code>large_cooks$aroma</code> and flavor grade of <code>large_cooks$flavor</code>.</p>
+<p><a href="#fig-coffee-cooksd" class="quarto-xref">Figure&nbsp;<span>6.12</span></a> shows the values of Cook’s distance for the observations in the data set. It includes a horizontal line at 1 marking the threshold for determining if an observation is influential. There is one observation in the data that has a value of Cook’s distance greater than 1; its value is 2.432. This is the observation with an aroma grade of <code>large_cooks$aroma</code> and flavor grade of <code>large_cooks$flavor</code>.</p>
 </section><section id="sec-outliers-impact" class="level3" data-number="6.4.5"><h3 data-number="6.4.5" class="anchored" data-anchor-id="sec-outliers-impact">
 <span class="header-section-number">6.4.5</span> Handling influential points</h3>
 <p>To better understand the impact of influential points, let’s take a look at our model fit with and without the influential observation.</p>
@@ -1285,25 +1298,25 @@ Table&nbsp;6.6: First ten rows of output produced by the <code>augment</code> fu
 <div class="cell">
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1340,6 +1353,7 @@ Robinson, David, Alex Hayes, and Simon Couch. 2023. <span>“Broom: Convert Stat
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="fn1"><p>The null hypothesis is there is no linear relationship between <code>aroma</code> and <code>flavor</code> <span class="math inline">\((H_0: \beta_1 = 0)\)</span> and the alternative is that there is a linear relationship <span class="math inline">\((H_a:\beta_1 \neq 0)\)</span>. The p-value is <span class="math inline">\(\approx 0\)</span>, so we reject the null hypothesis. The data provide evidence of a linear relationship between the two variables. The confidence interval is consistent, because 0 is not in the interval.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Here, we have analyzed the distribution of residuals for five countries to illustrate the independence condition. In practice, we may want to analyze the distribution of residuals for more countries in the data.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
