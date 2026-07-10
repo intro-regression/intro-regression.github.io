@@ -898,7 +898,9 @@ Suppose we decide to fit a model using `taxon`, `age`, `sex`, and `litter_size` 
 
 [^08-mlr-inference-11]: The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.
 
-An observation has **large leverage** if its combination of predictors is far away from the typical combination in the data. We use a threshold of $\frac{2(p+1)}{n}$, where $p+1$ is the number of terms in the model and $n$ is the sample size, to determine whether an observation has large leverage.
+An observation has *high leverage* if its combination of predictors is far away from the typical combination in the data. We use a threshold of $\frac{2(p+1)}{n}$, where $p+1$ is the number of terms in the model and $n$ is the sample size, to determine whether an observation has high leverage.[^08-mlr-inference-12]
+
+[^08-mlr-inference-12]: Note: We may choose to use the higher threshold of $\frac{3(p+1)}{n}$if the sample size is large.
 
 ```{r}
 #| label: fig-mlr-leverage
@@ -915,7 +917,7 @@ ggplot(data = lemurs_model_aug, aes(x = obs_num, y = .hat)) +
        y = "Leverage")
 ```
 
-@fig-mlr-leverage shows the leverage for each observation in the data. The leverage threshold `r round(leverage_threshold, 3)` is marked on the graph. Based on this graph, there are `r lemurs_model_aug |> filter(.hat > leverage_threshold) |> nrow()` observations with large leverage. These are observations who have a combination of predictors that is far from the typical combination in the data. Given the multidimensionality of the data, it is not as straight forward to identify what makes these observations have large leverage as it was in simple linear regression. We can examine the data further to see what (if anything) these large leverage observations have in common and how they differ from the typical combination of predictors in the data. From Cook's distance computed earlier; however, we know that these observations are not influential.
+@fig-mlr-leverage shows the leverage for each observation in the data. The leverage threshold `r round(leverage_threshold, 3)` is marked on the graph. Based on this graph, there are `r lemurs_model_aug |> filter(.hat > leverage_threshold) |> nrow()` observations with high leverage. These are observations who have a combination of predictors that is far from the typical combination in the data. Given the multidimensionality of the data, it is not as straight forward to identify what makes these observations have high leverage as it was in simple linear regression. We can examine the data further to see what (if anything) these high leverage observations have in common and how they differ from the typical combination of predictors in the data. From Cook's distance computed earlier; however, we know that these observations are not influential.
 
 #### Standardized residuals {.unnumbered}
 
@@ -954,10 +956,10 @@ ggplot(data = lemurs_model_aug, aes(x = .fitted, y = .std.resid)) +
 Consider the outlier observation. The residual for this observation is `r round(max_resid, 3)` and the standardized residual for this observation is `r round(max_std_resid, 3)`.
 
 - Explain what the value of the residual means in the context of the data.
-- Explain what the value of the standardized residual means in the context of the data.[^08-mlr-inference-12]
+- Explain what the value of the standardized residual means in the context of the data.[^08-mlr-inference-13]
 :::
 
-[^08-mlr-inference-12]: The residual means that the observed weight for this lemur is `r round(max_resid, 3)` grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is `r round(max_std_resid,3)`standard errors above the mean of the distribution of residuals.
+[^08-mlr-inference-13]: The residual means that the observed weight for this lemur is `r round(max_resid, 3)` grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is `r round(max_std_resid,3)`standard errors above the mean of the distribution of residuals.
 
 We did not have any influential points in this analysis, but there will be times when do have such points in modeling. @sec-outliers-impact discuses strategies for handling influential points in modeling.
 

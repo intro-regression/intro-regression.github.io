@@ -1437,7 +1437,7 @@ Figure&nbsp;8.9: Cook’s distance for each observation in lemur analysis
 <div class="yourturn">
 <p>Suppose we decide to fit a model using <code>taxon</code>, <code>age</code>, <code>sex</code>, and <code>litter_size</code> to predict the body length of young lemurs (instead of the weight)? How does the leverage for each observation compare in this model to the leverage in the model we’ve examined using these variables to predict weight?<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
 </div>
-<p>An observation has <strong>large leverage</strong> if its combination of predictors is far away from the typical combination in the data. We use a threshold of <span class="math inline">\(\frac{2(p+1)}{n}\)</span>, where <span class="math inline">\(p+1\)</span> is the number of terms in the model and <span class="math inline">\(n\)</span> is the sample size, to determine whether an observation has large leverage.</p>
+<p>An observation has <em>high leverage</em> if its combination of predictors is far away from the typical combination in the data. We use a threshold of <span class="math inline">\(\frac{2(p+1)}{n}\)</span>, where <span class="math inline">\(p+1\)</span> is the number of terms in the model and <span class="math inline">\(n\)</span> is the sample size, to determine whether an observation has high leverage.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-mlr-leverage" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1450,7 +1450,7 @@ Figure&nbsp;8.10: Leverage for observations in lemurs analysis
 </div>
 </div>
 </div>
-<p><a href="#fig-mlr-leverage" class="quarto-xref">Figure&nbsp;<span>8.10</span></a> shows the leverage for each observation in the data. The leverage threshold 0.048 is marked on the graph. Based on this graph, there are 13 observations with large leverage. These are observations who have a combination of predictors that is far from the typical combination in the data. Given the multidimensionality of the data, it is not as straight forward to identify what makes these observations have large leverage as it was in simple linear regression. We can examine the data further to see what (if anything) these large leverage observations have in common and how they differ from the typical combination of predictors in the data. From Cook’s distance computed earlier; however, we know that these observations are not influential.</p>
+<p><a href="#fig-mlr-leverage" class="quarto-xref">Figure&nbsp;<span>8.10</span></a> shows the leverage for each observation in the data. The leverage threshold 0.048 is marked on the graph. Based on this graph, there are 13 observations with high leverage. These are observations who have a combination of predictors that is far from the typical combination in the data. Given the multidimensionality of the data, it is not as straight forward to identify what makes these observations have high leverage as it was in simple linear regression. We can examine the data further to see what (if anything) these high leverage observations have in common and how they differ from the typical combination of predictors in the data. From Cook’s distance computed earlier; however, we know that these observations are not influential.</p>
 </section><section id="standardized-residuals" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="standardized-residuals">Standardized residuals</h4>
 <p>Standardized residuals are used to identify observations that have large magnitude residuals and thus the model poorly fit. We already noticed such an observation in <a href="#fig-mlr-resid-plot" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>, so why do we need standardized residuals? Recall that residuals are on the same scale and have the same units as the response variable. Thus, if we use the raw residuals, we would need to determine a new threshold for identifying outliers in each analysis. On the other hand, standardized residuals are on the same scale in every analysis (mean of 0 and standard deviation of 1) with no units, so we can use a universal threshold that applies to every analysis.</p>
 <div class="cell">
@@ -1470,7 +1470,7 @@ Figure&nbsp;8.11: Standardized residuals versus predicted values for lemur model
 <p>Consider the outlier observation. The residual for this observation is 3380.42 and the standardized residual for this observation is 6.442.</p>
 <ul>
 <li>Explain what the value of the residual means in the context of the data.</li>
-<li>Explain what the value of the standardized residual means in the context of the data.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>
+<li>Explain what the value of the standardized residual means in the context of the data.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>
 </li>
 </ul>
 </div>
@@ -1740,7 +1740,8 @@ Harrell Jr, Frank E. 2025. <span>“Rms: Regression Modeling Strategies.”</spa
 <p>The interval that corresponds with the interval constructed by bootstrapping is the interval for the estimated mean response, 1922.987 to 2603.653<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p>
 </li>
 <li id="fn11"><p>The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn12"><p>The residual means that the observed weight for this lemur is 3380.42 grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is 6.442standard errors above the mean of the distribution of residuals.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Note: We may choose to use the higher threshold of <span class="math inline">\(\frac{3(p+1)}{n}\)</span>if the sample size is large.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>The residual means that the observed weight for this lemur is 3380.42 grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is 6.442standard errors above the mean of the distribution of residuals.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

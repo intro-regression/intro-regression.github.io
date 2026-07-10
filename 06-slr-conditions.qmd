@@ -406,7 +406,7 @@ By the Central Limit Theorem, we know the distribution of the estimate slope (th
 
 The normality condition is more important, however, when computing the interval for the predicted value for an individual observation. Recall from @sec-slr-theory-predict, that the standard error for these intervals takes into account variability about the regression line (variability in $\mu_{Y|X}$) in addition to variability in the distribution of $Y$ for a the given value of $X$. We assume the shape of this distribution is normal, thus the calculations of $SE_{\hat{y}}$ may be misleading if there are large departures from normality.
 
-A common threshold for a "large enough" sample size is 30. This means if the sample has at least 30 observations (which is often the case for modern data sets!), we can use all the methods we've discussed to fit a simple linear regression model and draw conclusions from inference, even if the residuals are not normally distributed. Thus the inferential methods based on the Central Limit Theorem are considered robust to violations in the normality assumption, because we can feel confident about the conclusions from the inferential procedures even if the normality condition is not satisfied (given $n > 30$). One note of caution is that if the sample size is very close to 30, then the inferential methods based on the Central Limit Theorem are not robust to major departures form normality such as extreme skewness or outliers.
+A common threshold for a "large enough" sample size is 30. This means if the sample has at least 30 observations (which is often the case for modern data sets!), we can use all the methods we've discussed to fit a simple linear regression model and draw conclusions from inference, even if the residuals are not normally distributed. Thus the inferential methods based on the Central Limit Theorem are considered robust to violations in the normality assumption, because we can feel confident about the conclusions from the inferential procedures even if the normality condition is not satisfied (given $n > 30$). One note of caution is that 30 should be used as a general guideline but not a strict threshold. Therefore, if the sample size is very close to 30, then the inferential methods based on the Central Limit Theorem are not robust to major departures form normality such as extreme skewness or outliers.
 
 Recall from @sec-ch-slr-inf the objective of simulation-based inference is to use the data to generate the sample distribution. Therefore, we do not make any assumptions about the sampling distribution of the estimated slopes. Because there are no assumptions about the sampling distribution, the normality condition is not required for simulation-based inferential procedures.
 
@@ -507,25 +507,21 @@ Ultimately, we are most interested in examining Cook's distance, because it prov
 
 ### Leverage {#sec-slr-leverage}
 
-The **leverage** of the $i^{th}$ observation is a measure of the distance between its value of the predictor, $x_i$, and the average value of the predictor across all $n$ observations, $\bar{x} = \frac{1}{n}\sum_{j=1}^n x_j$.
+The **leverage** of the $i^{th}$ observation is a measure of how much influence an observation has on the predicted values, and thus the estimated coefficients (@hoaglin1978hat). It is computed by computing the distance between $x_i$ and the average value of the predictor across all $n$ observations, $\bar{x} = \frac{1}{n}\sum_{j=1}^n x_j$, relative to this distance across all observations.
 
 When doing simple linear regression, an observation's leverage, denoted $h_i$, is calculated using @eq-slr-leverage.
 
 $$h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^n(x_j - \bar{x})^2}$$ {#eq-slr-leverage}
 
-<!--# Maybe provide more explanation about where this formula comes from?-->
-
 The values of the leverage are between $\frac{1}{n}$ and 1 for each observation in the data set, and the average value of leverage across all $n$ observations is $\frac{(p+1)}{n}$, where $p$ is the number of predictors in the model. In simple linear regression $p = 1$, thus the average leverage is $\frac{2}{n}$.
 
-An observation is considered to have *large leverage* if its leverage is greater than $\frac{2(p+1)}{n}$ , i.e., greater than $\frac{2 \times 2}{n}$ for simple linear regression. This means that an observation is considered to have large leverage if its value of leverage is greater than twice the average value of leverage for the observations in the data set.
-
-<!--# briefly explain why we're using h and point reader to appendix for details in matrix notation-->
+A commonly used threshold for identifying observations with *high leverage* is $\frac{2(p+1)}{n}$ ( $\frac{2 \times 2}{n}$ for simple linear regression). This means that an observation is considered to have high leverage if its value of leverage is greater than twice the average value of leverage for the observations in the data set. This threshold for high leverage was defined in @hoaglin1978hat when sample sizes were generally smaller compared to modern data. Therefore, this threshold can result in a overwhelming number of observations being identified as having high leverage when the sample size is large (the case in most modern data sets). Therefore, some data scientists suggest using a threshold $\frac{3(p+1)}{n}$ to identify high leverage observations when analyzing large data sets.
 
 ::: {.analysis_in_practice latex=""}
 Leverage only depends on the values of the predictor variable(s). It does [**not**]{.underline} depend on values of the response.
 :::
 
-Let's take a look at the leverage for the observations in the coffee ratings data set. There are `r nrow(coffee_ratings)` observations in the data and one predictor variable, so the threshold for identifying observations with large leverage is $\frac{2 \times 2}{1338} =$ `r round(2 * 2/ nrow(coffee_ratings), 3)`.
+Let's take a look at the leverage for the observations in the coffee ratings data set. There are `r nrow(coffee_ratings)` observations in the data and one predictor variable, so the threshold for identifying observations with high leverage is $\frac{2 \times 2}{1338} =$ `r round(2 * 2/ nrow(coffee_ratings), 3)`.
 
 ```{r}
 #| label: calc-leverage-threshold
@@ -536,7 +532,7 @@ leverage_threshold <- 2 * (1 + 1) / nrow(coffee_ratings)
 n_large_leverage <- coffee_model_aug |> filter(.hat > leverage_threshold) |> nrow()
 ```
 
-@fig-coffee-leverage is a visualization of the leverage for each observation in the data set. The red, horizontal dotted line marks the threshold for identifying points as having large leverage. There are `r n_large_leverage` observations that have large leverage.
+@fig-coffee-leverage is a visualization of the leverage for each observation in the data set. The red, horizontal dotted line marks the threshold for identifying points as having high leverage. There are `r n_large_leverage` observations that have high leverage.
 
 ```{r}
 #| label: fig-coffee-leverage
@@ -554,10 +550,10 @@ ggplot(data = coffee_model_aug, aes(x = obs_num, y = .hat)) +
 ```
 
 ::: {.yourturn latex=""}
-There are `r n_large_leverage` observations that have large values for the leverage. What does it mean for an observation to have "large leverage" in the context of the coffee data?
+There are `r n_large_leverage` observations that have large values for the leverage. What does it mean for an observation to have "high leverage" in the context of the coffee data?
 :::
 
-Let's take a look at the observations with the largest values of leverage to get a better understanding about which points may be large leverage.
+Let's take a look at the observations with the highest values of leverage to get a better understanding about which points may be high leverage.
 
 ```{r}
 #| label: tbl-coffee-large-leverage
@@ -573,9 +569,9 @@ coffee_model_aug |>
   kable(digits = 3, col.names = c("Leverage", "aroma", "flavor"))
 ```
 
-Recall that the leverage only depends on the values of the predictor variable, so we only need to consider `aroma` to better understand why these points are large leverage. From the EDA in @sec-coffee-intro, the average aroma grade in the data set is `r round(mean(coffee_ratings$aroma), 3)` points and the standard deviation is `r round(sd(coffee_ratings$aroma), 3)` . The observations with the largest values of leverage have aroma grades that are either much higher (e.g., 8.75) or much lower (e.g., 5.08) than the average. Thus the large leverage points includes coffees that both smell much better and perhaps much worse than the majority of the coffees in the data.
+Recall that the leverage only depends on the values of the predictor variable, so we only need to consider `aroma` to better understand why these points are high leverage. From the EDA in @sec-coffee-intro, the average aroma grade in the data set is `r round(mean(coffee_ratings$aroma), 3)` points and the standard deviation is `r round(sd(coffee_ratings$aroma), 3)` . The observations with the highest values of leverage have aroma grades that are either much higher (e.g., 8.75) or much lower (e.g., 5.08) than the average. Thus the high leverage points includes coffees that both smell much better and perhaps much worse than the majority of the coffees in the data.
 
-Even when we identify points with large leverage, we still want to understand how these points are (or are not) influencing the model results. Thus, knowing an observation has large leverage is not enough to warrant any specific action. We'll examine Cook's distance to determine if the observation is influential in the model in @sec-cooks-distance and discuss approaches to deal with such influential points in @sec-outliers-impact .
+Even when we identify points with high leverage, we still want to understand how these points are (or are not) influencing the model results. Thus, knowing an observation has high leverage is not enough to warrant any specific action. We'll examine Cook's distance to determine if the observation is influential in the model in @sec-cooks-distance and discuss approaches to deal with such influential points in @sec-outliers-impact .
 
 ### Standardized residuals {#sec-slr-std-resid}
 
@@ -593,7 +589,7 @@ One assumption for linear regression is that the residuals are normally distribu
 If there are a lot of observations, it may not be practical to closely examine the approximately 5% of observations that were identified as potential outliers. Thus we may use a more restrictive threshold, e.g., $|std.resid_i| > 3$ (or higher) to identify points worth more close examination or only focus on those that are identified as influential points by Cook's distance.
 :::
 
-<!--# add callout connecting large standardized residuals to large leverage?-->
+<!--# add callout connecting large standardized residuals to high leverage?-->
 
 ```{r}
 #| label: fig-coffee-stdresid
@@ -672,13 +668,13 @@ coffee_model_aug |>
 We can use a plot of standardized residuals versus predicted values such as the one in @fig-coffee-stdresid to check the linearity and equal variance conditions from @sec-model-conditions.
 :::
 
-As with observations that have large leverage, we want to assess whether these points have out-sized influence on the model coefficients to help determine how to deal with these outliers (or if we need to do anything at all). To do so, we will look at the last diagnostic, Cook's distance.
+As with observations that have high leverage, we want to assess whether these points have out-sized influence on the model coefficients to help determine how to deal with these outliers (or if we need to do anything at all). To do so, we will look at the last diagnostic, Cook's distance.
 
 ### Cook's distance {#sec-cooks-distance}
 
 At this point we have introduced a diagnostic to identify outliers in the predictor variable (leverage) and one to identify outliers in the response variable (standardized residuals). Now we will use a single measure that combines information from the leverage and standardized residuals to identify potential influential points. This measure is called Cook's distance.
 
-**Cook's distance** is a measure of an observation's overall impact on the estimated model coefficients. In @eq-cooks-d, we see that Cook's distance takes into account an observation's leverage, $h_i$, the standardized residuals, $std.resid_i$, and the number of predictors in the model, $p$ ( $p=1$ for simple linear regression).
+**Cook's distance** [@cooksdistance] is a measure of an observation's overall impact on the estimated model coefficients. In @eq-cooks-d, we see that Cook's distance takes into account an observation's leverage, $h_i$, the standardized residuals, $std.resid_i$, and the number of predictors in the model, $p$ ( $p=1$ for simple linear regression).
 
 $$D_i = \frac{1}{p}(std.resid_i)^2\Big(\frac{h_i}{1-h_i}\Big)$$ {#eq-cooks-d}
 
