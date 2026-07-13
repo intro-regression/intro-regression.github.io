@@ -1015,7 +1015,7 @@ Table&nbsp;11.4: Logistic regression model for <code>aidrive_comfort</code> vers
 </blockquote>
 <p>From <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-exp</span>, the coefficient for <code>Agree</code> is <span class="math inline">\(e^{0.699} \approx 2.012\)</span>. This means the following:</p>
 <blockquote class="blockquote">
-<p><em>The <strong>odds</strong> a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 2.012 (</em> <span class="math inline">\(e^{0.699}\)</span><em>) <strong>times</strong> the odds of a respondent who is neutral about whether technology makes life easier.</em></p>
+<p><em>The <strong>predictedodds</strong> a respondent who agrees technology makes life easier is comfortable with driverless cars 2.012 (</em> <span class="math inline">\(e^{0.699}\)</span><em>) <strong>times</strong> the predicted odds of a respondent who is neutral about whether technology makes life easier.</em><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 </blockquote>
 <p>The value 2.012 is equal to the odds ratio of <code>aidrive_comfort = 1</code> for <code>tech_easy = Agree</code> versus <code>tech_easy = Neutral</code>. It is the same (give or take rounding) as the odds ratio we computed from <a href="#tbl-aidrive-two-way" class="quarto-xref">Table&nbsp;<span>11.3</span></a>. This tells us something important about the relationship between the odds ratio and model coefficients in a logistic regression model. When we fit a simple logistic regression model with one categorical predictor <span class="math inline">\(X\)</span> such that <span class="math inline">\(\beta_k\)</span> is the coefficient corresponding to the <span class="math inline">\(k^{th}\)</span> level of <span class="math inline">\(X\)</span>, then <span class="math inline">\(e^{\beta_k}\)</span> is the odds ratio between the <span class="math inline">\(k^{th}\)</span> level and the baseline level.</p>
 </section>
@@ -1095,14 +1095,14 @@ Table&nbsp;11.5: Logistic regression model for <code>aidrive_comfort</code> vers
 <p>where <span class="math inline">\(\hat{\pi}\)</span> is the predicted probability a respondent is comfortable with driverless cars.</p>
 <p>Based on <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-age-exp</span>, the interpretation of the <code>Agree</code> in terms of the odds is the following:</p>
 <blockquote class="blockquote">
-<p><em>The <strong>odds</strong> a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 1.970 (</em> <span class="math inline">\(e^{0.678}\)</span><em>) <strong>times</strong> the odds of a respondent who is neutral about whether technology makes life easier, holding age constant.</em></p>
+<p><em>The <strong>predictedodds</strong> a respondent who agrees technology makes life easier is comfortable with driverless cars are 1.970 (</em> <span class="math inline">\(e^{0.678}\)</span><em>) <strong>times</strong> the predicted odds of a respondent who is neutral about whether technology makes life easier, holding age constant.</em></p>
 </blockquote>
 <p>The value 1.970 (<span class="math inline">\(e^{0.678}\)</span>) is the odds ratio of comfort with driverless cars between those who agree technology makes life easier and those who are neutral, after adjusting for age. When there are multiple predictor variables in the logistic regression model, <span class="math inline">\(e^{\beta_j}\)</span> where <span class="math inline">\(\beta_j\)</span> is the coefficient for the predictor is called the <strong>adjusted odds ratio (AOR).</strong></p>
 <div class="yourturn">
 <p>Use the model from <a href="#tbl-logistic-comfort-tech-age" class="quarto-xref">Table&nbsp;<span>11.5</span></a>. Assume <code>age</code> is held constant.</p>
 <ul>
 <li>Interpret the coefficient of <code>Disagree</code> in terms of the log odds of being comfortable with driverless cars.</li>
-<li>Interpret the coefficient of <code>Disagree</code> in terms of the odds of being comfortable with driverless cars.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></li>
+<li>Interpret the coefficient of <code>Disagree</code> in terms of the odds of being comfortable with driverless cars.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></li>
 </ul>
 </div>
 </section>
@@ -1145,7 +1145,7 @@ Table&nbsp;11.5: Logistic regression model for <code>aidrive_comfort</code> vers
 <p>Use the model in <a href="#tbl-logistic-comfort-tech-age" class="quarto-xref">Table&nbsp;<span>11.5</span></a>. Assume opinions about technology are held constant.</p>
 <ul>
 <li><p>How are the log odds of being comfortable with driverless cars expected to change when age increases by 5 years?</p></li>
-<li><p>How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years? <a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p></li>
+<li><p>How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years? <a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p></li>
 </ul>
 </div>
 <!--# do i discuss marginal effects and the change in probability? -->
@@ -1386,7 +1386,7 @@ Table&nbsp;11.7: Model output for <code>aidrive_comfort</code> versus <code>tech
 <p>The hypotheses are the same as with simulation-based inference</p>
 <p><span class="math display">\[H_0:\beta_{\text{age}} = 0 \hspace{2mm} \text{ vs }\hspace{2mm} \beta_{\text{age}} \neq 0\]</span></p>
 <p>The null hypothesis is that there is no relationship between age and comfort with driverless cars after accounting for opinions about technology. The alternative hypothesis is that there is a relationship.</p>
-<p>The test statistic<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> is computed as</p>
+<p>The test statistic<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> is computed as</p>
 <p><span class="math display">\[z = \frac{-0.015 - 0}{0.003} \approx - 5 \]</span></p>
 <p>The p-value is computed as <span class="math inline">\(P(|Z| \geq |-4.902|) \approx\)</span> 4.83^{-6}. This value is so small it rounds to 0 when displaying the results to 3 digits. This is consistent with the p-value we observed from the permutation test in <a href="#sec-logistic-sim-inf" class="quarto-xref"><span>Section 11.5.1</span></a>. Because the p-value is small, we reject the null hypothesis and conclude there is evidence of a relationship between age and comfort with driverless cars after adjusting for opinions about technology.</p>
 <div class="analysis_in_practice">
@@ -1408,7 +1408,7 @@ Table&nbsp;11.7: Model output for <code>aidrive_comfort</code> versus <code>tech
 <div class="yourturn">
 <ul>
 <li>Interpret this interval in the context of the data in terms of the odds of being comfortable with driverless cars.</li>
-<li>How does this interval compare to the bootstrap confidence interval computed in <a href="#sec-logistic-sim-inf" class="quarto-xref"><span>Section 11.5.1</span></a>? <a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></li>
+<li>How does this interval compare to the bootstrap confidence interval computed in <a href="#sec-logistic-sim-inf" class="quarto-xref"><span>Section 11.5.1</span></a>? <a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></li>
 </ul>
 </div>
 </section>
@@ -1425,7 +1425,7 @@ Table&nbsp;11.7: Model output for <code>aidrive_comfort</code> versus <code>tech
 <ul>
 <li>Show how the test statistic is computed for <code>tech_easyDisagree</code>. Interpret this value in the context of the data.</li>
 <li>Do the data provide evidence that the odds are different among those who disagree technology makes life easier compared to those who are neutral (the baseline), after adjusting for age? Use <span class="math inline">\(\alpha = 0.05\)</span> Explain.</li>
-<li>Show how the 95% confidence interval for <code>tech_easyDisagree</code> is computed. Is it consistent with your conclusion in the previous question?<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></li>
+<li>Show how the 95% confidence interval for <code>tech_easyDisagree</code> is computed. Is it consistent with your conclusion in the previous question?<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></li>
 </ul>
 </div>
 <!--# Inference for a subset of coefficients  -->
@@ -2267,18 +2267,19 @@ Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaugh
 <li id="fn3"><p><span class="math inline">\(Pr(Y=1 | \text{tech\_easy = Agree}) = 706/ (495 + 706) = 0.588\)</span> and <span class="math inline">\(\text{odds}(Y=1 | \text{tech\_easy = Agree)} = 0.588/(1 - 0.588) = 706/495 = 1.43\)</span><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The odds ratio is <span class="math inline">\(\frac{706/495}{21/52} = 3.53\)</span> . This means that the odds a respondent who agrees technology makes life easier is comfortable with driverless cars are 3.53 times the odds a respondent who is disagrees that technology is making life easier is comfortable with driverless cars.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>The baseline level is <code>Neutral</code> . It is the only level that is not in the model output.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>The log odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be 0.499 less than the log odds of a respondent who is neutral about whether technology makes life easier, holding age constant.</p>
+<li id="fn6"><p>Recall from <a href="09-mlr-transformations.html#sec-transform-logy" class="quarto-xref"><span>Section 9.2</span></a> that interpretations of a multiplicative change can be written in terms of a percent change. Thus, this interpretation may equivalently be written as <em>“The predicted odds a respondent who agrees technology makes life easier are 101.2% greater than the predicted odds of a respondent who is neutral about whether technology makes life easier.”</em><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>The log odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be 0.499 less than the log odds of a respondent who is neutral about whether technology makes life easier, holding age constant.</p>
 <p>The odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be 0.607 (<span class="math inline">\(e^{-0.499}\)</span>) times the odds of a respondent who is neutral about whether technology makes life easier, holding age constant.<br>
 <br>
-Alternatively, we could write this in terms of an odds ratio greater than 1: The odds a respondent is neutral about whether technology makes life easier is comfortable with driverless cars are expected to be 1.647 (<span class="math inline">\(1/e^{-0.499}\)</span>) times the odds of a respondent who disagrees that technology makes life easier, holding age constant.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>When age increases by 5, the log odds are expected to decrease by 0.075 (<span class="math inline">\(-0.015 \times 5\)</span> ) . The expected odds change by a multiplicative factor of 0.928 ( <span class="math inline">\(e^{-0.015 \times 5}\)</span>).<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>Note the difference the result here and the model output is because the model output is computed using exact values of <span class="math inline">\(\hat{\beta}_j\)</span> and <span class="math inline">\(SE_{\hat{\beta}_j}\)</span>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars are expected to multiply by 0.979 ( <span class="math inline">\(e^{-0.021}\)</span> ) to 0.991 ( <span class="math inline">\(e^{-0.009}\)</span>), holding opinions about technology constant. This interval is equal to the interval obtained using bootstrapping.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10"><ul>
+Alternatively, we could write this in terms of an odds ratio greater than 1: The odds a respondent is neutral about whether technology makes life easier is comfortable with driverless cars are expected to be 1.647 (<span class="math inline">\(1/e^{-0.499}\)</span>) times the odds of a respondent who disagrees that technology makes life easier, holding age constant.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>When age increases by 5, the log odds are expected to decrease by 0.075 (<span class="math inline">\(-0.015 \times 5\)</span> ) . The expected odds change by a multiplicative factor of 0.928 ( <span class="math inline">\(e^{-0.015 \times 5}\)</span>).<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Note the difference the result here and the model output is because the model output is computed using exact values of <span class="math inline">\(\hat{\beta}_j\)</span> and <span class="math inline">\(SE_{\hat{\beta}_j}\)</span>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars are expected to multiply by 0.979 ( <span class="math inline">\(e^{-0.021}\)</span> ) to 0.991 ( <span class="math inline">\(e^{-0.009}\)</span>), holding opinions about technology constant. This interval is equal to the interval obtained using bootstrapping.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><ul>
 <li>The test statistic is <span class="math inline">\(\frac{-0.499 - 0}{0.295} \approx - 1.69\)</span>. The estimated coefficient of -0.499 is 1.69 standard errors below the hypothesized mean of 0. The p-value 0.091 &gt; 0.05, so the data do not provide sufficient evidence the odds are different for those who disagree that technology makes life easier versus those who are neutral, after adjusting for age. The 95% confidence interval is computed as <span class="math inline">\(-0.499 \pm 1.96 \times 0.295\)</span>. It is consistent with the conclusion, because 0 is in the interval.<br>
 </li>
 </ul>
-<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></li>
+<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></li>
 </ol>
 </section>
 

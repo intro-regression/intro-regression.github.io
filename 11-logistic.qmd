@@ -590,7 +590,9 @@ Now let's look at the coefficient for `Agree`, 0.699. Putting together what know
 
 From @eq-logistic-comfort-tech-exp, the coefficient for `Agree` is $e^{0.699} \approx 2.012$. This means the following:
 
-> *The **odds** a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 2.012 (* $e^{0.699}$*) **times** the odds of a respondent who is neutral about whether technology makes life easier.*
+> *The **predictedodds** a respondent who agrees technology makes life easier is comfortable with driverless cars 2.012 (* $e^{0.699}$*) **times** the predicted odds of a respondent who is neutral about whether technology makes life easier.*[^11-logistic-6]
+
+[^11-logistic-6]: Recall from @sec-transform-logy that interpretations of a multiplicative change can be written in terms of a percent change. Thus, this interpretation may equivalently be written as *"The predicted odds a respondent who agrees technology makes life easier are `r (round(exp(0.699), 3) - 1) * 100`% greater than the predicted odds of a respondent who is neutral about whether technology makes life easier."*
 
 The value 2.012 is equal to the odds ratio of `aidrive_comfort = 1` for `tech_easy = Agree` versus `tech_easy = Neutral`. It is the same (give or take rounding) as the odds ratio we computed from @tbl-aidrive-two-way. This tells us something important about the relationship between the odds ratio and model coefficients in a logistic regression model. When we fit a simple logistic regression model with one categorical predictor $X$ such that $\beta_k$ is the coefficient corresponding to the $k^{th}$ level of $X$, then $e^{\beta_k}$ is the odds ratio between the $k^{th}$ level and the baseline level.
 
@@ -628,7 +630,7 @@ where $\hat{\pi}$ is the predicted probability a respondent is comfortable with 
 
 Based on @eq-logistic-comfort-tech-age-exp, the interpretation of the `Agree` in terms of the odds is the following:
 
-> *The **odds** a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 1.970 (* $e^{0.678}$*) **times** the odds of a respondent who is neutral about whether technology makes life easier, holding age constant.*
+> *The **predictedodds** a respondent who agrees technology makes life easier is comfortable with driverless cars are 1.970 (* $e^{0.678}$*) **times** the predicted odds of a respondent who is neutral about whether technology makes life easier, holding age constant.*
 
 The value 1.970 ($e^{0.678}$) is the odds ratio of comfort with driverless cars between those who agree technology makes life easier and those who are neutral, after adjusting for age. When there are multiple predictor variables in the logistic regression model, $e^{\beta_j}$ where $\beta_j$ is the coefficient for the predictor is called the **adjusted odds ratio (AOR).**
 
@@ -636,10 +638,10 @@ The value 1.970 ($e^{0.678}$) is the odds ratio of comfort with driverless cars 
 Use the model from @tbl-logistic-comfort-tech-age. Assume `age` is held constant.
 
 - Interpret the coefficient of `Disagree` in terms of the log odds of being comfortable with driverless cars.
-- Interpret the coefficient of `Disagree` in terms of the odds of being comfortable with driverless cars.[^11-logistic-6]
+- Interpret the coefficient of `Disagree` in terms of the odds of being comfortable with driverless cars.[^11-logistic-7]
 :::
 
-[^11-logistic-6]: The log odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be 0.499 less than the log odds of a respondent who is neutral about whether technology makes life easier, holding age constant.
+[^11-logistic-7]: The log odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be 0.499 less than the log odds of a respondent who is neutral about whether technology makes life easier, holding age constant.
 
     The odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be `r round(exp(-0.499), 3)` ($e^{-0.499}$) times the odds of a respondent who is neutral about whether technology makes life easier, holding age constant.\
     \
@@ -693,10 +695,10 @@ Use the model in @tbl-logistic-comfort-tech-age. Assume opinions about technolog
 
 - How are the log odds of being comfortable with driverless cars expected to change when age increases by 5 years?
 
-- How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years? [^11-logistic-7]
+- How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years? [^11-logistic-8]
 :::
 
-[^11-logistic-7]: When age increases by 5, the log odds are expected to decrease by `r round(abs(-0.015 * 5), 3)` ($-0.015 \times 5$ ) . The expected odds change by a multiplicative factor of `r round(exp(-0.015 * 5), 3)` ( $e^{-0.015 \times 5}$).
+[^11-logistic-8]: When age increases by 5, the log odds are expected to decrease by `r round(abs(-0.015 * 5), 3)` ($-0.015 \times 5$ ) . The expected odds change by a multiplicative factor of `r round(exp(-0.015 * 5), 3)` ( $e^{-0.015 \times 5}$).
 
 <!--# do i discuss marginal effects and the change in probability? -->
 
@@ -912,9 +914,9 @@ $$H_0:\beta_{\text{age}} = 0 \hspace{2mm} \text{ vs }\hspace{2mm} \beta_{\text{a
 
 The null hypothesis is that there is no relationship between age and comfort with driverless cars after accounting for opinions about technology. The alternative hypothesis is that there is a relationship.
 
-The test statistic[^11-logistic-8] is computed as
+The test statistic[^11-logistic-9] is computed as
 
-[^11-logistic-8]: Note the difference the result here and the model output is because the model output is computed using exact values of $\hat{\beta}_j$ and $SE_{\hat{\beta}_j}$.
+[^11-logistic-9]: Note the difference the result here and the model output is because the model output is computed using exact values of $\hat{\beta}_j$ and $SE_{\hat{\beta}_j}$.
 
 $$z = \frac{-0.015 - 0}{0.003} \approx - 5 $$
 
@@ -945,10 +947,10 @@ $$\begin{aligned}
 
 ::: {.yourturn latex=""}
 - Interpret this interval in the context of the data in terms of the odds of being comfortable with driverless cars.
-- How does this interval compare to the bootstrap confidence interval computed in @sec-logistic-sim-inf? [^11-logistic-9]
+- How does this interval compare to the bootstrap confidence interval computed in @sec-logistic-sim-inf? [^11-logistic-10]
 :::
 
-[^11-logistic-9]: We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars are expected to multiply by `r round(exp(-.021), 3)` ( $e^{-0.021}$ ) to `r round(exp(-.009), 3)` ( $e^{-0.009}$), holding opinions about technology constant. This interval is equal to the interval obtained using bootstrapping.
+[^11-logistic-10]: We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars are expected to multiply by `r round(exp(-.021), 3)` ( $e^{-0.021}$ ) to `r round(exp(-.009), 3)` ( $e^{-0.009}$), holding opinions about technology constant. This interval is equal to the interval obtained using bootstrapping.
 
 #### Connection between hypothesis test and confidence intervals {.unnumbered}
 
@@ -965,10 +967,10 @@ Use the output in @tbl-comfort-tech-age-2.
 
 - Show how the test statistic is computed for `tech_easyDisagree`. Interpret this value in the context of the data.
 - Do the data provide evidence that the odds are different among those who disagree technology makes life easier compared to those who are neutral (the baseline), after adjusting for age? Use $\alpha = 0.05$ Explain.
-- Show how the 95% confidence interval for `tech_easyDisagree` is computed. Is it consistent with your conclusion in the previous question?[^11-logistic-10]
+- Show how the 95% confidence interval for `tech_easyDisagree` is computed. Is it consistent with your conclusion in the previous question?[^11-logistic-11]
 :::
 
-[^11-logistic-10]:
+[^11-logistic-11]:
     - The test statistic is $\frac{-0.499 - 0}{0.295} \approx - 1.69$. The estimated coefficient of -0.499 is 1.69 standard errors below the hypothesized mean of 0. The p-value 0.091 \> 0.05, so the data do not provide sufficient evidence the odds are different for those who disagree that technology makes life easier versus those who are neutral, after adjusting for age. The 95% confidence interval is computed as $-0.499 \pm 1.96 \times 0.295$. It is consistent with the conclusion, because 0 is in the interval.\
 
 <!--# Inference for a subset of coefficients  -->
