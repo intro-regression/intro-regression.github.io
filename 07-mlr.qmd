@@ -433,6 +433,35 @@ Recall from @sec-slr-interpret-coef, "in the context of the data" means
 
 [^07-mlr-3]: For each additional lemur in the litter in which a young lemur was born, the weight is expected to be lower by `r round(abs(litter_size_coef), 3)` grams, holding taxon, sex, and age constant.
 
+::: {.analysis_in_practice latex=""}
+The values of the estimated model coefficients $\hat{\beta}_j$ depend both on the relationship between $x_j$ and $y$ along with the units of $x_j$. Therefore, we cannot use the values of the coefficients to determine which predictor is "most important" in explaining variability in the response variable.
+
+For example, let's refit the model in @tbl-lemurs-model using `age` recorded in years instead of months.
+
+```{r}
+#| label: tbl-lemurs-model-age-years
+#| tbl-cap: "Model predicting lemurs weight with `age` recorded in years." 
+lemurs <- lemurs |>
+  mutate(age_in_years = age / 12)
+
+lemurs_model_age <- lm(weight ~ age_in_years + sex + 
+                     taxon + litter_size,
+                   data = lemurs)
+
+
+age_years_coeff <- tidy(lemurs_model_age) |> 
+  filter(term == "age_in_years") |>
+  pull(estimate)
+
+tidy(lemurs_model_age) |>
+  kable(digits = 3)
+```
+
+The new variable `age_in_years` is computed as `age/ 12`. Thus the coefficient for `age_in_years` in @tbl-lemurs-model-age, $\hat{\beta}{\text{age_in_years}} =\hat{\beta}_{\text{age}} * 12$ . The new coefficient `r age_years_coeff` is much larger, because it is the expected change in weight over 12 months instead of the expected weight over one month. It does not mean the effect of age is stronger when recorded in years versus months.
+
+Thus, it would be misleading to use values of the model coefficients to determine which variable is the most important. In @sec-standardize-predictors, we introduce a model using standardized predictors that can be used to make claims about variable importance.
+:::
+
 ### Interpreting coefficients of categorical predictors {#sec-mlr-interpret-categorical}
 
 When categorical predictors are included in a model, we need a way to transform the levels (or categories) of the predictor into quantitative information that can be used in the regression calculations. To do so, **indicator variable**s are created for each level of the categorical predictor. We then use these indicator variables in the regression model.
@@ -774,7 +803,7 @@ The interpretation of the intercept in narrative form when the quantitative pred
 
 Because the coefficients for the other predictors are the same, the interpretations for these predictors are the same as in @sec-mlr-interpret-quantitative and @sec-mlr-interpret-categorical.
 
-### Standardized quantitative predictors
+### Standardized quantitative predictors {#sec-standardize-predictors}
 
 Thus far, we have interpreted the coefficients to understand the relationship between the response and each predictor variable. Sometimes, however, the primary objective of the analysis may be less focused on interpretation and more focused on identifying which predictors are most important in understanding variability in the response variable. When that is the case, we can fit a model using standardized values of the quantitative predictors.
 

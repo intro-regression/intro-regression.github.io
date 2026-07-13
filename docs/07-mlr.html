@@ -398,7 +398,7 @@ window.Quarto = {
 <a href="#sec-other-predictors" id="toc-sec-other-predictors" class="nav-link" data-scroll-target="#sec-other-predictors"><span class="header-section-number">7.6</span> Centered and standardized predictors</a>
   <ul class="collapse">
 <li><a href="#centered-quantitative-predictors" id="toc-centered-quantitative-predictors" class="nav-link" data-scroll-target="#centered-quantitative-predictors"><span class="header-section-number">7.6.1</span> Centered quantitative predictors</a></li>
-  <li><a href="#standardized-quantitative-predictors" id="toc-standardized-quantitative-predictors" class="nav-link" data-scroll-target="#standardized-quantitative-predictors"><span class="header-section-number">7.6.2</span> Standardized quantitative predictors</a></li>
+  <li><a href="#sec-standardize-predictors" id="toc-sec-standardize-predictors" class="nav-link" data-scroll-target="#sec-standardize-predictors"><span class="header-section-number">7.6.2</span> Standardized quantitative predictors</a></li>
   </ul>
 </li>
   <li>
@@ -924,16 +924,86 @@ We write the interpretation of the coefficients in a multiple linear regression 
 </li>
 </ul>
 </div>
+<div class="analysis_in_practice">
+<p>The values of the estimated model coefficients <span class="math inline">\(\hat{\beta}_j\)</span> depend both on the relationship between <span class="math inline">\(x_j\)</span> and <span class="math inline">\(y\)</span> along with the units of <span class="math inline">\(x_j\)</span>. Therefore, we cannot use the values of the coefficients to determine which predictor is “most important” in explaining variability in the response variable.</p>
+<p>For example, let’s refit the model in <a href="#tbl-lemurs-model" class="quarto-xref">Table&nbsp;<span>7.3</span></a> using <code>age</code> recorded in years instead of months.</p>
+<div class="cell">
+<div id="tbl-lemurs-model-age-years" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-age-years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7.5: Model predicting lemurs weight with <code>age</code> recorded in years.
+</figcaption><div aria-describedby="tbl-lemurs-model-age-years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">43.8</td>
+<td style="text-align: right;">121.7</td>
+<td style="text-align: right;">0.360</td>
+<td style="text-align: right;">0.719</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">age_in_years</td>
+<td style="text-align: right;">1642.8</td>
+<td style="text-align: right;">58.3</td>
+<td style="text-align: right;">28.182</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sexM</td>
+<td style="text-align: right;">-88.8</td>
+<td style="text-align: right;">68.0</td>
+<td style="text-align: right;">-1.306</td>
+<td style="text-align: right;">0.193</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">taxonPCOQ</td>
+<td style="text-align: right;">471.7</td>
+<td style="text-align: right;">95.4</td>
+<td style="text-align: right;">4.943</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">taxonVRUB</td>
+<td style="text-align: right;">1037.3</td>
+<td style="text-align: right;">133.9</td>
+<td style="text-align: right;">7.747</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">litter_size</td>
+<td style="text-align: right;">-19.6</td>
+<td style="text-align: right;">65.8</td>
+<td style="text-align: right;">-0.298</td>
+<td style="text-align: right;">0.766</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>The new variable <code>age_in_years</code> is computed as <code>age/ 12</code>. Thus the coefficient for <code>age_in_years</code> in <span class="quarto-unresolved-ref">?tbl-lemurs-model-age</span>, <span class="math inline">\(\hat{\beta}{\text{age_in_years}} =\hat{\beta}_{\text{age}} * 12\)</span> . The new coefficient 1642.83 is much larger, because it is the expected change in weight over 12 months instead of the expected weight over one month. It does not mean the effect of age is stronger when recorded in years versus months.</p>
+<p>Thus, it would be misleading to use values of the model coefficients to determine which variable is the most important. In <a href="#sec-standardize-predictors" class="quarto-xref"><span>Section 7.6.2</span></a>, we introduce a model using standardized predictors that can be used to make claims about variable importance.</p>
+</div>
 </section><section id="sec-mlr-interpret-categorical" class="level3" data-number="7.4.2"><h3 data-number="7.4.2" class="anchored" data-anchor-id="sec-mlr-interpret-categorical">
 <span class="header-section-number">7.4.2</span> Interpreting coefficients of categorical predictors</h3>
 <p>When categorical predictors are included in a model, we need a way to transform the levels (or categories) of the predictor into quantitative information that can be used in the regression calculations. To do so, <strong>indicator variable</strong>s are created for each level of the categorical predictor. We then use these indicator variables in the regression model.</p>
 <p>Suppose we have a categorical variable that has <span class="math inline">\(k\)</span> levels. We define <span class="math inline">\(k\)</span> indicator variables, one for each level, such that the indicator takes the value <span class="math inline">\(1\)</span> if the observation belongs to the particular level and <span class="math inline">\(0\)</span> if the observation does not belong to the particular level. Let’s take a look at the variable <code>taxon</code> in the lemurs data.</p>
 <!--# Key term: An indicator variable represents a specific level of a categorical variable. It takes the value 1 if an observation is in that level and 0 otherwise. Indicator variables are used for categorical predictors in a model.-->
-<p>The variable <code>taxon</code> has three levels, ERUF, PCOQ, and VRUB, so we create three indicator variables. We will call these indicators <code>taxonERUF</code>, <code>taxonPCOQ</code>, and <code>taxonVRUB</code>. <a href="#tbl-indicators" class="quarto-xref">Table&nbsp;<span>7.5</span></a>, shows the number of observation at each level of the original variable <code>taxon</code> and the number of observations that take values 1 or 0 for each indicator variable.</p>
+<p>The variable <code>taxon</code> has three levels, ERUF, PCOQ, and VRUB, so we create three indicator variables. We will call these indicators <code>taxonERUF</code>, <code>taxonPCOQ</code>, and <code>taxonVRUB</code>. <a href="#tbl-indicators" class="quarto-xref">Table&nbsp;<span>7.6</span></a>, shows the number of observation at each level of the original variable <code>taxon</code> and the number of observations that take values 1 or 0 for each indicator variable.</p>
 <div class="cell">
 <div id="tbl-indicators" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-indicators-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.5: Indicator variables for taxon
+Table&nbsp;7.6: Indicator variables for taxon
 </figcaption><div aria-describedby="tbl-indicators-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1033,7 +1103,7 @@ Figure&nbsp;7.5: Different intercepts for each taxon. Purple dotted line = ERUF,
 <li>
 <code>sexM = 0</code>: The lemur is female.</li>
 <li>
-<code>taxonPCOQ = 0</code> and <code>taxonVRUB = 0</code>: The lemur is from the ERUF taxon. (See <a href="#tbl-indicators" class="quarto-xref">Table&nbsp;<span>7.5</span></a> to confirm this)</li>
+<code>taxonPCOQ = 0</code> and <code>taxonVRUB = 0</code>: The lemur is from the ERUF taxon. (See <a href="#tbl-indicators" class="quarto-xref">Table&nbsp;<span>7.6</span></a> to confirm this)</li>
 <li>
 <code>litter_size = 0</code>: There were 0 lemurs in the litter size in which the lemurs born. (Note that this is not a possible in the data set).</li>
 </ul>
@@ -1074,7 +1144,7 @@ Figure&nbsp;7.5: Different intercepts for each taxon. Purple dotted line = ERUF,
 <!--# is it always called centering if we're just shifting the variable? -->
 <p><strong>Centering</strong> a predictor means to shift every observation of that predictor by a single constant, denoted <span class="math inline">\(C\)</span>. For example, given a predictor <span class="math inline">\(X\)</span>, then the centered version of the predictor is <span class="math inline">\(X_{cent} = X - C\)</span>. Thus when <span class="math inline">\(X_{cent}\)</span> is a predictor in the model (instead of <span class="math inline">\(X\)</span>), then the intercept is now the expected response when <span class="math inline">\(X_{cent} = X - C = 0\)</span>, which occurs when <span class="math inline">\(X = C\)</span>.</p>
 <p>In the previous section, we determined that it is not possible for the litter size to be 0, because the litter size includes the observed lemur. Therefore, we can use centering to create a new variable <code>litter_size_cent</code> by shifting <code>litter_size</code> by 1, so that <code>litter_size_cent = 0</code> means <code>litter_size = 1</code> . Though it is not always the case, the newly centered variable <code>litter_size_cent</code> has a new meaningful interpretation. It is the number of siblings of in the litter. Putting this together, <code>litter_size_cent</code> = 0 means the lemur was born into a litter with no siblings.</p>
-<p>Because this centered variable has its own meaningful interpretation, we will rename the variable to more clearly indicate what this variable is measuring. We call the centered variable <code>litter_size_siblings</code> and use this name for the centered variable moving forward. The distributions of the original and centered variables are shown in <a href="#fig-centering" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> and <a href="#tbl-centering" class="quarto-xref">Table&nbsp;<span>7.6</span></a>.</p>
+<p>Because this centered variable has its own meaningful interpretation, we will rename the variable to more clearly indicate what this variable is measuring. We call the centered variable <code>litter_size_siblings</code> and use this name for the centered variable moving forward. The distributions of the original and centered variables are shown in <a href="#fig-centering" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> and <a href="#tbl-centering" class="quarto-xref">Table&nbsp;<span>7.7</span></a>.</p>
 <div id="fig-centering" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-centering-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
@@ -1107,7 +1177,7 @@ Figure&nbsp;7.6: Original versus centered values of <code>litter_size</code>
 <div class="cell">
 <div id="tbl-centering" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-centering-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.6: Distributions of <code>litter_size</code> vs <code>litter_size_siblings</code>
+Table&nbsp;7.7: Distributions of <code>litter_size</code> vs <code>litter_size_siblings</code>
 </figcaption><div aria-describedby="tbl-centering-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1149,7 +1219,7 @@ Table&nbsp;7.6: Distributions of <code>litter_size</code> vs <code>litter_size_s
 </figure>
 </div>
 </div>
-<p>From <a href="#fig-centering" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> and <a href="#tbl-centering" class="quarto-xref">Table&nbsp;<span>7.6</span></a>, we see that the only statistics that have changed are those about location (e.g., <span class="math inline">\(Q1\)</span>, <span class="math inline">\(Q3\)</span>, min, max) and those related the center (mean and median). The shape of the distribution and statistics regarding the spread (standard deviation and IQR) have remained the same after centering. By centering the variable we have essentially moved the distribution along the number line by some constant amount.</p>
+<p>From <a href="#fig-centering" class="quarto-xref">Figure&nbsp;<span>7.6</span></a> and <a href="#tbl-centering" class="quarto-xref">Table&nbsp;<span>7.7</span></a>, we see that the only statistics that have changed are those about location (e.g., <span class="math inline">\(Q1\)</span>, <span class="math inline">\(Q3\)</span>, min, max) and those related the center (mean and median). The shape of the distribution and statistics regarding the spread (standard deviation and IQR) have remained the same after centering. By centering the variable we have essentially moved the distribution along the number line by some constant amount.</p>
 <p><a href="#fig-centering-bivariate" class="quarto-xref">Figure&nbsp;<span>7.7</span></a> shows the relationship between weight versus the original and centered values of <code>litter_size</code>. Both plots have the same slope, illustrating that the slope of the relationship between the predictor and response has not changed by centering. All that has changed is what in means to be “zero”, what observations whose expected response is at the intercept. This is illustrated by the different intercepts for the models shown in the two plots.</p>
 <!--# is it an accessibility issue to have the equations in the plots?-->
 <div id="fig-centering-bivariate" class="quarto-layout-panel">
@@ -1183,11 +1253,11 @@ Figure&nbsp;7.7: Weight versus original and centered values of litter size
 </div>
 <p>A commonly used type of centering is <strong>mean-centering</strong>, in which <span class="math inline">\(C = \bar{X}\)</span>, meaning a quantitative predictor is shifted by its mean. Let’s mean-center <code>age</code>, so that the intercept does not represent lemurs who are 0 months old, but rather lemurs are who are the mean age in the data set.</p>
 <p><span class="math display">\[\text{age\_cent} = \text{age} - \text{mean(age)}\]</span></p>
-<p><a href="#tbl-age-cent-summary" class="quarto-xref">Table&nbsp;<span>7.7</span></a> is a table of the summary statistics for the <code>age</code> and <code>age_cent</code>. As before, the location statistics have changed but the variability is the same.</p>
+<p><a href="#tbl-age-cent-summary" class="quarto-xref">Table&nbsp;<span>7.8</span></a> is a table of the summary statistics for the <code>age</code> and <code>age_cent</code>. As before, the location statistics have changed but the variability is the same.</p>
 <div class="cell">
 <div id="tbl-age-cent-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-age-cent-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.7: Distributions of <code>age</code> and <code>age_cent</code>
+Table&nbsp;7.8: Distributions of <code>age</code> and <code>age_cent</code>
 </figcaption><div aria-describedby="tbl-age-cent-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1233,11 +1303,11 @@ Table&nbsp;7.7: Distributions of <code>age</code> and <code>age_cent</code>
 <!--# Key terms: Centering a variable is the process of shifting each observation by a constant amount $(X_{cent} = X - C$) -->
 <p>.</p>
 <!--# Mean-centering a variable is the process of shifting each observation by the variable's mean ( $X_{mean-cent} = X - \bar{X}$)-->
-<p>The output for the model with <code>age_cent</code> and <code>litter_size_siblings</code>, the centered and litter size respectively, is is in <a href="#tbl-lemurs-model-centered" class="quarto-xref">Table&nbsp;<span>7.8</span></a> .</p>
+<p>The output for the model with <code>age_cent</code> and <code>litter_size_siblings</code>, the centered and litter size respectively, is is in <a href="#tbl-lemurs-model-centered" class="quarto-xref">Table&nbsp;<span>7.9</span></a> .</p>
 <div class="cell">
 <div id="tbl-lemurs-model-centered" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-centered-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.8: Model for lemurs data with centered quantitative predictors
+Table&nbsp;7.9: Model for lemurs data with centered quantitative predictors
 </figcaption><div aria-describedby="tbl-lemurs-model-centered-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1299,11 +1369,11 @@ Table&nbsp;7.8: Model for lemurs data with centered quantitative predictors
 </div>
 </div>
 <!--# add note to code that you can also mean-center by using the scale function-->
-<p>A comparison of the model coefficients from the original model and the model with the mean-centered values for the quantitative predictors is shown in <a href="#tbl-lemurs-model-compare" class="quarto-xref">Table&nbsp;<span>7.9</span></a>. Let’s consider in what ways the two models are the same and in what ways they are different.</p>
+<p>A comparison of the model coefficients from the original model and the model with the mean-centered values for the quantitative predictors is shown in <a href="#tbl-lemurs-model-compare" class="quarto-xref">Table&nbsp;<span>7.10</span></a>. Let’s consider in what ways the two models are the same and in what ways they are different.</p>
 <div class="cell">
 <div id="tbl-lemurs-model-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.9: Model coefficients for original model and model with centered quantitative predictors
+Table&nbsp;7.10: Model coefficients for original model and model with centered quantitative predictors
 </figcaption><div aria-describedby="tbl-lemurs-model-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1351,7 +1421,7 @@ Table&nbsp;7.9: Model coefficients for original model and model with centered qu
 </div>
 </div>
 <p>The only term that changed between the two models is the intercept; the coefficients for all other predictors remained the same. This shows that centering one or more quantitative predictors, by shifting by the mean or some other constant, does not change the relationships between the predictor variables with the response variable. With this in mind, let’s interpret the intercept for the model with the centered variables.</p>
-<p>As before, the intercept is the expected weight when all the predictors are equal to 0. Thus, using the model in <a href="#tbl-lemurs-model-centered" class="quarto-xref">Table&nbsp;<span>7.8</span></a>, the intercept is the expected weight when</p>
+<p>As before, the intercept is the expected weight when all the predictors are equal to 0. Thus, using the model in <a href="#tbl-lemurs-model-centered" class="quarto-xref">Table&nbsp;<span>7.9</span></a>, the intercept is the expected weight when</p>
 <ul>
 <li><p><code>age_cent = 0</code>: The lemur is the mean age in the sample, 9.05 months old.</p></li>
 <li><p><code>sexM = 0</code>: The lemur is female.</p></li>
@@ -1363,7 +1433,7 @@ Table&nbsp;7.9: Model coefficients for original model and model with centered qu
 <p><em>The expected weight for female lemurs from the ERUF taxon who are 9.05 months old and were born into a litter with no siblings is about 1263.178 grams.</em></p>
 </blockquote>
 <p>Because the coefficients for the other predictors are the same, the interpretations for these predictors are the same as in <a href="#sec-mlr-interpret-quantitative" class="quarto-xref"><span>Section 7.4.1</span></a> and <a href="#sec-mlr-interpret-categorical" class="quarto-xref"><span>Section 7.4.2</span></a>.</p>
-</section><section id="standardized-quantitative-predictors" class="level3" data-number="7.6.2"><h3 data-number="7.6.2" class="anchored" data-anchor-id="standardized-quantitative-predictors">
+</section><section id="sec-standardize-predictors" class="level3" data-number="7.6.2"><h3 data-number="7.6.2" class="anchored" data-anchor-id="sec-standardize-predictors">
 <span class="header-section-number">7.6.2</span> Standardized quantitative predictors</h3>
 <p>Thus far, we have interpreted the coefficients to understand the relationship between the response and each predictor variable. Sometimes, however, the primary objective of the analysis may be less focused on interpretation and more focused on identifying which predictors are most important in understanding variability in the response variable. When that is the case, we can fit a model using standardized values of the quantitative predictors.</p>
 <!--# Add something about why we can't compare across scales for original variables.-->
@@ -1374,11 +1444,11 @@ Table&nbsp;7.9: Model coefficients for original model and model with centered qu
 <!--# $$
 X_{std} = \frac{X - \bar{X}}{s_X}
 $$-->
-<p>Unlike centering, standardizing a variable changes its units, because it is rescaled by the standard deviation. Therefore, the units are no longer the original units but rather the number of standard deviations an observation is away from the mean value. Because the units have changed, the value (but not the sign!) of the coefficient for standardized variables will change as well. <a href="#tbl-lemurs-model-std" class="quarto-xref">Table&nbsp;<span>7.10</span></a> shows the output of the model using standardized coefficients for <code>age</code> and <code>litter_size</code>. Similar to centering, we only standardize quantitative predictors, as there is no meaningful notion of “average” or “standard deviation” for categorical predictors such as <code>taxon</code> or <code>sex</code>.</p>
+<p>Unlike centering, standardizing a variable changes its units, because it is rescaled by the standard deviation. Therefore, the units are no longer the original units but rather the number of standard deviations an observation is away from the mean value. Because the units have changed, the value (but not the sign!) of the coefficient for standardized variables will change as well. <a href="#tbl-lemurs-model-std" class="quarto-xref">Table&nbsp;<span>7.11</span></a> shows the output of the model using standardized coefficients for <code>age</code> and <code>litter_size</code>. Similar to centering, we only standardize quantitative predictors, as there is no meaningful notion of “average” or “standard deviation” for categorical predictors such as <code>taxon</code> or <code>sex</code>.</p>
 <div class="cell">
 <div id="tbl-lemurs-model-std" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-std-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.10: Model with standardized coefficients for quantitative predictors
+Table&nbsp;7.11: Model with standardized coefficients for quantitative predictors
 </figcaption><div aria-describedby="tbl-lemurs-model-std-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1439,11 +1509,11 @@ Table&nbsp;7.10: Model with standardized coefficients for quantitative predictor
 </figure>
 </div>
 </div>
-<p>Now let’s compare the model with standardized quantitative predictors to the original model and the model using centered quantitative predictors. <a href="#tbl-lemurs-model-compare-pt2" class="quarto-xref">Table&nbsp;<span>7.11</span></a> shows the comparison of these models.</p>
+<p>Now let’s compare the model with standardized quantitative predictors to the original model and the model using centered quantitative predictors. <a href="#tbl-lemurs-model-compare-pt2" class="quarto-xref">Table&nbsp;<span>7.12</span></a> shows the comparison of these models.</p>
 <div class="cell">
 <div id="tbl-lemurs-model-compare-pt2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-compare-pt2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.11: Model coefficients for original model, model with centered quantitiatve predictors, and model with standardized quantitative predictors
+Table&nbsp;7.12: Model coefficients for original model, model with centered quantitiatve predictors, and model with standardized quantitative predictors
 </figcaption><div aria-describedby="tbl-lemurs-model-compare-pt2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1508,9 +1578,9 @@ Table&nbsp;7.11: Model coefficients for original model, model with centered quan
 <blockquote class="blockquote">
 <p><em>For every 7 months increase in age, the weight of lemurs is expected to increase by 960.139 grams, on average, holding taxon, sex, and litter size constant.</em></p>
 </blockquote>
-<p>We often standardize predictors when we want to identify which predictors are most important in explaining variability in the response variable. Because all the quantitative predictors are now on the same scale, we can look at the magnitude of the coefficients to rank the predictors in terms of importance. <!--# make sure this is true in terms of categorical predictors--> From the coefficients in <a href="#tbl-lemurs-model-std" class="quarto-xref">Table&nbsp;<span>7.10</span></a>, we see that <code>taxonVRUB</code> is the most important predictor, because it has the coefficient with the highest magnitude, i.e., the highest absolute value. This means that just knowing the lemur is from the VRUB taxon results in the largest expected change in the weight, on average, even after adjusting for the other predictors.</p>
+<p>We often standardize predictors when we want to identify which predictors are most important in explaining variability in the response variable. Because all the quantitative predictors are now on the same scale, we can look at the magnitude of the coefficients to rank the predictors in terms of importance. <!--# make sure this is true in terms of categorical predictors--> From the coefficients in <a href="#tbl-lemurs-model-std" class="quarto-xref">Table&nbsp;<span>7.11</span></a>, we see that <code>taxonVRUB</code> is the most important predictor, because it has the coefficient with the highest magnitude, i.e., the highest absolute value. This means that just knowing the lemur is from the VRUB taxon results in the largest expected change in the weight, on average, even after adjusting for the other predictors.</p>
 <div class="yourturn">
-<p>Based on <a href="#tbl-lemurs-model-std" class="quarto-xref">Table&nbsp;<span>7.10</span></a>, which predictor is the least important for predicting the weight of lemurs?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p>Based on <a href="#tbl-lemurs-model-std" class="quarto-xref">Table&nbsp;<span>7.11</span></a>, which predictor is the least important for predicting the weight of lemurs?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 </div>
 </section></section><section id="sec-mlr-interaction" class="level2" data-number="7.7"><h2 data-number="7.7" class="anchored" data-anchor-id="sec-mlr-interaction">
 <span class="header-section-number">7.7</span> Interaction terms</h2>
@@ -1542,7 +1612,7 @@ Figure&nbsp;7.8: Multivariate EDA to explore potential interaction effect betwee
 <div class="cell">
 <div id="tbl-lemurs-age-taxon-int-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-age-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.12: Output for regression model including interaction between age and taxon
+Table&nbsp;7.13: Output for regression model including interaction between age and taxon
 </figcaption><div aria-describedby="tbl-lemurs-age-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1617,7 +1687,7 @@ Table&nbsp;7.12: Output for regression model including interaction between age a
 </figure>
 </div>
 </div>
-<p>The model wit the interaction between <code>age</code> and <code>taxon</code> is in <a href="#tbl-lemurs-age-taxon-int-model" class="quarto-xref">Table&nbsp;<span>7.12</span></a>. The interaction terms are indicated in the output in the format <code>var1:var2</code>; for example, the interaction term of <code>age</code> for the PCOQ taxon is labeled as <code>age:taxonPCOQ</code>. This individual term is an estimate of how much the slope of <code>age</code> differs between the taxa PCOQ and ERUF, the baseline. Thus, the interpretation is</p>
+<p>The model wit the interaction between <code>age</code> and <code>taxon</code> is in <a href="#tbl-lemurs-age-taxon-int-model" class="quarto-xref">Table&nbsp;<span>7.13</span></a>. The interaction terms are indicated in the output in the format <code>var1:var2</code>; for example, the interaction term of <code>age</code> for the PCOQ taxon is labeled as <code>age:taxonPCOQ</code>. This individual term is an estimate of how much the slope of <code>age</code> differs between the taxa PCOQ and ERUF, the baseline. Thus, the interpretation is</p>
 <blockquote class="blockquote">
 <p><em>The slope of age for lemurs in the PCOQ taxon is about 96.085 greater for lemurs in PCOQ compared to lemurs in the ERUF taxon. This means for each additional month older a lemur is, the weight of a PCOQ lemur is expected to increase by 96.085 grams <u><strong>more</strong></u>, on average, compared to an ERUF lemur, holding sex and litter size constant.</em></p>
 </blockquote>
@@ -1651,11 +1721,11 @@ Figure&nbsp;7.9: <code>weight</code> versus <code>sex</code> by <code>taxon</cod
 </div>
 </div>
 <p><a href="#fig-lemurs-taxon-sex-int" class="quarto-xref">Figure&nbsp;<span>7.9</span></a> shows the relationship between <code>sex</code> and <code>weight</code> by <code>taxon</code>. Recall that an interaction effect means that the relationship between one predictor and the response variable differs by values of another predictor. Therefore, as we examine this plot, we are looking to see whether the relationship between sex and weight appears similar or different for each taxon (see <a href="03-eda.html#sec-multivar-eda" class="quarto-xref"><span>Section 3.6</span></a>). When we look at the boxplots for male and female relative to one another in the figure, we don’t see much difference across the three taxa, as there is a lot of overlap between the box plots for each taxon. The median weight for males versus females appears to differ for PCOQ lemurs compared to the other two groups. Thus, from the EDA we might expect a useful interaction for sex and the PCOQ species, but maybe not for VRUB.</p>
-<p>We add this interaction term in to the model using the same syntax as before. The output from the regression model is in <a href="#tbl-lemurs-sex-taxon-int-model" class="quarto-xref">Table&nbsp;<span>7.13</span></a>.</p>
+<p>We add this interaction term in to the model using the same syntax as before. The output from the regression model is in <a href="#tbl-lemurs-sex-taxon-int-model" class="quarto-xref">Table&nbsp;<span>7.14</span></a>.</p>
 <div class="cell">
 <div id="tbl-lemurs-sex-taxon-int-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-sex-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.13: Output for regression model including interaction between <code>sex</code> and <code>taxon</code>
+Table&nbsp;7.14: Output for regression model including interaction between <code>sex</code> and <code>taxon</code>
 </figcaption><div aria-describedby="tbl-lemurs-sex-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1768,7 +1838,7 @@ Figure&nbsp;7.10: <code>weight</code> versus <code>litter_size</code> by <code>a
 <div class="cell">
 <div id="tbl-lemurs-age-litter-int-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-age-litter-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.14: Output for regression model including interaction between <code>age</code> and <code>litter_size</code>
+Table&nbsp;7.15: Output for regression model including interaction between <code>age</code> and <code>litter_size</code>
 </figcaption><div aria-describedby="tbl-lemurs-age-litter-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1836,7 +1906,7 @@ Table&nbsp;7.14: Output for regression model including interaction between <code
 </figure>
 </div>
 </div>
-<p>The output for the model with the interaction between <code>age</code> and <code>litter_size</code> is in <a href="#tbl-lemurs-age-litter-int-model" class="quarto-xref">Table&nbsp;<span>7.14</span></a>. The coefficient for the term <code>age:litter_size</code> is the amount the effect of litter size changes as age increases by 1 month. It is interpreted as follows:</p>
+<p>The output for the model with the interaction between <code>age</code> and <code>litter_size</code> is in <a href="#tbl-lemurs-age-litter-int-model" class="quarto-xref">Table&nbsp;<span>7.15</span></a>. The coefficient for the term <code>age:litter_size</code> is the amount the effect of litter size changes as age increases by 1 month. It is interpreted as follows:</p>
 <blockquote class="blockquote">
 <p>For each additional month in age, the slope of litter size and weight decreases by 10.902, on average, holding taxon and sex constant.</p>
 </blockquote>
@@ -1909,7 +1979,7 @@ Table&nbsp;7.14: Output for regression model including interaction between <code
 </div>
 <div class="analysis_in_practice">
 <p><strong>Predictions using <code>augment()</code></strong></p>
-<p>The <code>augment</code> function, introduced in <a href="06-slr-conditions.html#sec-model-conditions" class="quarto-xref"><span>Section 6.2</span></a>, can be used to compute predicted values for each observation in the data set used to fit the model. The predicted values are stored in the column <code>.fitted</code> in the augmented data frame, as shown in <a href="#tbl-lemurs-model-augment" class="quarto-xref">Table&nbsp;<span>7.15</span></a>.</p>
+<p>The <code>augment</code> function, introduced in <a href="06-slr-conditions.html#sec-model-conditions" class="quarto-xref"><span>Section 6.2</span></a>, can be used to compute predicted values for each observation in the data set used to fit the model. The predicted values are stored in the column <code>.fitted</code> in the augmented data frame, as shown in <a href="#tbl-lemurs-model-augment" class="quarto-xref">Table&nbsp;<span>7.16</span></a>.</p>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lemurs_model_aug</span> <span class="op">|&gt;</span></span>
@@ -1918,7 +1988,7 @@ Table&nbsp;7.14: Output for regression model including interaction between <code
 <span><span class="fu">kable</span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="tbl-lemurs-model-augment" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-augment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.15: Partial output from the lemurs model augumented data frame
+Table&nbsp;7.16: Partial output from the lemurs model augumented data frame
 </figcaption><div aria-describedby="tbl-lemurs-model-augment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
