@@ -7,12 +7,12 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Identify whether linear or logistic regression is appropriate for a given analysis
--   Calculate and interpret probabilities, odds, and odds ratios
--   Interpret the coefficients of a logistic regression model
--   Conduct simulation-based and theory-based inference for the coefficients of a logistic regression model
--   Evaluate model conditions for logistic regression
--   Conduct logistic regression using R
+- Identify whether linear or logistic regression is appropriate for a given analysis
+- Calculate and interpret probabilities, odds, and odds ratios
+- Interpret the coefficients of a logistic regression model
+- Conduct simulation-based and theory-based inference for the coefficients of a logistic regression model
+- Evaluate model conditions for logistic regression
+- Conduct logistic regression using R
 
 <!-- ## R packages {.unnumbered} -->
 
@@ -111,25 +111,25 @@ The data are in `gss24-ai.csv`. The data were obtained through the **gssr** R pa
 
 **For the remainder of the chapter, we will refer to self-driving cars as "driverless cars" to align with the language used in the 2024 GSS.**
 
--   `aidrive_comfort`: Indicator variable for respondent's comfort with driverless (self-driving) cars. `0`: Not comfortable at all; `1`: At least some comfort.
+- `aidrive_comfort`: Indicator variable for respondent's comfort with driverless (self-driving) cars. `0`: Not comfortable at all; `1`: At least some comfort.
 
-    -   This variable was derived from responses to the original survey prompt: "Comfort with driverless cars". Scores ranged from 0 to 10 with 0 representing "totally uncomfortable with this situation" and 10 representing "totally comfortable with this situation". Responses of 0 on the original survey were coded as `aidrive_comfort = 0`. All other responses coded as 1.
+  - This variable was derived from responses to the original survey prompt: "Comfort with driverless cars". Scores ranged from 0 to 10 with 0 representing "totally uncomfortable with this situation" and 10 representing "totally comfortable with this situation". Responses of 0 on the original survey were coded as `aidrive_comfort = 0`. All other responses coded as 1.
 
--   `tech_easy` : Response to the question, "Does technology make our lives easier?" Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
+- `tech_easy` : Response to the question, "Does technology make our lives easier?" Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
 
--   `tech_harm`: Response to the question, "Does technology do more harm than good?". Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
+- `tech_harm`: Response to the question, "Does technology do more harm than good?". Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
 
--   `age`: Respondent's age in years
+- `age`: Respondent's age in years
 
--   `sex`: Respondent's self-reported sex. Categories are `Male`, `Female`, the options provided on the original survey. <!--# see bayes rules for dealing with binary-->
+- `sex`: Respondent's self-reported sex. Categories are `Male`, `Female`, the options provided on the original survey. <!--# see bayes rules for dealing with binary-->
 
--   `income`: Response to the question "In which of these groups did your total family income, from all sources, fall last year? That is, before taxes." Categories are `Less than $20k`, `$20-50k`, `$50-110k`, `$110k or more`, `Not reported` .
+- `income`: Response to the question "In which of these groups did your total family income, from all sources, fall last year? That is, before taxes." Categories are `Less than $20k`, `$20-50k`, `$50-110k`, `$110k or more`, `Not reported` .
 
-    -   Note: These categories were defined based on the 27 categories in `income16` from the original survey.
+  - Note: These categories were defined based on the 27 categories in `income16` from the original survey.
 
--   `polviews`: Response to the question, "I'm going to show you a seven-point scale on which the political views that people might hold are arranged from extremely liberal--point 1--to extremely conservative--point 7. Where would you place yourself?" Categories are `Moderate`, `Liberal`, `Conservative`, `No reported`.
+- `polviews`: Response to the question, "I'm going to show you a seven-point scale on which the political views that people might hold are arranged from extremely liberal--point 1--to extremely conservative--point 7. Where would you place yourself?" Categories are `Moderate`, `Liberal`, `Conservative`, `No reported`.
 
-    -   Note: These categories were defined based on the original 7 point scale.
+  - Note: These categories were defined based on the original 7 point scale.
 
 ::: {.analysis_in_practice latex=""}
 The General Social Survey includes sample weights, so that the analysis data is representative of the population of adults in the United States.
@@ -327,9 +327,8 @@ Before moving to modeling, let's take some time to focus on the response variabl
 
 The **probability** $Y=1$, denoted $Pr(Y=1)$, is a measure of the chance that the event $Y = 1$ occurs. Probabilities take values between 0 and 1, with 0 indicating an event is impossible and never occurs, and 1 indicating that an event always occurs. The **odds** $Y = 1$ are the ratio of the probability $Y = 1$ occurs versus the probability $Y = 0$ occurs. This is computed as
 
-$$
-\text{odds(Y = 1)} = \frac{Pr(Y = 1)}{Pr(Y = 0)} = \frac{Pr(Y = 1)}{1 - Pr(Y = 1)}
-$$ {#eq-odds}
+$$\text{odds(Y = 1)} = \frac{Pr(Y = 1)}{Pr(Y = 0)} = \frac{Pr(Y = 1)}{1 - Pr(Y = 1)}$$
+ {#eq-odds}
 
 Note that the odds that $Y = 0$ are equal to $1/ \text{odds}(Y = 1)$ .
 
@@ -356,9 +355,9 @@ odds <- response_tbl |> filter(aidrive_comfort == 1) |> pull(odds)
 ::: {.yourturn latex=""}
 Show how the following values are computed:
 
--   $Pr(\text{aidrive\_comfort} = 1) =$ `r round(p, 3)`
+- $Pr(\text{aidrive\_comfort} = 1) =$ `r round(p, 3)`
 
--   $\text{odds}(\text{aidrive\_comfort}=1)=$ `r round(odds, 3)` [^11-logistic-2]
+- $\text{odds}(\text{aidrive\_comfort}=1)=$ `r round(odds, 3)` [^11-logistic-2]
 :::
 
 [^11-logistic-2]: $Pr(Y = 1) = 829 / (692 + 829) = 0.545$
@@ -386,12 +385,11 @@ gss24_ai |>
 
 Each cell in the table is the number of observations that take the values indicated by the row and column. For example, there are 90 respondents in the data whose observed data are `tech_easy = "Neutral"` and `aidrive_comfort = "1"`. We can use this table to ask how the probability of being comfortable with driverless cars differs based on opinions about whether technology makes life easier. For example, we can compute the probability and the corresponding odds a randomly selected respondent is comfortable with driverless cars given they are neutral about whether technology makes life easier.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 Pr(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127 + 90}  \approx 0.415 \\[5pt]
 \text{odds}(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127} = \frac{0.415}{1 - 0.415}\approx{0.709}
-\end{aligned}
-$$ {#eq-prob-odds-cond}
+\end{aligned}$$
+ {#eq-prob-odds-cond}
 
 $Pr(Y=1 | \text{tech\_easy = Neutral})$ is called a **conditional probability**, because it is the probability that a randomly selected respondent is comfortable with driverless cars conditioned on (given) they are neutral about whether technology makes life easier. Similarly, $\text{odds}(Y=1 | \text{tech\_easy = Neutral})$ are **conditional odds**.
 
@@ -409,15 +407,12 @@ Compute the probability and corresponding odds of being comfortable with driverl
 
 From @tbl-aidrive-two-way, the odds a respondent who is neutral about technology making life easier is comfortable with driverless cars are 0.709, and the odds a respondent who agrees technology makes life easier are 1.43. We quantify how the odds for these two groups compare using an odds ratio. An **odds ratio** is computed as the odds for one group divided the odds for another, as shown in @eq-odds-ratio
 
-$$
-\text{odds ratio} = \frac{\text{odds}_{group 1}}{\text{odds}_{group 2}}
-$$ {#eq-odds-ratio}
+$$\text{odds ratio} = \frac{\text{odds}_{group 1}}{\text{odds}_{group 2}}$$
+ {#eq-odds-ratio}
 
 Let's compute the odds ratio for those who agree that technology makes life easier versus those who are neutral.
 
-$$
-\text{odds ratio} = \frac{\text{odds}_{\text{Agree}}}{\text{odds}_{\text{Neutral}}} = \frac{1.43}{0.709} = 2.02
-$$
+$$\text{odds ratio} = \frac{\text{odds}_{\text{Agree}}}{\text{odds}_{\text{Neutral}}} = \frac{1.43}{0.709} = 2.02$$
 
 > This means that the odds a respondent who agrees technology makes life easier is comfortable with driverless cars are 2.02 times the odds a respondent who is neutral about technology is comfortable with driverless cars.
 
@@ -451,9 +446,8 @@ The two-way table and odds ratios from the previous section helped us being to e
 
 Suppose we want to fit a model of the relationship between `age` and `aidrive_comfort`. Our first thought may be to use the linear regression model from @sec-ch-slr to model this relationship. In this case, the estimated model would be of the form
 
-$$
-\widehat{\text{aidrive\_comfort}} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}
-$$ {#eq-aidrive-age-linear}
+$$\widehat{\text{aidrive\_comfort}} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}$$
+ {#eq-aidrive-age-linear}
 
 ```{r}
 #| label: fig-try-linear
@@ -477,9 +471,8 @@ ggplot(data = gss24_ai, aes(x = age, y = comfort_num)) +
 
 Next, we might consider fitting a linear model such that the response variable is the $\pi = Pr(Y = 1)$, the probability of being comfortable with driverless cars. This estimated model takes the form
 
-$$
-\hat{\pi} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}
-$$ {#eq-aidrive-age-prob}
+$$\hat{\pi} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}$$
+ {#eq-aidrive-age-prob}
 
 ```{r}
 #| label: fig-try-prob
@@ -504,9 +497,8 @@ ggplot(data = comfort_age, aes(x = age, y = prob)) +
 
 When there is a binary categorical response variable, we use a **logistic regression model** to model the relationship between the binary response and one or more predictor variables as in @eq-logistic-model.
 
-$$
-\log\Big(\frac{\pi}{1 - \pi}\Big) = \beta_0 + \beta_1x_1 + \dots + \beta_px_p
-$$ {#eq-logistic-model}
+$$\log\Big(\frac{\pi}{1 - \pi}\Big) = \beta_0 + \beta_1x_1 + \dots + \beta_px_p$$
+ {#eq-logistic-model}
 
 where $\pi = Pr(Y = 1)$ and $\log\big(\frac{\pi}{1 - \pi}\big)$ is the **logit transformation**, also called the "log odds". The log odds can take any value $-\infty$ to $\infty$, so it does not have the boundary constraints of the probability and odds. The log odds output from @eq-logistic-model can be transformed back to the odds and probabilities, and we will the probabilities to assign each observation to a predicted class `aidrive_comfort = 0` or `aidrive_comfort = 1`. We'll discuss this more in @sec-ch-logistic-prediction.
 
@@ -562,11 +554,10 @@ tidy(comfort_tech_fit) |>
 
 @eq-logistic-comfort-tech is the equation from the model output in @tbl-logistic-comfort-tech.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \log\Big(\frac{\hat{\pi}}{1 - \hat{\pi}}\Big) = -0.344 + -0.061 \times \text{Can't choose}  + 0.699 \times \text{Agree}   - 0.562 \times \text{Disagree}
-\end{aligned}
-$$ {#eq-logistic-comfort-tech}
+\end{aligned}$$
+ {#eq-logistic-comfort-tech}
 
 where $\hat{\pi}$ is the predicted probability a respondent is comfortable with driverless cars.
 
@@ -578,20 +569,19 @@ What is the baseline level for `tech_easy`? [^11-logistic-5]
 
 The intercept, -0.344, is the estimated log odds for respondents in the baseline group, `Neutral`. Similar to interpretations in @sec-transform-logy, though we do calculations using the logit, we write interpretations in terms of the odds, so they are more clearly understood by the reader. To transform from logit to odds, we exponentiate both sides of the model equation. @eq-logistic-comfort-tech-exp shows the equation from @tbl-logistic-comfort-tech in terms of the odds of being comfortable with driverless cars.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \frac{\hat{\pi}}{1 - \hat{\pi}} = e^{-0.344} \times e^{-0.061 \times \text{Can't choose}} \times e^{0.699 \times \text{Agree}}  \times e^{-0.562 \times \text{Disagree}}
-\end{aligned}
-$$ {#eq-logistic-comfort-tech-exp}
+\end{aligned}$$
+ {#eq-logistic-comfort-tech-exp}
 
 From @eq-logistic-comfort-tech-exp, we see that the estimated odds a respondent who is neutral about whether technology makes life easier is comfortable with driverless cars is `r round(exp(-0.344), 3)` ( $e^{-0.344}$). This equals the odds that was computed from the two-way table in @eq-prob-odds-cond.
 
 ::: {.math_rules latex=""}
 The following two rules were used to go from @eq-logistic-comfort-tech to @eq-logistic-comfort-tech-exp
 
--   $e^{\log(a)} = a$
+- $e^{\log(a)} = a$
 
--   $e^{a+b}  = e^a e^b$
+- $e^{a+b}  = e^a e^b$
 :::
 
 Now let's look at the coefficient for `Agree`, 0.699. Putting together what know about the response variable with what we've learned about interpreting coefficients for categorical predictors in @sec-mlr-interpret-categorical, this estimated coefficient means the following:
@@ -629,11 +619,10 @@ The coefficient for `Agree` in this model is 0.678. It is but not equal to the c
 
 To write the interpretation in terms of the odds, we need to exponentiate both sides of the model equation as in the previous section. @eq-logistic-comfort-tech-age-exp shows the relationship between opinions about technology, age, and the odds of being comfortable with driverless cars.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \frac{\hat{\pi}}{1 - \hat{\pi}} = e^{0.420} \times e^{-0.118 \times \text{Can't choose}} \times e^{0.678 \times \text{Agree}}  \times e^{-0.499 \times \text{Disagree}} \times e^{-0.015 \times \text{age}}
-\end{aligned}
-$$ {#eq-logistic-comfort-tech-age-exp}
+\end{aligned}$$
+ {#eq-logistic-comfort-tech-age-exp}
 
 where $\hat{\pi}$ is the predicted probability a respondent is comfortable with driverless cars.
 
@@ -646,8 +635,8 @@ The value 1.970 ($e^{0.678}$) is the odds ratio of comfort with driverless cars 
 ::: {.yourturn latex=""}
 Use the model from @tbl-logistic-comfort-tech-age. Assume `age` is held constant.
 
--   Interpret the coefficient of `Disagree` in terms of the log odds of being comfortable with driverless cars.
--   Interpret the coefficient of `Disagree` in terms of the odds of being comfortable with driverless cars.[^11-logistic-6]
+- Interpret the coefficient of `Disagree` in terms of the log odds of being comfortable with driverless cars.
+- Interpret the coefficient of `Disagree` in terms of the odds of being comfortable with driverless cars.[^11-logistic-6]
 :::
 
 [^11-logistic-6]: The log odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be 0.499 less than the log odds of a respondent who is neutral about whether technology makes life easier, holding age constant.
@@ -666,50 +655,48 @@ Let's take a moment to show this interpretation mathematically by comparing the 
 
 Then, the change in the log odds is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \text{log odds (comfort | age + 1)}  - \text{log odds (comfort | age)} &= -0.015 \times ( \text{age} + 1) - (-  0.015 \times \text{age}) \\
 & = -0.015 ( \text{age} + 1 - \text{age}) \\
 & = -0.015 
-\end{aligned}
-$$ {#eq-age-interpret-log-odds}
+\end{aligned}$$
+ {#eq-age-interpret-log-odds}
 
 From @eq-age-interpret-log-odds, $\text{log odds (comfort | age + 1)} = \text{log odds (comfort | age)} - 0.015$.
 
 Now we'll interpret the coefficient of `age` in terms of the odds. Based on @eq-logistic-comfort-tech-age-exp, the interpretation of `age` in terms of the odds of being comfortable with driverless cars is the following:
 
-> *For each additional year increase in age, the **odds** a respondent is comfortable with driverless cars are expected to **multiply** by `r round(exp(-0.015), 3)` (* $e^{-0.015}$*), holding opinions about technology constant.*
+> *For each additional year increase in age, the **predicted odds** a respondent is comfortable with driverless cars change by a **multiplicative factor** of `r round(exp(-0.015), 3)` (* $e^{-0.015}$*), holding opinions about technology constant.*
 
 ::: {.math_rules latex=""}
--   $\log(a) + \log(b) = \log(ab)$
+- $\log(a) + \log(b) = \log(ab)$
 
 <!-- -->
 
--   $\log(a) - \log(b) = \log(\frac{a}{b})$
+- $\log(a) - \log(b) = \log(\frac{a}{b})$
 :::
 
 We can show the interpretation mathematically starting with the result from @eq-age-interpret-log-odds.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \text{log odds (comfort | age + 1)}  - \text{log odds (comfort | age)} &= -0.015 \\[8pt]
 \Rightarrow \log\Bigg(\frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}}\Bigg) & = -0.015 \\[8pt]
 *\text{exponetiate both sides}* \\[8pt]
 \Rightarrow \frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}} & = e^{-0.015}
-\end{aligned}
-$$ {#eq-age-interpret-odds}
+\end{aligned}$$
+ {#eq-age-interpret-odds}
 
 From @eq-age-interpret-odds, $\text{odds (comfort | age + 1)} = e^{-0.015} \times \text{odds (comfort | age)}$. The value $\frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}}$ is the odds ratio of being comfortable with driverless cars between `age` versus `age + 1`. Thus, given $\beta_j$ is the coefficient for a quantitative predictor $X_j$, the value $e^{\beta_j}$ is the (adjusted) odds ratio between $X_j + 1$ and $X_j$.
 
 ::: {.yourturn latex=""}
 Use the model in @tbl-logistic-comfort-tech-age. Assume opinions about technology are held constant.
 
--   How are the log odds of being comfortable with driverless cars expected to change when age increases by 5 years?
+- How are the log odds of being comfortable with driverless cars expected to change when age increases by 5 years?
 
--   How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years? [^11-logistic-7]
+- How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years? [^11-logistic-7]
 :::
 
-[^11-logistic-7]: When age increases by 5, the log odds are expected to decrease by `r round(abs(-0.015 * 5), 3)` ($-0.015 \times 5$ ) . The odds are expected to multiply by `r round(exp(-0.015 * 5), 3)` ( $e^{-0.015 \times 5}$).
+[^11-logistic-7]: When age increases by 5, the log odds are expected to decrease by `r round(abs(-0.015 * 5), 3)` ($-0.015 \times 5$ ) . The expected odds change by a multiplicative factor of `r round(exp(-0.015 * 5), 3)` ( $e^{-0.015 \times 5}$).
 
 <!--# do i discuss marginal effects and the change in probability? -->
 
@@ -743,22 +730,19 @@ We can use simulation-based inference to draw conclusions about the model coeffi
 
 Hypothesis tests is used to test a claim about a population parameter. In the case of logistic regression, we use hypothesis tests to evaluate whether there is evidence of a relationship between a given predictor and the log odds of the response variable. The hypotheses to test whether there is a relationship between predictor $X_j$ and the response, after adjusting for the other predictors are in @eq-logistic-hypotheses.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 &H_0: \beta_j = 0 - \text{There is no relationship between }X_j\text{ and the response}\\
 &H_a: \beta_j \neq 0 - \text{There is a relationship between }X_j\text{ and the response}
-\end{aligned}
-$$ {#eq-logistic-hypotheses}
+\end{aligned}$$
+ {#eq-logistic-hypotheses}
 
 The hypothesis test is conducted assuming the null hypothesis is true. When doing simulation-based inference, we use permutation sampling to generate the null distribution under this assumption. The process for permutation sampling is the same for logistic regression as with linear regression in @sec-slr-testing-sim. The values of the predictor of interest $X_j$ are permuted, such that the values are randomly assigned to each observation. There is no relationship between the permuted values of $X_j$ and the response variable. The logistic model is fit to each permuted sample, and the estimated coefficients $\hat{\beta}_j$ from the permuted samples make up the null distribution. The null distribution is used to compute the p-value and draw a conclusion about the hypotheses.
 
 We'll use a permutation test to evaluate whether there is evidence of a relationship between `age` and `aidrive_comfort` , after adjusting for `tech_easy`. <!--# be consistent with hypotheses in MLR inf chapter - do I include( adjusting fo rtech?)-->
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 H_0: \beta_{\text{age}} = 0 \hspace{2mm} \text{ vs } \hspace{2mm} \beta_{\text{age}} \neq 0
-\end{aligned}
-$$
+\end{aligned}$$
 
 The original value and five permutations of `age` for the first respondent are shown @tbl-logistic-permute.
 
@@ -901,15 +885,12 @@ The steps for the hypotheses test are the same as those outlined in @sec-mlr-hyp
 
 The hypotheses for a single coefficient are the same as in @eq-logistic-hypotheses:
 
-$$
-H_0: \beta_j = 0 \hspace{2mm} \text{ vs }\hspace{2mm} H_a: \beta_j \neq 0
-$$
+$$H_0: \beta_j = 0 \hspace{2mm} \text{ vs }\hspace{2mm} H_a: \beta_j \neq 0$$
 
 The test statistic, in @eq-logistic-test-stat, is called the Wald test statistic [@wald1943tests], <!--# make sure this is the correct reference-->because it is based on the approximation of the mean and standard error as $n$ is large.
 
-$$
-z = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}
-$$ {#eq-logistic-test-stat}
+$$z = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}$$
+ {#eq-logistic-test-stat}
 
 The test statistic, denoted by $z$, is the number of standard errors the estimated coefficient $\hat{\beta}_j$ is from 0, the hypothesized mean of the distribution. It follows a standard normal distribution, $N(0, 1)$, because it is based on asymptotic results (compared to the $t$ test statistic in linear regression which applies even for small $n$). Because the alternative hypothesis is two-sided, the p-value is computed as $P(|Z| \geq |z|)$ , where $Z \sim N(0, 1)$. <!--# did i do > or >= in linear regression?--> The p-value is interpreted as before, with small p-values providing stronger evidence against the null hypothesis.
 
@@ -927,9 +908,7 @@ tidy(comfort_tech_age_fit, conf.int = TRUE) |>
 
 The hypotheses are the same as with simulation-based inference
 
-$$
-H_0:\beta_{\text{age}} = 0 \hspace{2mm} \text{ vs }\hspace{2mm} \beta_{\text{age}} \neq 0
-$$
+$$H_0:\beta_{\text{age}} = 0 \hspace{2mm} \text{ vs }\hspace{2mm} \beta_{\text{age}} \neq 0$$
 
 The null hypothesis is that there is no relationship between age and comfort with driverless cars after accounting for opinions about technology. The alternative hypothesis is that there is a relationship.
 
@@ -937,9 +916,7 @@ The test statistic[^11-logistic-8] is computed as
 
 [^11-logistic-8]: Note the difference the result here and the model output is because the model output is computed using exact values of $\hat{\beta}_j$ and $SE_{\hat{\beta}_j}$.
 
-$$
-z = \frac{-0.015 - 0}{0.003} \approx - 5 
-$$
+$$z = \frac{-0.015 - 0}{0.003} \approx - 5 $$
 
 The p-value is computed as $P(|Z| \geq |-4.902|) \approx$ `r 2 * dnorm(-4.902, 0, 1)`. This value is so small it rounds to 0 when displaying the results to 3 digits. This is consistent with the p-value we observed from the permutation test in @sec-logistic-sim-inf. Because the p-value is small, we reject the null hypothesis and conclude there is evidence of a relationship between age and comfort with driverless cars after adjusting for opinions about technology.
 
@@ -951,9 +928,8 @@ We can use a decision-making threshold $\alpha$ when using the p-value to draw c
 
 The equation to compute the confidence interval for coefficients in logistic regression is very similar to the formula in linear regression from @sec-slr-inf-clt. The difference is the critical value $z^*$ is computed from the $N(0, 1)$ distribution
 
-$$
-\hat{\beta}_j \pm z^* \times SE_{\hat{\beta}_j}
-$$ {#eq-logistic-theory-ci}
+$$\hat{\beta}_j \pm z^* \times SE_{\hat{\beta}_j}$$
+ {#eq-logistic-theory-ci}
 
 In practice, the confidence interval is produced in the model output. Let's show how the 95% confidence interval for `age` is computed in @tbl-comfort-tech-age-2.
 
@@ -961,17 +937,15 @@ The values for $\hat{\beta}_j$ and $SE_{\hat{\beta}_j}$ can be read directly fro
 
 The 95% confidence interval for the coefficient of `age` is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 &-0.015 \pm 1.96 \times 0.003 \\[5pt]
 \Rightarrow &-0.015 \pm  0.00588 \\[5pt]
 \Rightarrow &\mathbf{[ -0.021 , -0.009]}  
-\end{aligned}
-$$
+\end{aligned}$$
 
 ::: {.yourturn latex=""}
--   Interpret this interval in the context of the data in terms of the odds of being comfortable with driverless cars.
--   How does this interval compare to the bootstrap confidence interval computed in @sec-logistic-sim-inf? [^11-logistic-9]
+- Interpret this interval in the context of the data in terms of the odds of being comfortable with driverless cars.
+- How does this interval compare to the bootstrap confidence interval computed in @sec-logistic-sim-inf? [^11-logistic-9]
 :::
 
 [^11-logistic-9]: We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars are expected to multiply by `r round(exp(-.021), 3)` ( $e^{-0.021}$ ) to `r round(exp(-.009), 3)` ( $e^{-0.009}$), holding opinions about technology constant. This interval is equal to the interval obtained using bootstrapping.
@@ -982,20 +956,20 @@ The same connection between two-sided hypothesis tests and confidence intervals 
 
 This means we can use a confidence interval to evaluate a claim about a coefficient and get a range of values the population coefficient may take. The following are the relationship between the confidence interval and hypothesis test:
 
--   Confidence interval for $\beta_j$ : If 0 is in the interval, fail to reject the null hypothesis. If 0 is not in the interval, reject the null hypothesis.
+- Confidence interval for $\beta_j$ : If 0 is in the interval, fail to reject the null hypothesis. If 0 is not in the interval, reject the null hypothesis.
 
--   Confidence interval for $e^{\beta_j}$: If 1 is in the interval, fail to reject the null hypothesis. If 1 is not in the interval, reject the null hypothesis.
+- Confidence interval for $e^{\beta_j}$: If 1 is in the interval, fail to reject the null hypothesis. If 1 is not in the interval, reject the null hypothesis.
 
 ::: {.yourturn latex=""}
 Use the output in @tbl-comfort-tech-age-2.
 
--   Show how the test statistic is computed for `tech_easyDisagree`. Interpret this value in the context of the data.
--   Do the data provide evidence that the odds are different among those who disagree technology makes life easier compared to those who are neutral (the baseline), after adjusting for age? Use $\alpha = 0.05$ Explain.
--   Show how the 95% confidence interval for `tech_easyDisagree` is computed. Is it consistent with your conclusion in the previous question?[^11-logistic-10]
+- Show how the test statistic is computed for `tech_easyDisagree`. Interpret this value in the context of the data.
+- Do the data provide evidence that the odds are different among those who disagree technology makes life easier compared to those who are neutral (the baseline), after adjusting for age? Use $\alpha = 0.05$ Explain.
+- Show how the 95% confidence interval for `tech_easyDisagree` is computed. Is it consistent with your conclusion in the previous question?[^11-logistic-10]
 :::
 
 [^11-logistic-10]:
-    -   The test statistic is $\frac{-0.499 - 0}{0.295} \approx - 1.69$. The estimated coefficient of -0.499 is 1.69 standard errors below the hypothesized mean of 0. The p-value 0.091 \> 0.05, so the data do not provide sufficient evidence the odds are different for those who disagree that technology makes life easier versus those who are neutral, after adjusting for age. The 95% confidence interval is computed as $-0.499 \pm 1.96 \times 0.295$. It is consistent with the conclusion, because 0 is in the interval.\
+    - The test statistic is $\frac{-0.499 - 0}{0.295} \approx - 1.69$. The estimated coefficient of -0.499 is 1.69 standard errors below the hypothesized mean of 0. The p-value 0.091 \> 0.05, so the data do not provide sufficient evidence the odds are different for those who disagree that technology makes life easier versus those who are neutral, after adjusting for age. The 95% confidence interval is computed as $-0.499 \pm 1.96 \times 0.295$. It is consistent with the conclusion, because 0 is in the interval.\
 
 <!--# Inference for a subset of coefficients  -->
 
@@ -1016,9 +990,8 @@ Similar to linear regression, we check model conditions to evaluate whether thes
 
 The linearity assumption for logistic regression states that there is a linear relationship between the predictors and the logit of the response variable. We check this assumption by looking at plots of the quantitative predictors versus the empirical logit of the response. The **empirical logit** is the log-odds of a binary variable ("logit") calculated from the data ("empirical"). For example, @eq-emp-logit is the empirical logit for the comfort with driverless cars in the sample data set.
 
-$$
-\text{empirical logit} = \log\Big(\frac{\pi}{1 - \pi}\Big) = \log\Big(\frac{0.545}{1 - 0.545}\Big) = 0.180
-$$ {#eq-emp-logit}
+$$\text{empirical logit} = \log\Big(\frac{\pi}{1 - \pi}\Big) = \log\Big(\frac{0.545}{1 - 0.545}\Big) = 0.180$$
+ {#eq-emp-logit}
 
 We can also look at the empirical logit by subgroup of a categorical variable. For example, @tbl-emp-logit-tech shows the empirical logit by opinion on whether technology makes life easier.
 

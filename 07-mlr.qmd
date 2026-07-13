@@ -958,25 +958,28 @@ tidy(lemurs_age_taxon_int) |>
 
 age_main <- age_int_pcoq <- tidy(lemurs_age_taxon_int) |>
   filter(term == "age") |> 
-  pull(estimate)
+  pull(estimate) |>
+  round(1)
 
 age_int_pcoq <- tidy(lemurs_age_taxon_int) |>
   filter(term == "age:taxonPCOQ") |> 
-  pull(estimate)
+  pull(estimate) |> 
+  round(1)
 
 age_int_vrub <- tidy(lemurs_age_taxon_int) |>
   filter(term == "age:taxonVRUB") |> 
-  pull(estimate)
+  pull(estimate) |>
+  round(1)
 
 ```
 
 The model wit the interaction between `age` and `taxon` is in @tbl-lemurs-age-taxon-int-model. The interaction terms are indicated in the output in the format `var1:var2`; for example, the interaction term of `age` for the PCOQ taxon is labeled as `age:taxonPCOQ`. This individual term is an estimate of how much the slope of `age` differs between the taxa PCOQ and ERUF, the baseline. Thus, the interpretation is
 
-> *The slope of age for lemurs in the PCOQ taxon is about `r round(age_int_pcoq, 3)` greater for lemurs in PCOQ compared to lemurs in the ERUF taxon. This means for each additional month older a lemur is, the weight of a PCOQ lemur is expected to increase by `r round(age_int_pcoq, 3)` grams [**more**]{.underline}, on average, compared to an ERUF lemur, holding sex and litter size constant.*
+> *The slope of age for lemurs in the PCOQ taxon is about `r age_int_pcoq` greater for lemurs in PCOQ compared to lemurs in the ERUF taxon. This means for each additional month older a lemur is, the weight of a PCOQ lemur is expected to increase by `r age_int_pcoq` grams [**more**]{.underline}, on average, compared to an ERUF lemur, holding sex and litter size constant.*
 
 This interpretation aligns with the steep slope of the line for the PCOQ species in @fig-lemurs-age-taxon-int. Note from the interpretation that coefficient of the interaction effect is how much the relationship between age and weight differ for the PCOQ species compared to the ERUF species, but it is [**not**]{.underline} the overall relationship between age and weight for PCOQ lemurs. To get that value, we must add the main effect of age (`age`) and the interaction effect (`age:taxonPCOQ`).
 
-> *The overall slope of age for PCOQ lemurs is `r round(age_main, 3) + round(age_int_pcoq, 3)` (`r round(age_main, 3)` + `r round(age_int_pcoq, 3)` ). This means that among PCOQ lemurs, for each additional month in age, the weight is expected to be greater by `r round(age_main, 3) + round(age_int_pcoq, 3)` grams, on average, holding sex and litter size constant.*
+> *The overall slope of age for PCOQ lemurs is `r age_main + age_int_pcoq` (`r age_main` + `r age_int_pcoq` ). This means that among PCOQ lemurs, for each additional month in age, the weight is expected to be greater by `r age_main + age_int_pcoq` grams, on average, holding sex and litter size constant.*
 
 ::: {.yourturn latex=""}
 What is the slope of `age` for lemurs in the VRUB taxon? Interpret it in the context of the data.[^07-mlr-10]
@@ -984,7 +987,7 @@ What is the slope of `age` for lemurs in the VRUB taxon? Interpret it in the con
 
 [^07-mlr-10]: The slope of age for lemurs in the VRUB taxon is `r round(age_main, 3) + round(age_int_vrub, 3)` (`r round(age_main, 3)` + `r round(age_int_vrub, 3)`). This means that among VRUB lemurs, for each additional month in age, the weight is expected to be greater by `r round(age_main, 3) + round(age_int_vrub, 3)` grams, on average, holding sex and litter size constant.
 
-By now we have quantified the relationship between age and weight for PCOQ and VRUB lemurs, but what about this relationship for ERUF lemurs, the baseline category? The interaction effect `age:taxonPCOQ` is the adjustment in the slope of age for PCOQ lemurs; the same is true about `age:taxonVRUB` for VRUB lemurs. Therefore, neither of these interaction effects apply to ERUF lemurs. Putting all this together, the coefficient of `age` for ERUF lemurs is `r round(age_main, 3)`. The term in the model `age` is called a **main effect**, because it describes the relationship between the response and predictor variable (among the baseline subgroup). The terms `age:taxonPCOQ` and `age:taxonVRUB` called **interaction effects**, because they are how much the relationship between the response and one predictor differs by values of another predictor.
+By now we have quantified the relationship between age and weight for PCOQ and VRUB lemurs, but what about this relationship for ERUF lemurs, the baseline category? The interaction effect `age:taxonPCOQ` is the adjustment in the slope of age for PCOQ lemurs; the same is true about `age:taxonVRUB` for VRUB lemurs. Therefore, neither of these interaction effects apply to ERUF lemurs. Putting all this together, the coefficient of `age` for ERUF lemurs is `r age_main`. The term in the model `age` is called a **main effect**, because it describes the relationship between the response and predictor variable (among the baseline subgroup). The terms `age:taxonPCOQ` and `age:taxonVRUB` called **interaction effects**, because they are how much the relationship between the response and one predictor differs by values of another predictor.
 
 <!--# Key terms: The main effect is the term in the model quantifying the relationship between the response and predictor. This effect could apply all observations or a subgroup of observations.-->
 
@@ -1039,18 +1042,18 @@ tidy(lemurs_sex_taxon_int) |>
 ```{r}
 sex_main <- tidy(lemurs_sex_taxon_int) |> 
   filter(term == "sexM") |>
-  pull(estimate) |> 
-  round(3)
+  pull(estimate) |>
+  round(1)
 
 sex_int_pcoq <- tidy(lemurs_sex_taxon_int) |> 
   filter(term == "sexM:taxonPCOQ") |>
-  pull(estimate) |> 
-  round(3)
+  pull(estimate) |>
+  round(1)
 
 sex_int_vrub <- tidy(lemurs_sex_taxon_int) |> 
   filter(term == "sexM:taxonVRUB") |>
-  pull(estimate) |> 
-  round(3)
+  pull(estimate)|> 
+  round(1)
 ```
 
 <!--# if I put this chapter after inference, I can talk about the p-values here.-->

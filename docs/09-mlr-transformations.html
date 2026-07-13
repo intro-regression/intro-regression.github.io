@@ -822,18 +822,14 @@ Figure&nbsp;9.6: Relationship between <code>expenditure_m</code> and <code>enrol
 <p>One solution to this is to use the simulation-based inference methods introduced in <a href="08-mlr-inference.html#sec-mlr-sim-inf" class="quarto-xref"><span>Section 8.3</span></a>, because the sampling distribution and null distribution for an estimated coefficient <span class="math inline">\(\hat{\beta}_j\)</span> are constructed relying only on the data, rather than any underlying assumptions about the distribution of <span class="math inline">\(\hat{\beta}_j\)</span>. Another approach is to use a transformation on the response variable to reduce the impacts of the different vertical spreads in the response variable. Such transformations are called <strong>variance-stabilizing transformations</strong>.</p>
 <!--# do i need a callout terminology box highlighting the definition of variance-stabilizing transformaiton?-->
 <!--# i really need to figure out syntax..upper or lower case y and x-->
-<p>Some commonly used variance-stabilizing transformations are the square-root transformation, <span class="math inline">\(\sqrt{y}\)</span> , and the reciprocal transformation, <span class="math inline">\(1/y\)</span> . In fact, the square root and reciprocal transformations are just two examples from the class of transformations called the <strong>Box-Cox transformations</strong> <span class="citation" data-cites="box1964analysis">(<a href="references.html#ref-box1964analysis" role="doc-biblioref">Box and Cox 1964</a>)</span>. These transformations are designed to handle a non-normal response variable of any shape. While Box-Cox transformations, such as <span class="math inline">\(\sqrt{y}\)</span> and <span class="math inline">\(1/y\)</span>, can be the optional choice for stabilizing variance and making the distribution of the response variable more normal (recall the normality condition), it is often difficult to interpret the coefficients for models with such transformed response variables in a way that an be easily understood by readers. Therefore, we will not focus on Box-Cox transformations in this text, because one of our primary objectives is to produce models that are easily interpretable.</p>
-<!--# read more about these and make sure this all aligns-->
-<!--# add callout box for Box-Cox transformations. History, what they are, and resources to learn more-->
-<p>Let’s consider another transformation for the response variable that can help address the violations in the equal variance condition while also being easily interpreted by the reader. We can apply a natural log transformation on the response variable, <span class="math inline">\(\log(y)\)</span> (also written as <span class="math inline">\(\ln(y)\)</span>), such that <span class="math inline">\(\log(y)\)</span> has the linear relationship with the predictor variables. <a href="#eq-log-y" class="quarto-xref">Equation&nbsp;<span>9.1</span></a> shows the statistical model when applying such transformation to the response variable.</p>
-<p><span id="eq-log-y"><span class="math display">\[
-\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\tag{9.1}\]</span></span></p>
+<p>Some commonly used variance-stabilizing transformations are the square-root transformation, <span class="math inline">\(\sqrt{y}\)</span> , and the reciprocal transformation, <span class="math inline">\(1/y\)</span> . In fact, the square root and reciprocal transformations are just two examples from the class of transformations called the <strong>Box-Cox transformations</strong> <span class="citation" data-cites="box1964analysis">(<a href="references.html#ref-box1964analysis" role="doc-biblioref">Box and Cox 1964</a>)</span>. These transformations are designed to handle a non-normal response variable of any shape. While Box-Cox transformations, such as <span class="math inline">\(\sqrt{y}\)</span> and <span class="math inline">\(1/y\)</span>, can be the optional choice for stabilizing variance and making the distribution of the response variable more normal (recall the normality condition), it is often difficult to interpret the coefficients for models with such transformed response variables in a way that an be easily understood by readers. Therefore, this text will not focus on Box-Cox transformations in general, but we will focus on a special case, the log transformation.</p>
+<p>Let’s consider another transformation for the response variable that can help address the violations in the equal variance condition while also being easily interpreted by the reader. We can apply a natural log transformation on the response variable, <span class="math inline">\(\log(y)\)</span> (also written as <span class="math inline">\(\ln(y)\)</span>), such that <span class="math inline">\(\log(y)\)</span> has the linear relationship with the predictor variables. <span class="quarto-unresolved-ref">?eq-log-y</span> shows the statistical model when applying such transformation to the response variable.</p>
+<p><span class="math display">\[\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-log-y}</p>
 <div class="math_rules">
 <p><strong>log = ln</strong></p>
 <p>In statistics, the term “log” refers to the natural log (typically denoted <span class="math inline">\(\ln\)</span> in mathematics).</p>
 </div>
-<p>As shown in <a href="#eq-log-y" class="quarto-xref">Equation&nbsp;<span>9.1</span></a>, the log transformation is applied to the individual values of <span class="math inline">\(Y\)</span>, and the transformed values are used in the model. Therefore, when we use a log (or any) transformation on the response variable, we assume the assumptions from <a href="05-slr-inference.html#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a> apply to the relationship between the predictors and the transformed values of <span class="math inline">\(Y\)</span>. Using <a href="#eq-log-y" class="quarto-xref">Equation&nbsp;<span>9.1</span></a>, this means we make assumptions about the relationship between the predictors and <span class="math inline">\(\log(y_i)\)</span>. The full analysis, including evaluating conditions and diagnostics, conducting inference, and computing predictions are done in terms of <span class="math inline">\(\log(y)\)</span>. Interpretations, however, are in terms of the original variable <span class="math inline">\(y\)</span>. Although we can write interpretations in terms of <span class="math inline">\(\log(y)\)</span> (we’ll see an example of this shortly), it is not as intuitive for readers to understand interpretations on a log-scale as on the natural scale.</p>
+<p>As shown in <span class="quarto-unresolved-ref">?eq-log-y</span>, the log transformation is applied to the individual values of <span class="math inline">\(Y\)</span>, and the transformed values are used in the model. Therefore, when we use a log (or any) transformation on the response variable, we assume the assumptions from <a href="05-slr-inference.html#sec-slr-foundation" class="quarto-xref"><span>Section 5.3</span></a> apply to the relationship between the predictors and the transformed values of <span class="math inline">\(Y\)</span>. Using <span class="quarto-unresolved-ref">?eq-log-y</span>, this means we make assumptions about the relationship between the predictors and <span class="math inline">\(\log(y_i)\)</span>. The full analysis, including evaluating conditions and diagnostics, conducting inference, and computing predictions are done in terms of <span class="math inline">\(\log(y)\)</span>. Interpretations, however, are in terms of the original variable <span class="math inline">\(y\)</span>. Although we can write interpretations in terms of <span class="math inline">\(\log(y)\)</span> (we’ll see an example of this shortly), it is not as intuitive for readers to understand interpretations on a log-scale as on the natural scale.</p>
 <p>Let’s begin by looking at the distribution of <code>log(expenditure_m)</code>, its relationship with <code>enrollment_th</code>, and how these compare to the exploratory data analysis in <a href="#sec-transform-eda" class="quarto-xref"><span>Section 9.1</span></a>.</p>
 <div id="fig-expend-compare" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-expend-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -886,7 +882,7 @@ Figure&nbsp;9.6: Relationship between <code>expenditure_m</code> and <code>enrol
 Figure&nbsp;9.7: Univariate and bivariate EDA for original and log-transformed <code>expenditure_m</code>
 </figcaption></figure>
 </div>
-<p>Now we fit the main effects model using <code>log(expenditure_m)</code>, the log-transformed expenditure, as the response variable. The output for the new is in <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a> and the equation is in <a href="#eq-ncaa-model-logy" class="quarto-xref">Equation&nbsp;<span>9.2</span></a>.</p>
+<p>Now we fit the main effects model using <code>log(expenditure_m)</code>, the log-transformed expenditure, as the response variable. The output for the new is in <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a> and the equation is in <span class="quarto-unresolved-ref">?eq-ncaa-model-logy</span>.</p>
 <div class="cell">
 <div id="tbl-ncaa-model-logy" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-model-logy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -974,13 +970,11 @@ Table&nbsp;9.3: Model with log-transformed expenditure as the response variable
 </figure>
 </div>
 </div>
-<p><span id="eq-ncaa-model-logy"><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 \widehat{\log(\text{expenditure\_m})} = &amp; 1.783 + 0.056 \times \text{enrollment\_th}\\
 &amp;- 0.311 \times \text{Northeast} - 0.176 \times \text{South} \\
 &amp; - 0.218 \times \text{West} - 0.672 \times \text{Public}
-\end{aligned}
-\tag{9.2}\]</span></span></p>
+\end{aligned}\]</span> {#eq-ncaa-model-logy}</p>
 <p>Before using the model, we analyze the residuals versus predicted values to evaluate whether the concerns with equal variance have been addressed by the transformation. <a href="#fig-ncaa-logy-resid" class="quarto-xref">Figure&nbsp;<span>9.8</span></a> shows the original plot of the residuals versus predicted values and the plot for the model using the log-transformed response variable.</p>
 <div id="fig-ncaa-logy-resid" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-logy-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1014,8 +1008,8 @@ Figure&nbsp;9.8: Residuals versus predicted values for original model and model 
 <p>Comparing the plots in <a href="#fig-ncaa-logy-resid" class="quarto-xref">Figure&nbsp;<span>9.8</span></a>, the first observation is that the <span class="math inline">\(y\)</span>-axis differs on the plots. This is the because the residuals are on the same scale and use the same units as the response variable. The residuals in <a href="#fig-ncaa-logy-resid-1" class="quarto-xref">Figure&nbsp;<span>9.8 (a)</span></a> are in terms of the original variable <code>expenditure_m</code>, and the residuals in <a href="#fig-ncaa-logy-resid-2" class="quarto-xref">Figure&nbsp;<span>9.8 (b)</span></a> are in terms of <code>log(expenditure_m)</code>. The same is true for the predicted values on the <span class="math inline">\(x\)</span>-axis. The second observation is that the vertical spread of the residuals is much more equal <a href="#fig-ncaa-logy-resid-2" class="quarto-xref">Figure&nbsp;<span>9.8 (b)</span></a> with the log-transformed response variable. Given this, it appears applying a log transformation on the response variable has addressed some of the problems with the equal variance condition.</p>
 <p>We can consider other transformations to improve the model fit even more; we’ll discuss those as the chapter continues. For now, let’s interpret the coefficients for the model in <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a>. The approach for interpreting the model coefficients in terms of the log-transformed response variable is the same as the one introduced in <a href="#sec-transform-logy" class="quarto-xref"><span>Section 9.2</span></a> for other multiple linear regression models. Below are the interpretations for <code>enrollment_th</code> and <code>regionNortheast</code> in terms of <code>log(expenditure)</code>.</p>
 <blockquote class="blockquote">
-<p><em>For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to increase by 0.056 log(millions of dollars), on average, holding region and type constant.</em></p>
-<p><em>The total log(expenditure) on basketball programs for NCAA Division I colleges is expected to be 0.311 log(millions of dollars) less, on average, for colleges in the Northeast region compared to those in the North Central region, holding enrollment and type constant.</em></p>
+<p><em>For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to increase by 0.056 log (millions of dollars), on average, holding region and type constant.</em></p>
+<p><em>The total log(expenditure) on basketball programs for NCAA Division I colleges is expected to be 0.311 log (millions of dollars) less, on average, for colleges in the Northeast region compared to those in the North Central region, holding enrollment and type constant.</em></p>
 </blockquote>
 <p>Though these interpretations are technically correct, it is difficult to fully comprehend what a change in log(millions of dollars) to the log(expenditure) really means. Therefore, we need to get back to the original variable (<code>expenditure_m)</code> and back to the original units (millions of dollars) to write an interpretation that is more intuitive.</p>
 <div class="math_rules">
@@ -1024,21 +1018,25 @@ Figure&nbsp;9.8: Residuals versus predicted values for original model and model 
 <li><p><span class="math inline">\(e^{a+b} = e^ae^b\)</span></p></li>
 </ul>
 </div>
-<p>Given <a href="#eq-log-y" class="quarto-xref">Equation&nbsp;<span>9.1</span></a> with a log-transformed response variable, the predicted values in terms of the original response variable is</p>
-<p><span id="eq-log-y-orig"><span class="math display">\[
-\begin{aligned}
+<p>Given <span class="quarto-unresolved-ref">?eq-log-y</span> with a log-transformed response variable, the predicted values in terms of the original response variable is</p>
+<p><span class="math display">\[\begin{aligned}
 \hat{y}_i &amp;= e^{\hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2}+ \dots + \hat{\beta}_px_{ip}} \\[10pt]
 &amp; = e^{\hat{\beta}_0}e^{\hat{\beta}_1x_{i1}}e^{\hat{\beta}_2x_{i2}} \dots e^{\hat{\beta}_px_{ip}}
-\end{aligned}
-\tag{9.3}\]</span></span></p>
-<p>From <a href="#eq-log-y-orig" class="quarto-xref">Equation&nbsp;<span>9.3</span></a>, the interpretations in terms of the original response variable are about a multiplicative change in the response when the predictor variable changes. Specifically, when <span class="math inline">\(X_j\)</span> increases by one unit, <span class="math inline">\(Y\)</span> is expected to multiply by a factor of <span class="math inline">\(e^{\hat{\beta}_j}\)</span>. The mathematical details for <a href="#eq-log-y-orig" class="quarto-xref">Equation&nbsp;<span>9.3</span></a> and the interpretations are in <a href="appendix-linear.html#sec-transform-y-math" class="quarto-xref"><span>Section A.10.1</span></a>.</p>
-<p>Now let’s use <a href="#eq-log-y-orig" class="quarto-xref">Equation&nbsp;<span>9.3</span></a> to interpret the coefficients of <code>enrollment_th</code> and <code>regionNortheast</code> in terms of <code>expenditure_m</code>.</p>
+\end{aligned}\]</span> {#eq-log-y-orig}</p>
+<p>From <span class="quarto-unresolved-ref">?eq-log-y-orig</span>, the interpretations in terms of the original response variable are about a multiplicative change in the response when the predictor variable changes. Specifically, when <span class="math inline">\(X_j\)</span> increases by one unit, <span class="math inline">\(Y\)</span> is expected to multiply by a factor of <span class="math inline">\(e^{\hat{\beta}_j}\)</span>. The mathematical details for <span class="quarto-unresolved-ref">?eq-log-y-orig</span> and the interpretations are in <a href="appendix-linear.html#sec-transform-y-math" class="quarto-xref"><span>Section A.10.1</span></a>.</p>
+<p>Now let’s use <span class="quarto-unresolved-ref">?eq-log-y-orig</span> to interpret the coefficients of <code>enrollment_th</code> and <code>regionNortheast</code> in terms of <code>expenditure_m</code>.</p>
 <blockquote class="blockquote">
-<p><em>For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to <strong>multiply by a factor</strong> of 1.058 (</em><span class="math inline">\(e^{0.056}\)</span><em>), holding region and type constant.</em></p>
-<p><em>The total expenditure on basketball programs for NCAA Division I colleges in the Northeast region is expected to be 0.733 (</em><span class="math inline">\(e^{-0.311}\)</span><em>) <strong>times</strong> the expenditure at colleges in the North Central region, holding enrollment and type constant.</em></p>
+<p><em>For each additional 1000 students at an NCAA Division I college, the expected total expenditure on basketball programs <strong>is multiplied by a factor</strong> of 1.058 (</em><span class="math inline">\(e^{0.056}\)</span><em>), holding region and type constant.</em></p>
+<p><em>The expected total expenditure on basketball programs for NCAA Division I colleges in the Northeast region is 0.733 (</em><span class="math inline">\(e^{-0.311}\)</span><em>) <strong>times</strong> the expenditure at colleges in the North Central region, holding enrollment and type constant.</em></p>
 </blockquote>
+<div class="analysis_in_practice">
+<p>Another common interpretation of the coefficients in terms of the original variable is in terms of percent change. Given the model coefficient <span class="math inline">\(\hat{\beta}_j\)</span>, the multiplicative change of <span class="math inline">\(e^{\hat{\beta}_j}\)</span>in the response is equivalent to a <span class="math inline">\((e^{\hat{\beta}_j} - 1) \times 100 \%\)</span> change in the response variable. For example, we may rewrite the interpretation for the effect of enrollment as</p>
+<blockquote class="blockquote">
+<p><em>For each additional 1000 students at an NCAA Division I college, the expected total expenditure on basketball programs</em> is expected to change by <em>5.8 %, holding region and type constant.</em></p>
+</blockquote>
+</div>
 <div class="yourturn">
-<p>Write the interpretation for <code>typePublic</code> in <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a> in terms of the change in enrollment. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Write the interpretation for <code>typePublic</code> in <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a> in terms of the change in expenditure. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </div>
 <p>The intercept, the expected response when all predictors are equal to 0, is <span class="math inline">\(e^{\hat{\beta}_0}\)</span>. Thus, the interpretation of the intercept for <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a> in terms of the original response variable is</p>
 <blockquote class="blockquote">
@@ -1051,17 +1049,13 @@ Figure&nbsp;9.8: Residuals versus predicted values for original model and model 
 <span class="header-section-number">9.3</span> Transformation on predictor variable(s)</h2>
 <p>Transformations on the response variable are often done to address violations in the equal variance condition, as shown in the previous section. In this section, we introduce transformations on one or more quantitative predictor variables that are used to model non-linear relationships with the response variable.</p>
 <p>In the exploratory data analysis in <a href="#sec-ncaa-eda" class="quarto-xref"><span>Section 9.1.1</span></a>, we observed that the relationship between <code>expenditure_m</code> and <code>enrollment_th</code> flattened as <code>enrollment_th</code> increased. For Colleges with larger enrollments generally have a smaller increase in expenditures on basketball programs for each additional 1000 students compared to the increase in expenditures for colleges with smaller enrollments. We account for this decreasing effect by applying a log transformation on the predictor variable. Here we will transform a single predictor but we can apply a log transformation to multiple quantitative predictors in a model.</p>
-<p>The general form of the linear regression model with a log-transformed predictor variable <span class="math inline">\(x_j\)</span> is shown in <a href="#eq-mlr-logx" class="quarto-xref">Equation&nbsp;<span>9.4</span></a> .</p>
-<p><span id="eq-mlr-logx"><span class="math display">\[
-y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\tag{9.4}\]</span></span></p>
-<p><a href="#eq-ncaa-logx" class="quarto-xref">Equation&nbsp;<span>9.5</span></a> shows the form of the model for NCAA Division I basketball expenditure using log-transformed values of enrollment.</p>
-<p><span id="eq-ncaa-logx"><span class="math display">\[
-\begin{aligned}
+<p>The general form of the linear regression model with a log-transformed predictor variable <span class="math inline">\(x_j\)</span> is shown in <span class="quarto-unresolved-ref">?eq-mlr-logx</span> .</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-mlr-logx}</p>
+<p><span class="quarto-unresolved-ref">?eq-ncaa-logx</span> shows the form of the model for NCAA Division I basketball expenditure using log-transformed values of enrollment.</p>
+<p><span class="math display">\[\begin{aligned}
 \text{expenditure\_m}_i = \beta_0 &amp;+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
 &amp;+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}
-\tag{9.5}\]</span></span></p>
+\end{aligned}\]</span> {#eq-ncaa-logx}</p>
 <p>At this point, we are using the original response variable, <code>expenditure_m</code>, so we can focus on understanding the log-transformed predictor variable. In the next section, we will look at the scenario in which both the response variable and one or more predictor variables is transformed. The output of the model with log-transformed enrollment is in <a href="#tbl-ncaa-model-logx" class="quarto-xref">Table&nbsp;<span>9.4</span></a>.</p>
 <div class="cell">
 <div id="tbl-ncaa-model-logx" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -1136,13 +1130,13 @@ Table&nbsp;9.4: Output of model with log-transformed <code>enrollment_th</code>
 <p><em>When the log-transformed enrollment increases by 1, the expenditure on basketball programs at NCAA Division 1 colleges is expected to increase by 5.992 million dollars, holding type and region constant.</em></p>
 </blockquote>
 <p>Though this interpretation is technically accurate, it is difficult to comprehend what an increase in the log-transformed enrollment actually means. Therefore, rather than interpreting the coefficient in terms of the log-transformed enrollment, we interpret enrollment in terms of its original units of 1000 students.</p>
-<p>Because `enrollment_th` is on the logarithmic scale in the model, it is most straightforward <!--# diff word here--> to interpret the change in expenditure when enrollment is multiplied by a constant <span class="math inline">\(C\)</span>. In general terms, given a model of the form in <a href="#eq-mlr-logx" class="quarto-xref">Equation&nbsp;<span>9.4</span></a>, the interpretation of predictor <span class="math inline">\(X_j\)</span> is below. The mathematical details for this interpretation are in <a href="appendix-linear.html#sec-transform-x-math" class="quarto-xref"><span>Section A.10.2</span></a>. <!--# Maybe add more explanation about why you multiply a log-transformed variable rather than just increase by 1. Maybe show the counterfactual, if we just increase by 1--></p>
+<p>Because `enrollment_th` is on the logarithmic scale in the model, it is most straightforward <!--# diff word here--> to interpret the change in expenditure when enrollment is multiplied by a constant <span class="math inline">\(C\)</span>. In general terms, given a model of the form in <span class="quarto-unresolved-ref">?eq-mlr-logx</span>, the interpretation of predictor <span class="math inline">\(X_j\)</span> is below. The mathematical details for this interpretation are in <a href="appendix-linear.html#sec-transform-x-math" class="quarto-xref"><span>Section A.10.2</span></a>. <!--# Maybe add more explanation about why you multiply a log-transformed variable rather than just increase by 1. Maybe show the counterfactual, if we just increase by 1--></p>
 <blockquote class="blockquote">
 <p><em>When</em> <span class="math inline">\(X_j\)</span> <em>is multiplied by a constant</em> <span class="math inline">\(C\)</span><em>,</em> <span class="math inline">\(Y\)</span> <em>is expected to change (increase or decrease) by</em> <span class="math inline">\(\beta_j \log(C)\)</span> <em>units, holding all else constant.</em></p>
 </blockquote>
 <div class="math_rules">
 <p><span class="math inline">\(\log(ab) = \log(a) +  \log(b)\)</span></p>
-<p>Applying this to <a href="#eq-mlr-logx" class="quarto-xref">Equation&nbsp;<span>9.4</span></a>,</p>
+<p>Applying this to <span class="quarto-unresolved-ref">?eq-mlr-logx</span>,</p>
 <p><span class="math inline">\(\beta_j\log(CX_j) = \beta_j[\log(C) + \log(X_j)] = \beta_j\log(C) + \beta_j \log(X_j)\)</span></p>
 </div>
 <p>Now let’s interpret the effect of <code>enrollment_th</code> in terms of the expected change in <code>expenditure_m</code> when <code>enrollment_th</code> doubles (<span class="math inline">\(C = 2\)</span>).</p>
@@ -1169,17 +1163,13 @@ Figure&nbsp;9.9: Residuals vs.&nbsp;fitted values for plot with log-transformed 
 </section><section id="sec-transform-logx-logy" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="sec-transform-logx-logy">
 <span class="header-section-number">9.4</span> Transformation on the response variable and predictor variable(s)</h2>
 <p>Models with transformations on both the response variable and one or more quantitative predictor variables can both address violations in the equal variance condition and capture non-linear relationships. Given what we have observed in the exploratory data analysis in <a href="#sec-ncaa-eda" class="quarto-xref"><span>Section 9.1.1</span></a> and the residual plots in <a href="#fig-ncaa-orig-resid" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>, <a href="#fig-ncaa-logy-resid" class="quarto-xref">Figure&nbsp;<span>9.8</span></a> , and <a href="#fig-ncaa-logx-resid" class="quarto-xref">Figure&nbsp;<span>9.9</span></a>, we will now fit a model using both <code>log(expenditure_m)</code> and <code>log(enrollment_th)</code>.</p>
-<p><a href="#eq-mlr-logx-logy" class="quarto-xref">Equation&nbsp;<span>9.6</span></a> is the general form of the model with a log-transformed response variable and a log-transformed predictor variable <span class="math inline">\(x_j\)</span> is shown in</p>
-<p><span id="eq-mlr-logx-logy"><span class="math display">\[
-\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\tag{9.6}\]</span></span></p>
-<p><a href="#eq-ncaa-logx-logy" class="quarto-xref">Equation&nbsp;<span>9.7</span></a> shows the form of the model for NCAA Division I basketball expenditure, and the output of the estimated model is in <a href="#tbl-ncaa-model-logx-logy" class="quarto-xref">Table&nbsp;<span>9.5</span></a>.</p>
-<p><span id="eq-ncaa-logx-logy"><span class="math display">\[
-\begin{aligned}
+<p><span class="quarto-unresolved-ref">?eq-mlr-logx-logy</span> is the general form of the model with a log-transformed response variable and a log-transformed predictor variable <span class="math inline">\(x_j\)</span> is shown in</p>
+<p><span class="math display">\[\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})\]</span> {#eq-mlr-logx-logy}</p>
+<p><span class="quarto-unresolved-ref">?eq-ncaa-logx-logy</span> shows the form of the model for NCAA Division I basketball expenditure, and the output of the estimated model is in <a href="#tbl-ncaa-model-logx-logy" class="quarto-xref">Table&nbsp;<span>9.5</span></a>.</p>
+<p><span class="math display">\[\begin{aligned}
 \log(\text{expenditure\_m}_i) = \beta_0 &amp;+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
 &amp;+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}
-\tag{9.7}\]</span></span></p>
+\end{aligned}\]</span> {#eq-ncaa-logx-logy}</p>
 <div class="cell">
 <div id="tbl-ncaa-model-logx-logy" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-model-logx-logy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1245,7 +1235,7 @@ Table&nbsp;9.5: Output of model with log-transformed expenditure and log-transfo
 </div>
 </div>
 <p>To interpret the model in <a href="#tbl-ncaa-model-logx-logy" class="quarto-xref">Table&nbsp;<span>9.5</span></a> that has both a log-transformed response and predictor variable, we will combine the approach to interpretations from <a href="#sec-transform-logy" class="quarto-xref"><span>Section 9.2</span></a> and <a href="#sec-transform-logx" class="quarto-xref"><span>Section 9.3</span></a>.</p>
-<p>The intercept is the expected value of <code>log(y)</code> when all the predictors are equal to 0. Because there is a log-transformed predictor <span class="math inline">\(x_j\)</span> in the model in <a href="#eq-mlr-logx-logy" class="quarto-xref">Equation&nbsp;<span>9.6</span></a>, this will be when <span class="math inline">\(\log(x_j)\)</span> is equal to 0, meaning <span class="math inline">\(x_j\)</span> is equal to 1. In terms of the model on NCAA Division I basketball expenditures shown in <a href="#tbl-ncaa-model-logx-logy" class="quarto-xref">Table&nbsp;<span>9.5</span></a>, the intercept 1.025 is interpreted as follows:</p>
+<p>The intercept is the expected value of <code>log(y)</code> when all the predictors are equal to 0. Because there is a log-transformed predictor <span class="math inline">\(x_j\)</span> in the model in <span class="quarto-unresolved-ref">?eq-mlr-logx-logy</span>, this will be when <span class="math inline">\(\log(x_j)\)</span> is equal to 0, meaning <span class="math inline">\(x_j\)</span> is equal to 1. In terms of the model on NCAA Division I basketball expenditures shown in <a href="#tbl-ncaa-model-logx-logy" class="quarto-xref">Table&nbsp;<span>9.5</span></a>, the intercept 1.025 is interpreted as follows:</p>
 <blockquote class="blockquote">
 <p><em>The expected log-transformed expenditure on basketball programs at private NCAA Division I colleges in the North Central region with 1000 students enrolled is 1.025.</em></p>
 </blockquote>
@@ -1253,7 +1243,7 @@ Table&nbsp;9.5: Output of model with log-transformed expenditure and log-transfo
 <blockquote class="blockquote">
 <p><em>The expected expenditure on basketball programs at private NCAA Division I colleges in the North Central region with 1000 students enrolled is 2.787 (exp(1.025)) million dollars.</em></p>
 </blockquote>
-<p>The interpretation for <span class="math inline">\(\beta_j\)</span>, the coefficient for <span class="math inline">\(\log(X_j)\)</span> in <a href="#eq-mlr-logx-logy" class="quarto-xref">Equation&nbsp;<span>9.6</span></a> is a bit more involved, as it incorporates the multiplicative change in both <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. We’ll start by writing the interpretation in terms of <span class="math inline">\(\log(Y)\)</span>.</p>
+<p>The interpretation for <span class="math inline">\(\beta_j\)</span>, the coefficient for <span class="math inline">\(\log(X_j)\)</span> in <span class="quarto-unresolved-ref">?eq-mlr-logx-logy</span> is a bit more involved, as it incorporates the multiplicative change in both <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. We’ll start by writing the interpretation in terms of <span class="math inline">\(\log(Y)\)</span>.</p>
 <blockquote class="blockquote">
 <p><em>When</em> <span class="math inline">\(X_j\)</span> <em>multiplies by a factor of</em> <span class="math inline">\(C\)</span><em>,</em> <span class="math inline">\(\log(Y)\)</span> <em>is expected to change (increase or decrease) by</em> <span class="math inline">\(\beta_j \log(C)\)</span> <em>, on average, holding all else constant.</em></p>
 </blockquote>
@@ -1426,14 +1416,12 @@ Table&nbsp;9.7: Model including interaction term with 95% confidence intervals
 </div>
 </div>
 <p>The confidence interval for <code>log(enrollment_th):typePublic</code> gives evidence that the interaction is useful to include in the model. Additionally, the <span class="math inline">\(R^2\)</span> for this model is 0.53, which is higher than the model chosen from <a href="#tbl-ncaa-compare-models" class="quarto-xref">Table&nbsp;<span>9.6</span></a>. The equation for the model with the interaction term is</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 \widehat{\log(\text{expenditure\_m}_i)} &amp;= 1.308 + 0.524 \times \log(\text{enrollment\_th}_i)\\
 &amp;- 0.339 \times \text{Northeast}_i - 0.117 \times \text{South}_i \\
 &amp;- 0.232 \times \text{West}_i - 1.284 \times \text{Public}_i \\
 &amp; + 0.255 \times \log(\text{enrollment\_th}_i) \times \text{Public}_i
-\end{aligned}
-\]</span></p>
+\end{aligned}\]</span></p>
 <p>We put together the concepts from <a href="07-mlr.html#sec-mlr-interaction" class="quarto-xref"><span>Section 7.7</span></a> and <a href="#sec-transform-logx-logy" class="quarto-xref"><span>Section 9.4</span></a> to interpret the model coefficients describing the relationship between <code>enrollment_th</code>, <code>type</code>, and <code>expenditure_m</code> on basketball programs. The coefficient of the interaction term <span class="math inline">\(\hat{\beta}_{interaction} = 0.255\)</span> means that <span class="math inline">\(\log(\text{expenditure})\)</span> changes (increases or decreases) by an additional <span class="math inline">\(C \times 0.255\)</span> for public colleges compared to private colleges when enrollment is multiplied by a factor <span class="math inline">\(C\)</span>. This means that the expenditure is expected to multiply by an additional <span class="math inline">\(C^{0.255}\)</span> for public institutions compared to private ones.</p>
 <p>Below are the interpretations of the relationship between enrollment and expenditure for public and private schools given a 10% increase in the enrollment.</p>
 <blockquote class="blockquote">

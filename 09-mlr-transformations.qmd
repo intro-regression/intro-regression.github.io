@@ -13,10 +13,10 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Identify when a variable transformation is needed to summarize the relationship between a response variable and predictor variable(s)
--   Explain the role of variance-stabilizing transformations in regression analysis
--   Fit and interpret models with a log-transformed response variable
--   Fit and interpret models with one or more log-transformed predictor variables
+- Identify when a variable transformation is needed to summarize the relationship between a response variable and predictor variable(s)
+- Explain the role of variance-stabilizing transformations in regression analysis
+- Fit and interpret models with a log-transformed response variable
+- Fit and interpret models with one or more log-transformed predictor variables
 
 ```{=html}
 <!--#
@@ -40,10 +40,10 @@ The EADA is a very rich data set with over 300 hundred variables about basketbal
 
 The data in `ncaa-basketball-DI-2023-2024.csv` contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.
 
--   `expenditure_m`: Total expenditure on basketball programs (in millions of US dollars)
--   `enrollment_th`: Total student enrollment (in thousands)
--   `type`: Whether the college is public or private
--   `region`: Region where the college is located. The regions are defined using the `state.region` vector in R.
+- `expenditure_m`: Total expenditure on basketball programs (in millions of US dollars)
+- `enrollment_th`: Total student enrollment (in thousands)
+- `type`: Whether the college is public or private
+- `region`: Region where the college is located. The regions are defined using the `state.region` vector in R.
 
 ::: {.objective latex=""}
 The goal of this analysis is to use the student enrollment, region, and type of college to explain variability in the total expenditure on basketball programs in the 2023 - 2024 academic year.
@@ -478,17 +478,12 @@ One solution to this is to use the simulation-based inference methods introduced
 
 <!--# i really need to figure out syntax..upper or lower case y and x-->
 
-Some commonly used variance-stabilizing transformations are the square-root transformation, $\sqrt{y}$ , and the reciprocal transformation, $1/y$ . In fact, the square root and reciprocal transformations are just two examples from the class of transformations called the **Box-Cox transformations** [@box1964analysis]. These transformations are designed to handle a non-normal response variable of any shape. While Box-Cox transformations, such as $\sqrt{y}$ and $1/y$, can be the optional choice for stabilizing variance and making the distribution of the response variable more normal (recall the normality condition), it is often difficult to interpret the coefficients for models with such transformed response variables in a way that an be easily understood by readers. Therefore, we will not focus on Box-Cox transformations in this text, because one of our primary objectives is to produce models that are easily interpretable.
-
-<!--# read more about these and make sure this all aligns-->
-
-<!--# add callout box for Box-Cox transformations. History, what they are, and resources to learn more-->
+Some commonly used variance-stabilizing transformations are the square-root transformation, $\sqrt{y}$ , and the reciprocal transformation, $1/y$ . In fact, the square root and reciprocal transformations are just two examples from the class of transformations called the **Box-Cox transformations** [@box1964analysis]. These transformations are designed to handle a non-normal response variable of any shape. While Box-Cox transformations, such as $\sqrt{y}$ and $1/y$, can be the optional choice for stabilizing variance and making the distribution of the response variable more normal (recall the normality condition), it is often difficult to interpret the coefficients for models with such transformed response variables in a way that an be easily understood by readers. Therefore, this text will not focus on Box-Cox transformations in general, but we will focus on a special case, the log transformation.
 
 Let's consider another transformation for the response variable that can help address the violations in the equal variance condition while also being easily interpreted by the reader. We can apply a natural log transformation on the response variable, $\log(y)$ (also written as $\ln(y)$), such that $\log(y)$ has the linear relationship with the predictor variables. @eq-log-y shows the statistical model when applying such transformation to the response variable.
 
-$$
-\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-log-y}
+$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-log-y}
 
 ::: {.math_rules latex=""}
 **log = ln**
@@ -549,13 +544,12 @@ tidy(ncaa_model_logy, conf.int = TRUE) |>
   kable(digits = 3)
 ```
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \widehat{\log(\text{expenditure\_m})} = & 1.783 + 0.056 \times \text{enrollment\_th}\\ 
 &- 0.311 \times \text{Northeast} - 0.176 \times \text{South} \\
 & - 0.218 \times \text{West} - 0.672 \times \text{Public}
-\end{aligned}
-$$ {#eq-ncaa-model-logy}
+\end{aligned}$$
+ {#eq-ncaa-model-logy}
 
 Before using the model, we analyze the residuals versus predicted values to evaluate whether the concerns with equal variance have been addressed by the transformation. @fig-ncaa-logy-resid shows the original plot of the residuals versus predicted values and the plot for the model using the log-transformed response variable.
 
@@ -585,37 +579,42 @@ Comparing the plots in @fig-ncaa-logy-resid, the first observation is that the $
 
 We can consider other transformations to improve the model fit even more; we'll discuss those as the chapter continues. For now, let's interpret the coefficients for the model in @tbl-ncaa-model-logy. The approach for interpreting the model coefficients in terms of the log-transformed response variable is the same as the one introduced in @sec-transform-logy for other multiple linear regression models. Below are the interpretations for `enrollment_th` and `regionNortheast` in terms of `log(expenditure)`.
 
-> *For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to increase by 0.056 log(millions of dollars), on average, holding region and type constant.*
+> *For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to increase by 0.056 log (millions of dollars), on average, holding region and type constant.*
 >
-> *The total log(expenditure) on basketball programs for NCAA Division I colleges is expected to be 0.311 log(millions of dollars) less, on average, for colleges in the Northeast region compared to those in the North Central region, holding enrollment and type constant.*
+> *The total log(expenditure) on basketball programs for NCAA Division I colleges is expected to be 0.311 log (millions of dollars) less, on average, for colleges in the Northeast region compared to those in the North Central region, holding enrollment and type constant.*
 
 Though these interpretations are technically correct, it is difficult to fully comprehend what a change in log(millions of dollars) to the log(expenditure) really means. Therefore, we need to get back to the original variable (`expenditure_m)` and back to the original units (millions of dollars) to write an interpretation that is more intuitive.
 
 ::: {.math_rules latex=""}
--   $e^{\log(a)} = a$
+- $e^{\log(a)} = a$
 
--   $e^{a+b} = e^ae^b$
+- $e^{a+b} = e^ae^b$
 :::
 
 Given @eq-log-y with a log-transformed response variable, the predicted values in terms of the original response variable is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \hat{y}_i &= e^{\hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2}+ \dots + \hat{\beta}_px_{ip}} \\[10pt]
 & = e^{\hat{\beta}_0}e^{\hat{\beta}_1x_{i1}}e^{\hat{\beta}_2x_{i2}} \dots e^{\hat{\beta}_px_{ip}}
-\end{aligned}
-$$ {#eq-log-y-orig}
+\end{aligned}$$
+ {#eq-log-y-orig}
 
 From @eq-log-y-orig, the interpretations in terms of the original response variable are about a multiplicative change in the response when the predictor variable changes. Specifically, when $X_j$ increases by one unit, $Y$ is expected to multiply by a factor of $e^{\hat{\beta}_j}$. The mathematical details for @eq-log-y-orig and the interpretations are in @sec-transform-y-math.
 
 Now let's use @eq-log-y-orig to interpret the coefficients of `enrollment_th` and `regionNortheast` in terms of `expenditure_m`.
 
-> *For each additional 1000 students at an NCAA Division I college, the total log(expenditure) on basketball programs is expected to **multiply by a factor** of `r round(exp(0.056), 3)` (*$e^{0.056}$*), holding region and type constant.*
+> *For each additional 1000 students at an NCAA Division I college, the expected total expenditure on basketball programs **is multiplied by a factor** of `r round(exp(0.056), 3)` (*$e^{0.056}$*), holding region and type constant.*
 >
-> *The total expenditure on basketball programs for NCAA Division I colleges in the Northeast region is expected to be `r round(exp(-0.311), 3)` (*$e^{-0.311}$*) **times** the expenditure at colleges in the North Central region, holding enrollment and type constant.*
+> *The expected total expenditure on basketball programs for NCAA Division I colleges in the Northeast region is `r round(exp(-0.311), 3)` (*$e^{-0.311}$*) **times** the expenditure at colleges in the North Central region, holding enrollment and type constant.*
+
+::: {.analysis_in_practice latex=""}
+Another common interpretation of the coefficients in terms of the original variable is in terms of percent change. Given the model coefficient $\hat{\beta}_j$, the multiplicative change of $e^{\hat{\beta}_j}$in the response is equivalent to a $(e^{\hat{\beta}_j} - 1) \times 100 \%$ change in the response variable. For example, we may rewrite the interpretation for the effect of enrollment as
+
+> *For each additional 1000 students at an NCAA Division I college, the expected total expenditure on basketball programs* is expected to change by *`r (round(exp(0.056), 3) - 1) * 100` %, holding region and type constant.*
+:::
 
 ::: {.yourturn latex=""}
-Write the interpretation for `typePublic` in @tbl-ncaa-model-logy in terms of the change in enrollment. [^09-mlr-transformations-4]
+Write the interpretation for `typePublic` in @tbl-ncaa-model-logy in terms of the change in expenditure. [^09-mlr-transformations-4]
 :::
 
 [^09-mlr-transformations-4]: The total expenditure on basketball programs for NCAA Division I colleges that are public is expected to be `r round(exp(-0.672), 3)` ($e^{-0.672}$) **times** the expenditure at private institutions, holding enrollment and region constant.
@@ -638,18 +637,16 @@ In the exploratory data analysis in @sec-ncaa-eda, we observed that the relation
 
 The general form of the linear regression model with a log-transformed predictor variable $x_j$ is shown in @eq-mlr-logx .
 
-$$
-y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-mlr-logx}
+$$y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-mlr-logx}
 
 @eq-ncaa-logx shows the form of the model for NCAA Division I basketball expenditure using log-transformed values of enrollment.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \text{expenditure\_m}_i = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
 &+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}
-$$ {#eq-ncaa-logx}
+\end{aligned}$$
+ {#eq-ncaa-logx}
 
 At this point, we are using the original response variable, `expenditure_m`, so we can focus on understanding the log-transformed predictor variable. In the next section, we will look at the scenario in which both the response variable and one or more predictor variables is transformed. The output of the model with log-transformed enrollment is in @tbl-ncaa-model-logx.
 
@@ -725,18 +722,16 @@ Models with transformations on both the response variable and one or more quanti
 
 @eq-mlr-logx-logy is the general form of the model with a log-transformed response variable and a log-transformed predictor variable $x_j$ is shown in
 
-$$
-\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-$$ {#eq-mlr-logx-logy}
+$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$
+ {#eq-mlr-logx-logy}
 
 @eq-ncaa-logx-logy shows the form of the model for NCAA Division I basketball expenditure, and the output of the estimated model is in @tbl-ncaa-model-logx-logy.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \log(\text{expenditure\_m}_i) = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
 &+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}
-$$ {#eq-ncaa-logx-logy}
+\end{aligned}$$
+ {#eq-ncaa-logx-logy}
 
 ```{r}
 #| label: tbl-ncaa-model-logx-logy
@@ -865,14 +860,12 @@ tidy(ncaa_model_logx_logy_int, conf.int = TRUE) |>
 
 The confidence interval for `log(enrollment_th):typePublic` gives evidence that the interaction is useful to include in the model. Additionally, the $R^2$ for this model is `r round(glance(ncaa_model_logx_logy_int)$r.squared,3)`, which is higher than the model chosen from @tbl-ncaa-compare-models. The equation for the model with the interaction term is
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \widehat{\log(\text{expenditure\_m}_i)} &= 1.308 + 0.524 \times \log(\text{enrollment\_th}_i)\\
 &- 0.339 \times \text{Northeast}_i - 0.117 \times \text{South}_i \\
 &- 0.232 \times \text{West}_i - 1.284 \times \text{Public}_i \\
 & + 0.255 \times \log(\text{enrollment\_th}_i) \times \text{Public}_i
-\end{aligned}
-$$
+\end{aligned}$$
 
 We put together the concepts from @sec-mlr-interaction and @sec-transform-logx-logy to interpret the model coefficients describing the relationship between `enrollment_th`, `type`, and `expenditure_m` on basketball programs. The coefficient of the interaction term $\hat{\beta}_{interaction} = 0.255$ means that $\log(\text{expenditure})$ changes (increases or decreases) by an additional $C \times 0.255$ for public colleges compared to private colleges when enrollment is multiplied by a factor $C$. This means that the expenditure is expected to multiply by an additional $C^{0.255}$ for public institutions compared to private ones.
 
