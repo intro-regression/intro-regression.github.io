@@ -1183,6 +1183,10 @@ The ideal randomized experiment is often not feasible in practice due to a varie
 
 ### Propensity score matching
 
+<!--# include something here where the propensity scores are included in the final outcome model? This gets into ideas of doubly robust estimation.-->
+
+<!--# paper for reference on doubly robust: https://pubmed.ncbi.nlm.nih.gov/16401269/-->
+
 ```{r}
 #| label: load-ace-data
 
