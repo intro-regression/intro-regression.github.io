@@ -474,7 +474,7 @@ window.Quarto = {
 </div>
 <p>The GSS, administered by the National Science Foundation and is administered by National Opinion Research Center (NORC) at the University of Chicago, began in 1972 and is conducted about every two years to measure “trends in opinions, attitudes, and behaviors” among adults age 18 and older in the United States <span class="citation" data-cites="gss2024">(<a href="references.html#ref-gss2024" role="doc-biblioref">Davern et al. 2025</a>)</span>. Households are randomly selected using multistage cluster sample based on data from the United States Census.</p>
 <p>Respondents in the 2024 survey were part of the second year of an experiment studying survey administration and randomly split into two groups. The first group had the opportunity to complete the survey through an in-person interview (format traditionally used) and non-respondents were offered the online survey. The second group had the opportunity to take the online survey first, then non-respondents were offered the in-person interview. <!--# helpful to add response rate?--></p>
-<p>The data are in <code>gss24-ai.csv</code>. The data were obtained through the <strong>gssr</strong> R package <span class="citation" data-cites="gssr">(<a href="references.html#ref-gssr" role="doc-biblioref">Healy 2023</a>)</span>. Questions about opinions on special topics such as technology are not given to every respondent, so the data in this analysis includes responses from 1521 adults who were asked about comfort with self-driving cars and who provided their age and sex in the survey. We will focus on the variables below (out of the over 600 variables in the full General Social Survey). The variable definitions are based on survey prompts and variable definitions in the <em>General Social Survey Documentation and Public Use File Codebook</em> <span class="citation" data-cites="gss2024">(<a href="references.html#ref-gss2024" role="doc-biblioref">Davern et al. 2025</a>)</span>.</p>
+<p>The data are in <code>gss24-ai.csv</code>. The data were obtained through the <strong>gssr</strong> R package <span class="citation" data-cites="gssr">(<a href="references.html#ref-gssr" role="doc-biblioref">Healy 2023</a>)</span>. Questions about opinions on special topics such as technology are not given to every respondent, so the data in this analysis includes responses from 1838 adults who were asked about comfort with self-driving cars and who provided their age and sex in the survey. We will focus on the variables below (out of the over 600 variables in the full General Social Survey). The variable definitions are based on survey prompts and variable definitions in the <em>General Social Survey Documentation and Public Use File Codebook</em> <span class="citation" data-cites="gss2024">(<a href="references.html#ref-gss2024" role="doc-biblioref">Davern et al. 2025</a>)</span>.</p>
 <p><strong>For the remainder of the chapter, we will refer to self-driving cars as “driverless cars” to align with the language used in the 2024 GSS.</strong></p>
 <ul>
 <li><p><code>aidrive_comfort</code>: Indicator variable for respondent’s comfort with driverless (self-driving) cars. <code>0</code>: Not comfortable at all; <code>1</code>: At least some comfort.</p>
@@ -536,7 +536,7 @@ Figure&nbsp;11.1: Distribution of original and aggregated variable on comfort wi
 </figure>
 </div>
 <p><a href="#fig-ai-comfort" class="quarto-xref">Figure&nbsp;<span>11.1</span></a> shows the distribution of the original responses to the survey question about comfort with driverless cars and <code>aidrive_comfort</code>, the binary variable we will use in the analysis. In practice, categorical variables may have many categories, so we can aggregate categories to simplify the variable based on the analysis question. We saw an example of this in <a href="03-eda.html#sec-univar-eda-cat" class="quarto-xref"><span>Section 3.4.1</span></a> when we looked at the variable <code>season</code> created from <code>month</code>. By simplifying the variable, we change the scope of the variable from a rating of the level of comfort an individual has with driverless cars to whether or not an individual has comfort with driverless cars. The latter aligns with the analysis objective and the modeling introduced in this chapter. Models for categorical response variables with three or more levels, such as the original survey responses, are introduced in <a href="13-special-topics.html#sec-multinomial" class="quarto-xref"><span>Section 13.2</span></a>.</p>
-<p>In <a href="#fig-ai-comfort-2" class="quarto-xref">Figure&nbsp;<span>11.1 (b)</span></a>, we see about 45% of the respondents said they were “totally uncomfortable” with driverless cars and 55% reported some level of comfort with these cars. In the distribution of the original response variable in <a href="#fig-ai-comfort-1" class="quarto-xref">Figure&nbsp;<span>11.1 (a)</span></a>, among those who had at least some comfort, most had comfort levels of 5 or less. This detail could be important as we interpret the practical implications of the conclusions drawn from the analysis.</p>
+<p>In <a href="#fig-ai-comfort-2" class="quarto-xref">Figure&nbsp;<span>11.1 (b)</span></a>, we see about 42% of the respondents said they were “totally uncomfortable” with driverless cars and 58% reported some level of comfort with these cars. In the distribution of the original response variable in <a href="#fig-ai-comfort-1" class="quarto-xref">Figure&nbsp;<span>11.1 (a)</span></a>, among those who had at least some comfort, most had comfort levels of 5 or less. This detail could be important as we interpret the practical implications of the conclusions drawn from the analysis.</p>
 <div id="fig-aidrive-predictor-eda" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-aidrive-predictor-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -611,12 +611,12 @@ Table&nbsp;11.1: Summary statistics for <code>age</code>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">age</td>
-<td style="text-align: right;">50.4</td>
-<td style="text-align: right;">17.6</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">36</td>
 <td style="text-align: right;">49</td>
-<td style="text-align: right;">65</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">64</td>
 <td style="text-align: right;">89</td>
 <td style="text-align: right;">0</td>
 </tr>
@@ -627,8 +627,8 @@ Table&nbsp;11.1: Summary statistics for <code>age</code>
 </figure>
 </div>
 </div>
-<p><a href="#fig-aidrive-predictor-eda" class="quarto-xref">Figure&nbsp;<span>11.2</span></a> and <a href="#tbl-age-summary" class="quarto-xref">Table&nbsp;<span>11.1</span></a> shows the univariate distributions of the predictor variables that will be used in this chapter. The exploratory data analysis for the other predictors is in <a href="12-logistic-prediction.html" class="quarto-xref"><span>Chapter 12</span></a> <!--# reference specific section--> . The mean age in the data is about 50.4 and the median is 49 years old. The youngest respondents in the data set are 18 and the oldest are 89 years old. The standard deviation is about 17.645 years, so the data spans the general age range for adults in the United States.</p>
-<p>We also observe from <a href="#fig-aidrive-predictor-eda" class="quarto-xref">Figure&nbsp;<span>11.2</span></a> that the majority of the respondents (about 57 %) reported their sex as female, and a vast majority of respondents (about 79%) agree that technology is making life easier.</p>
+<p><a href="#fig-aidrive-predictor-eda" class="quarto-xref">Figure&nbsp;<span>11.2</span></a> and <a href="#tbl-age-summary" class="quarto-xref">Table&nbsp;<span>11.1</span></a> shows the univariate distributions of the predictor variables that will be used in this chapter. The exploratory data analysis for the other predictors is in <a href="12-logistic-prediction.html" class="quarto-xref"><span>Chapter 12</span></a> <!--# reference specific section--> . The mean age in the data is about 49 and the median is 48 years old. The youngest respondents in the data set are 18 and the oldest are 89 years old. The standard deviation is about 17.529 years, so the data spans the general age range for adults in the United States.</p>
+<p>We also observe from <a href="#fig-aidrive-predictor-eda" class="quarto-xref">Figure&nbsp;<span>11.2</span></a> that the majority of the respondents (about 57 %) reported their sex as female, and a vast majority of respondents (about 78%) agree that technology is making life easier.</p>
 <div id="fig-aidrive-bivariate-eda" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-aidrive-bivariate-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -731,9 +731,7 @@ Figure&nbsp;11.4: Mutlivariate EDA to explore potential interaction effects. Blu
 <!--# The term "logistic regression" has not been introduced yet!-->
 <p>Before moving to modeling, let’s take some time to focus on the response variable. The response variable <span class="math inline">\(Y\)</span> is categorical and takes values “0” or “1”. The response <span class="math inline">\(Y = 1\)</span> indicates an observation takes the outcome of interest, and <span class="math inline">\(Y = 0\)</span> indicates an observation does not take that outcome. Sometimes <span class="math inline">\(Y = 1\)</span> and <span class="math inline">\(Y = 0\)</span> are called “success” and “failure”, respectively. Note, however, that a “success” just means it is the outcome we are interested in studying, not necessarily what would be considered a “success” in practice.</p>
 <p>The <strong>probability</strong> <span class="math inline">\(Y=1\)</span>, denoted <span class="math inline">\(Pr(Y=1)\)</span>, is a measure of the chance that the event <span class="math inline">\(Y = 1\)</span> occurs. Probabilities take values between 0 and 1, with 0 indicating an event is impossible and never occurs, and 1 indicating that an event always occurs. The <strong>odds</strong> <span class="math inline">\(Y = 1\)</span> are the ratio of the probability <span class="math inline">\(Y = 1\)</span> occurs versus the probability <span class="math inline">\(Y = 0\)</span> occurs. This is computed as</p>
-<p><span id="eq-odds"><span class="math display">\[
-\text{odds(Y = 1)} = \frac{Pr(Y = 1)}{Pr(Y = 0)} = \frac{Pr(Y = 1)}{1 - Pr(Y = 1)}
-\tag{11.1}\]</span></span></p>
+<p><span class="math display">\[\text{odds(Y = 1)} = \frac{Pr(Y = 1)}{Pr(Y = 0)} = \frac{Pr(Y = 1)}{1 - Pr(Y = 1)}\]</span> {#eq-odds}</p>
 <p>Note that the odds that <span class="math inline">\(Y = 0\)</span> are equal to <span class="math inline">\(1/ \text{odds}(Y = 1)\)</span> .</p>
 <div class="cell">
 <div id="tbl-response-prob-odds" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -755,15 +753,15 @@ Table&nbsp;11.2: Frequency, probability, and odds of <code>aidrive_comfort</code
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">692</td>
-<td style="text-align: right;">0.455</td>
-<td style="text-align: right;">0.835</td>
+<td style="text-align: right;">777</td>
+<td style="text-align: right;">0.423</td>
+<td style="text-align: right;">0.732</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">829</td>
-<td style="text-align: right;">0.545</td>
-<td style="text-align: right;">1.198</td>
+<td style="text-align: right;">1061</td>
+<td style="text-align: right;">0.577</td>
+<td style="text-align: right;">1.366</td>
 </tr>
 </tbody>
 </table>
@@ -772,12 +770,12 @@ Table&nbsp;11.2: Frequency, probability, and odds of <code>aidrive_comfort</code
 </figure>
 </div>
 </div>
-<p><a href="#tbl-response-prob-odds" class="quarto-xref">Table&nbsp;<span>11.2</span></a> shows the probabilities an odds for the response variable <code>aidrive_comfort</code>. In the data from 1521 respondents, the probability (chance) a randomly selected respondent is comfortable with driverless cars is 0.545. This may also be phrased as there is a 54.5 % chance a randomly selected respondent is comfortable with driverless cars. The odds a randomly selected respondent is comfortable with driverless cars are 1.198. This means that a randomly selected respondent is 1.198 times more likely to be comfortable with driverless cars than not be.</p>
+<p><a href="#tbl-response-prob-odds" class="quarto-xref">Table&nbsp;<span>11.2</span></a> shows the probabilities an odds for the response variable <code>aidrive_comfort</code>. In the data from 1838 respondents, the probability (chance) a randomly selected respondent is comfortable with driverless cars is 0.577. This may also be phrased as there is a 57.7 % chance a randomly selected respondent is comfortable with driverless cars. The odds a randomly selected respondent is comfortable with driverless cars are 1.366. This means that a randomly selected respondent is 1.366 times more likely to be comfortable with driverless cars than not be.</p>
 <div class="yourturn">
 <p>Show how the following values are computed:</p>
 <ul>
-<li><p><span class="math inline">\(Pr(\text{aidrive\_comfort} = 1) =\)</span> 0.545</p></li>
-<li><p><span class="math inline">\(\text{odds}(\text{aidrive\_comfort}=1)=\)</span> 1.198 <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p></li>
+<li><p><span class="math inline">\(Pr(\text{aidrive\_comfort} = 1) =\)</span> 0.577</p></li>
+<li><p><span class="math inline">\(\text{odds}(\text{aidrive\_comfort}=1)=\)</span> 1.366 <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p></li>
 </ul>
 </div>
 </section>
@@ -804,23 +802,23 @@ Table&nbsp;11.3: Two-way table of <code>aidrive_comfort</code> (columns) versus 
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Neutral</td>
-<td style="text-align: right;">127</td>
-<td style="text-align: right;">90</td>
+<td style="text-align: right;">149</td>
+<td style="text-align: right;">132</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Can’t choose</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">12</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">21</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Agree</td>
-<td style="text-align: right;">495</td>
-<td style="text-align: right;">706</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">878</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Disagree</td>
-<td style="text-align: right;">52</td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">30</td>
 </tr>
 </tbody>
 </table>
@@ -830,15 +828,13 @@ Table&nbsp;11.3: Two-way table of <code>aidrive_comfort</code> (columns) versus 
 </div>
 </div>
 <p>Each cell in the table is the number of observations that take the values indicated by the row and column. For example, there are 90 respondents in the data whose observed data are <code>tech_easy = "Neutral"</code> and <code>aidrive_comfort = "1"</code>. We can use this table to ask how the probability of being comfortable with driverless cars differs based on opinions about whether technology makes life easier. For example, we can compute the probability and the corresponding odds a randomly selected respondent is comfortable with driverless cars given they are neutral about whether technology makes life easier.</p>
-<p><span id="eq-prob-odds-cond"><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 Pr(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127 + 90}  \approx 0.415 \\[5pt]
 \text{odds}(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127} = \frac{0.415}{1 - 0.415}\approx{0.709}
-\end{aligned}
-\tag{11.2}\]</span></span></p>
+\end{aligned}\]</span> {#eq-prob-odds-cond}</p>
 <p><span class="math inline">\(Pr(Y=1 | \text{tech\_easy = Neutral})\)</span> is called a <strong>conditional probability</strong>, because it is the probability that a randomly selected respondent is comfortable with driverless cars conditioned on (given) they are neutral about whether technology makes life easier. Similarly, <span class="math inline">\(\text{odds}(Y=1 | \text{tech\_easy = Neutral})\)</span> are <strong>conditional odds</strong>.</p>
 <div class="analysis_in_practice">
-<p>It may sound awkward to communicate results where the odds are less than 1. Because the odds are reciprocal, they are typically reported in terms of the odds being greater than 1. For example, an alternative way to present the odds from <a href="#eq-prob-odds-cond" class="quarto-xref">Equation&nbsp;<span>11.2</span></a> is</p>
+<p>It may sound awkward to communicate results where the odds are less than 1. Because the odds are reciprocal, they are typically reported in terms of the odds being greater than 1. For example, an alternative way to present the odds from <span class="quarto-unresolved-ref">?eq-prob-odds-cond</span> is</p>
 <blockquote class="blockquote">
 <p><em>A randomly selected respondent who is neutral about technology making life easier is 1.41 times more likely to not be comfortable with driverless cars than be comfortable.</em></p>
 </blockquote>
@@ -846,14 +842,10 @@ Pr(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127 + 90}  \approx 0.415 \\[5
 <div class="yourturn">
 <p>Compute the probability and corresponding odds of being comfortable with driverless cars among those who agree with the statement that technology makes life easier.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 </div>
-<p>From <a href="#tbl-aidrive-two-way" class="quarto-xref">Table&nbsp;<span>11.3</span></a>, the odds a respondent who is neutral about technology making life easier is comfortable with driverless cars are 0.709, and the odds a respondent who agrees technology makes life easier are 1.43. We quantify how the odds for these two groups compare using an odds ratio. An <strong>odds ratio</strong> is computed as the odds for one group divided the odds for another, as shown in <a href="#eq-odds-ratio" class="quarto-xref">Equation&nbsp;<span>11.3</span></a></p>
-<p><span id="eq-odds-ratio"><span class="math display">\[
-\text{odds ratio} = \frac{\text{odds}_{group 1}}{\text{odds}_{group 2}}
-\tag{11.3}\]</span></span></p>
+<p>From <a href="#tbl-aidrive-two-way" class="quarto-xref">Table&nbsp;<span>11.3</span></a>, the odds a respondent who is neutral about technology making life easier is comfortable with driverless cars are 0.709, and the odds a respondent who agrees technology makes life easier are 1.43. We quantify how the odds for these two groups compare using an odds ratio. An <strong>odds ratio</strong> is computed as the odds for one group divided the odds for another, as shown in <span class="quarto-unresolved-ref">?eq-odds-ratio</span></p>
+<p><span class="math display">\[\text{odds ratio} = \frac{\text{odds}_{group 1}}{\text{odds}_{group 2}}\]</span> {#eq-odds-ratio}</p>
 <p>Let’s compute the odds ratio for those who agree that technology makes life easier versus those who are neutral.</p>
-<p><span class="math display">\[
-\text{odds ratio} = \frac{\text{odds}_{\text{Agree}}}{\text{odds}_{\text{Neutral}}} = \frac{1.43}{0.709} = 2.02
-\]</span></p>
+<p><span class="math display">\[\text{odds ratio} = \frac{\text{odds}_{\text{Agree}}}{\text{odds}_{\text{Neutral}}} = \frac{1.43}{0.709} = 2.02\]</span></p>
 <blockquote class="blockquote">
 <p>This means that the odds a respondent who agrees technology makes life easier is comfortable with driverless cars are 2.02 times the odds a respondent who is neutral about technology is comfortable with driverless cars.</p>
 </blockquote>
@@ -877,9 +869,7 @@ Pr(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127 + 90}  \approx 0.415 \\[5
 <!--# do this using simulated data??-->
 <!--# Intro of Hilbe logistic regression book has good explanation - reference that here.-->
 <p>Suppose we want to fit a model of the relationship between <code>age</code> and <code>aidrive_comfort</code>. Our first thought may be to use the linear regression model from <a href="04-slr.html" class="quarto-xref"><span>Chapter 4</span></a> to model this relationship. In this case, the estimated model would be of the form</p>
-<p><span id="eq-aidrive-age-linear"><span class="math display">\[
-\widehat{\text{aidrive\_comfort}} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}
-\tag{11.4}\]</span></span></p>
+<p><span class="math display">\[\widehat{\text{aidrive\_comfort}} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}\]</span> {#eq-aidrive-age-linear}</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-try-linear" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -895,11 +885,9 @@ Figure&nbsp;11.5: Linear regression model for <code>aidrive_comfort</code> versu
 </div>
 </div>
 <!--# should I use jitter here instead?-->
-<p><a href="#fig-try-linear" class="quarto-xref">Figure&nbsp;<span>11.5</span></a> is a visualization of the linear regression model for the relationship between <code>age</code> and <code>aidrive_comfort</code> shown in <a href="#eq-aidrive-age-linear" class="quarto-xref">Equation&nbsp;<span>11.4</span></a>. Here we easily see the linear regression model represented by the red line is not a good fit for the data. In fact, it (almost) never produces predictions of 0 or 1, the observed values of the response. Recall that the linear regression model is estimated by minimizing the sum of squared residuals, <span class="math inline">\(0 - \hat{y}_i\)</span> or <span class="math inline">\(1 - \hat{y}_i\)</span> in this scenario. These residuals can be minimized by finding a model that produces estimates between 0 and 1, as shown in <a href="#fig-try-linear" class="quarto-xref">Figure&nbsp;<span>11.5</span></a>, rather than trying to predict the actual observed values, 0 or 1.</p>
+<p><a href="#fig-try-linear" class="quarto-xref">Figure&nbsp;<span>11.5</span></a> is a visualization of the linear regression model for the relationship between <code>age</code> and <code>aidrive_comfort</code> shown in <span class="quarto-unresolved-ref">?eq-aidrive-age-linear</span>. Here we easily see the linear regression model represented by the red line is not a good fit for the data. In fact, it (almost) never produces predictions of 0 or 1, the observed values of the response. Recall that the linear regression model is estimated by minimizing the sum of squared residuals, <span class="math inline">\(0 - \hat{y}_i\)</span> or <span class="math inline">\(1 - \hat{y}_i\)</span> in this scenario. These residuals can be minimized by finding a model that produces estimates between 0 and 1, as shown in <a href="#fig-try-linear" class="quarto-xref">Figure&nbsp;<span>11.5</span></a>, rather than trying to predict the actual observed values, 0 or 1.</p>
 <p>Next, we might consider fitting a linear model such that the response variable is the <span class="math inline">\(\pi = Pr(Y = 1)\)</span>, the probability of being comfortable with driverless cars. This estimated model takes the form</p>
-<p><span id="eq-aidrive-age-prob"><span class="math display">\[
-\hat{\pi} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}
-\tag{11.5}\]</span></span></p>
+<p><span class="math display">\[\hat{\pi} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}\]</span> {#eq-aidrive-age-prob}</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-try-prob" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -916,9 +904,7 @@ Figure&nbsp;11.6: Linear model for Pr(<code>aidrive_comfort = 1</code>) versus <
 </div>
 <p><a href="#fig-try-prob" class="quarto-xref">Figure&nbsp;<span>11.6</span></a> shows the relationship between age and the probability of being comfortable with driverless cars. This model seems to be a better fit for the data, as it generally captures the trend that younger respondents are more likely to be comfortable with driverless cars compared to older respondents. The primary issue with using the probability as the response variable is that probabilities are bounded between 0 and 1. Therefore, it is impossible to get values less than 0 or greater than 1 in practice, so we would want the same bounded constraints on our model particularly if we wish to use the model for prediction. We saw a similar issue in <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a> with the values of <code>valence</code> in the Spotify data. We have the same issue when using the odds as the response variable, because the odds cannot be less than 0. Therefore, we need a model that not only captures the relationship between the response and predictor but also addresses the boundary constraint.</p>
 <p>When there is a binary categorical response variable, we use a <strong>logistic regression model</strong> to model the relationship between the binary response and one or more predictor variables as in <a href="appendix-logistic.html#eq-logistic-model" class="quarto-xref">Equation&nbsp;<span>B.1</span></a>.</p>
-<p><span id="eq-logistic-model"><span class="math display">\[
-\log\Big(\frac{\pi}{1 - \pi}\Big) = \beta_0 + \beta_1x_1 + \dots + \beta_px_p
-\tag{11.6}\]</span></span></p>
+<p><span class="math display">\[\log\Big(\frac{\pi}{1 - \pi}\Big) = \beta_0 + \beta_1x_1 + \dots + \beta_px_p\]</span> {#eq-logistic-model}</p>
 <p>where <span class="math inline">\(\pi = Pr(Y = 1)\)</span> and <span class="math inline">\(\log\big(\frac{\pi}{1 - \pi}\big)\)</span> is the <strong>logit transformation</strong>, also called the “log odds”. The log odds can take any value <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(\infty\)</span>, so it does not have the boundary constraints of the probability and odds. The log odds output from <a href="appendix-logistic.html#eq-logistic-model" class="quarto-xref">Equation&nbsp;<span>B.1</span></a> can be transformed back to the odds and probabilities, and we will the probabilities to assign each observation to a predicted class <code>aidrive_comfort = 0</code> or <code>aidrive_comfort = 1</code>. We’ll discuss this more in <a href="12-logistic-prediction.html" class="quarto-xref"><span>Chapter 12</span></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -970,31 +956,31 @@ Table&nbsp;11.4: Logistic regression model for <code>aidrive_comfort</code> vers
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">-0.344</td>
-<td style="text-align: right;">0.138</td>
-<td style="text-align: right;">-2.499</td>
-<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">-0.121</td>
+<td style="text-align: right;">0.120</td>
+<td style="text-align: right;">-1.014</td>
+<td style="text-align: right;">0.311</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyCan’t choose</td>
-<td style="text-align: right;">-0.061</td>
-<td style="text-align: right;">0.397</td>
-<td style="text-align: right;">-0.154</td>
-<td style="text-align: right;">0.878</td>
+<td style="text-align: right;">0.221</td>
+<td style="text-align: right;">0.338</td>
+<td style="text-align: right;">0.654</td>
+<td style="text-align: right;">0.513</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tech_easyAgree</td>
-<td style="text-align: right;">0.699</td>
-<td style="text-align: right;">0.150</td>
-<td style="text-align: right;">4.671</td>
+<td style="text-align: right;">0.582</td>
+<td style="text-align: right;">0.131</td>
+<td style="text-align: right;">4.431</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyDisagree</td>
-<td style="text-align: right;">-0.562</td>
-<td style="text-align: right;">0.293</td>
-<td style="text-align: right;">-1.919</td>
-<td style="text-align: right;">0.055</td>
+<td style="text-align: right;">-0.485</td>
+<td style="text-align: right;">0.257</td>
+<td style="text-align: right;">-1.891</td>
+<td style="text-align: right;">0.059</td>
 </tr>
 </tbody>
 </table>
@@ -1003,25 +989,21 @@ Table&nbsp;11.4: Logistic regression model for <code>aidrive_comfort</code> vers
 </figure>
 </div>
 </div>
-<p><a href="#eq-logistic-comfort-tech" class="quarto-xref">Equation&nbsp;<span>11.7</span></a> is the equation from the model output in <a href="#tbl-logistic-comfort-tech" class="quarto-xref">Table&nbsp;<span>11.4</span></a>.</p>
-<p><span id="eq-logistic-comfort-tech"><span class="math display">\[
-\begin{aligned}
+<p><span class="quarto-unresolved-ref">?eq-logistic-comfort-tech</span> is the equation from the model output in <a href="#tbl-logistic-comfort-tech" class="quarto-xref">Table&nbsp;<span>11.4</span></a>.</p>
+<p><span class="math display">\[\begin{aligned}
 \log\Big(\frac{\hat{\pi}}{1 - \hat{\pi}}\Big) = -0.344 + -0.061 \times \text{Can't choose}  + 0.699 \times \text{Agree}   - 0.562 \times \text{Disagree}
-\end{aligned}
-\tag{11.7}\]</span></span></p>
+\end{aligned}\]</span> {#eq-logistic-comfort-tech}</p>
 <p>where <span class="math inline">\(\hat{\pi}\)</span> is the predicted probability a respondent is comfortable with driverless cars.</p>
 <div class="yourturn">
 <p>What is the baseline level for <code>tech_easy</code>? <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 </div>
-<p>The intercept, -0.344, is the estimated log odds for respondents in the baseline group, <code>Neutral</code>. Similar to interpretations in <a href="09-mlr-transformations.html#sec-transform-logy" class="quarto-xref"><span>Section 9.2</span></a>, though we do calculations using the logit, we write interpretations in terms of the odds, so they are more clearly understood by the reader. To transform from logit to odds, we exponentiate both sides of the model equation. <a href="#eq-logistic-comfort-tech-exp" class="quarto-xref">Equation&nbsp;<span>11.8</span></a> shows the equation from <a href="#tbl-logistic-comfort-tech" class="quarto-xref">Table&nbsp;<span>11.4</span></a> in terms of the odds of being comfortable with driverless cars.</p>
-<p><span id="eq-logistic-comfort-tech-exp"><span class="math display">\[
-\begin{aligned}
+<p>The intercept, -0.344, is the estimated log odds for respondents in the baseline group, <code>Neutral</code>. Similar to interpretations in <a href="09-mlr-transformations.html#sec-transform-logy" class="quarto-xref"><span>Section 9.2</span></a>, though we do calculations using the logit, we write interpretations in terms of the odds, so they are more clearly understood by the reader. To transform from logit to odds, we exponentiate both sides of the model equation. <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-exp</span> shows the equation from <a href="#tbl-logistic-comfort-tech" class="quarto-xref">Table&nbsp;<span>11.4</span></a> in terms of the odds of being comfortable with driverless cars.</p>
+<p><span class="math display">\[\begin{aligned}
 \frac{\hat{\pi}}{1 - \hat{\pi}} = e^{-0.344} \times e^{-0.061 \times \text{Can't choose}} \times e^{0.699 \times \text{Agree}}  \times e^{-0.562 \times \text{Disagree}}
-\end{aligned}
-\tag{11.8}\]</span></span></p>
-<p>From <a href="#eq-logistic-comfort-tech-exp" class="quarto-xref">Equation&nbsp;<span>11.8</span></a>, we see that the estimated odds a respondent who is neutral about whether technology makes life easier is comfortable with driverless cars is 0.709 ( <span class="math inline">\(e^{-0.344}\)</span>). This equals the odds that was computed from the two-way table in <a href="#eq-prob-odds-cond" class="quarto-xref">Equation&nbsp;<span>11.2</span></a>.</p>
+\end{aligned}\]</span> {#eq-logistic-comfort-tech-exp}</p>
+<p>From <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-exp</span>, we see that the estimated odds a respondent who is neutral about whether technology makes life easier is comfortable with driverless cars is 0.709 ( <span class="math inline">\(e^{-0.344}\)</span>). This equals the odds that was computed from the two-way table in <span class="quarto-unresolved-ref">?eq-prob-odds-cond</span>.</p>
 <div class="math_rules">
-<p>The following two rules were used to go from <a href="#eq-logistic-comfort-tech" class="quarto-xref">Equation&nbsp;<span>11.7</span></a> to <a href="#eq-logistic-comfort-tech-exp" class="quarto-xref">Equation&nbsp;<span>11.8</span></a></p>
+<p>The following two rules were used to go from <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech</span> to <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-exp</span></p>
 <ul>
 <li><p><span class="math inline">\(e^{\log(a)} = a\)</span></p></li>
 <li><p><span class="math inline">\(e^{a+b}  = e^a e^b\)</span></p></li>
@@ -1031,7 +1013,7 @@ Table&nbsp;11.4: Logistic regression model for <code>aidrive_comfort</code> vers
 <blockquote class="blockquote">
 <p><em>The log odds a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 0.699 higher than the log odds of a respondent who is neutral about whether technology makes life easier.</em></p>
 </blockquote>
-<p>From <a href="#eq-logistic-comfort-tech-exp" class="quarto-xref">Equation&nbsp;<span>11.8</span></a>, the coefficient for <code>Agree</code> is <span class="math inline">\(e^{0.699} \approx 2.012\)</span>. This means the following:</p>
+<p>From <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-exp</span>, the coefficient for <code>Agree</code> is <span class="math inline">\(e^{0.699} \approx 2.012\)</span>. This means the following:</p>
 <blockquote class="blockquote">
 <p><em>The <strong>odds</strong> a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 2.012 (</em> <span class="math inline">\(e^{0.699}\)</span><em>) <strong>times</strong> the odds of a respondent who is neutral about whether technology makes life easier.</em></p>
 </blockquote>
@@ -1061,37 +1043,37 @@ Table&nbsp;11.5: Logistic regression model for <code>aidrive_comfort</code> vers
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">0.420</td>
-<td style="text-align: right;">0.208</td>
-<td style="text-align: right;">2.020</td>
-<td style="text-align: right;">0.043</td>
+<td style="text-align: right;">0.786</td>
+<td style="text-align: right;">0.182</td>
+<td style="text-align: right;">4.312</td>
+<td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyCan’t choose</td>
-<td style="text-align: right;">-0.118</td>
-<td style="text-align: right;">0.402</td>
-<td style="text-align: right;">-0.294</td>
-<td style="text-align: right;">0.769</td>
+<td style="text-align: right;">0.153</td>
+<td style="text-align: right;">0.344</td>
+<td style="text-align: right;">0.444</td>
+<td style="text-align: right;">0.657</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tech_easyAgree</td>
-<td style="text-align: right;">0.678</td>
-<td style="text-align: right;">0.151</td>
-<td style="text-align: right;">4.487</td>
+<td style="text-align: right;">0.588</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">4.419</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyDisagree</td>
-<td style="text-align: right;">-0.499</td>
-<td style="text-align: right;">0.295</td>
-<td style="text-align: right;">-1.690</td>
-<td style="text-align: right;">0.091</td>
+<td style="text-align: right;">-0.402</td>
+<td style="text-align: right;">0.260</td>
+<td style="text-align: right;">-1.544</td>
+<td style="text-align: right;">0.123</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">age</td>
-<td style="text-align: right;">-0.015</td>
+<td style="text-align: right;">-0.018</td>
 <td style="text-align: right;">0.003</td>
-<td style="text-align: right;">-4.902</td>
+<td style="text-align: right;">-6.623</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 </tbody>
@@ -1106,14 +1088,12 @@ Table&nbsp;11.5: Logistic regression model for <code>aidrive_comfort</code> vers
 <blockquote class="blockquote">
 <p><em>The log odds a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 0.678 higher than the log odds of a respondent who is neutral about whether technology makes life easier, holding age constant.</em></p>
 </blockquote>
-<p>To write the interpretation in terms of the odds, we need to exponentiate both sides of the model equation as in the previous section. <a href="#eq-logistic-comfort-tech-age-exp" class="quarto-xref">Equation&nbsp;<span>11.9</span></a> shows the relationship between opinions about technology, age, and the odds of being comfortable with driverless cars.</p>
-<p><span id="eq-logistic-comfort-tech-age-exp"><span class="math display">\[
-\begin{aligned}
+<p>To write the interpretation in terms of the odds, we need to exponentiate both sides of the model equation as in the previous section. <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-age-exp</span> shows the relationship between opinions about technology, age, and the odds of being comfortable with driverless cars.</p>
+<p><span class="math display">\[\begin{aligned}
 \frac{\hat{\pi}}{1 - \hat{\pi}} = e^{0.420} \times e^{-0.118 \times \text{Can't choose}} \times e^{0.678 \times \text{Agree}}  \times e^{-0.499 \times \text{Disagree}} \times e^{-0.015 \times \text{age}}
-\end{aligned}
-\tag{11.9}\]</span></span></p>
+\end{aligned}\]</span> {#eq-logistic-comfort-tech-age-exp}</p>
 <p>where <span class="math inline">\(\hat{\pi}\)</span> is the predicted probability a respondent is comfortable with driverless cars.</p>
-<p>Based on <a href="#eq-logistic-comfort-tech-age-exp" class="quarto-xref">Equation&nbsp;<span>11.9</span></a>, the interpretation of the <code>Agree</code> in terms of the odds is the following:</p>
+<p>Based on <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-age-exp</span>, the interpretation of the <code>Agree</code> in terms of the odds is the following:</p>
 <blockquote class="blockquote">
 <p><em>The <strong>odds</strong> a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 1.970 (</em> <span class="math inline">\(e^{0.678}\)</span><em>) <strong>times</strong> the odds of a respondent who is neutral about whether technology makes life easier, holding age constant.</em></p>
 </blockquote>
@@ -1134,17 +1114,15 @@ Table&nbsp;11.5: Logistic regression model for <code>aidrive_comfort</code> vers
 </blockquote>
 <p>Let’s take a moment to show this interpretation mathematically by comparing the log odds between <code>age</code> and <code>age + 1</code>, where <code>age+1</code> represents the one unit increase in <code>age</code>. The interpretations are written holding opinions about technology constant, so we can ignore this predictor when doing these calculations. We’ll also ignore the intercept, because it is also the same regardless of the value of <code>age</code>. Let <span class="math inline">\(\text{log odds (comfort | age)}\)</span> be the log odds given some value <code>age</code> and <span class="math inline">\(\text{log odds (comfort | age + 1)}\)</span> be the log odds given the value <code>age + 1</code>.</p>
 <p>Then, the change in the log odds is</p>
-<p><span id="eq-age-interpret-log-odds"><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 \text{log odds (comfort | age + 1)}  - \text{log odds (comfort | age)} &amp;= -0.015 \times ( \text{age} + 1) - (-  0.015 \times \text{age}) \\
 &amp; = -0.015 ( \text{age} + 1 - \text{age}) \\
 &amp; = -0.015
-\end{aligned}
-\tag{11.10}\]</span></span></p>
-<p>From <a href="#eq-age-interpret-log-odds" class="quarto-xref">Equation&nbsp;<span>11.10</span></a>, <span class="math inline">\(\text{log odds (comfort | age + 1)} = \text{log odds (comfort | age)} - 0.015\)</span>.</p>
-<p>Now we’ll interpret the coefficient of <code>age</code> in terms of the odds. Based on <a href="#eq-logistic-comfort-tech-age-exp" class="quarto-xref">Equation&nbsp;<span>11.9</span></a>, the interpretation of <code>age</code> in terms of the odds of being comfortable with driverless cars is the following:</p>
+\end{aligned}\]</span> {#eq-age-interpret-log-odds}</p>
+<p>From <span class="quarto-unresolved-ref">?eq-age-interpret-log-odds</span>, <span class="math inline">\(\text{log odds (comfort | age + 1)} = \text{log odds (comfort | age)} - 0.015\)</span>.</p>
+<p>Now we’ll interpret the coefficient of <code>age</code> in terms of the odds. Based on <span class="quarto-unresolved-ref">?eq-logistic-comfort-tech-age-exp</span>, the interpretation of <code>age</code> in terms of the odds of being comfortable with driverless cars is the following:</p>
 <blockquote class="blockquote">
-<p><em>For each additional year increase in age, the <strong>odds</strong> a respondent is comfortable with driverless cars are expected to <strong>multiply</strong> by 0.985 (</em> <span class="math inline">\(e^{-0.015}\)</span><em>), holding opinions about technology constant.</em></p>
+<p><em>For each additional year increase in age, the <strong>predicted odds</strong> a respondent is comfortable with driverless cars change by a <strong>multiplicative factor</strong> of 0.985 (</em> <span class="math inline">\(e^{-0.015}\)</span><em>), holding opinions about technology constant.</em></p>
 </blockquote>
 <div class="math_rules">
 <ul>
@@ -1155,16 +1133,14 @@ Table&nbsp;11.5: Logistic regression model for <code>aidrive_comfort</code> vers
 <li><span class="math inline">\(\log(a) - \log(b) = \log(\frac{a}{b})\)</span></li>
 </ul>
 </div>
-<p>We can show the interpretation mathematically starting with the result from <a href="#eq-age-interpret-log-odds" class="quarto-xref">Equation&nbsp;<span>11.10</span></a>.</p>
-<p><span id="eq-age-interpret-odds"><span class="math display">\[
-\begin{aligned}
+<p>We can show the interpretation mathematically starting with the result from <span class="quarto-unresolved-ref">?eq-age-interpret-log-odds</span>.</p>
+<p><span class="math display">\[\begin{aligned}
 \text{log odds (comfort | age + 1)}  - \text{log odds (comfort | age)} &amp;= -0.015 \\[8pt]
 \Rightarrow \log\Bigg(\frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}}\Bigg) &amp; = -0.015 \\[8pt]
 *\text{exponetiate both sides}* \\[8pt]
 \Rightarrow \frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}} &amp; = e^{-0.015}
-\end{aligned}
-\tag{11.11}\]</span></span></p>
-<p>From <a href="#eq-age-interpret-odds" class="quarto-xref">Equation&nbsp;<span>11.11</span></a>, <span class="math inline">\(\text{odds (comfort | age + 1)} = e^{-0.015} \times \text{odds (comfort | age)}\)</span>. The value <span class="math inline">\(\frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}}\)</span> is the odds ratio of being comfortable with driverless cars between <code>age</code> versus <code>age + 1</code>. Thus, given <span class="math inline">\(\beta_j\)</span> is the coefficient for a quantitative predictor <span class="math inline">\(X_j\)</span>, the value <span class="math inline">\(e^{\beta_j}\)</span> is the (adjusted) odds ratio between <span class="math inline">\(X_j + 1\)</span> and <span class="math inline">\(X_j\)</span>.</p>
+\end{aligned}\]</span> {#eq-age-interpret-odds}</p>
+<p>From <span class="quarto-unresolved-ref">?eq-age-interpret-odds</span>, <span class="math inline">\(\text{odds (comfort | age + 1)} = e^{-0.015} \times \text{odds (comfort | age)}\)</span>. The value <span class="math inline">\(\frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}}\)</span> is the odds ratio of being comfortable with driverless cars between <code>age</code> versus <code>age + 1</code>. Thus, given <span class="math inline">\(\beta_j\)</span> is the coefficient for a quantitative predictor <span class="math inline">\(X_j\)</span>, the value <span class="math inline">\(e^{\beta_j}\)</span> is the (adjusted) odds ratio between <span class="math inline">\(X_j + 1\)</span> and <span class="math inline">\(X_j\)</span>.</p>
 <div class="yourturn">
 <p>Use the model in <a href="#tbl-logistic-comfort-tech-age" class="quarto-xref">Table&nbsp;<span>11.5</span></a>. Assume opinions about technology are held constant.</p>
 <ul>
@@ -1183,20 +1159,16 @@ Table&nbsp;11.5: Logistic regression model for <code>aidrive_comfort</code> vers
 <p>We can use simulation-based inference to draw conclusions about the model coefficients in logistic regression. The process for constructing bootstrap confidence intervals and using permutation sampling for hypothesis tests are the same as in linear regression, with the difference being the type of model that is fit. Here we will show how they apply to logistic regression.</p>
 <section id="permutation-tests" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="permutation-tests">Permutation tests</h4>
-<p>Hypothesis tests is used to test a claim about a population parameter. In the case of logistic regression, we use hypothesis tests to evaluate whether there is evidence of a relationship between a given predictor and the log odds of the response variable. The hypotheses to test whether there is a relationship between predictor <span class="math inline">\(X_j\)</span> and the response, after adjusting for the other predictors are in <a href="#eq-logistic-hypotheses" class="quarto-xref">Equation&nbsp;<span>11.12</span></a>.</p>
-<p><span id="eq-logistic-hypotheses"><span class="math display">\[
-\begin{aligned}
+<p>Hypothesis tests is used to test a claim about a population parameter. In the case of logistic regression, we use hypothesis tests to evaluate whether there is evidence of a relationship between a given predictor and the log odds of the response variable. The hypotheses to test whether there is a relationship between predictor <span class="math inline">\(X_j\)</span> and the response, after adjusting for the other predictors are in <span class="quarto-unresolved-ref">?eq-logistic-hypotheses</span>.</p>
+<p><span class="math display">\[\begin{aligned}
 &amp;H_0: \beta_j = 0 - \text{There is no relationship between }X_j\text{ and the response}\\
 &amp;H_a: \beta_j \neq 0 - \text{There is a relationship between }X_j\text{ and the response}
-\end{aligned}
-\tag{11.12}\]</span></span></p>
+\end{aligned}\]</span> {#eq-logistic-hypotheses}</p>
 <p>The hypothesis test is conducted assuming the null hypothesis is true. When doing simulation-based inference, we use permutation sampling to generate the null distribution under this assumption. The process for permutation sampling is the same for logistic regression as with linear regression in <a href="05-slr-inference.html#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a>. The values of the predictor of interest <span class="math inline">\(X_j\)</span> are permuted, such that the values are randomly assigned to each observation. There is no relationship between the permuted values of <span class="math inline">\(X_j\)</span> and the response variable. The logistic model is fit to each permuted sample, and the estimated coefficients <span class="math inline">\(\hat{\beta}_j\)</span> from the permuted samples make up the null distribution. The null distribution is used to compute the p-value and draw a conclusion about the hypotheses.</p>
 <p>We’ll use a permutation test to evaluate whether there is evidence of a relationship between <code>age</code> and <code>aidrive_comfort</code> , after adjusting for <code>tech_easy</code>. <!--# be consistent with hypotheses in MLR inf chapter - do I include( adjusting fo rtech?)--></p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 H_0: \beta_{\text{age}} = 0 \hspace{2mm} \text{ vs } \hspace{2mm} \beta_{\text{age}} \neq 0
-\end{aligned}
-\]</span></p>
+\end{aligned}\]</span></p>
 <p>The original value and five permutations of <code>age</code> for the first respondent are shown <a href="#tbl-logistic-permute" class="quarto-xref">Table&nbsp;<span>11.6</span></a>.</p>
 <div class="cell">
 <div id="tbl-logistic-permute" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -1232,25 +1204,25 @@ Table&nbsp;11.6: Five permutations of <code>age</code> for Respondent 1
 <td style="text-align: left;">Permutation 2</td>
 <td style="text-align: left;">1</td>
 <td style="text-align: left;">Agree</td>
-<td style="text-align: right;">34</td>
+<td style="text-align: right;">61</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Permutation 3</td>
 <td style="text-align: left;">1</td>
 <td style="text-align: left;">Agree</td>
-<td style="text-align: right;">69</td>
+<td style="text-align: right;">65</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Permutation 4</td>
 <td style="text-align: left;">1</td>
 <td style="text-align: left;">Agree</td>
-<td style="text-align: right;">48</td>
+<td style="text-align: right;">42</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Permutation 5</td>
 <td style="text-align: left;">1</td>
 <td style="text-align: left;">Agree</td>
-<td style="text-align: right;">80</td>
+<td style="text-align: right;">73</td>
 </tr>
 </tbody>
 </table>
@@ -1276,7 +1248,7 @@ Figure&nbsp;11.8: Null distribution produced by permutation sampling. The solid 
 </div>
 </div>
 </div>
-<p><a href="#fig-logistic-permute" class="quarto-xref">Figure&nbsp;<span>11.8</span></a> shows that the estimated coefficient (solid vertical line) is far away from the center of the null distribution (the null hypothesized value 0), suggesting the evidence is not consistent with the null hypothesis. The p-value quantifies the strength of evidence against the null hypothesis. Based on the hypotheses in <a href="#eq-logistic-hypotheses" class="quarto-xref">Equation&nbsp;<span>11.12</span></a>, it is computed as the number of observations in the null distribution that have magnitude greater than <span class="math inline">\(|\beta_{\text{age}}|\)</span>.</p>
+<p><a href="#fig-logistic-permute" class="quarto-xref">Figure&nbsp;<span>11.8</span></a> shows that the estimated coefficient (solid vertical line) is far away from the center of the null distribution (the null hypothesized value 0), suggesting the evidence is not consistent with the null hypothesis. The p-value quantifies the strength of evidence against the null hypothesis. Based on the hypotheses in <span class="quarto-unresolved-ref">?eq-logistic-hypotheses</span>, it is computed as the number of observations in the null distribution that have magnitude greater than <span class="math inline">\(|\beta_{\text{age}}|\)</span>.</p>
 <p>The p-value in this example is <span class="math inline">\(\approx\)</span> 0. The p-value is very small, suggesting sufficient evidence against the null hypothesis. We reject the null hypothesis and conclude there is evidence of a relationship between age and comfort with driverless cars, after adjusting for opinions on technology.</p>
 </section>
 <section id="bootstrap-confidence-intervals" class="level4 unnumbered">
@@ -1298,13 +1270,13 @@ Figure&nbsp;11.9: Bootstrap distribution for the coefficient of <code>age</code>
 </div>
 </div>
 </div>
-<p>The 95% bootstrap confidence is -0.021 to -0.009. These values are marked by vertical lines in <a href="#fig-logistic-boot-dist" class="quarto-xref">Figure&nbsp;<span>11.9</span></a>. As with the model output, these are in terms of the relationship between age and the log odds of being comfortable with driverless cars. Thus, the direct interpretation of the 95% confidence interval is as follows:</p>
+<p>The 95% bootstrap confidence is -0.024 to -0.013. These values are marked by vertical lines in <a href="#fig-logistic-boot-dist" class="quarto-xref">Figure&nbsp;<span>11.9</span></a>. As with the model output, these are in terms of the relationship between age and the log odds of being comfortable with driverless cars. Thus, the direct interpretation of the 95% confidence interval is as follows:</p>
 <blockquote class="blockquote">
-<p><em>We are 95% confident that for each additional year in age, the log odds of being comfortable with driverless cars decrease between 0.009 to 0.021, holding opinions on technology constant.</em></p>
+<p><em>We are 95% confident that for each additional year in age, the log odds of being comfortable with driverless cars decrease between 0.013 to 0.024, holding opinions on technology constant.</em></p>
 </blockquote>
 <p>The interpretation in terms of the odds is the following:</p>
 <blockquote class="blockquote">
-<p><em>We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars multiply by a factor of 0.98 (</em> <span class="math inline">\(e^{-0.021}\)</span><em>) to 0.991 (</em> <span class="math inline">\(e^{-0.009}\)</span> <em>), holding opinions on technology constant.</em></p>
+<p><em>We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars multiply by a factor of 0.976 (</em> <span class="math inline">\(e^{-0.021}\)</span><em>) to 0.987 (</em> <span class="math inline">\(e^{-0.009}\)</span> <em>), holding opinions on technology constant.</em></p>
 </blockquote>
 </section>
 </section>
@@ -1323,14 +1295,10 @@ Figure&nbsp;11.9: Bootstrap distribution for the coefficient of <code>age</code>
 <li>Calculate a p-value.</li>
 <li>Draw a conclusion.</li>
 </ol>
-<p>The hypotheses for a single coefficient are the same as in <a href="#eq-logistic-hypotheses" class="quarto-xref">Equation&nbsp;<span>11.12</span></a>:</p>
-<p><span class="math display">\[
-H_0: \beta_j = 0 \hspace{2mm} \text{ vs }\hspace{2mm} H_a: \beta_j \neq 0
-\]</span></p>
-<p>The test statistic, in <a href="#eq-logistic-test-stat" class="quarto-xref">Equation&nbsp;<span>11.13</span></a>, is called the Wald test statistic <span class="citation" data-cites="wald1943tests">(<a href="references.html#ref-wald1943tests" role="doc-biblioref">Wald 1943</a>)</span>, <!--# make sure this is the correct reference-->because it is based on the approximation of the mean and standard error as <span class="math inline">\(n\)</span> is large.</p>
-<p><span id="eq-logistic-test-stat"><span class="math display">\[
-z = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}
-\tag{11.13}\]</span></span></p>
+<p>The hypotheses for a single coefficient are the same as in <span class="quarto-unresolved-ref">?eq-logistic-hypotheses</span>:</p>
+<p><span class="math display">\[H_0: \beta_j = 0 \hspace{2mm} \text{ vs }\hspace{2mm} H_a: \beta_j \neq 0\]</span></p>
+<p>The test statistic, in <span class="quarto-unresolved-ref">?eq-logistic-test-stat</span>, is called the Wald test statistic <span class="citation" data-cites="wald1943tests">(<a href="references.html#ref-wald1943tests" role="doc-biblioref">Wald 1943</a>)</span>, <!--# make sure this is the correct reference-->because it is based on the approximation of the mean and standard error as <span class="math inline">\(n\)</span> is large.</p>
+<p><span class="math display">\[z = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}\]</span> {#eq-logistic-test-stat}</p>
 <p>The test statistic, denoted by <span class="math inline">\(z\)</span>, is the number of standard errors the estimated coefficient <span class="math inline">\(\hat{\beta}_j\)</span> is from 0, the hypothesized mean of the distribution. It follows a standard normal distribution, <span class="math inline">\(N(0, 1)\)</span>, because it is based on asymptotic results (compared to the <span class="math inline">\(t\)</span> test statistic in linear regression which applies even for small <span class="math inline">\(n\)</span>). Because the alternative hypothesis is two-sided, the p-value is computed as <span class="math inline">\(P(|Z| \geq |z|)\)</span> , where <span class="math inline">\(Z \sim N(0, 1)\)</span>. <!--# did i do > or >= in linear regression?--> The p-value is interpreted as before, with small p-values providing stronger evidence against the null hypothesis.</p>
 <p>Let’s take a look at the hypothesis test for the coefficient of <code>age</code> using the theory-based methods. The components for the theory-based hypothesis test are produced in the model output. The output of the model including <code>tech_easy</code> and <code>age</code> is reproduced in <a href="#tbl-comfort-tech-age-2" class="quarto-xref">Table&nbsp;<span>11.7</span></a> along with the 95% confidence intervals for the model coefficients.</p>
 <div class="cell">
@@ -1365,48 +1333,48 @@ Table&nbsp;11.7: Model output for <code>aidrive_comfort</code> versus <code>tech
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">0.420</td>
-<td style="text-align: right;">0.208</td>
-<td style="text-align: right;">2.020</td>
-<td style="text-align: right;">0.043</td>
-<td style="text-align: right;">0.012</td>
-<td style="text-align: right;">0.828</td>
+<td style="text-align: right;">0.786</td>
+<td style="text-align: right;">0.182</td>
+<td style="text-align: right;">4.312</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.430</td>
+<td style="text-align: right;">1.145</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyCan’t choose</td>
-<td style="text-align: right;">-0.118</td>
-<td style="text-align: right;">0.402</td>
-<td style="text-align: right;">-0.294</td>
-<td style="text-align: right;">0.769</td>
-<td style="text-align: right;">-0.928</td>
-<td style="text-align: right;">0.661</td>
+<td style="text-align: right;">0.153</td>
+<td style="text-align: right;">0.344</td>
+<td style="text-align: right;">0.444</td>
+<td style="text-align: right;">0.657</td>
+<td style="text-align: right;">-0.522</td>
+<td style="text-align: right;">0.833</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tech_easyAgree</td>
-<td style="text-align: right;">0.678</td>
-<td style="text-align: right;">0.151</td>
-<td style="text-align: right;">4.487</td>
+<td style="text-align: right;">0.588</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">4.419</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">0.383</td>
-<td style="text-align: right;">0.976</td>
+<td style="text-align: right;">0.327</td>
+<td style="text-align: right;">0.849</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyDisagree</td>
-<td style="text-align: right;">-0.499</td>
-<td style="text-align: right;">0.295</td>
-<td style="text-align: right;">-1.690</td>
-<td style="text-align: right;">0.091</td>
-<td style="text-align: right;">-1.094</td>
-<td style="text-align: right;">0.068</td>
+<td style="text-align: right;">-0.402</td>
+<td style="text-align: right;">0.260</td>
+<td style="text-align: right;">-1.544</td>
+<td style="text-align: right;">0.123</td>
+<td style="text-align: right;">-0.920</td>
+<td style="text-align: right;">0.102</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">age</td>
-<td style="text-align: right;">-0.015</td>
+<td style="text-align: right;">-0.018</td>
 <td style="text-align: right;">0.003</td>
-<td style="text-align: right;">-4.902</td>
+<td style="text-align: right;">-6.623</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">-0.021</td>
-<td style="text-align: right;">-0.009</td>
+<td style="text-align: right;">-0.024</td>
+<td style="text-align: right;">-0.013</td>
 </tr>
 </tbody>
 </table>
@@ -1416,14 +1384,10 @@ Table&nbsp;11.7: Model output for <code>aidrive_comfort</code> versus <code>tech
 </div>
 </div>
 <p>The hypotheses are the same as with simulation-based inference</p>
-<p><span class="math display">\[
-H_0:\beta_{\text{age}} = 0 \hspace{2mm} \text{ vs }\hspace{2mm} \beta_{\text{age}} \neq 0
-\]</span></p>
+<p><span class="math display">\[H_0:\beta_{\text{age}} = 0 \hspace{2mm} \text{ vs }\hspace{2mm} \beta_{\text{age}} \neq 0\]</span></p>
 <p>The null hypothesis is that there is no relationship between age and comfort with driverless cars after accounting for opinions about technology. The alternative hypothesis is that there is a relationship.</p>
 <p>The test statistic<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> is computed as</p>
-<p><span class="math display">\[
-z = \frac{-0.015 - 0}{0.003} \approx - 5
-\]</span></p>
+<p><span class="math display">\[z = \frac{-0.015 - 0}{0.003} \approx - 5 \]</span></p>
 <p>The p-value is computed as <span class="math inline">\(P(|Z| \geq |-4.902|) \approx\)</span> 4.83^{-6}. This value is so small it rounds to 0 when displaying the results to 3 digits. This is consistent with the p-value we observed from the permutation test in <a href="#sec-logistic-sim-inf" class="quarto-xref"><span>Section 11.5.1</span></a>. Because the p-value is small, we reject the null hypothesis and conclude there is evidence of a relationship between age and comfort with driverless cars after adjusting for opinions about technology.</p>
 <div class="analysis_in_practice">
 <p>We can use a decision-making threshold <span class="math inline">\(\alpha\)</span> when using the p-value to draw conclusions from a hypothesis test. The potential for Type I and Type II errors is the same for logistic regression as in linear regression. See <a href="05-slr-inference.html#sec-slr-inf-conclusion" class="quarto-xref"><span>Section 5.6.4</span></a> for more on choosing <span class="math inline">\(\alpha\)</span> and potential errors.</p>
@@ -1432,19 +1396,15 @@ z = \frac{-0.015 - 0}{0.003} \approx - 5
 <section id="confidence-interval" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="confidence-interval">Confidence interval</h4>
 <p>The equation to compute the confidence interval for coefficients in logistic regression is very similar to the formula in linear regression from <a href="05-slr-inference.html#sec-slr-inf-clt" class="quarto-xref"><span>Section 5.9</span></a>. The difference is the critical value <span class="math inline">\(z^*\)</span> is computed from the <span class="math inline">\(N(0, 1)\)</span> distribution</p>
-<p><span id="eq-logistic-theory-ci"><span class="math display">\[
-\hat{\beta}_j \pm z^* \times SE_{\hat{\beta}_j}
-\tag{11.14}\]</span></span></p>
+<p><span class="math display">\[\hat{\beta}_j \pm z^* \times SE_{\hat{\beta}_j}\]</span> {#eq-logistic-theory-ci}</p>
 <p>In practice, the confidence interval is produced in the model output. Let’s show how the 95% confidence interval for <code>age</code> is computed in <a href="#tbl-comfort-tech-age-2" class="quarto-xref">Table&nbsp;<span>11.7</span></a>.</p>
 <p>The values for <span class="math inline">\(\hat{\beta}_j\)</span> and <span class="math inline">\(SE_{\hat{\beta}_j}\)</span> can be read directly from table, as before. The critical value <span class="math inline">\(z^*\)</span> is the point on the <span class="math inline">\(N(0, 1)\)</span> distribution such that the middle 95% (or <span class="math inline">\(C\%\)</span> in general) of the distribution is between <span class="math inline">\(-z^*\)</span> and <span class="math inline">\(z^*\)</span>. We can use statistical software to get this value as shown in <a href="#sec-logistic-r" class="quarto-xref"><span>Section 11.7</span></a>. The <span class="math inline">\(z^*\)</span> for the 95% confidence interval is 1.96.</p>
 <p>The 95% confidence interval for the coefficient of <code>age</code> is</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><span class="math display">\[\begin{aligned}
 &amp;-0.015 \pm 1.96 \times 0.003 \\[5pt]
 \Rightarrow &amp;-0.015 \pm  0.00588 \\[5pt]
 \Rightarrow &amp;\mathbf{[ -0.021 , -0.009]}  
-\end{aligned}
-\]</span></p>
+\end{aligned}\]</span></p>
 <div class="yourturn">
 <ul>
 <li>Interpret this interval in the context of the data in terms of the odds of being comfortable with driverless cars.</li>
@@ -1484,10 +1444,8 @@ z = \frac{-0.015 - 0}{0.003} \approx - 5
 <p>Similar to linear regression, we check model conditions to evaluate whether these assumptions hold for the data.</p>
 <section id="linearity" class="level3" data-number="11.6.1">
 <h3 data-number="11.6.1" class="anchored" data-anchor-id="linearity"><span class="header-section-number">11.6.1</span> Linearity</h3>
-<p>The linearity assumption for logistic regression states that there is a linear relationship between the predictors and the logit of the response variable. We check this assumption by looking at plots of the quantitative predictors versus the empirical logit of the response. The <strong>empirical logit</strong> is the log-odds of a binary variable (“logit”) calculated from the data (“empirical”). For example, <a href="#eq-emp-logit" class="quarto-xref">Equation&nbsp;<span>11.15</span></a> is the empirical logit for the comfort with driverless cars in the sample data set.</p>
-<p><span id="eq-emp-logit"><span class="math display">\[
-\text{empirical logit} = \log\Big(\frac{\pi}{1 - \pi}\Big) = \log\Big(\frac{0.545}{1 - 0.545}\Big) = 0.180
-\tag{11.15}\]</span></span></p>
+<p>The linearity assumption for logistic regression states that there is a linear relationship between the predictors and the logit of the response variable. We check this assumption by looking at plots of the quantitative predictors versus the empirical logit of the response. The <strong>empirical logit</strong> is the log-odds of a binary variable (“logit”) calculated from the data (“empirical”). For example, <span class="quarto-unresolved-ref">?eq-emp-logit</span> is the empirical logit for the comfort with driverless cars in the sample data set.</p>
+<p><span class="math display">\[\text{empirical logit} = \log\Big(\frac{\pi}{1 - \pi}\Big) = \log\Big(\frac{0.545}{1 - 0.545}\Big) = 0.180\]</span> {#eq-emp-logit}</p>
 <p>We can also look at the empirical logit by subgroup of a categorical variable. For example, <a href="#tbl-emp-logit-tech" class="quarto-xref">Table&nbsp;<span>11.8</span></a> shows the empirical logit by opinion on whether technology makes life easier.</p>
 <div class="cell">
 <div id="tbl-emp-logit-tech" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -1509,27 +1467,27 @@ Table&nbsp;11.8: Probability and empirical logit of <code>aidrive_comfort</code>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Neutral</td>
-<td style="text-align: right;">217</td>
-<td style="text-align: right;">0.415</td>
-<td style="text-align: right;">-0.344</td>
+<td style="text-align: right;">281</td>
+<td style="text-align: right;">0.470</td>
+<td style="text-align: right;">-0.121</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Can’t choose</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">0.400</td>
-<td style="text-align: right;">-0.405</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">0.525</td>
+<td style="text-align: right;">0.100</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Agree</td>
-<td style="text-align: right;">1201</td>
-<td style="text-align: right;">0.588</td>
-<td style="text-align: right;">0.355</td>
+<td style="text-align: right;">1432</td>
+<td style="text-align: right;">0.613</td>
+<td style="text-align: right;">0.460</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Disagree</td>
-<td style="text-align: right;">73</td>
-<td style="text-align: right;">0.288</td>
-<td style="text-align: right;">-0.907</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">0.353</td>
+<td style="text-align: right;">-0.606</td>
 </tr>
 </tbody>
 </table>
@@ -1539,7 +1497,7 @@ Table&nbsp;11.8: Probability and empirical logit of <code>aidrive_comfort</code>
 </div>
 </div>
 <p>Computing the empirical logit across values of a quantitative predictor is similar as the process for categorical predictors. We divide the values of the quantitative predictor into bins and compute the empirical logit of the response for the observations within each bin. There are multiple ways to divide the quantitative predictor into bins. Some software creates the bins, such that there are an equal number of observations in each bin. Another option is to create bins by dividing by some incremental amount (e.g., dividing <code>age</code> into 5 or 10 year increments). Dividing the variable by the same incremental amount can be more easily interpreted; however, there may be large variation in the number of observations in each bin that needs to be taken into account when comparing the empirical logit across bins. The former method may be less interpretable, but we know the empirical logit is computed using the same observations for each bin.</p>
-<p><a href="#tbl-emp-logit-age" class="quarto-xref">Table&nbsp;<span>11.9</span></a> shows the number of observations <span class="math inline">\(n\)</span>, probability, and empirical logit across bins of <code>age</code> using the two approaches for dividing <code>age</code> into bins. In Table (a) of <a href="#tbl-emp-logit-age" class="quarto-xref">Table&nbsp;<span>11.9</span></a>, the bins have been created such that the observations are more evenly distributed across bins. Often, the number of observations will be equal or differ by a small amount. In this case, because <code>age</code> is a discrete variable, there are many observations with the exact same value of age. For example, there are 38 observations with the age of 39 years old. Because all observations with the same age are in the same bin, the number of observations in bins that include ages that occur frequently is higher than less common ages in the data, such as those over 70 years old. Note, however, that the number of observations in each bin are still more even than when the bins are created using equal age increments.</p>
+<p><a href="#tbl-emp-logit-age" class="quarto-xref">Table&nbsp;<span>11.9</span></a> shows the number of observations <span class="math inline">\(n\)</span>, probability, and empirical logit across bins of <code>age</code> using the two approaches for dividing <code>age</code> into bins. In Table (a) of <a href="#tbl-emp-logit-age" class="quarto-xref">Table&nbsp;<span>11.9</span></a>, the bins have been created such that the observations are more evenly distributed across bins. Often, the number of observations will be equal or differ by a small amount. In this case, because <code>age</code> is a discrete variable, there are many observations with the exact same value of age. For example, there are 43 observations with the age of 39 years old. Because all observations with the same age are in the same bin, the number of observations in bins that include ages that occur frequently is higher than less common ages in the data, such as those over 70 years old. Note, however, that the number of observations in each bin are still more even than when the bins are created using equal age increments.</p>
 <div id="tbl-emp-logit-age" class="quarto-layout-panel anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-emp-logit-age-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1566,63 +1524,63 @@ Table&nbsp;11.9: Probability and empirical logit of <code>aidrive_comfort</code>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">[18,27)</td>
-<td style="text-align: right;">158</td>
-<td style="text-align: right;">0.677</td>
-<td style="text-align: right;">0.741</td>
+<td style="text-align: right;">209</td>
+<td style="text-align: right;">0.708</td>
+<td style="text-align: right;">0.886</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">[27,34)</td>
-<td style="text-align: right;">154</td>
-<td style="text-align: right;">0.636</td>
-<td style="text-align: right;">0.560</td>
+<td style="text-align: left;">[27,33)</td>
+<td style="text-align: right;">168</td>
+<td style="text-align: right;">0.690</td>
+<td style="text-align: right;">0.802</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">[34,40)</td>
-<td style="text-align: right;">178</td>
-<td style="text-align: right;">0.607</td>
-<td style="text-align: right;">0.434</td>
+<td style="text-align: left;">[33,38)</td>
+<td style="text-align: right;">186</td>
+<td style="text-align: right;">0.661</td>
+<td style="text-align: right;">0.669</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">[40,45)</td>
-<td style="text-align: right;">141</td>
-<td style="text-align: right;">0.582</td>
-<td style="text-align: right;">0.329</td>
+<td style="text-align: left;">[38,43)</td>
+<td style="text-align: right;">189</td>
+<td style="text-align: right;">0.635</td>
+<td style="text-align: right;">0.553</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">[45,50)</td>
-<td style="text-align: right;">134</td>
-<td style="text-align: right;">0.575</td>
-<td style="text-align: right;">0.301</td>
+<td style="text-align: left;">[43,49)</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: right;">0.564</td>
+<td style="text-align: right;">0.258</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">[50,57)</td>
-<td style="text-align: right;">157</td>
-<td style="text-align: right;">0.490</td>
-<td style="text-align: right;">-0.038</td>
+<td style="text-align: left;">[49,56)</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">0.537</td>
+<td style="text-align: right;">0.148</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">[57,63)</td>
+<td style="text-align: left;">[56,61)</td>
 <td style="text-align: right;">153</td>
-<td style="text-align: right;">0.438</td>
-<td style="text-align: right;">-0.250</td>
+<td style="text-align: right;">0.464</td>
+<td style="text-align: right;">-0.144</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">[63,69)</td>
-<td style="text-align: right;">163</td>
-<td style="text-align: right;">0.466</td>
-<td style="text-align: right;">-0.135</td>
+<td style="text-align: left;">[61,68)</td>
+<td style="text-align: right;">215</td>
+<td style="text-align: right;">0.479</td>
+<td style="text-align: right;">-0.084</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">[69,75)</td>
-<td style="text-align: right;">143</td>
-<td style="text-align: right;">0.462</td>
-<td style="text-align: right;">-0.154</td>
+<td style="text-align: left;">[68,74)</td>
+<td style="text-align: right;">158</td>
+<td style="text-align: right;">0.500</td>
+<td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">[75,89]</td>
-<td style="text-align: right;">140</td>
-<td style="text-align: right;">0.507</td>
-<td style="text-align: right;">0.029</td>
+<td style="text-align: left;">[74,89]</td>
+<td style="text-align: right;">175</td>
+<td style="text-align: right;">0.509</td>
+<td style="text-align: right;">0.034</td>
 </tr>
 </tbody>
 </table>
@@ -1649,63 +1607,63 @@ Table&nbsp;11.9: Probability and empirical logit of <code>aidrive_comfort</code>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(18,25]</td>
-<td style="text-align: right;">132</td>
-<td style="text-align: right;">0.667</td>
-<td style="text-align: right;">0.693</td>
+<td style="text-align: right;">181</td>
+<td style="text-align: right;">0.707</td>
+<td style="text-align: right;">0.882</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">(25,32]</td>
-<td style="text-align: right;">151</td>
-<td style="text-align: right;">0.642</td>
-<td style="text-align: right;">0.586</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: right;">0.694</td>
+<td style="text-align: right;">0.818</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">(32,39]</td>
-<td style="text-align: right;">207</td>
-<td style="text-align: right;">0.618</td>
-<td style="text-align: right;">0.483</td>
+<td style="text-align: right;">262</td>
+<td style="text-align: right;">0.653</td>
+<td style="text-align: right;">0.631</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">(39,46]</td>
-<td style="text-align: right;">193</td>
-<td style="text-align: right;">0.549</td>
-<td style="text-align: right;">0.198</td>
+<td style="text-align: right;">246</td>
+<td style="text-align: right;">0.585</td>
+<td style="text-align: right;">0.345</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">(46,54]</td>
-<td style="text-align: right;">159</td>
+<td style="text-align: right;">187</td>
 <td style="text-align: right;">0.572</td>
 <td style="text-align: right;">0.291</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">(54,61]</td>
-<td style="text-align: right;">188</td>
-<td style="text-align: right;">0.463</td>
-<td style="text-align: right;">-0.149</td>
+<td style="text-align: right;">218</td>
+<td style="text-align: right;">0.477</td>
+<td style="text-align: right;">-0.092</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">(61,68]</td>
-<td style="text-align: right;">181</td>
-<td style="text-align: right;">0.448</td>
-<td style="text-align: right;">-0.211</td>
+<td style="text-align: right;">215</td>
+<td style="text-align: right;">0.479</td>
+<td style="text-align: right;">-0.084</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">(68,75]</td>
-<td style="text-align: right;">170</td>
-<td style="text-align: right;">0.471</td>
-<td style="text-align: right;">-0.118</td>
+<td style="text-align: right;">187</td>
+<td style="text-align: right;">0.497</td>
+<td style="text-align: right;">-0.011</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">(75,82]</td>
-<td style="text-align: right;">90</td>
-<td style="text-align: right;">0.567</td>
-<td style="text-align: right;">0.268</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">0.568</td>
+<td style="text-align: right;">0.275</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">(82,89]</td>
-<td style="text-align: right;">50</td>
-<td style="text-align: right;">0.400</td>
-<td style="text-align: right;">-0.405</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">0.412</td>
+<td style="text-align: right;">-0.357</td>
 </tr>
 </tbody>
 </table>
@@ -1769,56 +1727,56 @@ Table&nbsp;11.10: Logistic regression model including quadratic term for age.
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">1.2106</td>
-<td style="text-align: right;">0.4545</td>
-<td style="text-align: right;">2.664</td>
-<td style="text-align: right;">0.0077</td>
-<td style="text-align: right;">0.3246</td>
-<td style="text-align: right;">2.1077</td>
+<td style="text-align: right;">1.6045</td>
+<td style="text-align: right;">0.4129</td>
+<td style="text-align: right;">3.886</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">0.801</td>
+<td style="text-align: right;">2.4205</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyCan’t choose</td>
-<td style="text-align: right;">-0.1600</td>
-<td style="text-align: right;">0.4040</td>
-<td style="text-align: right;">-0.396</td>
-<td style="text-align: right;">0.6922</td>
-<td style="text-align: right;">-0.9745</td>
-<td style="text-align: right;">0.6227</td>
+<td style="text-align: right;">0.1217</td>
+<td style="text-align: right;">0.3455</td>
+<td style="text-align: right;">0.352</td>
+<td style="text-align: right;">0.7246</td>
+<td style="text-align: right;">-0.557</td>
+<td style="text-align: right;">0.8051</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tech_easyAgree</td>
-<td style="text-align: right;">0.6832</td>
-<td style="text-align: right;">0.1512</td>
-<td style="text-align: right;">4.519</td>
+<td style="text-align: right;">0.5949</td>
+<td style="text-align: right;">0.1332</td>
+<td style="text-align: right;">4.466</td>
 <td style="text-align: right;">0.0000</td>
-<td style="text-align: right;">0.3884</td>
-<td style="text-align: right;">0.9816</td>
+<td style="text-align: right;">0.334</td>
+<td style="text-align: right;">0.8568</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyDisagree</td>
-<td style="text-align: right;">-0.5118</td>
-<td style="text-align: right;">0.2956</td>
-<td style="text-align: right;">-1.731</td>
-<td style="text-align: right;">0.0834</td>
-<td style="text-align: right;">-1.1070</td>
-<td style="text-align: right;">0.0562</td>
+<td style="text-align: right;">-0.4148</td>
+<td style="text-align: right;">0.2603</td>
+<td style="text-align: right;">-1.594</td>
+<td style="text-align: right;">0.1110</td>
+<td style="text-align: right;">-0.933</td>
+<td style="text-align: right;">0.0895</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">age</td>
-<td style="text-align: right;">-0.0498</td>
-<td style="text-align: right;">0.0181</td>
-<td style="text-align: right;">-2.755</td>
-<td style="text-align: right;">0.0059</td>
-<td style="text-align: right;">-0.0854</td>
-<td style="text-align: right;">-0.0145</td>
+<td style="text-align: right;">-0.0550</td>
+<td style="text-align: right;">0.0167</td>
+<td style="text-align: right;">-3.295</td>
+<td style="text-align: right;">0.0010</td>
+<td style="text-align: right;">-0.088</td>
+<td style="text-align: right;">-0.0225</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">I(age^2)</td>
-<td style="text-align: right;">0.0003</td>
+<td style="text-align: right;">0.0004</td>
 <td style="text-align: right;">0.0002</td>
-<td style="text-align: right;">1.967</td>
-<td style="text-align: right;">0.0492</td>
-<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">2.226</td>
+<td style="text-align: right;">0.0260</td>
+<td style="text-align: right;">0.000</td>
 <td style="text-align: right;">0.0007</td>
 </tr>
 </tbody>
@@ -1830,7 +1788,7 @@ Table&nbsp;11.10: Logistic regression model including quadratic term for age.
 </div>
 <!--# is adding the quadratic term too much of a digression?-->
 <p><a href="#tbl-comfort-tech-age-sq" class="quarto-xref">Table&nbsp;<span>11.10</span></a> is the output of the model that includes the quadratic term for <code>age</code>. The p-value for the quadratic term is around 0.05, so based on this alone, it is unclear whether or not to keep the squared term in the model. Thus, let’s look at the confidence interval and some model comparison statistics introduced in <a href="10-model-eval.html#sec-model-compare-stats" class="quarto-xref"><span>Section 10.2</span></a> to have more information to take into account regarding the quadratic term.</p>
-<p>The 95% confidence interval for the coefficient of <span class="math inline">\(\text{age}^2\)</span> is 1.955^{-6} to 6.802^{-4}. This shows the quadratic term has a very small adjustment on the relationship between age and comfort with driverless cars. Even if the quadratic term is statistically significant, it may not be practically significant.</p>
+<p>The 95% confidence interval for the coefficient of <span class="math inline">\(\text{age}^2\)</span> is 4.368^{-5} to 6.763^{-4}. This shows the quadratic term has a very small adjustment on the relationship between age and comfort with driverless cars. Even if the quadratic term is statistically significant, it may not be practically significant.</p>
 <div class="cell">
 <div id="tbl-age-sq-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1850,13 +1808,13 @@ Table&nbsp;11.11: AIC and BIC for models with and without quadratic term for <co
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Age</td>
-<td style="text-align: right;">2036</td>
-<td style="text-align: right;">2062</td>
+<td style="text-align: right;">2431</td>
+<td style="text-align: right;">2458</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Age + Age^2</td>
-<td style="text-align: right;">2034</td>
-<td style="text-align: right;">2066</td>
+<td style="text-align: right;">2428</td>
+<td style="text-align: right;">2461</td>
 </tr>
 </tbody>
 </table>
@@ -1921,48 +1879,48 @@ Table&nbsp;11.11: AIC and BIC for models with and without quadratic term for <co
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">0.420</td>
-<td style="text-align: right;">0.208</td>
-<td style="text-align: right;">2.020</td>
-<td style="text-align: right;">0.043</td>
-<td style="text-align: right;">0.012</td>
-<td style="text-align: right;">0.828</td>
+<td style="text-align: right;">0.786</td>
+<td style="text-align: right;">0.182</td>
+<td style="text-align: right;">4.312</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">0.430</td>
+<td style="text-align: right;">1.145</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyCan’t choose</td>
-<td style="text-align: right;">-0.118</td>
-<td style="text-align: right;">0.402</td>
-<td style="text-align: right;">-0.294</td>
-<td style="text-align: right;">0.769</td>
-<td style="text-align: right;">-0.928</td>
-<td style="text-align: right;">0.661</td>
+<td style="text-align: right;">0.153</td>
+<td style="text-align: right;">0.344</td>
+<td style="text-align: right;">0.444</td>
+<td style="text-align: right;">0.657</td>
+<td style="text-align: right;">-0.522</td>
+<td style="text-align: right;">0.833</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tech_easyAgree</td>
-<td style="text-align: right;">0.678</td>
-<td style="text-align: right;">0.151</td>
-<td style="text-align: right;">4.487</td>
+<td style="text-align: right;">0.588</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">4.419</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">0.383</td>
-<td style="text-align: right;">0.976</td>
+<td style="text-align: right;">0.327</td>
+<td style="text-align: right;">0.849</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyDisagree</td>
-<td style="text-align: right;">-0.499</td>
-<td style="text-align: right;">0.295</td>
-<td style="text-align: right;">-1.690</td>
-<td style="text-align: right;">0.091</td>
-<td style="text-align: right;">-1.094</td>
-<td style="text-align: right;">0.068</td>
+<td style="text-align: right;">-0.402</td>
+<td style="text-align: right;">0.260</td>
+<td style="text-align: right;">-1.544</td>
+<td style="text-align: right;">0.123</td>
+<td style="text-align: right;">-0.920</td>
+<td style="text-align: right;">0.102</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">age</td>
-<td style="text-align: right;">-0.015</td>
+<td style="text-align: right;">-0.018</td>
 <td style="text-align: right;">0.003</td>
-<td style="text-align: right;">-4.902</td>
+<td style="text-align: right;">-6.623</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">-0.021</td>
-<td style="text-align: right;">-0.009</td>
+<td style="text-align: right;">-0.024</td>
+<td style="text-align: right;">-0.013</td>
 </tr>
 </tbody>
 </table>
@@ -1998,48 +1956,48 @@ Table&nbsp;11.11: AIC and BIC for models with and without quadratic term for <co
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">1.522</td>
-<td style="text-align: right;">0.208</td>
-<td style="text-align: right;">2.020</td>
-<td style="text-align: right;">0.043</td>
-<td style="text-align: right;">1.012</td>
-<td style="text-align: right;">2.289</td>
+<td style="text-align: right;">2.195</td>
+<td style="text-align: right;">0.182</td>
+<td style="text-align: right;">4.312</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: right;">1.537</td>
+<td style="text-align: right;">3.142</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyCan’t choose</td>
-<td style="text-align: right;">0.889</td>
-<td style="text-align: right;">0.402</td>
-<td style="text-align: right;">-0.294</td>
-<td style="text-align: right;">0.769</td>
-<td style="text-align: right;">0.395</td>
-<td style="text-align: right;">1.936</td>
+<td style="text-align: right;">1.165</td>
+<td style="text-align: right;">0.344</td>
+<td style="text-align: right;">0.444</td>
+<td style="text-align: right;">0.657</td>
+<td style="text-align: right;">0.593</td>
+<td style="text-align: right;">2.301</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tech_easyAgree</td>
-<td style="text-align: right;">1.969</td>
-<td style="text-align: right;">0.151</td>
-<td style="text-align: right;">4.487</td>
+<td style="text-align: right;">1.800</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: right;">4.419</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">1.467</td>
-<td style="text-align: right;">2.653</td>
+<td style="text-align: right;">1.387</td>
+<td style="text-align: right;">2.338</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tech_easyDisagree</td>
-<td style="text-align: right;">0.607</td>
-<td style="text-align: right;">0.295</td>
-<td style="text-align: right;">-1.690</td>
-<td style="text-align: right;">0.091</td>
-<td style="text-align: right;">0.335</td>
-<td style="text-align: right;">1.071</td>
+<td style="text-align: right;">0.669</td>
+<td style="text-align: right;">0.260</td>
+<td style="text-align: right;">-1.544</td>
+<td style="text-align: right;">0.123</td>
+<td style="text-align: right;">0.398</td>
+<td style="text-align: right;">1.108</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">age</td>
-<td style="text-align: right;">0.985</td>
+<td style="text-align: right;">0.982</td>
 <td style="text-align: right;">0.003</td>
-<td style="text-align: right;">-4.902</td>
+<td style="text-align: right;">-6.623</td>
 <td style="text-align: right;">0.000</td>
-<td style="text-align: right;">0.979</td>
-<td style="text-align: right;">0.991</td>
+<td style="text-align: right;">0.976</td>
+<td style="text-align: right;">0.987</td>
 </tr>
 </tbody>
 </table>
@@ -2125,12 +2083,12 @@ Table&nbsp;11.11: AIC and BIC for models with and without quadratic term for <co
 # Groups:   tech_easy [4]
   tech_easy    aidrive_comfort     n probability empirical_logit
   &lt;fct&gt;        &lt;fct&gt;           &lt;int&gt;       &lt;dbl&gt;           &lt;dbl&gt;
-1 Neutral      0                 127       0.585           0.344
-2 Neutral      1                  90       0.415          -0.344
-3 Can't choose 0                  18       0.6             0.405
-4 Can't choose 1                  12       0.4            -0.405
-5 Agree        0                 495       0.412          -0.355
-6 Agree        1                 706       0.588           0.355
+1 Neutral      0                 149       0.530           0.121
+2 Neutral      1                 132       0.470          -0.121
+3 Can't choose 0                  19       0.475          -0.100
+4 Can't choose 1                  21       0.525           0.100
+5 Agree        0                 554       0.387          -0.460
+6 Agree        1                 878       0.613           0.460
 # ℹ 2 more rows</code></pre>
 </div>
 </div>
@@ -2150,12 +2108,12 @@ Table&nbsp;11.11: AIC and BIC for models with and without quadratic term for <co
 # Groups:   age_bins [10]
   age_bins aidrive_comfort     n probability empirical_logit
   &lt;fct&gt;    &lt;fct&gt;           &lt;int&gt;       &lt;dbl&gt;           &lt;dbl&gt;
-1 (18,25]  0                  44       0.333          -0.693
-2 (18,25]  1                  88       0.667           0.693
-3 (25,32]  0                  54       0.358          -0.586
-4 (25,32]  1                  97       0.642           0.586
-5 (32,39]  0                  79       0.382          -0.483
-6 (32,39]  1                 128       0.618           0.483
+1 (18,25]  0                  53       0.293          -0.882
+2 (18,25]  1                 128       0.707           0.882
+3 (25,32]  0                  60       0.306          -0.818
+4 (25,32]  1                 136       0.694           0.818
+5 (32,39]  0                  91       0.347          -0.631
+6 (32,39]  1                 171       0.653           0.631
 # ℹ 14 more rows</code></pre>
 </div>
 </div>
@@ -2173,12 +2131,12 @@ Table&nbsp;11.11: AIC and BIC for models with and without quadratic term for <co
 # Groups:   age_bins [10]
   age_bins aidrive_comfort     n probability empirical_logit
   &lt;fct&gt;    &lt;fct&gt;           &lt;int&gt;       &lt;dbl&gt;           &lt;dbl&gt;
-1 [18,27)  1                 107       0.677          0.741 
-2 [27,34)  1                  98       0.636          0.560 
-3 [34,40)  1                 108       0.607          0.434 
-4 [40,45)  1                  82       0.582          0.329 
-5 [45,50)  1                  77       0.575          0.301 
-6 [50,57)  1                  77       0.490         -0.0382
+1 [18,27)  1                 148       0.708           0.886
+2 [27,33)  1                 116       0.690           0.802
+3 [33,38)  1                 123       0.661           0.669
+4 [38,43)  1                 120       0.635           0.553
+5 [43,49)  1                 110       0.564           0.258
+6 [49,56)  1                 102       0.537           0.148
 # ℹ 4 more rows</code></pre>
 </div>
 </div>
@@ -2228,16 +2186,16 @@ Table&nbsp;11.11: AIC and BIC for models with and without quadratic term for <co
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>emplogit_age_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Group Cases XMin XMax XMean NumYes  Prop AdjProp  Logit
-1      1   158   18   26  22.8    107 0.677   0.676  0.735
-2      2   154   27   33  30.2     98 0.636   0.635  0.554
-3      3   178   34   39  36.6    108 0.607   0.606  0.431
-4      4   141   40   44  42.2     82 0.582   0.581  0.327
-5      5   134   45   49  47.1     77 0.575   0.574  0.298
-6      6   157   50   56  53.3     77 0.490   0.491 -0.036
-7      7   153   57   62  59.5     67 0.438   0.438 -0.249
-8      8   163   63   68  65.5     76 0.466   0.466 -0.136
-9      9   143   69   74  71.3     66 0.462   0.462 -0.152
-10    10   140   75   89  80.2     71 0.507   0.507  0.028</code></pre>
+1      1   209   18   26  22.7    148 0.708   0.707  0.881
+2      2   168   27   32  29.6    116 0.690   0.689  0.795
+3      3   186   33   37  35.0    123 0.661   0.660  0.663
+4      4   189   38   42  40.1    120 0.635   0.634  0.549
+5      5   195   43   48  45.4    110 0.564   0.564  0.257
+6      6   190   49   55  52.1    102 0.537   0.537  0.148
+7      7   153   56   60  58.2     71 0.464   0.464 -0.144
+8      8   215   61   67  64.1    103 0.479   0.479 -0.084
+9      9   158   68   73  70.2     79 0.500   0.500  0.000
+10    10   175   74   89  79.1     89 0.509   0.509  0.036</code></pre>
 </div>
 </div>
 <p>As we see from the output of underlying data, <code>emplogitplot1()</code> divides the quantitative variable into bins, such that the observations are approximately evenly distributed across bins. The result is very similar to the result from creating bins using <code>cut2()</code>. The underlying data in <code>emplogit_age_data</code> can be used to make the graph using the <strong>ggplot2</strong> functions, as shown below.</p>
@@ -2313,7 +2271,7 @@ Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaugh
 <p>The odds a respondent who disagrees technology makes life easier is comfortable with driverless cars are expected to be 0.607 (<span class="math inline">\(e^{-0.499}\)</span>) times the odds of a respondent who is neutral about whether technology makes life easier, holding age constant.<br>
 <br>
 Alternatively, we could write this in terms of an odds ratio greater than 1: The odds a respondent is neutral about whether technology makes life easier is comfortable with driverless cars are expected to be 1.647 (<span class="math inline">\(1/e^{-0.499}\)</span>) times the odds of a respondent who disagrees that technology makes life easier, holding age constant.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>When age increases by 5, the log odds are expected to decrease by 0.075 (<span class="math inline">\(-0.015 \times 5\)</span> ) . The odds are expected to multiply by 0.928 ( <span class="math inline">\(e^{-0.015 \times 5}\)</span>).<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>When age increases by 5, the log odds are expected to decrease by 0.075 (<span class="math inline">\(-0.015 \times 5\)</span> ) . The expected odds change by a multiplicative factor of 0.928 ( <span class="math inline">\(e^{-0.015 \times 5}\)</span>).<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn8"><p>Note the difference the result here and the model output is because the model output is computed using exact values of <span class="math inline">\(\hat{\beta}_j\)</span> and <span class="math inline">\(SE_{\hat{\beta}_j}\)</span>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>We are 95% confident that for each additional year in age, the odds of being comfortable with driverless cars are expected to multiply by 0.979 ( <span class="math inline">\(e^{-0.021}\)</span> ) to 0.991 ( <span class="math inline">\(e^{-0.009}\)</span>), holding opinions about technology constant. This interval is equal to the interval obtained using bootstrapping.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn10"><ul>
