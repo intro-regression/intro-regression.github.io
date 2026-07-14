@@ -39,6 +39,7 @@ library(knitr)
 library(Hmisc)
 library(Stat2Data)
 library(skimr)
+library(kableExtra)
 
 # load gss data for 2024
 
@@ -380,7 +381,15 @@ gss24_ai |>
   count(tech_easy, aidrive_comfort) |>
   pivot_wider(names_from = aidrive_comfort, 
               values_from = n) |>
-  kable(col.names = c("Tech Easy", "0", "1"))
+  kbl(,
+      escape = FALSE,
+      align = c("l", "c", "c"), 
+      col.names = c("Tech Easy", "No (0)", "Yes (1)")) |>
+  add_header_above(c(" " = 1, "AI Drive Comfort" = 2)) |>
+  collapse_rows(
+    columns = 1,
+    valign = "middle"
+  )
 ```
 
 Each cell in the table is the number of observations that take the values indicated by the row and column. For example, there are 90 respondents in the data whose observed data are `tech_easy = "Neutral"` and `aidrive_comfort = "1"`. We can use this table to ask how the probability of being comfortable with driverless cars differs based on opinions about whether technology makes life easier. For example, we can compute the probability and the corresponding odds a randomly selected respondent is comfortable with driverless cars given they are neutral about whether technology makes life easier.
