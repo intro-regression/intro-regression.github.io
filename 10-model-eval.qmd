@@ -7,11 +7,11 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Describe how model performance statistics are used to compare multiple models
--   Conduct model selection using stepwise procedures
--   Use cross-validation to compare models
--   Implement a model selection workflow using testing and training sets and cross validation
--   Implement a model selection workflow in R
+- Describe how model performance statistics are used to compare multiple models
+- Conduct model selection using stepwise procedures
+- Use cross-validation to compare models
+- Implement a model selection workflow using testing and training sets and cross validation
+- Implement a model selection workflow in R
 
 ```{=html}
 <!--#
@@ -85,23 +85,23 @@ The predictors are the following:
 
 <!--# removing Key & Instrumentalness & Speechiness from the analysis. Need to remove them from the data-->
 
--   `playlist_genre`: Playlist genre <!--# need something more specific? -->
+- `playlist_genre`: Playlist genre <!--# need something more specific? -->
 
--   `danceability`: Measure ranging 0 to 1 that describes how well suited the song is for dancing. Songs with values close to 0 are the least danceable, and those with values close to 1 are the most danceable.
+- `danceability`: Measure ranging 0 to 1 that describes how well suited the song is for dancing. Songs with values close to 0 are the least danceable, and those with values close to 1 are the most danceable.
 
--   `energy`: Measure ranging from 0 to 1 that describes the intensity and activity of a song. Songs with values close to 1 may feel fast, loud, and noisy, while songs with values close to 0 may feel quiet and slow.
+- `energy`: Measure ranging from 0 to 1 that describes the intensity and activity of a song. Songs with values close to 1 may feel fast, loud, and noisy, while songs with values close to 0 may feel quiet and slow.
 
--   `loudness`: Measure typically ranging from -60 and 0 of the volume in decibels (dB). It is computed by averaging the volume across the entire song.
+- `loudness`: Measure typically ranging from -60 and 0 of the volume in decibels (dB). It is computed by averaging the volume across the entire song.
 
--   `mode`: Description of the type of scale for the musical melody of a song. Possible values are "Major" and "Minor".
+- `mode`: Description of the type of scale for the musical melody of a song. Possible values are "Major" and "Minor".
 
--   `acousticness`: Measure ranging from 0 to 1 of the confidence a song is acoustic. <!--# is there a better description here?--> Values close to 0 are low confidence the song is acoustic, and values close to 1 are high confidence the song is acoustic.
+- `acousticness`: Measure ranging from 0 to 1 of the confidence a song is acoustic. <!--# is there a better description here?--> Values close to 0 are low confidence the song is acoustic, and values close to 1 are high confidence the song is acoustic.
 
--   `liveness`: Measure ranging from 0 to 1 detecting the presence of live audience in the song. Values close to 1 (0.8 or higher) indicate a strong likelihood the song track was recorded in front a live audience.
+- `liveness`: Measure ranging from 0 to 1 detecting the presence of live audience in the song. Values close to 1 (0.8 or higher) indicate a strong likelihood the song track was recorded in front a live audience.
 
--   `tempo`: Measure of the average pace of a song in beats per minute (BPM).
+- `tempo`: Measure of the average pace of a song in beats per minute (BPM).
 
--   `duration_min`: Length of a song in minutes
+- `duration_min`: Length of a song in minutes
 
 ::: {.objective latex=""}
 The goal of this analysis is to explain variability in `valence` using other musical features. This model can be used for prediction, but the primary objective is explanation.
@@ -297,9 +297,8 @@ We begin by discussing model fit and performance statistics used to compare mode
 
 Recall from @sec-model-assessment that $R^2$ is the proportion of variability in the response variable that is explained by the model. This value is based on the process Analysis of Variance (ANOVA), in which the variability in the response variable is decomposed into variability that can be explained by the model and variability left unexplained in the residuals. Thus, $R^2$ is computed as
 
-$$
-R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}
-$$ {#eq-rsq}
+$$R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}$$
+ {#eq-rsq}
 
 where $SSM$ is the model sum of squares (explained variability), $SSR$ is the residual sum of squares (unexplained variability), and $SST$ is the total variability in the response variable.
 
@@ -309,9 +308,8 @@ When comparing models with different numbers of predictors, we can use a related
 
 The formula for Adjusted $R^2$ is
 
-$$
-\text{Adjusted }R^2 = 1 - \frac{SSR / (n - p - 1)}{SST / (n - 1)}
-$$ {#eq-adj-rsq}
+$$\text{Adjusted }R^2 = 1 - \frac{SSR / (n - p - 1)}{SST / (n - 1)}$$
+ {#eq-adj-rsq}
 
 where $SSR$ and $SST$ are defined as before, $n$ is the number of observations in the data, and $p$ is the number of predictors.
 
@@ -364,22 +362,21 @@ Below are guidelines for using $R^2$ and Adjusted $R^2$ in practice.
 
 $R^2$
 
--   Use to describe the proportion of variability in the response that is explained by the model.
--   Do [**not**]{.underline} use to compare models with different numbers of predictors.
+- Use to describe the proportion of variability in the response that is explained by the model.
+- Do [**not**]{.underline} use to compare models with different numbers of predictors.
 
 **Adjusted** $R^2$
 
--   Use for model selection and to compare models with different numbers of predictors.
--   Do [**not**]{.underline} use as a direct interpretation of the proportion of variability in the response that is explained by the model.
+- Use for model selection and to compare models with different numbers of predictors.
+- Do [**not**]{.underline} use as a direct interpretation of the proportion of variability in the response that is explained by the model.
 :::
 
 ### Root Mean Square Error (RMSE)
 
 Another statistic for model comparison is the Root Mean Square Error introduced in @sec-model-assessment. The **Root Mean Square Error (RMSE)** is a measure of the average error in the model predictions. From @eq-rmse, we can see it is very similar to $\hat{\sigma}$ ([@eq-mlr-sigma]). In fact, the difference between these values is negligible when the number of observations, $n$, is large.
 
-$$
-RMSE = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}} = \sqrt{\frac{SSR}{n}}
-$$ {#eq-rmse}
+$$RMSE = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}} = \sqrt{\frac{SSR}{n}}$$
+ {#eq-rmse}
 
 The RMSE is typically used over other model comparison statistics, such as Adjusted $R^2$, when the primary modeling objective is prediction.
 
@@ -417,12 +414,11 @@ Adjusted $R^2$ and RMSE are computed by quantifying the variability in the resid
 
 The **Akaike’s Information Criterion (AIC)** [@akaike1974] and **Schwarz’s Bayesian Information Criterion (BIC)** [@schwarz1978estimating] are two measures of model fit based on the likelihood. Their equations are
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 AIC &= -2\log L + 2(p+1) \\
 BIC &= -2\log L + \log(n)(p+1)
-\end{aligned}
-$$ {#eq-aic-bic}
+\end{aligned}$$
+ {#eq-aic-bic}
 
 where $\log L$ is the log-likelihood, $n$ is the number of observations, and $p+1$ is the number of terms in the model.
 
@@ -430,14 +426,14 @@ In @eq-aic-bic, the first term for both AIC and BIC is $-2 \log L$. Because the 
 
 The AIC and BIC for a single model is generally not meaningful in practice, so these values are used to compare two or more models. Small values of AIC and BIC correspond to better model fit, so we select the model that minimizes these statistics when comparing multiple models. In practice, a difference of 10 or greater in the AIC or BIC between models, is considered meaningful enough to choose one model over the other. @tbl-aic-bic-guidelines provides more specific guidelines for model comparison based on the differences in AIC and BIC.
 
-| Strength of evidence in favor of $M_2$ | $AIC_{M_1} - AIC_{M_2}$[^10-model-eval-3] |  $BIC_{M_1} - BIC_{M_2}$[^10-model-eval-4] |
-|-----------------------------|-------------------------|--------------------------|
+| Strength of evidence in favor of $M_2$ | $AIC_{M_1} - AIC_{M_2}$[^10-model-eval-3] | $BIC_{M_1} - BIC_{M_2}$[^10-model-eval-4] |
+|--------------------------|-----------------------|------------------------|
 | None | 0 - 2 | 0 - 2 |
 | Weak | 2 - 7 | 2 - 6 |
 | Strong | 7 - 10 | 6 - 10 |
 | Very strong | $>$ 10 | $>$ 10 |
 
-: Guidelines for comparing two models, $M_1$ and $M_2$, using AIC and BIC {#tbl-aic-bic-guidelines}
+: Guidelines for comparing two models, $M_1$ and $M_2$, using AIC and BIC
 
 [^10-model-eval-3]: Based on [@kass1995bayes]
 
@@ -477,13 +473,13 @@ In this example, the same model minimizes both AIC and BIC. In fact, based on th
 Below is a summary of the model comparison statistics:
 
 | Statistic | Equation | Values that indicate good fit | Prioritize when analysis objective is... |
-|----------------|--------------------|----------------|--------------------|
+|-----------------|-------------------|-----------------|-------------------|
 | Adjusted $R^2$ | $\frac{SSR/ (n - p - 1}{SST / (n - 1)}$ | Higher | Explanation |
 | RMSE | $\sqrt{\frac{SSR}{n}}$ | Lower | Prediction |
 | AIC | $-2\log L + 2(p+1)$ | Lower | Explanation |
 | BIC | $-2\log L + \log(n)(p+1)$ | Lower | Prediction |
 
-: : Model comparison statistics {#tbl-model-compare-stats}
+: : Model comparison statistics
 :::
 
 ## Stepwise model selection {#sec-stepwise-selection}
@@ -732,11 +728,11 @@ There are multiple ways to split the data into training and testing sets as show
 #|   - Time ordered
 #| layout-ncol: 2
 
-include_graphics("images/10-train-test-random.png")
+include_graphics(c("images/10-train-test-random.png", "images/10-train-test-stratified.png","images/10-train-test-time.png"))
 
-include_graphics("images/10-train-test-stratified.png")
+#include_graphics()
 
-include_graphics("images/10-train-test-time.png")
+#include_graphics()
 ```
 
 The most common way to assign observations to the training or testing set is to take a simple random sample such that $Z\%$ of the observations are in the training set and $(100 - Z)\%$ are in the testing set (@fig-train-test-1). A common split is 80% training and 20% testing; however, <!--# is there a citation for this?-->there is no magic number for the best split. The primary consideration for determining a split is the overall size of the sample data and ensuring there are enough observations in the training set to conduct inference and model evaluation. For example, if the data set is small (e.g., 100 observations), perhaps a split of 90% training and 10% testing may be preferred, so that as much data as possible is available for the model building process.
@@ -978,17 +974,17 @@ The most commonly used values for $k$, the number of folds, are 5 and 10. There 
 
 **Using a smaller value of** $k$
 
--   Use a smaller number of folds there are few observations in the training set. Only one fold is part of the assessment set used to evaluate the model performance at each iteration, so if $k$ is large, there will be very few observations in the assessment set.
+- Use a smaller number of folds there are few observations in the training set. Only one fold is part of the assessment set used to evaluate the model performance at each iteration, so if $k$ is large, there will be very few observations in the assessment set.
 
--   Small values of $k$ tend to result in more biased estimates of the model performance statistic, for example RMSE. Biased estimates are far from the true (yet unknown!) population statistic, so they can result in an unreliable view of the model performance.
+- Small values of $k$ tend to result in more biased estimates of the model performance statistic, for example RMSE. Biased estimates are far from the true (yet unknown!) population statistic, so they can result in an unreliable view of the model performance.
 
 <br>
 
 **Using a larger value of** $k$
 
--   Cross-validation can be computationally intensive. Larger $k$ means more resampling and model refitting is required, which can result in long computational times, often for little added value.
+- Cross-validation can be computationally intensive. Larger $k$ means more resampling and model refitting is required, which can result in long computational times, often for little added value.
 
--   Large values of $k$ result in more variability in the estimated model performance statistic, for example RMSE. This means at each iteration may produce very different estimates of the model performance, resulting in an unreliable evaluation of the model performance.
+- Large values of $k$ result in more variability in the estimated model performance statistic, for example RMSE. This means at each iteration may produce very different estimates of the model performance, resulting in an unreliable evaluation of the model performance.
 
 <br>
 
