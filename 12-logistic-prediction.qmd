@@ -7,12 +7,12 @@ source("_common.R")
 
 ## Learning goals {.unnumbered}
 
--   Compute predictions from the logistic regression model
--   Use model predictions to classify observations
--   Construct and interpret a confusion matrix
--   Use the ROC curve to evaluate model performance and select classification threshold
--   Evaluate model performance using AUC, AIC, and BIC
--   Implement a model building workflow for logistic regression using R
+- Compute predictions from the logistic regression model
+- Use model predictions to classify observations
+- Construct and interpret a confusion matrix
+- Use the ROC curve to evaluate model performance and select classification threshold
+- Evaluate model performance using AUC, AIC, and BIC
+- Implement a model building workflow for logistic regression using R
 
 ```{=html}
 <!--#
@@ -34,23 +34,23 @@ In @sec-ch-logistic, we introduced data from the 2024 General Social Survey in w
 
 We use the variables below in this chapter. The variable definitions are based on survey prompts and variable definitions in the *General Social Survey Documentation and Public Use File Codebook* [@gss2024].
 
--   `aidrive_comfort`: Indicator variable for respondent's comfort with driverless (self-driving) cars. `0`: Not comfortable at all; `1`: At least some comfort.
+- `aidrive_comfort`: Indicator variable for respondent's comfort with driverless (self-driving) cars. `0`: Not comfortable at all; `1`: At least some comfort.
 
-    -   This variable was derived from responses to the original survey prompt: "Comfort with driverless cars". Scores ranged from 0 to 10 with 0 representing "totally uncomfortable with this situation" and 10 representing "totally comfortable with this situation". Responses of 0 on the original survey were coded as `aidrive_comfort = 0`. All other responses coded as 1.
+  - This variable was derived from responses to the original survey prompt: "Comfort with driverless cars". Scores ranged from 0 to 10 with 0 representing "totally uncomfortable with this situation" and 10 representing "totally comfortable with this situation". Responses of 0 on the original survey were coded as `aidrive_comfort = 0`. All other responses coded as 1.
 
--   `tech_easy` : Response to the question, "Does technology make our lives easier?" Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
+- `tech_easy` : Response to the question, "Does technology make our lives easier?" Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
 
--   `age`: Respondent's age in years
+- `age`: Respondent's age in years
 
--   `income`: Response to the question "In which of these groups did your total family income, from all sources, fall last year? That is, before taxes." Categories are `Less than $20k`, `$20-50k`, `$50-110k`, `$110k or more`, `Not reported` .
+- `income`: Response to the question "In which of these groups did your total family income, from all sources, fall last year? That is, before taxes." Categories are `Less than $20k`, `$20-50k`, `$50-110k`, `$110k or more`, `Not reported` .
 
-    -   Note: These categories were defined based on the 27 categories in `income16` from the original survey.
+  - Note: These categories were defined based on the 27 categories in `income16` from the original survey.
 
--   `tech_harm`: Response to the question, "Does technology do more harm than good?". Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
+- `tech_harm`: Response to the question, "Does technology do more harm than good?". Categories are `Neutral`, `Can't choose` (Respondent doesn't know / is unable to provide an answer), `Agree`, `Disagree`.
 
--   `polviews`: Response to the question, "I'm going to show you a seven-point scale on which the political views that people might hold are arranged from extremely liberal--point 1--to extremely conservative--point 7. Where would you place yourself?" Categories are `Moderate`, `Liberal`, `Conservative`, `No reported`.
+- `polviews`: Response to the question, "I'm going to show you a seven-point scale on which the political views that people might hold are arranged from extremely liberal--point 1--to extremely conservative--point 7. Where would you place yourself?" Categories are `Moderate`, `Liberal`, `Conservative`, `No reported`.
 
-    -   Note: These categories were defined based on the original 7 point scale.
+  - Note: These categories were defined based on the original 7 point scale.
 
 <!--# do i want to put Sex back in this chapter?-->
 
@@ -214,14 +214,12 @@ aidrive_comfort_aug |>
 
 Let's show how the predicted values for the first observation are computed. The predicted log odds the first individual who is 33 years old, agrees that technology makes life better, and has an annual income of \$110k or more are
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 \log \Big(\frac{\hat{\pi}}{1-\hat{\pi}}\Big) &=  0.032 - 0.016  \times 33 + 0.075   \times 0 +  0.576 \times 1 \\ 
 &- 0.436  \times 0 +  0.264 \times 0 +  0.526  \times 0 \\
 & + 1.223  \times 1 + 0.265 \times 0 \\
 & = 1.3
-\end{aligned}
-$$
+\end{aligned}$$
 
 where $\hat{\pi}$ is the predicted probability of being comfortable with driverless cars.
 
@@ -238,19 +236,44 @@ Using the predicted log odds from @tbl-aidrive-comfort-predict, the predicted od
 
 $$\widehat{\text{odds}} = e^{\log \big( \frac{\hat{\pi}}{1-\hat{\pi}}\big)} = e^{1.306} = 3.69 $$
 
-Lastly, we use the odds from @tbl-aidrive-comfort-predict to compute the predicted probability:
+Lastly, we use the odds from @tbl-aidrive-comfort-predict to compute the predicted probability[^12-logistic-prediction-2]:
 
-$$
-\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.692}{1 + 3.692} = 0.787
-$$
+[^12-logistic-prediction-2]: These values may differ slightly from the values in the the table, because we are computing predictions using rounded coefficient.
 
-Note: These values may differ slightly from the values in the the table, because we are computing predictions using rounded coefficient.
+$$\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.692}{1 + 3.692} = 0.787$$
 
-::: {.yourturn latex=""}
-Show how to compute the predicted log odds, odds, and probability for individual #2 in @tbl-aidrive-comfort-predict.[^12-logistic-prediction-2]
+::: {.math_rules latex=""}
+The relationship between the predicted log odds and the predicted probability is more concisely represented by the **sigmoid function** (@eq-sigmoid). The sigmoid function, denoted $\sigma(z)$, is the inverse of the logit function, i.e., the log odds.
+
+$$\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}$$
+
+It produces the "S" curve often seen for the predicted probabilities from a logistic regression model. @fig-sigmoid is an illustration of the sigmoid function.
+
+```{r}
+#| label: fig-sigmoid
+#| fig-cap: Illustration of the sigmoid function based on simulated data
+
+sigmoid <- function(x) {
+  1 / (1 + exp(-x))
+}
+
+# Generate data for plotting
+x_values <- seq(-10, 10, by = 0.1)
+y_values <- sigmoid(x_values)
+data <- data.frame(x = x_values, y = y_values)
+
+# Plot the sigmoid function
+ggplot(data, aes(x = x, y = y)) +
+  geom_line(color = "blue") +
+  labs(x = expression(z), y = expression(sigma(z)))
+```
 :::
 
-[^12-logistic-prediction-2]: **Log odds:** $\log \Big(\frac{\hat{\pi}}{1-\hat{\pi}}\Big) =  0.032 - 0.016  \times 19 + 0.075   \times 0 +  0.576 \times 0
+::: {.yourturn latex=""}
+Show how to compute the predicted log odds, odds, and probability for individual #2 in @tbl-aidrive-comfort-predict.[^12-logistic-prediction-3]
+:::
+
+[^12-logistic-prediction-3]: **Log odds:** $\log \Big(\frac{\hat{\pi}}{1-\hat{\pi}}\Big) =  0.032 - 0.016  \times 19 + 0.075   \times 0 +  0.576 \times 0
     - 0.436  \times 0 +  0.264 \times 0 +  0.526  \times 0
      + 1.223  \times 1 + 0.265 \times 0 = 0.951$
 
@@ -306,24 +329,22 @@ aidrive_comfort_aug |>
 
 @tbl-confusion-matrix shows the confusion matrix for the model in @tbl-aidrive-comfort-fit and a threshold of 0.5. In this table, the rows define the predicted classes and the columns define the observed classes. Let's break down what each cell is in the table:
 
--   There are 349 observations with the predicted class of 0 and observed class of 0.
--   There are 228 observations with the predicted class of 0 and observed class of 1.
--   There are 343 observations with the predicted class of 1 and observed class of 0.
--   There are 601 observations with the predicted class of 1 and observed class of 1.
+- There are 349 observations with the predicted class of 0 and observed class of 0.
+- There are 228 observations with the predicted class of 0 and observed class of 1.
+- There are 343 observations with the predicted class of 1 and observed class of 0.
+- There are 601 observations with the predicted class of 1 and observed class of 1.
 
 We compute various statistics from the confusion matrix to evaluate how well the observations are classified. The first statistics we can calculate are the accuracy and misclassification rate. The **accuracy** is the proportion <!--# or percentage?--> of observations that are correctly classified (the observed and predicted classes are the same). The accuracy based on @tbl-confusion-matrix is
 
-$$
-\text{accuracy} = \frac{349 + 601}{349 + 228 + 343 + 601} = 0.625 
-$$ {#eq-logistic-accuracy}
+$$\text{accuracy} = \frac{349 + 601}{349 + 228 + 343 + 601} = 0.625 $$
+ {#eq-logistic-accuracy}
 
 Using the model in @tbl-aidrive-comfort-fit and the threshold of 0.5, 62.5% of the observations are correctly classified.
 
 The **misclassification rate** is the proportion of observations that are not correctly classified (the observed and predicted classes differ). The misclassification rate based on @tbl-confusion-matrix is
 
-$$
-\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375
-$$ {#eq-logistic-misclassification}
+$$\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375$$
+ {#eq-logistic-misclassification}
 
 Using the model in @tbl-aidrive-comfort-fit and the threshold of 0.5, 37.5% of the observations are incorrectly classified. Note that the misclassification rate is equal to $1 - \text{accuracy}$ ,and vice versa.
 
@@ -355,46 +376,42 @@ The accuracy and misclassification rate provide a nice initial indication of the
 | **Classified** **not comfortable**$(\hat{y}_i = 0)$ | True negative (TN) | False negative (FN) |
 | **Classified comfortable**$(\hat{y}_i = 1)$ | False positive (FP) | True positive (TP) |
 
-: Detailed confusion matrix {#tbl-confusion-matrix-detailed}
+: Detailed confusion matrix
 
 <!--# check the notation used in this table, y_i and p_i-->
 
 @tbl-confusion-matrix-detailed shows in greater detail what is being quantified in each cell of the confusion matrix. We will use these values to compute more granular values about the classification. As in @tbl-confusion-matrix, the rows define the predicted classes and the columns define the observed classes. The values in the cell indicate the following:
 
--   **True negative (TN):** The number of observations that are predicted to be not comfortable with driverless cars ( $\hat{y}_i = 0$) and have observed response of not comfortable ($y_i = 0$) .
+- **True negative (TN):** The number of observations that are predicted to be not comfortable with driverless cars ( $\hat{y}_i = 0$) and have observed response of not comfortable ($y_i = 0$) .
 
--   **False negative (FN):** The number of observations that are predicted to be not comfortable with driverless cars ( $\hat{y}_i = 0$) and have observed response of comfortable ( $y_i = 1$) .
+- **False negative (FN):** The number of observations that are predicted to be not comfortable with driverless cars ( $\hat{y}_i = 0$) and have observed response of comfortable ( $y_i = 1$) .
 
--   **False positive (FP):** The number of observations that are predicted to be comfortable with driverless cars ( $\hat{y}_i = 1$) and have observed response of not comfortable ( $y_i = 0$) .
+- **False positive (FP):** The number of observations that are predicted to be comfortable with driverless cars ( $\hat{y}_i = 1$) and have observed response of not comfortable ( $y_i = 0$) .
 
--   **True positive (TP):** The number of observations that are predicted to be comfortable with driverless cars ( $\hat{y}_i = 1$) and have observed response of comfortable ( $y_i = 1$) .
+- **True positive (TP):** The number of observations that are predicted to be comfortable with driverless cars ( $\hat{y}_i = 1$) and have observed response of comfortable ( $y_i = 1$) .
 
 Using these definitions, the general form of accuracy computed in @eq-logistic-accuracy is
 
-$$
-\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}
-$$ {#eq-accuracy-general}
+$$\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}$$
+ {#eq-accuracy-general}
 
 ::: {.yourturn latex=""}
-Write the general equation for the misclassification computed in @eq-logistic-misclassification using the terms in @tbl-confusion-matrix-detailed.[^12-logistic-prediction-3]
+Write the general equation for the misclassification computed in @eq-logistic-misclassification using the terms in @tbl-confusion-matrix-detailed.[^12-logistic-prediction-4]
 :::
 
-[^12-logistic-prediction-3]: $$\text{misclassification} = \frac{\text{False negative} + \text{False positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}
-    $$
+[^12-logistic-prediction-4]: $$\text{misclassification} = \frac{\text{False negative} + \text{False positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}$$
 
 Now let's take a look at additional statistics that help us quantify how well the observations are classified. First, we'll focus on the column containing those who have observed values $y_i = 1$.
 
 The **sensitivity** (**true positive rate**) is the proportion of those with observed $y_i = 1$ that were correctly classified as $\hat{y}_i = 1$. In machine learning contexts, this value is also called **recall** or **probability of detection**.
 
-$$
-\text{Sensitivity} = \frac{\text{True positive}}{\text{False negative} + \text{True positive}}
-$$ {#eq-sensitivity}
+$$\text{Sensitivity} = \frac{\text{True positive}}{\text{False negative} + \text{True positive}}$$
+ {#eq-sensitivity}
 
 The **false negative rate** is the proportion of those with observed $y_i = 1$ that were incorrectly classified as $\hat{y}_i = 0$.
 
-$$
-\text{False negative rate} = \frac{\text{False negative}}{\text{False negative} + \text{True positive}}
-$$ {#eq-false-negative}
+$$\text{False negative rate} = \frac{\text{False negative}}{\text{False negative} + \text{True positive}}$$
+ {#eq-false-negative}
 
 The false negative rate is equal to $1 - \text{Sensitivity}$ and vice versa. The denominators for the false negative rate and the sensitivity are the total number of observations with observed response $y_i = 1$. In terms of our analysis, this is the total number of people who responded they are comfortable with driverless cars in the General Social Survey.
 
@@ -402,37 +419,34 @@ Next, we look at the column of containing those who have observed values of $y_i
 
 The **specificity** (**true negative rate**) is the proportion of those with observed $y_i = 0$ who were correctly classified as $\hat{y}_i = 0$.
 
-$$
-\text{Specificity} = \frac{\text{True negative}}{\text{True negative} + \text{False positive}}
-$$ {#eq-specificity}
+$$\text{Specificity} = \frac{\text{True negative}}{\text{True negative} + \text{False positive}}$$
+ {#eq-specificity}
 
 The **false positive rate** is the proportion of those with observed $y_i = 0$ who were incorrectly classified as $\hat{y}_i = 1$. In machine learning contexts, this value is also called the **probability of false alarm.**
 
-$$
-\text{False positive rate} = \frac{\text{False positive}}{\text{True negative} + \text{False positive}}
-$$ {#eq-false-positive}
+$$\text{False positive rate} = \frac{\text{False positive}}{\text{True negative} + \text{False positive}}$$
+ {#eq-false-positive}
 
 The false positive rate is equal to $1 - \text{specificity}$. The denominators for the specificity and false positive rate are the total number of observations with observed response $y_i = 0$. In terms of our analysis, this is the total number of people who responded they are not comfortable with driverless cars in the General Social Survey.
 
 The values shown thus far quantify how well observations are classified based on the observed response. Another question that is often of interest is among those with predicted class of $\hat{y}_i = 1$, how many actually have observed values of $y_i = 1$? This value is called the **precision.**
 
-$$
-\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}}
-$$ {#eq-precision}
+$$\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}}$$
+ {#eq-precision}
 
 Now the denominator is the number of observations that have a predicted class $\hat{y}_i = 1$, the second row in the @tbl-confusion-matrix-detailed. In the context of our analysis, the precision is how many of the individuals who are predicted to be comfortable with driverless cars actually responded on the General Social Survey that they are comfortable with driverless cars. If we're using the model to identify individuals for a targeted marketing campaign, the precision can be useful in quantifying whether the marketing will generally capture those who are actually comfortable with driverless cars or if a large proportion would be aimed at those who actually aren't comfortable with driverless cars and likely won't become robotaxi customers.
 
 ::: {.yourturn latex=""}
 Use @tbl-confusion-matrix to compute the following:
 
--   Sensitivity
+- Sensitivity
 
--   Specificity
+- Specificity
 
--   Precision[^12-logistic-prediction-4]
+- Precision[^12-logistic-prediction-5]
 :::
 
-[^12-logistic-prediction-4]: $$\begin{aligned}\text{Sensitivity} &= 601/ (228 + 601) = 0.725 \\ \text{Specificity} &= 349 / (349 + 343) = 0.504 \\\text{Precision} &= 601 / (343 + 601) = 0.637\end{aligned}$$
+[^12-logistic-prediction-5]: $$\begin{aligned}\text{Sensitivity} &= 601/ (228 + 601) = 0.725 \\ \text{Specificity} &= 349 / (349 + 343) = 0.504 \\\text{Precision} &= 601 / (343 + 601) = 0.637\end{aligned}$$
 
 We have shown how we can derive a lot of useful information from the confusion matrix. As we use the confusion matrix to evaluate how well observations are classified; however, we need to keep in mind that the confusion matrix is determined based on the model predictions [**and**]{.underline} the threshold for classification. For example, in @tbl-confusion-matrix-0.3, we see a confusion matrix for the same model in @aidrive-comfort-fit using the threshold of 0.3.
 
@@ -453,7 +467,7 @@ Due to the low threshold, there are many more observations classified as $\hat{y
 
 ## ROC Curve {#sec-roc}
 
-Ideally, we want a way to evaluate the the model performance regardless of threshold and then choose a threshold that results in the "best" classification as determined by the statistics from the previous section. We could make confusion matrices across a range of thresholds, but this process could be cumbersome and time consuming to make so many confusion matrices. Rather than make individual confusion matrices, we will use the **receiving operator characteristic (ROC) curve** shown in @fig-aidrive-comfort-roc-curve. The ROC curve is a single visualization to holistically evaluate the model fit and see how well the model classifies at different thresholds. We can use the data from the ROC curve to choose a classification threshold. <!--# add something about origin of ROC curve or where it gets its name-->
+Ideally, we want a way to evaluate the the model performance regardless of threshold and then choose a threshold that results in the "best" classification as determined by the statistics from the previous section. We could make confusion matrices across a range of thresholds, but this process could be cumbersome and time consuming to make so many confusion matrices. Rather than make individual confusion matrices, we will use the **receiving operator characteristic (ROC) curve** shown in @fig-aidrive-comfort-roc-curve. The ROC curve is a single visualization to holistically evaluate the model fit and see how well the model classifies at different thresholds. We can use the data from the ROC curve to choose a classification threshold. <!--#add something about origin of ROC curve or where it gets its name. Maybe leave this out? it's a bit of an aside and I can't find a good original source for the name. -->
 
 ```{r}
 #| label: fig-aidrive-comfort-roc-curve
@@ -583,9 +597,7 @@ roc_optimize <- aidrive_comfort_aug |>
 
 In the next section, we will talk more about using the ROC curve to evaluate the model fit beyond a visual assessment. For now, let's discuss how to use the ROC curve to determine a probability threshold for classification. When we use a model for classification, we want a high true positive rate and a low false positive rate. Therefore, one of the most straightforward ways of using the ROC curve to identify a classification threshold is to choose the threshold that corresponds to the point on the curve that is closest to the top-left corner. <!--# This will be the point that has the best ratio of true positive rate to false positive rate. not sure if that is true--> <!--# does this relate to that F1 metric from machine learning?-->. There are many ways to identify this point mathematically. For example, we can find the combination of $\text{Sensitivity}$ and $1 - \text{Specificity}$ that minimizes the following:
 
-$$
-\sqrt{(1 - \text{Specificity})^2 + (\text{Sensitivity} - 1)^2}
-$$
+$$\sqrt{(1 - \text{Specificity})^2 + (\text{Sensitivity} - 1)^2}$$
 
 <!--# verify this equation is correct.-->
 
@@ -594,20 +606,20 @@ In terms of the ROC curve in @fig-aidrive-roc, this point is at a false positive
 While this may be a reasonable approach for identifying a threshold in many contexts, we often need to consider the practical implications when making analysis decisions in practice. For example, suppose we build a logistic regression model to diagnosis a medical illness. A classification of "1" means the patient has the illness and undergoes a treatment plan. A classification of "0" means the patient does not have the illness and does not undergo a treatment plan.
 
 ::: {.yourturn latex=""}
-What is a "true positive" in this scenario? What is a "false positive"?[^12-logistic-prediction-5]
+What is a "true positive" in this scenario? What is a "false positive"?[^12-logistic-prediction-6]
 :::
 
-[^12-logistic-prediction-5]: A true positive is correctly classifying a patient with the illness as a "1", having the illness. A "false positive" is incorrectly classifying a patient that doesn't have the illness as a "1", having the illness.
+[^12-logistic-prediction-6]: A true positive is correctly classifying a patient with the illness as a "1", having the illness. A "false positive" is incorrectly classifying a patient that doesn't have the illness as a "1", having the illness.
 
 When determining the probability threshold for classification, we need to think carefully about the implications of the analysis decision. More specifically, one thing we need to consider is the severity of the treatment the patient will undergo. If the treatment is minimal, then perhaps we might be willing to set a threshold that results in more false positives. If the treatment is very invasive, however, we want to minimize false positives. Otherwise, there will be many patients who do not need the treatment who will undergo an invasive treatment. Similarly, we want to consider the implications of lower sensitivity and not diagnosing individuals who actually have the illness.
 
 ::: yourturn
--   If the main objective is high sensitivity, do we set a probability threshold closer to 0 or to 1?
+- If the main objective is high sensitivity, do we set a probability threshold closer to 0 or to 1?
 
--   If the main objective is high specificity, do we set a probability threshold closer to 0 or to 1?[^12-logistic-prediction-6]
+- If the main objective is high specificity, do we set a probability threshold closer to 0 or to 1?[^12-logistic-prediction-7]
 :::
 
-[^12-logistic-prediction-6]: If the main objective is high sensitivity, we set a low threshold close to 0. If the main objective is high specificity, we set a high threshold close to 1.
+[^12-logistic-prediction-7]: If the main objective is high sensitivity, we set a low threshold close to 0. If the main objective is high specificity, we set a high threshold close to 1.
 
 ## Model evaluation and comparison {#sec-logistic-model-eval}
 
@@ -694,12 +706,10 @@ Though we prefer models with high values of AUC (close to 1), we do not want a m
 
 Similar to linear regression, we can use the Akaike's Information Criterion (AIC) [@akaike1974] and the Bayesian Schwarz's Criterion (BIC) [@schwarz1978estimating] as relative measures for comparing logistic regression models. The equations for AIC and BIC in logistic regression are the same as these in linear regression @sec-aic-bic.
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 &\text{AIC} = -2 \log L + 2(p+1) \\[5pt]
 &\text{BIC} = -2 \log L + \log(n)(p+1)
-\end{aligned}
-$$
+\end{aligned}$$
 
 where $\log L$ is the log-likelihood of the model, $n$ is the number of observations, and $p + 1$ is the number of terms in the model. The penalty applied by BIC for the number of predictors in the model is greater than the penalty applied in AIC, as $\log(n) > 2$ (when $n > 8$). Therefore, BIC will tend to preference more parsimonious models, those with a fewer number of predictors. The values of AIC and BIC are not meaningful to interpret for individual models. These values are most useful for comparing models in the model selection process. When using AIC and BIC to compare models, we can use the guidelines in @tbl-aic-bic-guidelines, the same as with linear regression.
 

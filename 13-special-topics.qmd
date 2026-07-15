@@ -922,8 +922,8 @@ lemurs_fit <- lmer(weight ~ taxon + sex + litter_size + age +
                      (1|dlc_id), 
                    data = lemurs)
 
-tidy(lemurs_fit) |>
-  kable(digits = 3)
+broom.mixed::tidy(lemurs_fit) |>
+  kable(digits = 3, format.args = list(nsmall = 3))
 ```
 
 The equation of the fitted model is

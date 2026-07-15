@@ -1350,7 +1350,7 @@ Figure&nbsp;12.5: Examle ROC curves with corresponding AUC
 &amp;\text{BIC} = -2 \log L + \log(n)(p+1)
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(\log L\)</span> is the log-likelihood of the model, <span class="math inline">\(n\)</span> is the number of observations, and <span class="math inline">\(p + 1\)</span> is the number of terms in the model. The penalty applied by BIC for the number of predictors in the model is greater than the penalty applied in AIC, as <span class="math inline">\(\log(n) &gt; 2\)</span> (when <span class="math inline">\(n &gt; 8\)</span>). Therefore, BIC will tend to preference more parsimonious models, those with a fewer number of predictors. The values of AIC and BIC are not meaningful to interpret for individual models. These values are most useful for comparing models in the model selection process. When using AIC and BIC to compare models, we can use the guidelines in <a href="10-model-eval.html#tbl-aic-bic-guidelines" class="quarto-xref">Table&nbsp;<span>10.3</span></a>, the same as with linear regression.</p>
+<p>where <span class="math inline">\(\log L\)</span> is the log-likelihood of the model, <span class="math inline">\(n\)</span> is the number of observations, and <span class="math inline">\(p + 1\)</span> is the number of terms in the model. The penalty applied by BIC for the number of predictors in the model is greater than the penalty applied in AIC, as <span class="math inline">\(\log(n) &gt; 2\)</span> (when <span class="math inline">\(n &gt; 8\)</span>). Therefore, BIC will tend to preference more parsimonious models, those with a fewer number of predictors. The values of AIC and BIC are not meaningful to interpret for individual models. These values are most useful for comparing models in the model selection process. When using AIC and BIC to compare models, we can use the guidelines in <span class="quarto-unresolved-ref">?tbl-aic-bic-guidelines</span>, the same as with linear regression.</p>
 <p>Let’s use AIC and BIC to compare the model from <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> to a model that includes the same predictors along with <code>polviews</code> (how individuals rate their political views) and <code>tech_harm</code> (whether an individual thinks technology generally does more harm than good).</p>
 <div class="cell">
 <div id="tbl-aic-bic-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -1469,12 +1469,12 @@ Prediction   0   1
 <pre><code># A tibble: 10 × 3
   .threshold specificity sensitivity
        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-1      0.367      0.188        0.935
-2      0.283      0.0679       0.984
-3      0.432      0.308        0.852
-4      0.525      0.571        0.665
-5      0.430      0.305        0.856
-6      0.319      0.121        0.972
+1      0.364      0.181        0.936
+2      0.280      0.0636       0.984
+3      0.426      0.295        0.862
+4      0.513      0.545        0.688
+5      0.424      0.290        0.866
+6      0.311      0.117        0.973
 # ℹ 4 more rows</code></pre>
 </div>
 </div>
@@ -1564,7 +1564,7 @@ Prediction   0   1
 <pre><code># A tibble: 1 × 6
   .metric .estimator  mean     n std_err .config        
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
-1 roc_auc binary     0.649     5 0.00737 pre0_mod0_post0</code></pre>
+1 roc_auc binary     0.649     5 0.00736 pre0_mod0_post0</code></pre>
 </div>
 </div>
 <p><strong>Model 2</strong></p>
@@ -1574,7 +1574,7 @@ Prediction   0   1
 <pre><code># A tibble: 1 × 6
   .metric .estimator  mean     n std_err .config        
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
-1 roc_auc binary     0.674     5 0.00895 pre0_mod0_post0</code></pre>
+1 roc_auc binary     0.674     5 0.00896 pre0_mod0_post0</code></pre>
 </div>
 </div>
 <p>The average AUC is 0.649 for Model 1 and 0.674 for Model 2. Therefore, we select Model 2 that includes the additional predictors <code>tech_harm</code> and <code>polviews_fct</code>, because it has the higher average AUC across the five folds. This is consistent with the conclusion from AIC and BIC in <a href="#sec-logistic-aic-bic" class="quarto-xref"><span>Section 12.5.2</span></a>. In practice, we will likely consider more than two models, for example, we might consider models with interaction terms or transformations. We will conduct cross validation and compare average AUC for each candidate model. For simplicity, we will only compare two models here and proceed with Model 2 as the final model.</p>
