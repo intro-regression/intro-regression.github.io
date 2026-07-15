@@ -327,7 +327,7 @@ ggmice(recipes_sub_mice, aes(x = reviews, y = avg_rating)) +
 
 ### Further reading {#sec-missing-data-further-reading}
 
-This section provided a short introduction to working with missing data, but there is a large body of research and strategies for dealing with such data in an analysis. For more a more detailed introduction to working with missing data and the analysis implications of missingness, see @little2019statistical and chapter 25 of @gelman2007data.
+This section provided a short introduction to working with missing data, but there is a large body of research and strategies for dealing with such data in an analysis. For more a more detailed introduction to working with missing data and the analysis implications of missingness, see *Statistical Analysis with Missing Data* [@little2019statistical] and Chapter 25 of *Data Analysis Using Regression and Multilevel/Hierarchical Models* [@gelman2007data].
 
 ## Multinomial logistic regression {#sec-multinomial}
 
@@ -763,7 +763,9 @@ voters |>
   ) 
 ```
 
-### Generalized linear models
+### Further reading
+
+Multinomial logistic regression is part of a larger class of models called *generalized linear models*. Linear regression and logistic regression are also examples of generalized linear models. These models have been widely studied; in fact, many statistics programs have a full course dedicated to generalized linear models. For readers interested in a more in-depth introduction to multinomial logistic regression and generalized linear models, see *Data Analysis Using Regression and Multilevel/Hierarchical Models* [@gelman2007data] and *Beyond Multiple Linear Regression* [@roback2021beyond]. We refer readers interested in an introduction to the underlying theory alongside application to *An Introduction to Generalized Linear Models* [@dobson2018introduction].
 
 ## Random intercepts model {#sec-random-intercepts}
 
