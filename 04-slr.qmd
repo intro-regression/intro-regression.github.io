@@ -320,8 +320,7 @@ where $n$ is the number of observations in the data. The line that "best" fits t
 ::: {.math_rules latex=""}
 An alternative to minimizing the sum of square residuals (\@eq-sum-sq-resid) is to minimize the sum of the absolute value of residuals
 
-$$\sum_{i=1}^n |e_i|  = |e_1| + |e_2| + \dots + |e_n| $$
- {#eq-sum-abs-value-resid}
+$$\sum_{i=1}^n |e_i|  = |e_1| + |e_2| + \dots + |e_n| $$ {#eq-sum-abs-value-resid}
 
 Estimating the regression coefficients using @eq-sum-abs-value-resid is called **least absolute deviations regression.**
 
