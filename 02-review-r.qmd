@@ -27,7 +27,7 @@ library(palmerpenguins)
 
 ## Data: Palmer penguins {#sec-penguins-intro}
 
-In this chapter, explore data about penguins collected at the Palmer Station in Antarctica. The data were collected 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program. The data are in the `penguins` data frame in the **palmerpenguins** R package [@palmerpenguins].
+In this chapter, explore data about penguins collected at the Palmer Station in Antarctica. The data were collected 2007 - 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program. The data are in the `penguins` data frame in the **palmerpenguins** R package [@palmerpenguins]. A **data frame** is a table structured into rows and columns. Typically, the rows represent the observations and the columns represent the variables (the characteristics about each observation).
 
 We will use the following variables:
 
@@ -43,7 +43,7 @@ We will use the following variables:
 
 - `year` : Study year (2007, 2008, 2009)
 
-See the [@palmerpenguins] for the full code book.
+See the [@palmerpenguins] for the full codebook.
 
 ## Installation
 
@@ -132,7 +132,7 @@ Let's use the criteria above to evaluate whether this is a tidy data frame.
 1.  *Each variable forms a column.*
     - Yes, the variables are stored in individual columns. There are no instances of multiple variables stored in a single column or a single variable stored across multiple columns.
 2.  *Each observation forms a row.*
-    - Yes, the information for one penguin (observation) is across a single row. There are no instances of multiple penguins represented on a single row or a single penguin represented across multiple rows.
+    - Yes, the observations in this data set are individual penguins. The information for one penguin is across a single row. There are no instances of multiple penguins represented on a single row or a single penguin represented across multiple rows.
 3.  *Each type of observational unit forms a table.*
     - Yes, the observational unit is the set of penguins included in the study. The data from these penguins makes up the data frame.
 
@@ -140,7 +140,7 @@ Let's use the criteria above to evaluate whether this is a tidy data frame.
 
 All the data sets used in the book are tidy, so we can focus on regression analysis concepts and methods. In practice, we may need to "tidy" data before doing any analysis. @wickham2014tidy has recommendations for handling different issues that make data untidy.
 
-The data sets in the tidyverse are stored as tibbles. **Tibbles** are like data frames in R with some differences in the underlying features. As @wickham2023r puts it, a tibble is a data frame that modifies "some older behaviours to make life a little easier". One nice feature of tibbles is that they show summary information about the data set overall and for each variable. For example, in @tbl-penguins we see there are `r nrow(penguins)` rows (observations) and `r ncol(penguins)` columns (variables). We also see the type for each column, e.g. `species` is stored as a `<fct>` (factor). We talk more about data types in @sec-initial-check.
+The data sets in the tidyverse are stored as tibbles. **Tibbles** are like data frames in R with some differences in the underlying features. As @wickham2017r puts it, a tibble is a data frame that modifies "some older behaviours to make life a little easier". One nice feature of tibbles is that they show summary information about the data set overall and for each variable. For example, in @tbl-penguins we see there are `r nrow(penguins)` rows (observations) and `r ncol(penguins)` columns (variables). We also see the type for each column, e.g. `species` is stored as a `<fct>` (factor). We talk more about data types in @sec-initial-check.
 
 ### **The pipe**
 
@@ -325,8 +325,8 @@ set.seed(123)
 penguins |>
   mutate(sex = if_else(is.na(sex), "Missing", sex)) |>
   sample_n(10) |>
-  select(sex)
-
+  select(sex) |>
+  print(n = 10)
 ```
 
 The code above uses `is.na()`, a logical function that returns `TRUE` if the value is missing and `FALSE` otherwise.
@@ -446,7 +446,7 @@ The first part of the code establishes the base layer by specifying the tibble t
 ggplot(data = penguins)
 ```
 
-The next part of the code is used to set the **aes**thetics that indicate how the variables are mapped onto features of the plot. It is defined in the `mapping =` argument inside the `aes()` function. Often times, we do not see the argument name `mapping =` in the code, but it is the second argument of `ggplot()`.
+The next part of the code is used to set the **aes**thetics that indicate how the variables are mapped onto features of the plot. They are defined in in the `aes()` function as part of the code `mapping = aes()`. Often, we do not see the argument name `mapping =` in the code, but it is the second argument of `ggplot()`.
 
 Let's map the aesthetics such `bill_length_mm` is on the x-axis and `flipper_length_mm` is on the y-axis.
 
@@ -536,11 +536,9 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm)) +
 
 #### Aesthetics
 
-There are a variety of aesthetics, visual features, that can be customized in **ggplot2**. Some commonly used aesthetics include `color`, `shape`, `size`, `alpha` (transparency), `fill`, and `linetype`. The same aesthetics can be applied across the entire plot, or aesthetics can be applied based on values of a variable.
+There are a variety of aesthetics, visual features, that can be customized in **ggplot2**. Some commonly used aesthetics include `color`, `shape`, `size`, `alpha` (transparency), `fill` (shade in area) and `linetype`. The same aesthetics can be applied across the entire plot, or aesthetics can be applied based on values of a variable.
 
-We often apply the same aesthetic across an entire plot to make it more visually appealing or easier to read. This type of aesthetic change does not add any additional information to the visualization.
-
-For example, the code below changes the color of all points on the plot by adding the `color =` argument in `geom_point()`. The colors can be defined based on a list of over 600 colors[^02-review-r-8] or HTML hex color codes.
+We often apply the same aesthetic across an entire plot to make it more visually appealing or easier to read. This type of aesthetic change does not add any additional information to the visualization. For example, the code below changes the color of all points on the plot by adding the `color =` argument in `geom_point()`. The colors can be defined based on a list of over 600 colors[^02-review-r-8] or HTML hex color codes.
 
 [^02-review-r-8]: Type `colors()` in R to see the full list of built-in colors.
 

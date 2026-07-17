@@ -407,7 +407,7 @@ div.csl-indent {
 <li>Create reproducible documents using Quarto</li>
 </ul></section><section id="sec-penguins-intro" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="sec-penguins-intro">
 <span class="header-section-number">2.1</span> Data: Palmer penguins</h2>
-<p>In this chapter, explore data about penguins collected at the Palmer Station in Antarctica. The data were collected 2007 - 2009 by Dr.&nbsp;Kristen Gorman with the Palmer Station Long Term Ecological Research Program. The data are in the <code>penguins</code> data frame in the <strong>palmerpenguins</strong> R package <span class="citation" data-cites="palmerpenguins">(<a href="references.html#ref-palmerpenguins" role="doc-biblioref">Horst, Hill, and Gorman 2020</a>)</span>.</p>
+<p>In this chapter, explore data about penguins collected at the Palmer Station in Antarctica. The data were collected 2007 - 2009 by Dr.&nbsp;Kristen Gorman with the Palmer Station Long Term Ecological Research Program. The data are in the <code>penguins</code> data frame in the <strong>palmerpenguins</strong> R package <span class="citation" data-cites="palmerpenguins">(<a href="references.html#ref-palmerpenguins" role="doc-biblioref">Horst, Hill, and Gorman 2020</a>)</span>. A <strong>data frame</strong> is a table structured into rows and columns. Typically, the rows represent the observations and the columns represent the variables (the characteristics about each observation).</p>
 <p>We will use the following variables:</p>
 <ul>
 <li><p><code>species</code>: Penguins species (Adelie, Chinstrap, Gentoo)</p></li>
@@ -417,12 +417,12 @@ div.csl-indent {
 <li><p><code>sex</code> : Penguins sex (female, male)</p></li>
 <li><p><code>year</code> : Study year (2007, 2008, 2009)</p></li>
 </ul>
-<p>See the <span class="citation" data-cites="palmerpenguins">(<a href="references.html#ref-palmerpenguins" role="doc-biblioref">Horst, Hill, and Gorman 2020</a>)</span> for the full code book.</p>
+<p>See the <span class="citation" data-cites="palmerpenguins">(<a href="references.html#ref-palmerpenguins" role="doc-biblioref">Horst, Hill, and Gorman 2020</a>)</span> for the full codebook.</p>
 </section><section id="installation" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="installation">
 <span class="header-section-number">2.2</span> Installation</h2>
 <section id="installing-r-and-rstudio" class="level3" data-number="2.2.1"><h3 data-number="2.2.1" class="anchored" data-anchor-id="installing-r-and-rstudio">
 <span class="header-section-number">2.2.1</span> Installing R and RStudio</h3>
-<p>We will use the statistical analysis software R. Go to <a href="https://cran.rstudio.com/">https://cran.rstudio.com</a> to download and install R. R version 4.5.0 was used for the computing in this book. We use R through an integrated user environment (IDE). The IDE is a user-friendly interface with additional features that make it easier to use the underlying software. <span class="citation" data-cites="moderndive">Ismay and Kim (<a href="references.html#ref-moderndive" role="doc-biblioref">2019</a>)</span> describes it this way, “R is like a car’s engine while [the IDE] is like a car’s dashboard.” <!--# do i need a page number?--></p>
+<p>We will use the statistical analysis software R. Go to <a href="https://cran.rstudio.com/">https://cran.rstudio.com</a> to download and install R. R version 4.5.0 was used for the computing in this book. We use R through an integrated user environment (IDE). The IDE is a user-friendly interface with additional features that make it easier to use the underlying software. <span class="citation" data-cites="moderndive">Ismay, Kim, and Valdivia (<a href="references.html#ref-moderndive" role="doc-biblioref">2025</a>)</span> describes it this way, “R is like a car’s engine while [the IDE] is like a car’s dashboard.” <!--# do i need a page number?--></p>
 <p>There are two widely used IDEs for R offered by the open-source data science company Posit: RStudio and Positron. At this point, RStudio is the most commonly used environment for R <span class="citation" data-cites="posit-downloads">(<a href="references.html#ref-posit-downloads" role="doc-biblioref">Posit Software, PBC 2025</a>)</span> and is widely used by R programmers in classes, academic research, and industry. Go to <a href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop</a> to download RStudio on a laptop or desktop computer. A cloud-based version is also available on Posit Cloud (<a href="https://posit.cloud/" class="uri">https://posit.cloud/</a>). Positron is a new IDE designed specifically for a data science workflow. It has more advanced data exploration and AI-assistance capabilities compared to RStudio. Go to <a href="https://positron.posit.co/">https://positron.posit.co</a> to download Positron<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>Overall, the content in this chapter is the same when using RStudio and Positron, with the exception of a minor difference mentioned in <a href="#sec-quarto" class="quarto-xref"><span>Section 2.7</span></a>.</p>
 </section><section id="installing-r-packages" class="level3" data-number="2.2.2"><h3 data-number="2.2.2" class="anchored" data-anchor-id="installing-r-packages">
@@ -447,11 +447,11 @@ div.csl-indent {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.6.0
-✔ ggplot2   4.0.1     ✔ tibble    3.3.0
-✔ lubridate 1.9.4     ✔ tidyr     1.3.2
-✔ purrr     1.2.0     
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
@@ -506,7 +506,7 @@ Table&nbsp;2.1: First 10 rows of <code>penguins</code> data
 <li>
 <em>Each observation forms a row.</em>
 <ul>
-<li>Yes, the information for one penguin (observation) is across a single row. There are no instances of multiple penguins represented on a single row or a single penguin represented across multiple rows.</li>
+<li>Yes, the observations in this data set are individual penguins. The information for one penguin is across a single row. There are no instances of multiple penguins represented on a single row or a single penguin represented across multiple rows.</li>
 </ul>
 </li>
 <li>
@@ -518,7 +518,7 @@ Table&nbsp;2.1: First 10 rows of <code>penguins</code> data
 </ol>
 <p><strong>All the criteria are met, so <code>penguins</code> is a tidy data frame.</strong></p>
 <p>All the data sets used in the book are tidy, so we can focus on regression analysis concepts and methods. In practice, we may need to “tidy” data before doing any analysis. <span class="citation" data-cites="wickham2014tidy">Wickham (<a href="references.html#ref-wickham2014tidy" role="doc-biblioref">2014</a>)</span> has recommendations for handling different issues that make data untidy.</p>
-<p>The data sets in the tidyverse are stored as tibbles. <strong>Tibbles</strong> are like data frames in R with some differences in the underlying features. As <span class="citation" data-cites="wickham2023r">Wickham, Çetinkaya-Rundel, and Grolemund (<a href="references.html#ref-wickham2023r" role="doc-biblioref">2023</a>)</span> puts it, a tibble is a data frame that modifies “some older behaviours to make life a little easier”. One nice feature of tibbles is that they show summary information about the data set overall and for each variable. For example, in <a href="#tbl-penguins" class="quarto-xref">Table&nbsp;<span>2.1</span></a> we see there are 344 rows (observations) and 8 columns (variables). We also see the type for each column, e.g.&nbsp;<code>species</code> is stored as a <code>&lt;fct&gt;</code> (factor). We talk more about data types in <a href="03-eda.html#sec-initial-check" class="quarto-xref"><span>Section 3.3</span></a>.</p>
+<p>The data sets in the tidyverse are stored as tibbles. <strong>Tibbles</strong> are like data frames in R with some differences in the underlying features. As <span class="citation" data-cites="wickham2017r">Wickham and Grolemund (<a href="references.html#ref-wickham2017r" role="doc-biblioref">2017</a>)</span> puts it, a tibble is a data frame that modifies “some older behaviours to make life a little easier”. One nice feature of tibbles is that they show summary information about the data set overall and for each variable. For example, in <a href="#tbl-penguins" class="quarto-xref">Table&nbsp;<span>2.1</span></a> we see there are 344 rows (observations) and 8 columns (variables). We also see the type for each column, e.g.&nbsp;<code>species</code> is stored as a <code>&lt;fct&gt;</code> (factor). We talk more about data types in <a href="03-eda.html#sec-initial-check" class="quarto-xref"><span>Section 3.3</span></a>.</p>
 </section><section id="the-pipe" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="the-pipe">
 <span class="header-section-number">2.3.2</span> <strong>The pipe</strong>
 </h3>
@@ -758,15 +758,18 @@ Table&nbsp;2.1: First 10 rows of <code>penguins</code> data
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 1
-  sex    
-  &lt;chr&gt;  
-1 Missing
-2 male   
-3 female 
-4 male   
-5 male   
-6 female 
-# ℹ 4 more rows</code></pre>
+   sex    
+   &lt;chr&gt;  
+ 1 Missing
+ 2 male   
+ 3 female 
+ 4 male   
+ 5 male   
+ 6 female 
+ 7 female 
+ 8 male   
+ 9 male   
+10 female </code></pre>
 </div>
 </div>
 <p>The code above uses <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code>, a logical function that returns <code>TRUE</code> if the value is missing and <code>FALSE</code> otherwise.</p>
@@ -1285,7 +1288,7 @@ Garnier, Simon, Ross, Noam, Rudis, Robert, Camargo, et al. 2024. <em><span class
 Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <span>“Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data.”</span> <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
 </div>
 <div id="ref-moderndive" class="csl-entry" role="listitem">
-Ismay, Chester, and Albert Y Kim. 2019. <em>Statistical Inference via Data Science: A Moderndive into r and the Tidyverse</em>.
+Ismay, Chester, Albert Y Kim, and Arturo Valdivia. 2025. <em>Statistical Inference via Data Science: A Moderndive into r and the Tidyverse</em>. Chapman; Hall/CRC.
 </div>
 <div id="ref-PNWColors" class="csl-entry" role="listitem">
 Lawlor, Jake. 2020. <span>“PNWColors: Color Palettes Inspired by Nature in the US Pacific Northwest.”</span> <a href="https://doi.org/10.32614/CRAN.package.PNWColors">https://doi.org/10.32614/CRAN.package.PNWColors</a>.
@@ -1319,6 +1322,9 @@ Wickham, Hadley, Mine Çetinkaya-Rundel, and Garrett Grolemund. 2023. <em>R for 
 </div>
 <div id="ref-dplyr" class="csl-entry" role="listitem">
 Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <span>“Dplyr: A Grammar of Data Manipulation.”</span> <a href="https://doi.org/10.32614/CRAN.package.dplyr">https://doi.org/10.32614/CRAN.package.dplyr</a>.
+</div>
+<div id="ref-wickham2017r" class="csl-entry" role="listitem">
+Wickham, Hadley, and Garrett Grolemund. 2017. <em>R for Data Science</em>. 1st ed. " O’Reilly Media, Inc.".
 </div>
 </div>
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
