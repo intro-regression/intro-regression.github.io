@@ -454,7 +454,7 @@ window.Quarto = {
 </div>
 </section><section id="sec-slr-eda" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="sec-slr-eda">
 <span class="header-section-number">4.2</span> Exploratory data analysis</h2>
-<p>Recall from <a href="03-eda.html" class="quarto-xref"><span>Chapter 3</span></a> that we begin analysis with <strong>exploratory data analysis (EDA)</strong> to better understand the data, the distributions of key variables, and relationships in the data before fitting the regression model. The exploratory data analysis here focuses on the two variables that will be in the regression model, <code>critics</code> and <code>audience</code>. In practice, however, we may want to explore other variables in the data set (for example, <code>year</code> in this analysis) to provide additional context later on as we interpret results from the regression model. We begin with univariate EDA (<a href="03-eda.html#sec-univar-eda" class="quarto-xref"><span>Section 3.4</span></a>), exploring one variable at a time, then we’ll conduct bivariate EDA (<a href="03-eda.html#sec-bivar-eda" class="quarto-xref"><span>Section 3.5</span></a>) to look at the relationship between the critics scores and audience scores.</p>
+<p>Recall from <a href="03-eda.html" class="quarto-xref"><span>Chapter 3</span></a> that we begin analysis with <strong>exploratory data analysis (EDA)</strong> to better understand the data, the distributions of key variables, and relationships in the data before fitting the regression model. The exploratory data analysis here focuses on the two variables that will be in the regression model, <code>critics</code> and <code>audience</code>. In practice, however, we may want to explore other variables in the data set (for example, <code>year</code> in this analysis) to provide additional context later on as we interpret results from the regression model. We begin with univariate EDA ( introduced in <a href="03-eda.html#sec-univar-eda" class="quarto-xref"><span>Section 3.4</span></a>) to exploring one variable at a time, then we’ll conduct bivariate EDA (introduced in <a href="03-eda.html#sec-bivar-eda" class="quarto-xref"><span>Section 3.5</span></a>) to explore the relationship between the critics scores and audience scores.</p>
 <section id="univariate-eda" class="level3" data-number="4.2.1"><h3 data-number="4.2.1" class="anchored" data-anchor-id="univariate-eda">
 <span class="header-section-number">4.2.1</span> Univariate EDA</h3>
 <p>The univariate distributions of <code>critics_score</code> and <code>audience_score</code> are visualized in <a href="#fig-movies-univariate" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> and summarized in <a href="#tbl-movies-univariate" class="quarto-xref">Table&nbsp;<span>4.1</span></a>.</p>
@@ -711,7 +711,7 @@ e_i &amp;= y_i - \hat{y}_i \\
 <blockquote class="blockquote">
 <p><em>The expected audience score for movies on Rotten Tomatoes with a critics score of 0 is 32.316 points.</em></p>
 </blockquote>
-<p>We always need to estimate the intercept in <span class="quarto-unresolved-ref">?eq-regressio</span> to get the line that best fit using least squares regression. The intercept, however, does not always have a meaningful interpretation. We ask the following questions to determine if the intercept has a meaningful interpretation:</p>
+<p>We always need to estimate the intercept in <a href="#eq-regression" class="quarto-xref">Equation&nbsp;<span>4.7</span></a> to get the line that best fit using least squares regression. The intercept, however, does not always have a meaningful interpretation. We ask the following questions to determine if the intercept has a meaningful interpretation:</p>
 <ol type="1">
 <li><p>Is it plausible for the predictor variable to take values at or near zero?</p></li>
 <li><p>Are there observations in the data with values of the predictor at or near zero?</p></li>
@@ -771,7 +771,7 @@ Figure&nbsp;4.5: Source: https://www.rottentomatoes.com/m/barbie (accessed Augus
 <li>What is a reasonable error threshold based on the subject matter and analysis objectives? We may be willing to use a model with higher RMSE for a low-stakes analysis objective (for example, the model is used to inform the choices of movie-goers) than a high-stakes objective (the model is used to inform how a movie studio’s multi-million dollar marketing budget will be allocated).</li>
 </ol>
 <div class="yourturn">
-<p>The RMSE for the movie scores model is 12.452. The range for the audience score is -. What is your evaluation of the model fit based on RMSE? Explain your response.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<p>The RMSE for the movie scores model is 12.452. The values of audience score in the data range from 20 to 94. What is your evaluation of the model fit based on RMSE? Explain your response.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
 </div>
 </section><section id="sec-slr-sum-sq" class="level3" data-number="4.7.2"><h3 data-number="4.7.2" class="anchored" data-anchor-id="sec-slr-sum-sq">
 <span class="header-section-number">4.7.2</span> Analysis of variance and <span class="math inline">\(R^2\)</span>
@@ -970,7 +970,7 @@ Xie, Yihui. 2024. <span>“Knitr: A General-Purpose Package for Dynamic Report G
 <li id="fn8"><p>Source: https://www.rottentomatoes.com/m/asteroid_city Accessed on August 29, 2023.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>The predicted audience score is 32.316 + 0.519 * 75 = <strong>71.241</strong>. The model over predicted. The residual is 62 - 71.241 = <strong>-9.241.</strong><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn10"><p>Lower values indicate a better fit, with 0 indicating the predictor variable perfectly predicts the response.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn11"><p><strong>Example answer:</strong> An error of 12.452 is about a 17% error based on the range of the audience scores. Because the audience scores range 0 to 100, this error seems relatively large.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p><strong>Example answer:</strong> An error of 12.452 is about a 17% error based on the range of the audience scores, 20 to 94. This error could seem relatively large, depending on how the model will be used to inform decisions in practice.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn12"><p>Higher values of <span class="math inline">\(R^2\)</span> indicate a better model fit, as it means more of the variability in the response is being explained by the model.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

@@ -69,7 +69,7 @@ What is the response variable for the movie scores analysis? What is the predict
 
 ## Exploratory data analysis {#sec-slr-eda}
 
-Recall from @sec-ch-eda that we begin analysis with **exploratory data analysis (EDA)** to better understand the data, the distributions of key variables, and relationships in the data before fitting the regression model. The exploratory data analysis here focuses on the two variables that will be in the regression model, `critics` and `audience`. In practice, however, we may want to explore other variables in the data set (for example, `year` in this analysis) to provide additional context later on as we interpret results from the regression model. We begin with univariate EDA ([@sec-univar-eda]), exploring one variable at a time, then we'll conduct bivariate EDA ([@sec-bivar-eda]) to look at the relationship between the critics scores and audience scores.
+Recall from @sec-ch-eda that we begin analysis with **exploratory data analysis (EDA)** to better understand the data, the distributions of key variables, and relationships in the data before fitting the regression model. The exploratory data analysis here focuses on the two variables that will be in the regression model, `critics` and `audience`. In practice, however, we may want to explore other variables in the data set (for example, `year` in this analysis) to provide additional context later on as we interpret results from the regression model. We begin with univariate EDA ( introduced in [@sec-univar-eda]) to exploring one variable at a time, then we'll conduct bivariate EDA (introduced in [@sec-bivar-eda]) to explore the relationship between the critics scores and audience scores.
 
 ### Univariate EDA
 
@@ -392,7 +392,7 @@ The intercept in @eq-movies-slr of 32.316 is interpreted as the following:
 
 > *The expected audience score for movies on Rotten Tomatoes with a critics score of 0 is 32.316 points.*
 
-We always need to estimate the intercept in @eq-regressio to get the line that best fit using least squares regression. The intercept, however, does not always have a meaningful interpretation. We ask the following questions to determine if the intercept has a meaningful interpretation:
+We always need to estimate the intercept in @eq-regression to get the line that best fit using least squares regression. The intercept, however, does not always have a meaningful interpretation. We ask the following questions to determine if the intercept has a meaningful interpretation:
 
 1.  Is it plausible for the predictor variable to take values at or near zero?
 
@@ -479,10 +479,10 @@ rmse <- sqrt(sum(slr_model$residuals^2)/nrow(movie_scores))
 ```
 
 ::: {.yourturn latex=""}
-The RMSE for the movie scores model is `r round(rmse,3)`. The range for the audience score is `r max(movie_scores$audience) - min(movie_scores$audience)`. What is your evaluation of the model fit based on RMSE? Explain your response.[^04-slr-11]
+The RMSE for the movie scores model is `r round(rmse,3)`. The values of audience score in the data range from `r min(movie_scores$audience_score)` to `r max(movie_scores$audience_score)`. What is your evaluation of the model fit based on RMSE? Explain your response.[^04-slr-11]
 :::
 
-[^04-slr-11]: **Example answer:** An error of 12.452 is about a 17% error based on the range of the audience scores. Because the audience scores range 0 to 100, this error seems relatively large.
+[^04-slr-11]: **Example answer:** An error of 12.452 is about a 17% error based on the range of the audience scores, `r min(movie_scores$audience_score)` to `r max(movie_scores$audience_score)`. This error could seem relatively large, depending on how the model will be used to inform decisions in practice.
 
 ### Analysis of variance and $R^2$ {#sec-slr-sum-sq}
 
