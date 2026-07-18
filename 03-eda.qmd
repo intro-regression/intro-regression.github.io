@@ -154,7 +154,7 @@ Our goal is to use exploratory data analysis to understand the distributions of 
 
 ## Purpose of exploratory data analysis
 
-This book is about regression analysis, using statistical models to describe the relationship between a response variable and one or more predictor variables, as well as use predict values of the response variable. This chapter focuses exploratory data analysis, an important step of the workflow that happens before modeling as show @fig-data-science-workflow. **Exploratory data analysis** **(EDA)** is the process of examining the data to better understand the observations, distributions of variables, relationships between variables, and other interesting features of the data. It helps us identify observations that are far from the majority of the data, instances of missing data, and potential errors in the data <!--# such as errors in how the data were recorded or how the data set was loaded into the statistical software-->. Lastly, it is where we gain initial insights about potential relationships between variables that help inform the decisions we'll make as we do the regression analysis.
+This book is about regression analysis, using statistical models to describe the relationship between a response variable and one or more predictor variables, as well as use predict values of the response variable. This chapter focuses exploratory data analysis, an important step of the workflow that happens before modeling as show @fig-data-science-workflow. **Exploratory data analysis** **(EDA)** is the process of examining the data to better understand the observations, distributions of variables, relationships between variables, and other interesting features of the data. It helps us identify **outliers,** observations that are far from the majority of the data, along with instances of missing data, and potential errors in the data <!--# such as errors in how the data were recorded or how the data set was loaded into the statistical software-->. Lastly, it is where we gain initial insights about potential relationships between variables that help inform the decisions we'll make as we do the regression analysis.
 
 In his 1977 book *Exploratory Data Analysis* , Statistician John Tukey described EDA as "looking at data to see what it seems to say" [@tukey1977exploratory, p. v]. This short definition emphasizes an important point about EDA. It is only used to glean initial insights from the data ("what it *seems* to say") [**not**]{.underline} to draw conclusions. We use statistical inference (@sec-ch-slr-inf and @sec-ch-mlr-inf) to draw conclusions from the data. Though we can't draw conclusions from EDA, it is still a critical step in th workflow. The insights gleaned from EDA help us more fully understand the implications of our results as we apply them in practice. It also helps us as data scientists better communicate the nuances in the data to collaborators and stakeholders. We typically don't publish all the results of EDA in a final report or presentation, but the knowledge gained from EDA is infused throughout any report or presentation as we describe the data, interpret results, and share conclusions. Simply put,
 
@@ -169,7 +169,7 @@ In his 1977 book *Exploratory Data Analysis* , Statistician John Tukey described
 - Explore relationships between two variables
 - Explore relationships between three or more variables
 
-In each step of the workflow, we will also make note of **outliers**, observations that are far from the majority of the data. The remainder of this chapter follows the progression outlined above, but the workflow may not be as linear in practice. In fact, some data cleaning may occur based on what is learned at each subsequent step. The goal is to *explore*, and thus use judgment and creativity to move around the data and guide the exploration.
+In each step of the workflow, we will also make note of outliers. The remainder of this chapter follows the progression outlined above, but the workflow may not be as linear in practice. In fact, some data cleaning may occur based on what is learned at each subsequent step. The goal is to *explore*, and thus use judgment and creativity to move around the data and guide the exploration.
 
 ## Initial data cleaning {#sec-initial-check}
 
@@ -221,7 +221,7 @@ recipes <- recipes |>
 
 One of the most common mismatches between the variable's type and how it is stored occurs when categorical variables are stored in the software under numeric formats. From @tbl-glimpse-recipe, we see this has occurred with the variables `month` and `chef_john`. This often happens when the categories are represented by numbers (e.g., "1" instead of "January"). Though we know they are categorical from @sec-intro-recipes, they are currently stored as *double* column types by the software. This means the the software thinks we can do calculations, such as find the average or standard deviation; however, these types of operations would not make sense in the context of `month`, for example. This mismatch can become particularly troublesome in the regression models. As we'll see in @sec-ch-mlr, quantitative and categorical variables are handled differently in regression models.
 
-We address these mismatches before moving forward with the EDA by changing the format in which such variables are stored. Once we have made changes to the data, we examine the summary of the data again to check the changes we've made and address any remaining issues. In @tbl-glimpse-recipes-2, we see that `chef_john` and `month` are now correctly stored as factors, a format suitable for categorical variables. We are now ready to move on to the next step and explore the distributions of individual variables. <!--# [Add reference here to R for data science? Telling stories with data? Modern data science for more detail on data cleaning / prep?] --> <!--# may not need this detail? We specifically make month a factor variable type, because the months have a natural ordering.-->
+We address these mismatches before moving forward with the EDA by changing the type in which such variables are stored. Once we have made changes to the data, we examine the summary of the data again to check the changes we've made and address any remaining issues. In @tbl-glimpse-recipes-2, we see that `chef_john` and `month` are now correctly stored as factors, a format suitable for categorical variables. We are now ready to move on to the next step and explore the distributions of individual variables. <!--# [Add reference here to R for data science? Telling stories with data? Modern data science for more detail on data cleaning / prep?] --> <!--# may not need this detail? We specifically make month a factor variable type, because the months have a natural ordering.-->
 
 ```{r}
 #| label: fix-month-chefjohn
@@ -267,7 +267,7 @@ ggplot(data = recipes, aes(x = month)) +
 
 As we look at @fig-univar-month, one thing that immediately stands out is the large number of recipes in November. We are unable to determine the reason for this large spike from the plot alone, but we may have some hypotheses about why this is the case based on our understanding the site's users and our collaborators' subject-matter expertise. One hypothesis is that there is a large uptick in recipes during the holiday season in the United States, Thanksgiving in particular, because it is a United States holiday in November that traditionally includes a large meal.
 
-The bar chart in @fig-univar-month displays the frequencies, but perhaps we are more interested in visualizing the proportions, also called **relative frequencies**. In that case we can (1) remake the bar plot such that that height of the bars represent the proportions rather than frequencies ([@fig-univar-eda-month-prop-1]), (2) make a pie chart, or (3) make a waffle chart.
+The bar chart in @fig-univar-month displays the frequencies, but perhaps we are more interested in visualizing the proportions, also called **relative frequencies**. In that case we can (1) remake the bar plot such that that height of the bars represent the proportions rather than frequencies ([@fig-univar-eda-month-prop-1]), (2) make a pie chart ([@fig-univar-eda-month-prop-2]), or (3) make a waffle chart ([@fig-univar-eda-month-prop-3]).
 
 ```{r}
 #| label: fig-univar-eda-month-prop
@@ -679,13 +679,13 @@ Because the distribution of `avg_rating` is skewed with outliers, the IQR `r IQR
 
 #### Describe the distribution: Outliers {.unnumbered}
 
-The last part of describing the distribution of a quantitative variable is the presence of outliers. Outliers can be valid observations that are very different from the rest of the data (e.g,. a professional athlete's annual salary in the distribution of annual salaries for 1000 randomly sampled adults in the United States). Sometimes, however, they indicate errors in the data (e.g., a person's age is recorded as 150 years old).
+The last part of describing the distribution of a quantitative variable is the presence of outliers. Outliers can be valid observations that are very different from the rest of the data (e.g., a professional athlete's annual salary in the distribution of annual salaries for 1000 randomly sampled adults in the United States). Sometimes, however, they indicate errors in the data (e.g., a person's age is recorded as 150 years old).
 
 Outliers are most visible in histograms ([@fig-univar-eda-rating]) and boxplots ([@fig-univar-eda-rating-alt-2]). It is more challenging to differentiate between outliers and skewness in a density plot. From the histogram, we visually assess outliers by looking for observations that are set apart on the graph, typically very high or very low. For example, in @fig-univar-eda-rating, there appears to be at least a few outliers that have low average ratings around 1 and 2.
 
 On a boxplot, the outliers are marked as points on the plot. An observation is considered an outlier if it is less than $Q_1 - 1.5 \times IQR$ or greater than $Q_3 + 1.5 \times IQR$. Based on the boxplot in @fig-univar-eda-rating-alt, observations with average ratings about 3.5 or less have been identified as outliers. Based on this plot, there are no outliers on the high end of the distribution of average rating.
 
-If there are outliers due to data entry errors, we need to input the correct values, if possible, or remove the observations from the analysis data. If there are a lot of data entry errors for an individual variable, we may consider removing that variable from the analysis and thus retaining more observations for the analysis. If outliers are unusual yet valid observations, there are options on how to handle them based on the analysis goals and their impact on the regression analysis results. We discuss these options further in @sec-handle-outliers.
+If there are outliers due to data entry errors, we need to input the correct values, if possible, or remove the observations from the analysis data. If there are a lot of data entry errors for an individual variable, we may consider removing that variable from the analysis and thus retaining more observations for the analysis. If outliers are unusual yet valid observations, there are options on how to handle them based on the analysis goals and their impact on the regression analysis results. We discuss these options further in @sec-outliers-impact.
 
 <!--# add this about notable features here? Unusual patterns are those that may not follow what we would expect, such as a mode at an unexpected value. This commonly happens in practice with modes at values such as -1 or 0, which are intended to represent missing data rather than actual observed values.-->
 
@@ -894,7 +894,7 @@ ggplot(data = df_flat, aes(x = x, y = y)) +
 
 ```
 
-The direction is **positive** [@fig-bivariate-direction-1] if one variable tends to increase as the other increases. The direction is **negative** [@fig-bivariate-direction-2] if one variable tends to decrease as the other increases. Lastly, there **no direction** [@fig-bivariate-direction-3] if there is no clear pattern in how one variable changes as the other changes.
+The direction is **positive** ([@fig-bivariate-direction-1]) if one variable tends to increase as the other increases. The direction is **negative** ([@fig-bivariate-direction-2]) if one variable tends to decrease as the other increases. Lastly, there **no direction** ([@fig-bivariate-direction-3]) if there is no clear pattern in how one variable changes as the other changes.
 
 From @fig-bivar-eda-protein-calories, relationship between `calories` and `protein` is positive and linear. In general, recipes with more calories per serving tend to also have more grams of protein per serving.
 
@@ -1094,7 +1094,7 @@ prep_rating_cor <- recipes |>
 
 Something that may stand out on this plot is that the data appear to be organized in columns. This is not an error in the data, but rather reveals something about the way `prep_time` appears on the website. The preparation times are recorded in 5-minute increments for recipes with preparation time of five minutes or greater. The exact time is recorded for the few recipes with preparation time less than five minutes.
 
-The next thing that stands out on @fig-bivar-eda-prep-rating-45min is the recipes with preparation times equal to 0. This seems unusual, as we would expect some preparation for any recipe. So what is happening here? The recipes with 0 minutes for the preparation times are those that show no preparation time on the website. In other words, these are examples of missing data. We don't know why exactly these values are missing but some possible explanations are (1) the recipe author included the preparation time in the value for `cook_time`, (2) the recipe author just did not include preparation time in the materials posted on the site. In practice, we need to deal with these types of observations before moving too far into the analysis and modeling. <!--# We provide some strategies to do so in @sec-ch-special-topics.-->
+The next thing that stands out on @fig-bivar-eda-prep-rating-45min is the recipes with preparation times equal to 0. This seems unusual, as we would expect some preparation for any recipe. So what is happening here? The recipes with 0 minutes for the preparation times are those that show no preparation time on the website. In other words, these are examples of missing data. We don't know why exactly these values are missing but some possible explanations are (1) the recipe author included the preparation time in the value for `cook_time`, (2) the recipe author just did not include preparation time in the materials posted on the site. In practice, we need to address these types of observations before moving too far into the analysis and modeling. We provide strategies for working with missing data in @sec-missing-data.
 
 ### Quantitative and categorical variables {#sec-bivar-eda-quant-cat}
 
@@ -1323,7 +1323,7 @@ Much of the exploratory data analysis in this chapter is done using functions fr
 
 ### Data summaries {#sec-eda-data-summaries}
 
-The `skim()` function in the **skimr** R package [@skimr] provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data [@sec-initial-check] and univariate data analysis ([@sec-univar-eda]). The code below produces a summary for each column `recipes`. Different types of summary output is produced based on the column's data type.
+The `skim()` function in the **skimr** R package [@skimr] provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data ([@sec-initial-check]) and univariate data analysis ([@sec-univar-eda]). The code below produces a summary for each column `recipes`. Different types of summary output is produced based on the column's data type.
 
 ```{r}
 #| label: tbl-skim-recipes 
@@ -1363,7 +1363,7 @@ recipes |>
 
 ### Waffle charts
 
-We introduced waffle charts in @sec-univar-eda-cat to explore the univariate distribution of a categorical variable. Waffle charts are produced using `geom_waffle()` in the **waffle** R package [@waffle]. The functions in this package are developed to work within the **ggplot2** framework, so we can use all the **ggplot** functions from @sec-customize-plots to customize the charts.
+We introduced waffle charts in @sec-univar-eda-cat to explore the univariate distribution of a categorical variable. Waffle charts are produced using `geom_waffle()` in the **waffle** package [@waffle]. The functions in this package are developed to work within the **ggplot2** framework, so we can use all the **ggplot** functions from @sec-customize-plots to customize the charts.
 
 The code to create a waffle chart for the `season` is below. We begin by using `count()` to compute the number of observations at each level. Inside `geom_waffle()`, the argument `flip = TRUE` arranges the level of season by rows, rather than the default arrangement by columns. The argument `make_proportional = TRUE` produces a chart such that the number of squares is approximately equal to the proportion of observations at each level, rather than the raw number of observations. Lastly, `theme_enhance_waffle()` removes unnecessary axis labels.
 
@@ -1381,7 +1381,7 @@ recipes |>
 
 ### Ridgeline plots
 
-In @sec-bivar-eda-quant-cat, we introduced ridgeline plots to explore the relationship between a quantitative and categorical variable. We use `geom_density_ridges()` in the **ggridges** R package [@ggridges] to create the plots. Similar to **ggwaffle**, the functions in this package are developed to work within the **ggplot2** framework, so we can utilize the functions from @sec-customize-plots to customize the plots.
+In @sec-bivar-eda-quant-cat, we introduced ridgeline plots to explore the relationship between a quantitative and categorical variable. We use `geom_density_ridges()` in the **ggridges** package [@ggridges] to create the plots. Similar to the **waffle** package, the functions in **ggridges** are developed to work within the **ggplot2** framework, so we can utilize the functions from @sec-customize-plots to customize the plots.
 
 The code for the ridgeline plot of the relationship between `avg_rating` and `chef_john` is below.
 
