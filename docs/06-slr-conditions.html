@@ -652,7 +652,7 @@ Figure&nbsp;6.2: Residuals versus predicted values from the model of <code>flavo
 <p><em>Based on the plot, can you generally guess with some certainty whether the residual would be positive or negative for a given predicted value or range of predicted values?</em></p>
 <ul>
 <li><p>If the answer is no, then the linearity condition is satisfied.</p></li>
-<li><p>If the answer is yes, then the current linear model does not adequately capture the relationship between the response and predictor variables. A model that incorporates information from more predictors or a different modeling approach is needed (we’ll discuss some of these in <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a> and @@sec-ch-transformations).</p></li>
+<li><p>If the answer is yes, then the current linear model does not adequately capture the relationship between the response and predictor variables. A model that incorporates information from more predictors or a different modeling approach is needed (we’ll discuss some of these in <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a> and <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>).</p></li>
 </ul>
 </blockquote>
 <p><a href="#fig-linearity-not-met" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> shows an example of a residual plot for simulated data in which the linearity condition is not met. There is a parabolic pattern in the plot, so the residuals are not randomly scattered around 0.</p>
@@ -671,12 +671,12 @@ Figure&nbsp;6.3: Example of violation in linearity condition. The residuals are 
 <!--# is this framing too confusing bc "no" means satisfied?-->
 <p>Now let’s use the plot of residuals versus predicted values in <a href="#fig-coffee-linearity" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> to assess the linearity condition for the model in <a href="#tbl-coffee-model" class="quarto-xref">Table&nbsp;<span>6.2</span></a>. <strong>Based on this plot, we conclude</strong> <strong>the linearity condition is satisfied.</strong> We cannot determine with great certainty whether the residual will be positive or negative for any predicted value or range of predicted values, as the points are randomly scattered around the horizontal line at <span class="math inline">\(y = 0\)</span>. Thus the linear model adequately captures the relationship between aroma and flavor grades, and the residuals capture the random variability in flavor grade due to sources other than the aroma.</p>
 <div class="analysis_in_practice">
-<p>We made the assessment about linearity considering the range of fitted values that represents the bulk of the data. Because there is only one outlying observation with a fitted value less than 6, we are unable to determine what the random variability of the residuals would look like for fitted values in this range. Thus the presence of a few extreme outliers. Outliers are discussed in more detail in <a href="#sec-model-diagnostics" class="quarto-xref"><span>Section 6.4</span></a>.</p>
+<p>We made the assessment about linearity considering the range of fitted values that represents the bulk of the data. Because there is only one outlying observation with a fitted value less than 6, we are unable to determine what the random variability of the residuals would look like for fitted values in this range. Thus the presence of a few extreme outliers does not impact the evaluation of the linearity condition. Outliers are discussed in more detail in <a href="#sec-model-diagnostics" class="quarto-xref"><span>Section 6.4</span></a>.</p>
 </div>
 </section><section id="independence" class="level3" data-number="6.2.3"><h3 data-number="6.2.3" class="anchored" data-anchor-id="independence">
 <span class="header-section-number">6.2.3</span> Independence</h3>
-<p>The next condition in LINE is <strong>independence</strong>, that the residuals are independent of each other and that the sign of one residual does not inform the sign of other residuals. <!--# less confusing way to explain this?-->This condition is primarily checked based on the given information about the subject matter and the data collection process. This condition can be more challenging to evaluate, especially if we do not have much information about the data. If the condition is violated, there are two general scenarios in which the violation occurred. If neither of these apply to the data, then it is usually reasonable to conclude that the independence condition is satisfied.</p>
-<p>The first scenario in which independence is often violated is due to a <strong>serial effect.</strong> <!--# does this term need to be cited?--> This occurs when data have a chronological order or are collected over time, and there is some pattern in the residuals when examining them in chronological order. If the data have a natural chronological order or were collected over time, make a scatterplot of residuals versus time order. Similar to checking the linearity condition, seeing no discernible pattern in the plot indicates the independence condition is satisfied. In this case, it means that knowing something about the order in which an observation was collected does not give information about whether the model tends to over or under predict. Otherwise, the independence condition is violated.</p>
+<p>The next condition in LINE is <strong>independence</strong>, that the residuals are independent of each other and that the sign of one residual does not inform the sign of other residuals. <!--# less confusing way to explain this?-->This condition is primarily checked based on the given information about the subject matter and the data collection process. It can be more challenging to evaluate this condition, especially if we do not have much information about the data. If the condition is violated, there are two general scenarios in which the violation occurred. If neither of these apply to the data, then it is usually reasonable to conclude that the independence condition is satisfied.</p>
+<p>The first scenario in which independence is often violated is due to a <strong>serial effect.</strong> <!--# does this term need to be cited?--> This occurs when data have a chronological order or are collected over time, and there is some pattern in the residuals when examining them in chronological order. If the data have a natural chronological order or were collected over time, make a scatterplot of residuals versus time order. Similar to checking the linearity condition, seeing no discernible pattern in the plot indicates the independence condition is satisfied. In this case, it means that knowing something about the order in which observations were collected does not give information about whether the model tends to over or under predict. Otherwise, the independence condition is violated.</p>
 <!--# do i need a graph illustrating this?-->
 <p>The second common violation of independence is due to a <strong>cluster effect</strong>. <!--# does this term need to be cited?--> This is when there are subgroups present in the data that are not accounted for in the model. To check this condition, modify the plot of the residuals versus predicted by using color, shape, faceting, or visual features to differentiate the observations by the subgroup. Similar to checking the linearity condition, we expect the residuals to be randomly scattered above and below <span class="math inline">\(y = 0\)</span> for each subgroup. If this is not the case, there is indication that subgroup should be accounted for in the model.</p>
 <p>We will talk more about strategies for dealing with violations in the model conditions in <a href="#sec-conditions-not-satisfied" class="quarto-xref"><span>Section 6.3</span></a> and how to include categorical predictors in the model to account for subgroups in <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
@@ -773,7 +773,7 @@ Figure&nbsp;6.7: Plot of the residuals versus predicted values. The vertical spr
 </ol></section><section id="independence-1" class="level3" data-number="6.3.2"><h3 data-number="6.3.2" class="anchored" data-anchor-id="independence-1">
 <span class="header-section-number">6.3.2</span> Independence</h3>
 <p>The independence condition states that the residuals are independent of one another. This assurance is most important when estimating variability about the line or variability in the estimated regression coefficients when doing statistical inference. If the independence condition is not satisfied and some residuals are correlated with one another, then our procedures may underestimate the true variability about the regression line and ultimately the variability in the estimated regression coefficients. <!--# add link to inference chapter?--> This is due to the fact that each observation is not fully contributing new information, because there is some correlation between two or more observations. Thus the <strong>effective sample size</strong>, or how many observations independently provide information, is smaller than the true sample size <span class="math inline">\(n\)</span>. This could result in misleading inferential conclusions, such as concluding there is a linear relationship between the response and predictor variable, when in fact there is no such a relationship.</p>
-<p>If the independence condition is not met, more advanced statistical methods would be required to properly deal with the correlated residuals. These methods are beyond the scope of this book, but you can learn more about these methods called <strong>multilevel models</strong> or <strong>hierarchical models</strong> in books such as <span class="citation" data-cites="roback2021beyond">Roback and Legler (<a href="references.html#ref-roback2021beyond" role="doc-biblioref">2021</a>)</span>.</p>
+<p>If the independence condition is not met, more advanced statistical methods, called <em>multilevel models</em> or <em>hierarchical models</em>, would be required to properly deal with the correlated residuals. We introduce these models in <a href="13-special-topics.html#sec-random-intercepts" class="quarto-xref"><span>Section 13.3</span></a>.</p>
 <p>If we observe some pattern in the residuals based on subgroup, then there are two approaches to address it. The first is creating a separate model for each subgroup. The primary disadvantage to this approach is that we may have a different estimate for the slope and intercept for each subgroup, and thus it may be more difficult to draw overall conclusions about the relationship between the response and predictor variables. The second option is to fit a model that includes the subgroup as a predictor. This will allow us to account for differences by subgroup while maintaining a single model that makes it easier to draw overall conclusions. This type of model is called a <strong>multiple linear regression</strong> model, because it includes more than one predictor variable. We will introduce these models more in detail in <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
 <p>If the violations in the independence condition are not addressed, we must use caution when drawing conclusions from the model or calculating predictions given the systematic under or over prediction by subgroup. In this case, we should consider if the model can be used to produce the type of valuable inferential insights we intend.</p>
 <!--# needs some discussion about what to do if time is the issue-->
@@ -798,9 +798,12 @@ Figure&nbsp;6.7: Plot of the residuals versus predicted values. The vertical spr
 <p>There are approaches for handling violations in the equal variance condition. These approaches typically involve performing a transformation on the response variable. We will discuss these further in <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>.</p>
 </section><section id="recap" class="level3" data-number="6.3.5"><h3 data-number="6.3.5" class="anchored" data-anchor-id="recap">
 <span class="header-section-number">6.3.5</span> Recap</h3>
-<p><span class="quarto-unresolved-ref">?tbl-slr-conditions</span> provides a summary of the model conditions and whether they must be satisfied to reliably conduct each modeling task.</p>
+<p><a href="#tbl-slr-conditions" class="quarto-xref">Table&nbsp;<span>6.3</span></a> provides a summary of the model conditions and whether they must be satisfied to reliably conduct each modeling task.</p>
+<div id="tbl-slr-conditions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-slr-conditions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.3: Summary of necessary conditions for various analysis tasks on the slope
+</figcaption><div aria-describedby="tbl-slr-conditions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
-<caption>Summary of necessary conditions for various analysis tasks on the slope</caption>
 <colgroup>
 <col style="width: 11%">
 <col style="width: 15%">
@@ -843,6 +846,9 @@ Figure&nbsp;6.7: Plot of the residuals versus predicted values. The vertical spr
 </tr>
 </tbody>
 </table>
+</div>
+</figure>
+</div>
 <p>So far we have discussed the model conditions to assess whether the assumptions for simple linear regression reasonably hold true for our data. We have not, however, dealt with the presence of outliers in the data and the potential impact (or “influence”) they may have on the regression model. In the next section, we discuss measures we can use to identify and assess the potential impact of such outlying observations.</p>
 </section></section><section id="sec-model-diagnostics" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="sec-model-diagnostics">
 <span class="header-section-number">6.4</span> Model diagnostics</h2>
@@ -921,13 +927,13 @@ Figure&nbsp;6.9: Leverage for observations in the coffee ratings data
 </div>
 </div>
 <div class="yourturn">
-<p>There are 114 observations that have large values for the leverage. What does it mean for an observation to have “high leverage” in the context of the coffee data?</p>
+<p>There are 114 observations that have high values for the leverage. What does it mean for an observation to have “high leverage” in the context of the coffee data?<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 </div>
 <p>Let’s take a look at the observations with the highest values of leverage to get a better understanding about which points may be high leverage.</p>
 <div class="cell">
 <div id="tbl-coffee-large-leverage" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coffee-large-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.3: Observations with the top five highest values for leverage
+Table&nbsp;6.4: Observations with the top five highest values for leverage
 </figcaption><div aria-describedby="tbl-coffee-large-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -996,12 +1002,12 @@ Figure&nbsp;6.10: Standardized residuals versus observation number for model of 
 </div>
 <!--# maybe use visualization to show why these have big std residuals-->
 <p><a href="#fig-coffee-stdresid" class="quarto-xref">Figure&nbsp;<span>6.10</span></a> shows 12 observations with large magnitude residuals based on the threshold <span class="math inline">\(\pm 3\)</span> . This includes observations that have positive residuals with large magnitude (indicating the model greatly underpredicted) and observations with negative residuals with large magnitude (indicating the model greatly overpredicted).</p>
-<p>These five observations with the largest magnitude residuals are shown in <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.4</span></a>.</p>
+<p>These five observations with the largest magnitude residuals are shown in <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.5</span></a>.</p>
 <!--# think of a way to visualize observations with large magnitude residuals-->
 <div class="cell">
 <div id="tbl-coffee-large-resid" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coffee-large-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.4: Observations with large magnitude residuals
+Table&nbsp;6.5: Observations with large magnitude residuals
 </figcaption><div aria-describedby="tbl-coffee-large-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1049,7 +1055,7 @@ Table&nbsp;6.4: Observations with large magnitude residuals
 </figure>
 </div>
 </div>
-<p>We see from <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.4</span></a> and <a href="#fig-coffee-large-resid" class="quarto-xref">Figure&nbsp;<span>6.11</span></a> that these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual that has a higher actual flavor rating than the model predicts based on its very low aroma rating.</p>
+<p>We see from <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.5</span></a> and <a href="#fig-coffee-large-resid" class="quarto-xref">Figure&nbsp;<span>6.11</span></a> that these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual that has a higher actual flavor rating than the model predicts based on its very low aroma rating.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-coffee-large-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1086,14 +1092,14 @@ Figure&nbsp;6.12: Cook’s distance versus observation number for coffee ratings
 </div>
 </div>
 </div>
-<p><a href="#fig-coffee-cooksd" class="quarto-xref">Figure&nbsp;<span>6.12</span></a> shows the values of Cook’s distance for the observations in the data set. It includes a horizontal line at 1 marking the threshold for determining if an observation is influential. There is one observation in the data that has a value of Cook’s distance greater than 1; its value is 2.432. This is the observation with an aroma grade of <code>large_cooks$aroma</code> and flavor grade of <code>large_cooks$flavor</code>.</p>
+<p><a href="#fig-coffee-cooksd" class="quarto-xref">Figure&nbsp;<span>6.12</span></a> shows the values of Cook’s distance for the observations in the data set. It includes a horizontal line at 1 marking the threshold for determining if an observation is influential. There is one observation in the data that has a value of Cook’s distance greater than 1; its value is 2.432. This is the observation with an aroma grade of 5.08 and flavor grade of 7.75.</p>
 </section><section id="sec-outliers-impact" class="level3" data-number="6.4.5"><h3 data-number="6.4.5" class="anchored" data-anchor-id="sec-outliers-impact">
 <span class="header-section-number">6.4.5</span> Handling influential points</h3>
 <p>To better understand the impact of influential points, let’s take a look at our model fit with and without the influential observation.</p>
 <div class="cell">
 <div id="tbl-influential-impact" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-influential-impact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.5: Estimated model coefficients for model with and without influential observation
+Table&nbsp;6.6: Estimated model coefficients for model with and without influential observation
 </figcaption><div aria-describedby="tbl-influential-impact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1120,13 +1126,13 @@ Table&nbsp;6.5: Estimated model coefficients for model with and without influent
 </figure>
 </div>
 </div>
-<p>In <a href="#tbl-influential-impact" class="quarto-xref">Table&nbsp;<span>6.5</span></a>, the estimates for the intercept and coefficient of <code>aroma</code> change based on whether the influential point is included or not included in the data. Therefore, it is now our task as the data scientist to determine how to best proceed given the influential point.</p>
+<p>In <a href="#tbl-influential-impact" class="quarto-xref">Table&nbsp;<span>6.6</span></a>, the estimates for the intercept and coefficient of <code>aroma</code> change based on whether the influential point is included or not included in the data. Therefore, it is now our task as the data scientist to determine how to best proceed given the influential point.</p>
 <section id="outlier-based-on-predictor" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="outlier-based-on-predictor">Outlier based on predictor</h4>
 <p>If an observation is an outlier based on the predictor variable, first consider if it is the result of a data entry error that can be fixed. If not, one option is to remove this observation from the analysis, particularly if the outlier is an influential point or a result of a data entry error. Doing so limits the scope of the conclusions that can be drawn from the analysis and the range of values for which the model can be used for prediction, because removing the outlying observation narrows the range of possible values for the predictor. When taking this approach, it is important to mention it when communicating results. Additionally, we need to be careful not to extrapolate if using the model for prediction. <!--# maybe clarify this a bit?--></p>
 <p>The influential point identified in <a href="#sec-cooks-distance" class="quarto-xref"><span>Section 6.4.4</span></a> is an outlier because it has a value of the predictor much lower than the rest of the data. Therefore, we could remove this observation and thus limit the scope of the analysis to coffee that has an aroma rating of 6 or higher. We can also keep this observation in the analysis and thus have some information about coffees with aroma ratings less than 6. Given there is a single observation with a rating less than 6, however, conclusions about coffees with low coffee ratings should be made with caution.</p>
 </section><section id="outlier-based-on-response" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="outlier-based-on-response">Outlier based on response</h4>
 <p>If the observation is an outlier based on the value of the response variable, first consider if it is the result of a data entry error. If it is not and the value of the predictor is within the range of the other observations in the data, the observation should not be removed from the analysis. Removing the observation could result in taking out useful information for understanding the relationship between the response and predictor variable.</p>
-<p>If the outlier is influential, one approach is to build the model with and without the influential point, then compare the estimated values and inference for the model coefficients. Another approach is to transform the response variable to reduce the effect of outliers (more on transformations in @@sec-ch-transformations). A last approach is to collect more data, so the model information can be informed by more observations; however, collecting more data is often not feasible in practice.</p>
+<p>If the outlier is influential, one approach is to build the model with and without the influential point, then compare the estimated values and inference for the model coefficients. Another approach is to transform the response variable to reduce the effect of outliers (more on transformations in <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>). A last approach is to collect more data, so the model information can be informed by more observations; however, collecting more data is often not feasible in practice.</p>
 </section></section></section><section id="sec-model-in-practice" class="level2" data-number="6.5"><h2 data-number="6.5" class="anchored" data-anchor-id="sec-model-in-practice">
 <span class="header-section-number">6.5</span> Modeling in practice</h2>
 <p>In this chapter, we have introduced a set of model conditions and diagnostics to evaluate how well the model fits the data and satisfies the assumptions for linear regression. Now we’ll conclude the chapter by discussing how we might incorporate these tools in practice.</p>
@@ -1150,7 +1156,7 @@ Table&nbsp;6.5: Estimated model coefficients for model with and without influent
 </ol>
 <!--# add something here dealing with the outlier we found--></section><section id="sec-conditions-in-r" class="level2" data-number="6.6"><h2 data-number="6.6" class="anchored" data-anchor-id="sec-conditions-in-r">
 <span class="header-section-number">6.6</span> Model conditions and diagnostics in R</h2>
-<p>The residuals, along with other observation-level statistics, can be obtained using <code>augment()</code> in the <strong>broom</strong> R package <span class="citation" data-cites="broom">(<a href="references.html#ref-broom" role="doc-biblioref">Robinson, Hayes, and Couch 2023</a>)</span>. This package is in the suite of packages that are included as part of <strong>tidymodels</strong><span class="citation" data-cites="tidymodels">(<a href="references.html#ref-tidymodels" role="doc-biblioref">Kuhn and Wickham 2020</a>)</span>. The output produced by this function is shown in <a href="#tbl-coffee-aug" class="quarto-xref">Table&nbsp;<span>6.6</span></a>.</p>
+<p>The residuals, along with other observation-level statistics, can be obtained using <code>augment()</code> in the <strong>broom</strong> R package <span class="citation" data-cites="broom">(<a href="references.html#ref-broom" role="doc-biblioref">Robinson, Hayes, and Couch 2023</a>)</span>. This package is in the suite of packages that are included as part of <strong>tidymodels</strong><span class="citation" data-cites="tidymodels">(<a href="references.html#ref-tidymodels" role="doc-biblioref">Kuhn and Wickham 2020</a>)</span>. The output produced by this function is shown in <a href="#tbl-coffee-aug" class="quarto-xref">Table&nbsp;<span>6.7</span></a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coffee_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">flavor</span> <span class="op">~</span> <span class="va">aroma</span>, data <span class="op">=</span> <span class="va">coffee_ratings</span><span class="op">)</span></span>
 <span></span>
@@ -1159,7 +1165,7 @@ Table&nbsp;6.5: Estimated model coefficients for model with and without influent
 <div class="cell">
 <div id="tbl-coffee-aug" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coffee-aug-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.6: First ten rows of output produced by the <code>augment</code> function
+Table&nbsp;6.7: First ten rows of output produced by the <code>augment</code> function
 </figcaption><div aria-describedby="tbl-coffee-aug-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1295,29 +1301,21 @@ Table&nbsp;6.6: First ten rows of output produced by the <code>augment</code> fu
 <code>.std.resid</code>: Standardized residuals</li>
 </ul>
 <p>The plots used to check the model conditions and diagnostics are produced using <code>ggplot()</code> functions. We can also produce similar plots in base R format using the <code>plot</code> function. The QQ-plot produced from <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> is used to check the normality condition. The distribution of the residuals is approximately normal if the points lie along the diagonal line.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
-</figure>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid"></a></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid"></a></p>
 </div>
 </div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
-</figure>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid"></a></p>
 </div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
-</figure>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><a href="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="06-slr-conditions_files/figure-html/unnamed-chunk-4-4.png" class="img-fluid"></a></p>
 </div>
 </div>
 </div>
@@ -1343,9 +1341,6 @@ Hoaglin, David C, and Roy E Welsch. 1978. <span>“The Hat Matrix in Regression 
 <div id="ref-tidymodels" class="csl-entry" role="listitem">
 Kuhn, Max, and Hadley Wickham. 2020. <span>“Tidymodels: A Collection of Packages for Modeling and Machine Learning Using Tidyverse Principles.”</span> <a href="https://www.tidymodels.org">https://www.tidymodels.org</a>.
 </div>
-<div id="ref-roback2021beyond" class="csl-entry" role="listitem">
-Roback, Paul, and Julie Legler. 2021. <em>Beyond Multiple Linear Regression: Applied Generalized Linear Models and Multilevel Models in r</em>. Chapman; Hall/CRC.
-</div>
 <div id="ref-broom" class="csl-entry" role="listitem">
 Robinson, David, Alex Hayes, and Simon Couch. 2023. <span>“Broom: Convert Statistical Objects into Tidy Tibbles.”</span> <a href="https://CRAN.R-project.org/package=broom">https://CRAN.R-project.org/package=broom</a>.
 </div>
@@ -1354,6 +1349,7 @@ Robinson, David, Alex Hayes, and Simon Couch. 2023. <span>“Broom: Convert Stat
 <ol>
 <li id="fn1"><p>The null hypothesis is there is no linear relationship between <code>aroma</code> and <code>flavor</code> <span class="math inline">\((H_0: \beta_1 = 0)\)</span> and the alternative is that there is a linear relationship <span class="math inline">\((H_a:\beta_1 \neq 0)\)</span>. The p-value is <span class="math inline">\(\approx 0\)</span>, so we reject the null hypothesis. The data provide evidence of a linear relationship between the two variables. The confidence interval is consistent, because 0 is not in the interval.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Here, we have analyzed the distribution of residuals for five countries to illustrate the independence condition. In practice, we may want to analyze the distribution of residuals for more countries in the data.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>An observation with high leverage has an aroma value that is far away from the mean value of aroma in this data set. It can have a value that is much lower or much higher than the mean.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

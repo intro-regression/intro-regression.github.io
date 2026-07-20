@@ -229,7 +229,7 @@ When we fit a linear regression model, we are using the predictor to explain som
 >
 > - If the answer is no, then the linearity condition is satisfied.
 >
-> - If the answer is yes, then the current linear model does not adequately capture the relationship between the response and predictor variables. A model that incorporates information from more predictors or a different modeling approach is needed (we'll discuss some of these in @sec-ch-mlr and \@\@sec-ch-transformations).
+> - If the answer is yes, then the current linear model does not adequately capture the relationship between the response and predictor variables. A model that incorporates information from more predictors or a different modeling approach is needed (we'll discuss some of these in @sec-ch-mlr and @sec-ch-transformations).
 
 @fig-linearity-not-met shows an example of a residual plot for simulated data in which the linearity condition is not met. There is a parabolic pattern in the plot, so the residuals are not randomly scattered around 0.
 
@@ -259,14 +259,14 @@ augment(model) |>
 Now let's use the plot of residuals versus predicted values in @fig-coffee-linearity to assess the linearity condition for the model in @tbl-coffee-model. **Based on this plot, we conclude** **the linearity condition is satisfied.** We cannot determine with great certainty whether the residual will be positive or negative for any predicted value or range of predicted values, as the points are randomly scattered around the horizontal line at $y = 0$. Thus the linear model adequately captures the relationship between aroma and flavor grades, and the residuals capture the random variability in flavor grade due to sources other than the aroma.
 
 ::: {.analysis_in_practice latex=""}
-We made the assessment about linearity considering the range of fitted values that represents the bulk of the data. Because there is only one outlying observation with a fitted value less than 6, we are unable to determine what the random variability of the residuals would look like for fitted values in this range. Thus the presence of a few extreme outliers. Outliers are discussed in more detail in @sec-model-diagnostics.
+We made the assessment about linearity considering the range of fitted values that represents the bulk of the data. Because there is only one outlying observation with a fitted value less than 6, we are unable to determine what the random variability of the residuals would look like for fitted values in this range. Thus the presence of a few extreme outliers does not impact the evaluation of the linearity condition. Outliers are discussed in more detail in @sec-model-diagnostics.
 :::
 
 ### Independence
 
-The next condition in LINE is **independence**, that the residuals are independent of each other and that the sign of one residual does not inform the sign of other residuals. <!--# less confusing way to explain this?-->This condition is primarily checked based on the given information about the subject matter and the data collection process. This condition can be more challenging to evaluate, especially if we do not have much information about the data. If the condition is violated, there are two general scenarios in which the violation occurred. If neither of these apply to the data, then it is usually reasonable to conclude that the independence condition is satisfied.
+The next condition in LINE is **independence**, that the residuals are independent of each other and that the sign of one residual does not inform the sign of other residuals. <!--# less confusing way to explain this?-->This condition is primarily checked based on the given information about the subject matter and the data collection process. It can be more challenging to evaluate this condition, especially if we do not have much information about the data. If the condition is violated, there are two general scenarios in which the violation occurred. If neither of these apply to the data, then it is usually reasonable to conclude that the independence condition is satisfied.
 
-The first scenario in which independence is often violated is due to a **serial effect.** <!--# does this term need to be cited?--> This occurs when data have a chronological order or are collected over time, and there is some pattern in the residuals when examining them in chronological order. If the data have a natural chronological order or were collected over time, make a scatterplot of residuals versus time order. Similar to checking the linearity condition, seeing no discernible pattern in the plot indicates the independence condition is satisfied. In this case, it means that knowing something about the order in which an observation was collected does not give information about whether the model tends to over or under predict. Otherwise, the independence condition is violated.
+The first scenario in which independence is often violated is due to a **serial effect.** <!--# does this term need to be cited?--> This occurs when data have a chronological order or are collected over time, and there is some pattern in the residuals when examining them in chronological order. If the data have a natural chronological order or were collected over time, make a scatterplot of residuals versus time order. Similar to checking the linearity condition, seeing no discernible pattern in the plot indicates the independence condition is satisfied. In this case, it means that knowing something about the order in which observations were collected does not give information about whether the model tends to over or under predict. Otherwise, the independence condition is violated.
 
 <!--# do i need a graph illustrating this?-->
 
@@ -420,7 +420,7 @@ If the linearity condition is not satisfied, we can ask ourselves a few question
 
 The independence condition states that the residuals are independent of one another. This assurance is most important when estimating variability about the line or variability in the estimated regression coefficients when doing statistical inference. If the independence condition is not satisfied and some residuals are correlated with one another, then our procedures may underestimate the true variability about the regression line and ultimately the variability in the estimated regression coefficients. <!--# add link to inference chapter?--> This is due to the fact that each observation is not fully contributing new information, because there is some correlation between two or more observations. Thus the **effective sample size**, or how many observations independently provide information, is smaller than the true sample size $n$. This could result in misleading inferential conclusions, such as concluding there is a linear relationship between the response and predictor variable, when in fact there is no such a relationship.
 
-If the independence condition is not met, more advanced statistical methods would be required to properly deal with the correlated residuals. These methods are beyond the scope of this book, but you can learn more about these methods called **multilevel models** or **hierarchical models** in books such as @roback2021beyond.
+If the independence condition is not met, more advanced statistical methods, called *multilevel models* or *hierarchical models*, would be required to properly deal with the correlated residuals. We introduce these models in @sec-random-intercepts.
 
 If we observe some pattern in the residuals based on subgroup, then there are two approaches to address it. The first is creating a separate model for each subgroup. The primary disadvantage to this approach is that we may have a different estimate for the slope and intercept for each subgroup, and thus it may be more difficult to draw overall conclusions about the relationship between the response and predictor variables. The second option is to fit a model that includes the subgroup as a predictor. This will allow us to account for differences by subgroup while maintaining a single model that makes it easier to draw overall conclusions. This type of model is called a **multiple linear regression** model, because it includes more than one predictor variable. We will introduce these models more in detail in @sec-ch-mlr.
 
@@ -473,7 +473,7 @@ There are approaches for handling violations in the equal variance condition. Th
 | Equal variance  | Not needed            | Not needed                 | Important                                                                           |
 +-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
 
-: Summary of necessary conditions for various analysis tasks on the slope
+: Summary of necessary conditions for various analysis tasks on the slope {#tbl-slr-conditions}
 
 So far we have discussed the model conditions to assess whether the assumptions for simple linear regression reasonably hold true for our data. We have not, however, dealt with the presence of outliers in the data and the potential impact (or "influence") they may have on the regression model. In the next section, we discuss measures we can use to identify and assess the potential impact of such outlying observations.
 
@@ -580,8 +580,10 @@ ggplot(data = coffee_model_aug, aes(x = obs_num, y = .hat)) +
 ```
 
 ::: {.yourturn latex=""}
-There are `r n_large_leverage` observations that have large values for the leverage. What does it mean for an observation to have "high leverage" in the context of the coffee data?
+There are `r n_large_leverage` observations that have high values for the leverage. What does it mean for an observation to have "high leverage" in the context of the coffee data?[^06-slr-conditions-3]
 :::
+
+[^06-slr-conditions-3]: An observation with high leverage has an aroma value that is far away from the mean value of aroma in this data set. It can have a value that is much lower or much higher than the mean.
 
 Let's take a look at the observations with the highest values of leverage to get a better understanding about which points may be high leverage.
 
@@ -738,7 +740,7 @@ large_cooks <- coffee_model_aug |>
   slice(1)
 ```
 
-@fig-coffee-cooksd shows the values of Cook's distance for the observations in the data set. It includes a horizontal line at 1 marking the threshold for determining if an observation is influential. There is one observation in the data that has a value of Cook's distance greater than 1; its value is `r round(max(coffee_model_aug$.cooksd), 3)`. This is the observation with an aroma grade of `large_cooks$aroma` and flavor grade of `large_cooks$flavor`.
+@fig-coffee-cooksd shows the values of Cook's distance for the observations in the data set. It includes a horizontal line at 1 marking the threshold for determining if an observation is influential. There is one observation in the data that has a value of Cook's distance greater than 1; its value is `r round(max(coffee_model_aug$.cooksd), 3)`. This is the observation with an aroma grade of `r large_cooks$aroma` and flavor grade of `r large_cooks$flavor`.
 
 ### Handling influential points {#sec-outliers-impact}
 
@@ -776,7 +778,7 @@ The influential point identified in @sec-cooks-distance is an outlier because it
 
 If the observation is an outlier based on the value of the response variable, first consider if it is the result of a data entry error. If it is not and the value of the predictor is within the range of the other observations in the data, the observation should not be removed from the analysis. Removing the observation could result in taking out useful information for understanding the relationship between the response and predictor variable.
 
-If the outlier is influential, one approach is to build the model with and without the influential point, then compare the estimated values and inference for the model coefficients. Another approach is to transform the response variable to reduce the effect of outliers (more on transformations in \@\@sec-ch-transformations). A last approach is to collect more data, so the model information can be informed by more observations; however, collecting more data is often not feasible in practice.
+If the outlier is influential, one approach is to build the model with and without the influential point, then compare the estimated values and inference for the model coefficients. Another approach is to transform the response variable to reduce the effect of outliers (more on transformations in @sec-ch-transformations). A last approach is to collect more data, so the model information can be informed by more observations; however, collecting more data is often not feasible in practice.
 
 ## Modeling in practice {#sec-model-in-practice}
 
@@ -840,6 +842,7 @@ We use the following columns produced by `augment()` to check model conditions a
 The plots used to check the model conditions and diagnostics are produced using `ggplot()` functions. We can also produce similar plots in base R format using the `plot` function. The QQ-plot produced from `plot()` is used to check the normality condition. The distribution of the residuals is approximately normal if the points lie along the diagonal line.
 
 ```{r}
+#| layout-ncol: 2
 plot(coffee_model)
 ```
 

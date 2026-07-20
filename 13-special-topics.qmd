@@ -56,7 +56,7 @@ This chapter introduces readers to a collection to models that are extensions of
 
 - Missing data
 - Multinomial logistic regression
-- Random intercepts models
+- Multilevel models
 - Decision trees for regression and classification
 - Causal inference using propensity score models
 
@@ -767,7 +767,7 @@ voters |>
 
 Multinomial logistic regression is part of a larger class of models called *generalized linear models*. Linear regression and logistic regression are also examples of generalized linear models. These models have been widely studied; in fact, many statistics programs have a full course dedicated to generalized linear models. For readers interested in a more in-depth introduction to multinomial logistic regression and generalized linear models, see *Data Analysis Using Regression and Multilevel/Hierarchical Models* [@gelman2007data] and *Beyond Multiple Linear Regression* [@roback2021beyond]. We refer readers interested in an introduction to the underlying theory alongside application to *An Introduction to Generalized Linear Models* [@dobson2018introduction].
 
-## Random intercepts model {#sec-random-intercepts}
+## Multilevel models {#sec-random-intercepts}
 
 One of the key assumptions we've made throughout this book is that the observations in the sample data are independent of each other. Often in practice, however, there is an underlying grouping structure in the data, and the observations are not completely independent of one another. For example, the data may contain multiple measurements from each individual (call repeated measures) as in @fig-repeated-measures.
 
