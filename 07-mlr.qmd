@@ -247,7 +247,7 @@ In @fig-mlr-bivariate-2, lemurs from the PCOQ taxon have a lower median weight t
 
 Based on the medians and large overlap in the boxplots in @fig-mlr-bivariate-3, there does not appear to be much difference in the weights of male and female lemurs. From this plot, we see the lemur with the high outlying weight is a female.
 
-@fig-mlr-bivariate-4 shows the relationship between `litter_size` and `weight`. Random noise was added to reduce overlap in the points on the graph. This makes it easier to see the relationship between the two variables. Based on this scatterplot, the relationship between `litter_size` and `weight` appears to be positive and relatively weak.
+@fig-mlr-bivariate-4 shows the relationship between `litter_size` and `weight`. Random noise (a very small value drawn from a uniform distribution) was added to make the relationship easier to visualization. Because `litter_size` is discrete, the observations would fall into straight vertical lines, making it more challenging to understand the relationship between the two variables. Based on this scatterplot, the relationship between `litter_size` and `weight` appears to be positive and relatively weak.
 
 Now that we have a better understanding of the variables in this analysis, we will use a multiple linear regression model to understand how taxon, litter size, age, and sex explains variability in the weight of lemurs. Before looking at the model specific to this data, we will discuss the details of the multiple linear regression model, in general, and to determine if a multiple linear regression model is appropriate for the data.
 
@@ -457,7 +457,7 @@ tidy(lemurs_model_age) |>
   kable(digits = 3)
 ```
 
-The new variable `age_in_years` is computed as `age/ 12`. Thus the coefficient for `age_in_years` in @tbl-lemurs-model-age, $\hat{\beta}{\text{age_in_years}} =\hat{\beta}_{\text{age}} * 12$ . The new coefficient `r age_years_coeff` is much larger, because it is the expected change in weight over 12 months instead of the expected weight over one month. It does not mean the effect of age is stronger when recorded in years versus months.
+The new variable `age_in_years` is computed as `age/ 12`. Thus the coefficient for `age_in_years` in @tbl-lemurs-model-age-years, $\hat{\beta}{\text{age\_in\_years}} =\hat{\beta}_{\text{age}} * 12$ . The new coefficient `r age_years_coeff` is much larger, because it is the expected change in weight over 12 months instead of the expected weight over one month. It does not mean the effect of age is stronger when recorded in years versus months.
 
 Thus, it would be misleading to use values of the model coefficients to determine which variable is the most important. In @sec-standardize-predictors, we introduce a model using standardized predictors that can be used to make claims about variable importance.
 :::
@@ -513,13 +513,13 @@ vrub_coef <- tidy(lemurs_model) |> filter(term == "taxonVRUB") |> pull(estimate)
 > *The coefficient for the VRUB taxon is* $\hat{\beta}_{VRUB} =$ *`r round(vrub_coef, 3)`. This means that the expected weight is `r round(vrub_coef, 3)` grams greater, on average, for lemurs in the VRUB taxon compared to the expected weight for lemurs in the ERUF taxon, holding age, sex, and litter size constant.*
 
 ::: {.analysis_in_practice latex=""}
-The code in @sec-mlr-estimate-R shows that we only need to put the name of the categorical predictor into the `lm` function for fitting the model. R (and other statistical software) will create indicator variables behind the scenes and selects the baseline level as the following:
+The code in @sec-mlr-estimate-r shows that we only need to put the name of the categorical predictor into the `lm` function for fitting the model. R (and other statistical software) will create indicator variables behind the scenes and selects the baseline level as the following:
 
 - If the categorical predictor is nominal (it has no inherent order like `taxon`), then R chooses the first level alphabetically to be the baseline. R made ERUF the baseline level for `taxon`, because it is first alphabetically in the list of ERUF, PCOQ, and VRUB.
 
 - If the categorical predictor is ordinal (there is some order imposed), then R chooses the lowest level to be the baseline.
 
-As the data scientists, we can determine which level we would like to be the baseline level if neither of these approaches align well with the data. To do so, use functions to impose an ordering with the desired baseline as the first level.
+As the data scientists, we can determine which level we would like to be the baseline level if neither of these approaches align well with the data. To do so, use functions, such as `fct_relevel()` in R, to impose an ordering with the desired baseline as the first level.
 :::
 
 Indicator variables in the model describe how much the intercept of the model shifts based on the levels of the categorical variable. The intercept term in the model is the intercept associated with the baseline level for the categorical predictor. This means the intercepts for `taxon` are the following:
@@ -567,7 +567,7 @@ The other categorical predictor in the model in @tbl-lemurs-model is `sex`.
 - What is the intercept for female lemurs? For male lemurs?[^07-mlr-4]
 :::
 
-[^07-mlr-4]: The baseline level for sex is "F" (Female). The average weight for male lemurs is about `r round(abs(sex_coef), 3)` grams less than the average weight for female lemurs, holding taxon, age, and litter size constant. The intercept for female lemurs is `r round(lemurs_model_intercept, 3)` .The intercept for male lemurs is `r round(lemurs_model_intercept, 3) + round(sex_coef, 3)` (`r round(lemurs_model_intercept, 3)` + `r round(sex_coef, 3)` ).
+[^07-mlr-4]: The baseline level for sex is "F" (Female). The average weight for male lemurs is about `r round(abs(sex_coef), 3)` grams less than the average weight for female lemurs, holding taxon, age, and litter size constant. The intercept for female lemurs is `r round(lemurs_model_intercept, 3)`.The intercept for male lemurs is `r round(lemurs_model_intercept, 3) + round(sex_coef, 3)` (`r round(lemurs_model_intercept, 3)` + `r round(sex_coef, 3)` ).
 
 ### Interpreting the intercept {#sec-intercept}
 
@@ -973,7 +973,9 @@ age_int_vrub <- tidy(lemurs_age_taxon_int) |>
 
 ```
 
-The model wit the interaction between `age` and `taxon` is in @tbl-lemurs-age-taxon-int-model. The interaction terms are indicated in the output in the format `var1:var2`; for example, the interaction term of `age` for the PCOQ taxon is labeled as `age:taxonPCOQ`. This individual term is an estimate of how much the slope of `age` differs between the taxa PCOQ and ERUF, the baseline. Thus, the interpretation is
+The model wit the interaction between `age` and `taxon` is in @tbl-lemurs-age-taxon-int-model. The interaction terms are indicated in the output in the format `var1:var2`; for example, the interaction term of `age` for the PCOQ taxon is labeled as `age:taxonPCOQ`.[^07-mlr-10] This individual term is an estimate of how much the slope of `age` differs between the taxa PCOQ and ERUF, the baseline. Thus, the interpretation is
+
+[^07-mlr-10]: Another common format for interaction terms is $\text{age} \times \text{taxonPCOQ}$.
 
 > *The slope of age for lemurs in the PCOQ taxon is about `r age_int_pcoq` greater for lemurs in PCOQ compared to lemurs in the ERUF taxon. This means for each additional month older a lemur is, the weight of a PCOQ lemur is expected to increase by `r age_int_pcoq` grams [**more**]{.underline}, on average, compared to an ERUF lemur, holding sex and litter size constant.*
 
@@ -982,10 +984,10 @@ This interpretation aligns with the steep slope of the line for the PCOQ species
 > *The overall slope of age for PCOQ lemurs is `r age_main + age_int_pcoq` (`r age_main` + `r age_int_pcoq` ). This means that among PCOQ lemurs, for each additional month in age, the weight is expected to be greater by `r age_main + age_int_pcoq` grams, on average, holding sex and litter size constant.*
 
 ::: {.yourturn latex=""}
-What is the slope of `age` for lemurs in the VRUB taxon? Interpret it in the context of the data.[^07-mlr-10]
+What is the slope of `age` for lemurs in the VRUB taxon? Interpret it in the context of the data.[^07-mlr-11]
 :::
 
-[^07-mlr-10]: The slope of age for lemurs in the VRUB taxon is `r round(age_main, 3) + round(age_int_vrub, 3)` (`r round(age_main, 3)` + `r round(age_int_vrub, 3)`). This means that among VRUB lemurs, for each additional month in age, the weight is expected to be greater by `r round(age_main, 3) + round(age_int_vrub, 3)` grams, on average, holding sex and litter size constant.
+[^07-mlr-11]: The slope of age for lemurs in the VRUB taxon is `r round(age_main, 3) + round(age_int_vrub, 3)` (`r round(age_main, 3)` + `r round(age_int_vrub, 3)`). This means that among VRUB lemurs, for each additional month in age, the weight is expected to be greater by `r round(age_main, 3) + round(age_int_vrub, 3)` grams, on average, holding sex and litter size constant.
 
 By now we have quantified the relationship between age and weight for PCOQ and VRUB lemurs, but what about this relationship for ERUF lemurs, the baseline category? The interaction effect `age:taxonPCOQ` is the adjustment in the slope of age for PCOQ lemurs; the same is true about `age:taxonVRUB` for VRUB lemurs. Therefore, neither of these interaction effects apply to ERUF lemurs. Putting all this together, the coefficient of `age` for ERUF lemurs is `r age_main`. The term in the model `age` is called a **main effect**, because it describes the relationship between the response and predictor variable (among the baseline subgroup). The terms `age:taxonPCOQ` and `age:taxonVRUB` called **interaction effects**, because they are how much the relationship between the response and one predictor differs by values of another predictor.
 
@@ -1001,9 +1003,9 @@ We used the original variables `age` and `litter_size` in this section; however,
 
 ### Interaction between two categorical predictors
 
-Another type of interaction effect is between two categorical predictors. Let's consider the interaction between `taxon` and `sex` for this data. We might include this interaction effect if we want to explore whether the relationship between sex and weight differs by taxon.[^07-mlr-11]
+Another type of interaction effect is between two categorical predictors. Let's consider the interaction between `taxon` and `sex` for this data. We might include this interaction effect if we want to explore whether the relationship between sex and weight differs by taxon.[^07-mlr-12]
 
-[^07-mlr-11]: The interaction between sex and taxon would also tell us if the relationship between taxon and weight differs by sex. We have decided to interpret the interaction effect in the other direction given it is more practically meaningful to understand differences between sexes within each taxon versus the other way around.
+[^07-mlr-12]: The interaction between sex and taxon would also tell us if the relationship between taxon and weight differs by sex. We have decided to interpret the interaction effect in the other direction given it is more practically meaningful to understand differences between sexes within each taxon versus the other way around.
 
 ```{r}
 #| label: fig-lemurs-taxon-sex-int
@@ -1070,10 +1072,10 @@ As before, to get the overall difference in the average weight between male and 
 
 ::: {.yourturn latex=""}
 - What is the overall effect of `sexM` for lemurs in the VRUB taxon?
-- What is the overall effect of `sexM` for lemurs in the ERUF taxon?[^07-mlr-12]
+- What is the overall effect of `sexM` for lemurs in the ERUF taxon?[^07-mlr-13]
 :::
 
-[^07-mlr-12]: The overall effect of `sexM` for lemurs in the VRUB taxon is `r sex_main + sex_int_vrub` (`r sex_main` + `r sex_int_vrub` ). The overall effect of `sexM` for lemurs in the ERUF taxon is `r sex_main`
+[^07-mlr-13]: The overall effect of `sexM` for lemurs in the VRUB taxon is `r sex_main + sex_int_vrub` (`r sex_main` + `r sex_int_vrub` ). The overall effect of `sexM` for lemurs in the ERUF taxon is `r sex_main`
 
 ### Interaction between two quantitative predictors
 
@@ -1134,7 +1136,7 @@ age_litter_int <- tidy(lemurs_age_litter_int) |>
 
 The output for the model with the interaction between `age` and `litter_size` is in @tbl-lemurs-age-litter-int-model. The coefficient for the term `age:litter_size` is the amount the effect of litter size changes as age increases by 1 month. It is interpreted as follows:
 
-> For each additional month in age, the slope of litter size and weight decreases by `r abs(age_litter_int)`, on average, holding taxon and sex constant.
+> *For each additional month in age, the slope of litter size and weight decreases by `r abs(age_litter_int)`, on average, holding taxon and sex constant.*
 
 As with previous interaction effects, we add the coefficients for the main effect term and interaction term to get the overall effect of litter size at different ages. Recall that interaction effects are just two predictor variables multiplied together, so we need to plug in a value of age to get the overall effect of litter for that age. When we had interaction effects with at least one categorical predictor, we plugged in the 1 or 0 for the indicator variable. Now we can choose any age in the range of our data to plug in. We may also want to plug in a few different ages throughout the range to see how the effect of litter size compares for different ages.
 
@@ -1145,10 +1147,10 @@ Let's interpret the effect of litter size for lemurs who are 12 months old. The 
 The coefficient of the main effect of `litter_size` is the effect of litter size when `age = 0`. There are no lemurs who are 0 months old in the data, so we should be cautious about trying to derive meaning from the main effect of litter size in this model or refit the model using the centered values of the quantitative predictors.
 
 ::: {.yourturn latex=""}
-What is the overall effect of litter size for lemurs who are 20 months old? Interpret this value in the context of the data.[^07-mlr-13]
+What is the overall effect of litter size for lemurs who are 20 months old? Interpret this value in the context of the data.[^07-mlr-14]
 :::
 
-[^07-mlr-13]: The overall effect of litter size for lemurs who are 20 months old is `r litter_main + age_litter_int` . This means that for lemurs who are 20 months old, for each additional sibling in their litter, their weight is expected to be less by `r abs(litter_main + 20 * age_litter_int)` (`r litter_main` + `r 20` $\times$ `r age_litter_int` ), on average, holding sex and taxon constant.
+[^07-mlr-14]: The overall effect of litter size for lemurs who are 20 months old is `r litter_main + age_litter_int` . This means that for lemurs who are 20 months old, for each additional sibling in their litter, their weight is expected to be less by `r abs(litter_main + 20 * age_litter_int)` (`r litter_main` + `r 20` $\times$ `r age_litter_int` ), on average, holding sex and taxon constant.
 
 ::: {.analysis_in_practice latex=""}
 In this section we only discussed interactions between two variables, but there can be interactions between three or more variables. Though such interactions are possible, they should be used with caution to avoid fitting the model too closely to the sample data and losing generalizability (called model overfit). These complex interactions also become difficult to interpret and can be harder to explain to a general audience.
