@@ -72,7 +72,7 @@ Which of the following do you think best describes the relationship between `per
 
 ### Exploratory data analysis {#sec-parks-eda-model}
 
-The visualizations and summary statistics for univariate and bivariate exploratory data analysis are in @fig-parks-univariate-eda and @tbl-parks-univariate-eda.
+The visualizations and summary statistics for univariate exploratory data analysis are in @fig-parks-univariate-eda and @tbl-parks-univariate-eda. The bivariate EDA is in @fig-parks-bivariate-eda.
 
 ```{r}
 # Modified from data available in 2021 Tidy Tuesday Park Access: https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-06-22/readme.md
@@ -208,8 +208,8 @@ The estimate `r round(parks_model_tidy$estimate[2],3)` is the "best guess" of th
 
 There are two types of statistical inference procedures:
 
-- **Hypothesis tests:** Test a specific claim about the population-level slope
-- **Confidence intervals**: A range of values that the population-level slope may reasonably take
+- **Hypothesis test:** Test of a specific claim about the population-level slope
+- **Confidence interval**: A range of values that the population-level slope may reasonably take
 
 This chapter focuses on statistical inference for the slope $\beta_1$, but the concepts introduced here can be applied to inference on the population-level intercept $\beta_0$ and other population-level parameters.
 
@@ -241,7 +241,9 @@ While the process described above would be an approach for constructing the samp
 
 <!--# does this section need to be here or could it be somewhere else?-->
 
-In @sec-slr-specify, we introduced the statistical model for simple linear regression $$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-slr-model-ch5}
+In @sec-slr-specify, we introduced the statistical model for simple linear regression
+
+$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-slr-model-ch5}
 
 such that $Y$ is the response variable, $X$ is the predictor variable, and $\epsilon$ is the error term. @eq-slr-model-ch5 can be rewritten in terms of the distribution of the response variable $Y$ given the predictor $X$. It is represented as $Y|X$ ( "$Y$ given $X$")
 
@@ -433,7 +435,7 @@ The points at what percentiles in the bootstrap distribution mark the lower and 
 - 98% confidence interval?[^05-slr-inference-6]
 :::
 
-[^05-slr-inference-6]: The points at the $5^{th}$ and $95^{th}$ percentiles make the bounds for the 95% confidence interval. The points at the $1^{st}$ and $99^{th}$ percentiles mark the lower and upper bounds for a 98% confidence interval.
+[^05-slr-inference-6]: The points at the $5^{th}$ and $95^{th}$ percentiles make the bounds for the 90% confidence interval. The points at the $1^{st}$ and $99^{th}$ percentiles mark the lower and upper bounds for a 98% confidence interval.
 
 ### Interpreting the interval
 
@@ -535,7 +537,7 @@ The alternative hypothesis defined in @eq-slr-hypotheses is "not equal to 0". Th
 
 A one-sided hypothesis test imposes some information about the direction of the parameter, that is positive ($> 0$) or negative ( $< 0$). Given this additional information imposed by the direction of the alternative hypothesis, it requires less evidence to reject the null hypothesis in favor of the alternative. Therefore, it is best to use a one-sided hypothesis only if (1) there is some indication from previous knowledge or research that the relationship between the response variable and the predictor variable is in a particular direction, or (2) only one direction of the relationship between the response and predictor variables is relevant in practice. Outside of these two scenarios, it is not advisable to use the one-sided hypothesis, as there could appear to be a statistically significant relationship between the two variables merely by chance of how the hypotheses were constructed.
 
-Because a two-sided hypothesis test makes no assumption about the direction of the relationship between the response variable and predictor variable. It is a good starting point for drawing conclusions about the relationship between the two variables. From the two-sided hypothesis, we will conclude whether there is or is not sufficient statistical evidence of a linear relationship between the response and predictor. With this conclusion, we cannot determine if the relationship between the variables is positive or negative without additional analysis. We use a confidence interval (@sec-bootstrap-ci) to make specific conclusions about the direction and magnitude of the relationship.
+Because a two-sided hypothesis test makes no assumption about the direction of the relationship between the response variable and predictor variable, it is a good starting point for drawing conclusions about the relationship between the two variables. From the two-sided hypothesis, we will conclude whether there is or is not sufficient statistical evidence of a linear relationship between the response and predictor. With this conclusion, we cannot determine if the relationship between the variables is positive or negative without additional analysis. We use a confidence interval (@sec-bootstrap-ci) to make specific conclusions about the direction and magnitude of the relationship.
 
 ### Simulate the null distribution {#sec-slr-inf-permutation}
 
@@ -897,7 +899,9 @@ The steps for conducting a hypothesis test based on the Central Limit Theorem ar
 3.  Calculate a p-value.
 4.  Draw a conclusion.
 
-As in @sec-slr-testing-sim the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of "not equal to 0". Therefore, the null and alternative hypotheses are the same as defined in @eq-slr-hypotheses $$\begin{aligned}
+As in @sec-slr-testing-sim the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of "not equal to 0". Therefore, the null and alternative hypotheses are the same as defined in @eq-slr-hypotheses
+
+$$\begin{aligned}
 H_0: \beta_1 = 0 \\
 H_a: \beta_1 \neq 0 \\
 \end{aligned}$$
@@ -960,7 +964,7 @@ $$\begin{aligned}
 &\text{where } t \sim t_{n-2}
 \end{aligned} $$ {#eq-pvalue-two-sided}
 
-We compare the p-value to a decision-making threshold $\alpha$ to draw final conclusions. If $\text{p-value} < \alpha$ , we reject the null hypothesis and conclude the alternative. Otherwise, we fail to reject the null hypothesis. See @sec-slr-inf-conclusion for more detail about using the $\alpha$-level and p-value to draw conclusions.
+We compare the p-value to a decision-making threshold $\alpha$ to draw final conclusions. If $\text{p-value} < \alpha$, we reject the null hypothesis and conclude the alternative. Otherwise, we fail to reject the null hypothesis. See @sec-slr-inf-conclusion for more detail about using the $\alpha$-level and p-value to draw conclusions.
 
 Now let's apply this process to test whether there is evidence of a linear relationship between per capita expenditure and the number of playgrounds per 10,000 residents. As before, the null and and alternative hypotheses are
 
@@ -989,7 +993,44 @@ df <- n - p - 1
 pval <- pt(-abs(2.063), 95) + pt(abs(2.063), 95, lower.tail = FALSE)
 ```
 
-Given there are $n$ = `r n` observations, the test statistic follows a $t$ distribution with $97 - 2 =$ `r df` degrees of freedom. The p-value, is $Pr(t < - |2.063| \text{ or } t > |2.063|) =$ `r round(pval, 3)`.
+Given there are $n$ = `r n` observations, the test statistic follows a $t$ distribution with $97 - 2 =$ `r df` degrees of freedom. The p-value, is $Pr(t < - |2.063| \text{ or } t > |2.063|) =$ `r round(pval, 3)`. The area under the curve of the $t$ distribution used to compute the p-value is shown in @fig-compute-pvalue. The code to compute the p-value from the $t$ distribution is in @sec-theory-inf-r; however, we typically obtain the p-value from the software's model output in practice.
+
+```{r}
+#| label: fig-compute-pvalue
+#| fig-cap: "Compute the p-value using t-distribution with 95 df"
+
+# Parameters
+df_val <- df  # degrees of freedom for the t-distribution
+
+# Create data for the full curve
+x_vals <- seq(-5, 5, length.out = 1000)
+t_data <- data.frame(
+  x = x_vals,
+  y = dt(x_vals, df = df_val)
+)
+
+# Data for the shaded tails
+left_tail <- t_data %>% filter(x <= -2.063)
+right_tail <- t_data %>% filter(x >= 2.063)
+
+y_max <- max(t_data$y)
+
+# Build the plot
+ggplot(t_data, aes(x = x, y = y)) +
+  geom_line(color = "black", linewidth = 1) +
+  geom_area(data = left_tail, aes(x = x, y = y), fill = "darkcyan") +
+  geom_area(data = right_tail, aes(x = x, y = y), fill = "darkcyan") +
+  geom_vline(xintercept = c(-2, 2), linetype = "dashed", color = "gray40") +
+  labs(
+    x = "t",
+    y = ""
+  ) +
+  theme_bw() +
+  annotate("text", x = -2.75, y = y_max * 1.05, label = "-2.063", 
+           color = "gray30", size = 5, fontface = "bold") +
+  annotate("text", x = 2.75, y = y_max * 1.05, label = "2.063", 
+           color = "gray30", size = 5, fontface = "bold") 
+```
 
 ::: {.yourturn latex=""}
 A colleague makes the following statement:
@@ -1235,7 +1276,7 @@ parks_fit <- lm(playgrounds ~ per_capita_expend, data = parks)
 tidy(parks_fit, conf.int = TRUE, conf.level= 0.95)
 ```
 
-In practice, we use the output from `tidy()` to get the confidence interval. To compute the confidence interval directly from the formula in @eq-conf-int-beta, we get $\hat{\beta}_1$ from the `estimate` column of the `tidy()` output and $SE_{\hat{\beta}_1}$ from the `std.error` column. The critical value is computed using the `qt` function. the first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in @eq-parks-ci is
+In practice, we use the output from `tidy()` to get the confidence interval. To compute the confidence interval directly from the formula in @eq-conf-int-beta, we get $\hat{\beta}_1$ from the `estimate` column of the `tidy()` output and $SE_{\hat{\beta}_1}$ from the `std.error` column. The critical value is computed using the `qt` function. The first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in @eq-parks-ci is
 
 ```{r}
 qt(0.975, 95)

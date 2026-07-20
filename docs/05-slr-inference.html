@@ -495,7 +495,7 @@ window.Quarto = {
 </div>
 <section id="sec-parks-eda-model" class="level3" data-number="5.1.1">
 <h3 data-number="5.1.1" class="anchored" data-anchor-id="sec-parks-eda-model"><span class="header-section-number">5.1.1</span> Exploratory data analysis</h3>
-<p>The visualizations and summary statistics for univariate and bivariate exploratory data analysis are in <a href="#fig-parks-univariate-eda" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> and <a href="#tbl-parks-univariate-eda" class="quarto-xref">Table&nbsp;<span>5.1</span></a>.</p>
+<p>The visualizations and summary statistics for univariate exploratory data analysis are in <a href="#fig-parks-univariate-eda" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> and <a href="#tbl-parks-univariate-eda" class="quarto-xref">Table&nbsp;<span>5.1</span></a>. The bivariate EDA is in <a href="#fig-parks-bivariate-eda" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>.</p>
 <div id="fig-parks-univariate-eda" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-parks-univariate-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -675,8 +675,8 @@ Table&nbsp;5.2: Linear regression model <code>per_capita_expend</code> and <code
 <p>The estimate 0.003 is the “best guess” of the relationship between per capita expenditure and the number of playgrounds per 10,000 residents; however, this is likely not the exact value of the relationship in the population of all US cities. We can use <strong>statistical inference</strong>, the process of drawing conclusions about the population based on the analysis of the sample data. More specifically, we will use statistical inference to draw conclusions about the population-level slope, <span class="math inline">\(\beta_1\)</span>.</p>
 <p>There are two types of statistical inference procedures:</p>
 <ul>
-<li><strong>Hypothesis tests:</strong> Test a specific claim about the population-level slope</li>
-<li><strong>Confidence intervals</strong>: A range of values that the population-level slope may reasonably take</li>
+<li><strong>Hypothesis test:</strong> Test of a specific claim about the population-level slope</li>
+<li><strong>Confidence interval</strong>: A range of values that the population-level slope may reasonably take</li>
 </ul>
 <p>This chapter focuses on statistical inference for the slope <span class="math inline">\(\beta_1\)</span>, but the concepts introduced here can be applied to inference on the population-level intercept <span class="math inline">\(\beta_0\)</span> and other population-level parameters.</p>
 <p>As we’ll see throughout the chapter, a key component of statistical inference is quantifying the <strong>sampling variability</strong>, sample-to-sample variability in the statistic that is the “best guest” estimate for the parameter. For example, when we conduct statistical inference on the slope of per capita expenditure <span class="math inline">\(\beta_1\)</span>, we need to quantify the sampling the variability of the statistic <span class="math inline">\(\hat{\beta}_1\)</span>, the estimated (sample) slope. This is the amount of variability in <span class="math inline">\(\hat{\beta}_1\)</span> that is expected if we repeated the following process many times: (1) collect a new sample that is the same size as our sample data ( 97 in this analysis), and (2) use the new sample to fit a model using <code>per_capita_expend</code> to predict <code>playgrounds</code> to obtain an estimate of the slope. The idea is that <span class="math inline">\(\hat{\beta}_1\)</span> would not be the same for each new sample, so we need a way to quantify the variability in these estimated slopes to understand this natural variation. The <span class="math inline">\(\hat{\beta}_1\)</span> values from the new samples make up the <strong>sampling distribution</strong>.</p>
@@ -697,7 +697,8 @@ Table&nbsp;5.2: Linear regression model <code>per_capita_expend</code> and <code
 <section id="sec-slr-foundation" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="sec-slr-foundation"><span class="header-section-number">5.3</span> Foundations of simple linear regression</h2>
 <!--# does this section need to be here or could it be somewhere else?-->
-<p>In <a href="04-slr.html#sec-slr-specify" class="quarto-xref"><span>Section 4.3.1</span></a>, we introduced the statistical model for simple linear regression <span id="eq-slr-model-ch5"><span class="math display">\[Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon}) \tag{5.3}\]</span></span></p>
+<p>In <a href="04-slr.html#sec-slr-specify" class="quarto-xref"><span>Section 4.3.1</span></a>, we introduced the statistical model for simple linear regression</p>
+<p><span id="eq-slr-model-ch5"><span class="math display">\[Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon}) \tag{5.3}\]</span></span></p>
 <p>such that <span class="math inline">\(Y\)</span> is the response variable, <span class="math inline">\(X\)</span> is the predictor variable, and <span class="math inline">\(\epsilon\)</span> is the error term. <a href="#eq-slr-model-ch5" class="quarto-xref">Equation&nbsp;<span>5.3</span></a> can be rewritten in terms of the distribution of the response variable <span class="math inline">\(Y\)</span> given the predictor <span class="math inline">\(X\)</span>. It is represented as <span class="math inline">\(Y|X\)</span> ( “<span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>”)</p>
 <p><span id="eq-slr-dist"><span class="math display">\[Y|X \sim N(\beta_0 + \beta_1X , \sigma^2_\epsilon) \tag{5.4}\]</span></span></p>
 <p><a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.4</span></a> is the assumed distribution of the response variable conditional on the predictor variable under the simple linear regression model. Therefore, we conduct simple linear regression assuming <a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.4</span></a> is true. <!--# @fig-slr-assumptions is a visual representation of this equation.--> Based on the equation <!--# and figure --> we specify the assumptions that are made when we do simple linear regression. More specifically, the following assumptions are made based on <a href="#eq-slr-dist" class="quarto-xref">Equation&nbsp;<span>5.4</span></a>:</p>
@@ -1067,7 +1068,7 @@ Table&nbsp;5.6: 95% confidence interval for the slope
 <h4 class="unnumbered anchored" data-anchor-id="one-vs.-two-sided-hypotheses">One vs.&nbsp;two-sided hypotheses</h4>
 <p>The alternative hypothesis defined in <a href="#eq-slr-hypotheses" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> is “not equal to 0”. This is the alternative hypothesis corresponding to a <em>two-sided</em> hypothesis test, because it includes the scenarios in which <span class="math inline">\(\beta_1\)</span> is less than or greater than 0. There are two other options for defining the alternative hypothesis, “<span class="math inline">\(\beta_1\)</span> is less than 0” (<span class="math inline">\(H_a: \beta_1 &lt; 0\)</span>) and “<span class="math inline">\(\beta_1\)</span> is greater than 0” (<span class="math inline">\(H_a: \beta_1 &gt; 0\)</span>). These are <em>one-sided hypothesis tests</em>, as they only consider the alternative scenario in which <span class="math inline">\(\beta_1\)</span> is either less than or greater than 0, respectively.</p>
 <p>A one-sided hypothesis test imposes some information about the direction of the parameter, that is positive (<span class="math inline">\(&gt; 0\)</span>) or negative ( <span class="math inline">\(&lt; 0\)</span>). Given this additional information imposed by the direction of the alternative hypothesis, it requires less evidence to reject the null hypothesis in favor of the alternative. Therefore, it is best to use a one-sided hypothesis only if (1) there is some indication from previous knowledge or research that the relationship between the response variable and the predictor variable is in a particular direction, or (2) only one direction of the relationship between the response and predictor variables is relevant in practice. Outside of these two scenarios, it is not advisable to use the one-sided hypothesis, as there could appear to be a statistically significant relationship between the two variables merely by chance of how the hypotheses were constructed.</p>
-<p>Because a two-sided hypothesis test makes no assumption about the direction of the relationship between the response variable and predictor variable. It is a good starting point for drawing conclusions about the relationship between the two variables. From the two-sided hypothesis, we will conclude whether there is or is not sufficient statistical evidence of a linear relationship between the response and predictor. With this conclusion, we cannot determine if the relationship between the variables is positive or negative without additional analysis. We use a confidence interval (<a href="#sec-bootstrap-ci" class="quarto-xref"><span>Section 5.4</span></a>) to make specific conclusions about the direction and magnitude of the relationship.</p>
+<p>Because a two-sided hypothesis test makes no assumption about the direction of the relationship between the response variable and predictor variable, it is a good starting point for drawing conclusions about the relationship between the two variables. From the two-sided hypothesis, we will conclude whether there is or is not sufficient statistical evidence of a linear relationship between the response and predictor. With this conclusion, we cannot determine if the relationship between the variables is positive or negative without additional analysis. We use a confidence interval (<a href="#sec-bootstrap-ci" class="quarto-xref"><span>Section 5.4</span></a>) to make specific conclusions about the direction and magnitude of the relationship.</p>
 </section>
 </section>
 <section id="sec-slr-inf-permutation" class="level3" data-number="5.6.2">
@@ -1548,7 +1549,8 @@ Figure&nbsp;5.7: Bootstrap distribution of predictions when <code>spend = 150</c
 <li>Calculate a p-value.</li>
 <li>Draw a conclusion.</li>
 </ol>
-<p>As in <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of “not equal to 0”. Therefore, the null and alternative hypotheses are the same as defined in <a href="#eq-slr-hypotheses" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> <span class="math display">\[\begin{aligned}
+<p>As in <a href="#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a> the goal is to use hypothesis testing to determine whether there is evidence of a statistically significant linear relationship between a response and predictor variable, corresponding to the two-sided alternative hypothesis of “not equal to 0”. Therefore, the null and alternative hypotheses are the same as defined in <a href="#eq-slr-hypotheses" class="quarto-xref">Equation&nbsp;<span>5.5</span></a></p>
+<p><span class="math display">\[\begin{aligned}
 H_0: \beta_1 = 0 \\
 H_a: \beta_1 \neq 0 \\
 \end{aligned}\]</span></p>
@@ -1587,7 +1589,7 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 &amp;\text{p-value} = Pr(|t| &gt; |T|) = Pr(t &lt; -|T| \text{ or } t &gt; |T|) \\[5pt]
 &amp;\text{where } t \sim t_{n-2}
 \end{aligned}  \tag{5.10}\]</span></span></p>
-<p>We compare the p-value to a decision-making threshold <span class="math inline">\(\alpha\)</span> to draw final conclusions. If <span class="math inline">\(\text{p-value} &lt; \alpha\)</span> , we reject the null hypothesis and conclude the alternative. Otherwise, we fail to reject the null hypothesis. See <a href="#sec-slr-inf-conclusion" class="quarto-xref"><span>Section 5.6.4</span></a> for more detail about using the <span class="math inline">\(\alpha\)</span>-level and p-value to draw conclusions.</p>
+<p>We compare the p-value to a decision-making threshold <span class="math inline">\(\alpha\)</span> to draw final conclusions. If <span class="math inline">\(\text{p-value} &lt; \alpha\)</span>, we reject the null hypothesis and conclude the alternative. Otherwise, we fail to reject the null hypothesis. See <a href="#sec-slr-inf-conclusion" class="quarto-xref"><span>Section 5.6.4</span></a> for more detail about using the <span class="math inline">\(\alpha\)</span>-level and p-value to draw conclusions.</p>
 <p>Now let’s apply this process to test whether there is evidence of a linear relationship between per capita expenditure and the number of playgrounds per 10,000 residents. As before, the null and and alternative hypotheses are</p>
 <p><span class="math display">\[\begin{aligned}
 &amp;H_0: \beta_{1} = 0 \\
@@ -1596,7 +1598,21 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <p>where <span class="math inline">\(\beta_1\)</span> is the true slope between <code>per_capita_expend</code> and <code>playgrounds</code>. The observed slope from <a href="#tbl-parks-model" class="quarto-xref">Table&nbsp;<span>5.2</span></a>, we know the observed slope <span class="math inline">\(\hat{\beta}_{1}\)</span> is 0.003 and the estimated standard error <span class="math inline">\(SE_{\hat{\beta}_{1}}\)</span> is 0.002. The test statistic is</p>
 <p><span class="math display">\[T = \frac{0.0033 - 0}{0.0016} = 2.063\]</span></p>
 <p>This test statistic means that assuming the true slope of <code>per_capita_expend</code> in this model is 0 and thus the mean of the distribution of <span class="math inline">\(\hat{\beta}_{1}\)</span> is 0, the observed slope of 0.003 is 2.063 standard errors above this hypothesized mean. It’s difficult to determine whether or not this is really “far enough” away from the center of the distribution, but we can calculate a p-value to determine the probability of observing a slope at least this far given the null hypothesis is true.</p>
-<p>Given there are <span class="math inline">\(n\)</span> = 97 observations, the test statistic follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(97 - 2 =\)</span> 95 degrees of freedom. The p-value, is <span class="math inline">\(Pr(t &lt; - |2.063| \text{ or } t &gt; |2.063|) =\)</span> 0.042.</p>
+<p>Given there are <span class="math inline">\(n\)</span> = 97 observations, the test statistic follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(97 - 2 =\)</span> 95 degrees of freedom. The p-value, is <span class="math inline">\(Pr(t &lt; - |2.063| \text{ or } t &gt; |2.063|) =\)</span> 0.042. The area under the curve of the <span class="math inline">\(t\)</span> distribution used to compute the p-value is shown in <a href="#fig-compute-pvalue" class="quarto-xref">Figure&nbsp;<span>5.9</span></a>. The code to compute the p-value from the <span class="math inline">\(t\)</span> distribution is in <a href="#sec-theory-inf-r" class="quarto-xref"><span>Section 5.10.3</span></a>; however, we typically obtain the p-value from the software’s model output in practice.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-compute-pvalue" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-compute-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="05-slr-inference_files/figure-html/fig-compute-pvalue-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;5.9: Compute the p-value using t-distribution with 95 df"><img src="05-slr-inference_files/figure-html/fig-compute-pvalue-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-compute-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.9: Compute the p-value using t-distribution with 95 df
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 <div class="yourturn">
 <p>A colleague makes the following statement:</p>
 <p><em>The p-value 0.042 means there is a 4.2 % chance the null hypothesis is true.</em> Is this interpretation of the p-value correct? If not, write the correct interpretation.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
@@ -1744,7 +1760,7 @@ Table&nbsp;5.12: Standard errors and 95% intervals for the predicted mean respon
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="05-slr-inference_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1815,7 +1831,7 @@ Table&nbsp;5.12: Standard errors and 95% intervals for the predicted mean respon
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<p><a href="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="05-slr-inference_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1857,7 +1873,7 @@ Table&nbsp;5.12: Standard errors and 95% intervals for the predicted mean respon
 2 per_capita_expend  0.00330   0.00160      2.06 4.24e- 2 0.000115   0.00648</code></pre>
 </div>
 </div>
-<p>In practice, we use the output from <code>tidy()</code> to get the confidence interval. To compute the confidence interval directly from the formula in <a href="#eq-conf-int-beta" class="quarto-xref">Equation&nbsp;<span>5.11</span></a>, we get <span class="math inline">\(\hat{\beta}_1\)</span> from the <code>estimate</code> column of the <code>tidy()</code> output and <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> from the <code>std.error</code> column. The critical value is computed using the <code>qt</code> function. the first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in <a href="#eq-parks-ci" class="quarto-xref">Equation&nbsp;<span>5.12</span></a> is</p>
+<p>In practice, we use the output from <code>tidy()</code> to get the confidence interval. To compute the confidence interval directly from the formula in <a href="#eq-conf-int-beta" class="quarto-xref">Equation&nbsp;<span>5.11</span></a>, we get <span class="math inline">\(\hat{\beta}_1\)</span> from the <code>estimate</code> column of the <code>tidy()</code> output and <span class="math inline">\(SE_{\hat{\beta}_1}\)</span> from the <code>std.error</code> column. The critical value is computed using the <code>qt</code> function. The first argument is the cumulative probability (the percentile associated with the upper bound of the interval), and the degrees of freedom go in the second argument. For example, the critical value for the 95% confidence interval for the parks data used in <a href="#eq-parks-ci" class="quarto-xref">Equation&nbsp;<span>5.12</span></a> is</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.99</code></pre>
@@ -1964,7 +1980,7 @@ Intercept: We would not expect a city to invest $0 on services and facilities fo
 <li id="fn3"><p>We sample with replacement so that we get a new sample of <span class="math inline">\(x_i, y_i\)</span> pairs each time we bootstrap. In each bootstrap sample, some <span class="math inline">\(x_i, y_i\)</span> pairs from original data may appear multiple times and some may be omitted. If we sampled without replacement, the resulting bootstrap samples would always be exactly the same as the original sample data.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Each bootstrap sample is the same size as our current sample data. In this case, the sample data we’re analyzing has 97 observations.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>There are 1000 values, the number of iterations, in the bootstrapped sampling distribution.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>The points at the <span class="math inline">\(5^{th}\)</span> and <span class="math inline">\(95^{th}\)</span> percentiles make the bounds for the 95% confidence interval. The points at the <span class="math inline">\(1^{st}\)</span> and <span class="math inline">\(99^{th}\)</span> percentiles mark the lower and upper bounds for a 98% confidence interval.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>The points at the <span class="math inline">\(5^{th}\)</span> and <span class="math inline">\(95^{th}\)</span> percentiles make the bounds for the 90% confidence interval. The points at the <span class="math inline">\(1^{st}\)</span> and <span class="math inline">\(99^{th}\)</span> percentiles mark the lower and upper bounds for a 98% confidence interval.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn7"><p>The variability is approximately equal in both distributions. This is expected, because the distributions will have the same variability but different centers.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn8"><p>Given there is no linear relationship between spending per resident and playgrounds per 10,000 residents ( <span class="math inline">\(H_0\)</span> is true), the probability of observing a slope of 0.003 or more extreme in a random sample of 97 cities is 0.046.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>It is possible we have made a Type I error, because we concluded to reject the null hypothesis.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
