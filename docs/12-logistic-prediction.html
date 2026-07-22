@@ -399,7 +399,7 @@ window.Quarto = {
   <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation"><span class="header-section-number">12.6.3</span> Model evaluation</a></li>
   </ul>
 </li>
-  <li><a href="#sec-logistic-workflow" id="toc-sec-logistic-workflow" class="nav-link" data-scroll-target="#sec-logistic-workflow"><span class="header-section-number">12.7</span> Modeling building workflow in R</a></li>
+  <li><a href="#sec-logistic-workflow" id="toc-sec-logistic-workflow" class="nav-link" data-scroll-target="#sec-logistic-workflow"><span class="header-section-number">12.7</span> Modeling-building workflow in R</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">12.8</span> Summary</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/matackett/regression-book/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -677,7 +677,7 @@ Table&nbsp;12.1: Model of <code>aidrive_comfort</code> versus <code>age</code>, 
 </div>
 </div>
 <div class="yourturn">
-<p>Consider the coefficients for the indicators of <code>income_fct</code>. Are they consistent with the observations from the EDA? Why or why not. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Consider the coefficients for the indicators of <code>income_fct</code>. Are they consistent with the observations from the EDA? Why or why not.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 </div>
 </section></section><section id="prediction-and-classification" class="level2" data-number="12.3"><h2 data-number="12.3" class="anchored" data-anchor-id="prediction-and-classification">
 <span class="header-section-number">12.3</span> Prediction and classification</h2>
@@ -821,24 +821,36 @@ Table&nbsp;12.2: Predictions from model in <a href="#tbl-aidrive-comfort-fit" cl
 </div>
 </div>
 <p>Let’s show how the predicted values for the first observation are computed. The predicted log odds the first individual who is 33 years old, agrees that technology makes life better, and has an annual income of $110k or more are</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p><span id="eq-pred-log-odds"><span class="math display">\[\begin{aligned}
 \log \Big(\frac{\hat{\pi}}{1-\hat{\pi}}\Big) &amp;=  0.032 - 0.016  \times 33 + 0.075   \times 0 +  0.576 \times 1 \\
 &amp;- 0.436  \times 0 +  0.264 \times 0 +  0.526  \times 0 \\
 &amp; + 1.223  \times 1 + 0.265 \times 0 \\
-&amp; = 1.3
-\end{aligned}
-\]</span></p>
-<p>where <span class="math inline">\(\hat{\pi}\)</span> is the predicted probability of being comfortable with driverless cars.</p>
-<p>Using the predicted log odds from <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a>, the predicted odds for this individual are</p>
-<p><span class="math display">\[\widehat{\text{odds}} = e^{\log \big( \frac{\hat{\pi}}{1-\hat{\pi}}\big)} = e^{1.306} = 3.69 \]</span></p>
-<p>Lastly, we use the odds from <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a> to compute the predicted probability:</p>
-<p><span class="math display">\[
-\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.692}{1 + 3.692} = 0.787
-\]</span></p>
-<p>Note: These values may differ slightly from the values in the the table, because we are computing predictions using rounded coefficient.</p>
+&amp; = 1.303
+\end{aligned} \tag{12.1}\]</span></span></p>
+<p>where <span class="math inline">\(\hat{\pi}\)</span> is the predicted probability of being comfortable with driverless cars. Note that the difference between the predicted log odds computed in <a href="#eq-pred-log-odds" class="quarto-xref">Equation&nbsp;<span>12.1</span></a> and the predicted log odds in <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a> is due to rounding of the coefficients in <a href="#eq-pred-log-odds" class="quarto-xref">Equation&nbsp;<span>12.1</span></a>.</p>
+<p>Using the predicted log odds from the first row of <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a>, the predicted odds for this individual are</p>
+<p><span class="math display">\[\widehat{\text{odds}} = e^{\log \big( \frac{\hat{\pi}}{1-\hat{\pi}}\big)} = e^{1.306} = 3.6 \]</span></p>
+<p>Lastly, we use the odds from <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a> to compute the predicted probability<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
+<p><span class="math display">\[\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.692}{1 + 3.692} = 0.787\]</span></p>
+<div class="math_rules">
+<p>The relationship between the predicted log odds and the predicted probability is more concisely represented by the <strong>sigmoid function</strong> (<span class="quarto-unresolved-ref">?eq-sigmoid</span>). The sigmoid function, denoted <span class="math inline">\(\sigma(z)\)</span>, is the inverse of the logit function, i.e., the log odds.</p>
+<p><span class="math display">\[\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}\]</span></p>
+<p>It produces the “S” curve often seen for the predicted probabilities from a logistic regression model. <a href="#fig-sigmoid" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> is an illustration of the sigmoid function.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-sigmoid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-sigmoid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="12-logistic-prediction_files/figure-html/fig-sigmoid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;12.3: Illustration of the sigmoid function based on simulated data"><img src="12-logistic-prediction_files/figure-html/fig-sigmoid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sigmoid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.3: Illustration of the sigmoid function based on simulated data
+</figcaption></figure>
+</div>
+</div>
+</div>
+</div>
 <div class="yourturn">
-<p>Show how to compute the predicted log odds, odds, and probability for individual #2 in <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Show how to compute the predicted odds and probability for individual #2 in <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 </div>
 </section><section id="sec-classification" class="level3" data-number="12.3.2"><h3 data-number="12.3.2" class="anchored" data-anchor-id="sec-classification">
 <span class="header-section-number">12.3.2</span> Classification</h3>
@@ -983,14 +995,10 @@ Observed class
 <li>There are 601 observations with the predicted class of 1 and observed class of 1.</li>
 </ul>
 <p>We compute various statistics from the confusion matrix to evaluate how well the observations are classified. The first statistics we can calculate are the accuracy and misclassification rate. The <strong>accuracy</strong> is the proportion <!--# or percentage?--> of observations that are correctly classified (the observed and predicted classes are the same). The accuracy based on <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> is</p>
-<p><span id="eq-logistic-accuracy"><span class="math display">\[
-\text{accuracy} = \frac{349 + 601}{349 + 228 + 343 + 601} = 0.625
-\tag{12.1}\]</span></span></p>
+<p><span id="eq-logistic-accuracy"><span class="math display">\[\text{accuracy} = \frac{349 + 601}{349 + 228 + 343 + 601} = 0.625  \tag{12.2}\]</span></span></p>
 <p>Using the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and the threshold of 0.5, 62.5% of the observations are correctly classified.</p>
 <p>The <strong>misclassification rate</strong> is the proportion of observations that are not correctly classified (the observed and predicted classes differ). The misclassification rate based on <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> is</p>
-<p><span id="eq-logistic-misclassification"><span class="math display">\[
-\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375
-\tag{12.2}\]</span></span></p>
+<p><span id="eq-logistic-misclassification"><span class="math display">\[\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375 \tag{12.3}\]</span></span></p>
 <p>Using the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and the threshold of 0.5, 37.5% of the observations are incorrectly classified. Note that the misclassification rate is equal to <span class="math inline">\(1 - \text{accuracy}\)</span> ,and vice versa.</p>
 <div class="analysis_in_practice">
 <p>When the distribution of the response variable is largely imbalanced, the accuracy can be a misleading measure of how well the observations are classified. For example, suppose there are 100 observations, such that 5% of the observations have an observed response <span class="math inline">\(Y = 1\)</span>, and 95% of the observations have an observed response of <span class="math inline">\(Y = 0\)</span>. We may observe an imbalanced distribution like this when building a model to detect the presence of a rare disease, for example.</p>
@@ -1083,47 +1091,35 @@ Table&nbsp;12.5: Detailed confusion matrix
 <li><p><strong>False positive (FP):</strong> The number of observations that are predicted to be comfortable with driverless cars ( <span class="math inline">\(\hat{y}_i = 1\)</span>) and have observed response of not comfortable ( <span class="math inline">\(y_i = 0\)</span>) .</p></li>
 <li><p><strong>True positive (TP):</strong> The number of observations that are predicted to be comfortable with driverless cars ( <span class="math inline">\(\hat{y}_i = 1\)</span>) and have observed response of comfortable ( <span class="math inline">\(y_i = 1\)</span>) .</p></li>
 </ul>
-<p>Using these definitions, the general form of accuracy computed in <a href="#eq-logistic-accuracy" class="quarto-xref">Equation&nbsp;<span>12.1</span></a> is</p>
-<p><span id="eq-accuracy-general"><span class="math display">\[
-\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}
-\tag{12.3}\]</span></span></p>
+<p>Using these definitions, the general form of accuracy computed in <a href="#eq-logistic-accuracy" class="quarto-xref">Equation&nbsp;<span>12.2</span></a> is</p>
+<p><span id="eq-accuracy-general"><span class="math display">\[\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}} \tag{12.4}\]</span></span></p>
 <div class="yourturn">
-<p>Write the general equation for the misclassification computed in <a href="#eq-logistic-misclassification" class="quarto-xref">Equation&nbsp;<span>12.2</span></a> using the terms in <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>Write the general equation for the misclassification computed in <a href="#eq-logistic-misclassification" class="quarto-xref">Equation&nbsp;<span>12.3</span></a> using the terms in <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </div>
 <p>Now let’s take a look at additional statistics that help us quantify how well the observations are classified. First, we’ll focus on the column containing those who have observed values <span class="math inline">\(y_i = 1\)</span>.</p>
 <p>The <strong>sensitivity</strong> (<strong>true positive rate</strong>) is the proportion of those with observed <span class="math inline">\(y_i = 1\)</span> that were correctly classified as <span class="math inline">\(\hat{y}_i = 1\)</span>. In machine learning contexts, this value is also called <strong>recall</strong> or <strong>probability of detection</strong>.</p>
-<p><span id="eq-sensitivity"><span class="math display">\[
-\text{Sensitivity} = \frac{\text{True positive}}{\text{False negative} + \text{True positive}}
-\tag{12.4}\]</span></span></p>
+<p><span id="eq-sensitivity"><span class="math display">\[\text{Sensitivity} = \frac{\text{True positive}}{\text{False negative} + \text{True positive}} \tag{12.5}\]</span></span></p>
 <p>The <strong>false negative rate</strong> is the proportion of those with observed <span class="math inline">\(y_i = 1\)</span> that were incorrectly classified as <span class="math inline">\(\hat{y}_i = 0\)</span>.</p>
-<p><span id="eq-false-negative"><span class="math display">\[
-\text{False negative rate} = \frac{\text{False negative}}{\text{False negative} + \text{True positive}}
-\tag{12.5}\]</span></span></p>
+<p><span id="eq-false-negative"><span class="math display">\[\text{False negative rate} = \frac{\text{False negative}}{\text{False negative} + \text{True positive}} \tag{12.6}\]</span></span></p>
 <p>The false negative rate is equal to <span class="math inline">\(1 - \text{Sensitivity}\)</span> and vice versa. The denominators for the false negative rate and the sensitivity are the total number of observations with observed response <span class="math inline">\(y_i = 1\)</span>. In terms of our analysis, this is the total number of people who responded they are comfortable with driverless cars in the General Social Survey.</p>
 <p>Next, we look at the column of containing those who have observed values of <span class="math inline">\(y_i =0\)</span>.</p>
 <p>The <strong>specificity</strong> (<strong>true negative rate</strong>) is the proportion of those with observed <span class="math inline">\(y_i = 0\)</span> who were correctly classified as <span class="math inline">\(\hat{y}_i = 0\)</span>.</p>
-<p><span id="eq-specificity"><span class="math display">\[
-\text{Specificity} = \frac{\text{True negative}}{\text{True negative} + \text{False positive}}
-\tag{12.6}\]</span></span></p>
+<p><span id="eq-specificity"><span class="math display">\[\text{Specificity} = \frac{\text{True negative}}{\text{True negative} + \text{False positive}} \tag{12.7}\]</span></span></p>
 <p>The <strong>false positive rate</strong> is the proportion of those with observed <span class="math inline">\(y_i = 0\)</span> who were incorrectly classified as <span class="math inline">\(\hat{y}_i = 1\)</span>. In machine learning contexts, this value is also called the <strong>probability of false alarm.</strong></p>
-<p><span id="eq-false-positive"><span class="math display">\[
-\text{False positive rate} = \frac{\text{False positive}}{\text{True negative} + \text{False positive}}
-\tag{12.7}\]</span></span></p>
+<p><span id="eq-false-positive"><span class="math display">\[\text{False positive rate} = \frac{\text{False positive}}{\text{True negative} + \text{False positive}} \tag{12.8}\]</span></span></p>
 <p>The false positive rate is equal to <span class="math inline">\(1 - \text{specificity}\)</span>. The denominators for the specificity and false positive rate are the total number of observations with observed response <span class="math inline">\(y_i = 0\)</span>. In terms of our analysis, this is the total number of people who responded they are not comfortable with driverless cars in the General Social Survey.</p>
 <p>The values shown thus far quantify how well observations are classified based on the observed response. Another question that is often of interest is among those with predicted class of <span class="math inline">\(\hat{y}_i = 1\)</span>, how many actually have observed values of <span class="math inline">\(y_i = 1\)</span>? This value is called the <strong>precision.</strong></p>
-<p><span id="eq-precision"><span class="math display">\[
-\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}}
-\tag{12.8}\]</span></span></p>
+<p><span id="eq-precision"><span class="math display">\[\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}} \tag{12.9}\]</span></span></p>
 <p>Now the denominator is the number of observations that have a predicted class <span class="math inline">\(\hat{y}_i = 1\)</span>, the second row in the <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>. In the context of our analysis, the precision is how many of the individuals who are predicted to be comfortable with driverless cars actually responded on the General Social Survey that they are comfortable with driverless cars. If we’re using the model to identify individuals for a targeted marketing campaign, the precision can be useful in quantifying whether the marketing will generally capture those who are actually comfortable with driverless cars or if a large proportion would be aimed at those who actually aren’t comfortable with driverless cars and likely won’t become robotaxi customers.</p>
 <div class="yourturn">
 <p>Use <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> to compute the following:</p>
 <ul>
 <li><p>Sensitivity</p></li>
 <li><p>Specificity</p></li>
-<li><p>Precision<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p></li>
+<li><p>Precision<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p></li>
 </ul>
 </div>
-<p>We have shown how we can derive a lot of useful information from the confusion matrix. As we use the confusion matrix to evaluate how well observations are classified; however, we need to keep in mind that the confusion matrix is determined based on the model predictions <u><strong>and</strong></u> the threshold for classification. For example, in <a href="#tbl-confusion-matrix-0.3" class="quarto-xref">Table&nbsp;<span>12.6</span></a>, we see a confusion matrix for the same model in <span class="citation" data-cites="aidrive-comfort-fit">(<a href="references.html#ref-aidrive-comfort-fit" role="doc-biblioref"><strong>aidrive-comfort-fit?</strong></a>)</span> using the threshold of 0.3.</p>
+<p>We have shown how we can derive a lot of useful information from the confusion matrix. As we use the confusion matrix to evaluate how well observations are classified; however, we need to keep in mind that the confusion matrix is determined based on the model predictions <u><strong>and</strong></u> the threshold for classification. For example, in <a href="#tbl-confusion-matrix-0.3" class="quarto-xref">Table&nbsp;<span>12.6</span></a>, we see a confusion matrix for the same model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> using the threshold of 0.3.</p>
 <div class="cell">
 <div id="tbl-confusion-matrix-0.3" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-0.3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1170,28 +1166,28 @@ Observed class
 <p>Due to the low threshold, there are many more observations classified as <span class="math inline">\(\hat{y}_i = 1\)</span> compared to <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a>. The accuracy rate is now 58.1% and the misclassification rate is 41.9% even though the model hasn’t changed. From this example, we see that even if the model is unchanged, the metrics computed from the confusion matrix will differ based on the threshold. Therefore, we would like a way to evaluate the model performance independent from the choice of threshold.</p>
 </section></section><section id="sec-roc" class="level2" data-number="12.4"><h2 data-number="12.4" class="anchored" data-anchor-id="sec-roc">
 <span class="header-section-number">12.4</span> ROC Curve</h2>
-<p>Ideally, we want a way to evaluate the the model performance regardless of threshold and then choose a threshold that results in the “best” classification as determined by the statistics from the previous section. We could make confusion matrices across a range of thresholds, but this process could be cumbersome and time consuming to make so many confusion matrices. Rather than make individual confusion matrices, we will use the <strong>receiving operator characteristic (ROC) curve</strong> shown in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.3</span></a>. The ROC curve is a single visualization to holistically evaluate the model fit and see how well the model classifies at different thresholds. We can use the data from the ROC curve to choose a classification threshold. <!--# add something about origin of ROC curve or where it gets its name--></p>
+<p>Ideally, we want a way to evaluate the the model performance regardless of threshold and then choose a threshold that results in the “best” classification as determined by the statistics from the previous section. We could make confusion matrices across a range of thresholds, but this process could be cumbersome and time consuming to make so many confusion matrices. Rather than make individual confusion matrices, we will use the <strong>receiving operator characteristic (ROC) curve</strong> shown in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a>. The ROC curve is a single visualization to holistically evaluate the model fit and see how well the model classifies at different thresholds. We can use the data from the ROC curve to choose a classification threshold. <!--#add something about origin of ROC curve or where it gets its name. Maybe leave this out? it's a bit of an aside and I can't find a good original source for the name. --></p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-aidrive-comfort-roc-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-aidrive-comfort-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-aidrive-comfort-roc-curve-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;12.3: ROC curve for model in Table&nbsp;tbl-aidrive-comfort-fit with point marked at threshold = 0.4754"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-comfort-roc-curve-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-comfort-roc-curve-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;12.4: ROC curve for model in Table&nbsp;tbl-aidrive-comfort-fit with point marked at threshold = 0.4754"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-comfort-roc-curve-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aidrive-comfort-roc-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.3: ROC curve for model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> with point marked at threshold = 0.4754
+Figure&nbsp;12.4: ROC curve for model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> with point marked at threshold = 0.4754
 </figcaption></figure>
 </div>
 </div>
 </div>
 <!--# need to update this graph so that it is not a direct copy of Mine's, including the colors-->
-<p><a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> is the ROC curve for the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a>. The <span class="math inline">\(x\)</span>-axis on the ROC curve is <span class="math inline">\(1 - \text{Specificity}\)</span>, the false positive rate, and the <span class="math inline">\(y\)</span>-axis is <span class="math inline">\(\text{Sensitivity}\)</span>, the true positive rate. Thus, the ROC curve is a visualization of the true positive rate versus the false positive rate at classification thresholds ranging from 0 to 1 (equivalent to the log odds ranging from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(\infty\)</span>). The diagonal line represents a model fit in which the true positive rate and false positives are equal regardless of the threshold. This means the model is unable to distinguish the observations that actually have an observed response of <span class="math inline">\(y_i = 1\)</span> versus those that do not, so it is essentially the same as using a coin flip to classify observations (not a good model!). In contrast, ROC curves that hit closer to the top-left corner indicate a model that is good at distinguishing true positives and false positives.</p>
+<p><a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> is the ROC curve for the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a>. The <span class="math inline">\(x\)</span>-axis on the ROC curve is <span class="math inline">\(1 - \text{Specificity}\)</span>, the false positive rate, and the <span class="math inline">\(y\)</span>-axis is <span class="math inline">\(\text{Sensitivity}\)</span>, the true positive rate. Thus, the ROC curve is a visualization of the true positive rate versus the false positive rate at classification thresholds ranging from 0 to 1 (equivalent to the log odds ranging from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(\infty\)</span>). The diagonal line represents a model fit in which the true positive rate and false positives are equal regardless of the threshold. This means the model is unable to distinguish the observations that actually have an observed response of <span class="math inline">\(y_i = 1\)</span> versus those that do not, so it is essentially the same as using a coin flip to classify observations (not a good model!). In contrast, ROC curves that hit closer to the top-left corner indicate a model that is good at distinguishing true positives and false positives.</p>
 <div id="fig-roc-curve-examples" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-roc-curve-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div id="fig-roc-curve-examples-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-1.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.4&nbsp;(a): Poor distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-1.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.5&nbsp;(a): Poor distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Poor distinction
@@ -1201,7 +1197,7 @@ Figure&nbsp;12.3: ROC curve for model in <a href="#tbl-aidrive-comfort-fit" clas
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div id="fig-roc-curve-examples-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-2.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.4&nbsp;(b): Good distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-2.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.5&nbsp;(b): Good distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Good distinction
@@ -1211,7 +1207,7 @@ Figure&nbsp;12.3: ROC curve for model in <a href="#tbl-aidrive-comfort-fit" clas
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div id="fig-roc-curve-examples-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-3.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.4&nbsp;(c): Nearly perfect distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-3.png" class="lightbox" data-gallery="fig-roc-curve-examples" title="Figure&nbsp;12.5&nbsp;(c): Nearly perfect distinction"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (c) Nearly perfect distinction
@@ -1221,12 +1217,12 @@ Figure&nbsp;12.3: ROC curve for model in <a href="#tbl-aidrive-comfort-fit" clas
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-curve-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.4: Example ROC curves for different model performs
+Figure&nbsp;12.5: Example ROC curves for different model performs
 </figcaption></figure>
 </div>
 <!--# think of better words than distinction?-->
-<p><a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> shows example ROC curves for different model fits. <a href="#fig-roc-curve-examples-1" class="quarto-xref">Figure&nbsp;<span>12.4 (a)</span></a> is the ROC curve for a model that does a poor job distinguishing between the true positives and false positives (close to the diagonal line) and <a href="#fig-roc-curve-examples-3" class="quarto-xref">Figure&nbsp;<span>12.4 (c)</span></a> is the ROC curve for a model that almost perfectly distinguishes between the true and false positives (close to the top-left corner). Generally, we expect to see ROC curves somewhere in the middle, similar to <a href="#fig-roc-curve-examples-2" class="quarto-xref">Figure&nbsp;<span>12.4 (b)</span></a>. Here, the model generally does a good job distinguishing between the true and false positives, but we will expect to get some false positives if we want a high true positive rate (sensitivity).</p>
-<p>Each point in the ROC curve is <span class="math inline">\((1 - \text{Specificity, } \text{Sensitivity})\)</span> at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> shows corresponds to <span class="math inline">\(1 - \text{Specificity} = 0.525\)</span> and <span class="math inline">\(\text{Sensitivity} = 0.75\)</span>. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a>. Observations with predicted probability <span class="math inline">\(\hat{\pi}_i &gt; 0.4888088\)</span> are classified as being comfortable with driverless cars, and those with <span class="math inline">\(\hat{\pi}_i \leq 0.4888088\)</span> are classified as not being comfortable with driverless cars.</p>
+<p><a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.5</span></a> shows example ROC curves for different model fits. <a href="#fig-roc-curve-examples-1" class="quarto-xref">Figure&nbsp;<span>12.5 (a)</span></a> is the ROC curve for a model that does a poor job distinguishing between the true positives and false positives (close to the diagonal line) and <a href="#fig-roc-curve-examples-3" class="quarto-xref">Figure&nbsp;<span>12.5 (c)</span></a> is the ROC curve for a model that almost perfectly distinguishes between the true and false positives (close to the top-left corner). Generally, we expect to see ROC curves somewhere in the middle, similar to <a href="#fig-roc-curve-examples-2" class="quarto-xref">Figure&nbsp;<span>12.5 (b)</span></a>. Here, the model generally does a good job distinguishing between the true and false positives, but we will expect to get some false positives if we want a high true positive rate (sensitivity).</p>
+<p>Each point in the ROC curve is <span class="math inline">\((1 - \text{Specificity, } \text{Sensitivity})\)</span> at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> shows corresponds to <span class="math inline">\(1 - \text{Specificity} = 0.525\)</span> and <span class="math inline">\(\text{Sensitivity} = 0.75\)</span>. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a>. Observations with predicted probability <span class="math inline">\(\hat{\pi}_i &gt; 0.4888088\)</span> are classified as being comfortable with driverless cars, and those with <span class="math inline">\(\hat{\pi}_i \leq 0.4888088\)</span> are classified as not being comfortable with driverless cars.</p>
 <div class="cell" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
 <div id="tbl-aidrive-roc-confmat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1272,23 +1268,21 @@ Observed class
 </div>
 <!--# would be nice to have the roc curve and confusion mat side-by-side-->
 <div class="yourturn">
-<p>Compute the sensitivity and specificity from <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a> and compare these to the values observed on the curve in <span class="quarto-unresolved-ref">?fig-aidrive-roc</span>.</p>
+<p>Compute the sensitivity and specificity from <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a>. You can confirm your result using the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> .<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 </div>
 <p>In the next section, we will talk more about using the ROC curve to evaluate the model fit beyond a visual assessment. For now, let’s discuss how to use the ROC curve to determine a probability threshold for classification. When we use a model for classification, we want a high true positive rate and a low false positive rate. Therefore, one of the most straightforward ways of using the ROC curve to identify a classification threshold is to choose the threshold that corresponds to the point on the curve that is closest to the top-left corner. <!--# This will be the point that has the best ratio of true positive rate to false positive rate. not sure if that is true--> <!--# does this relate to that F1 metric from machine learning?-->. There are many ways to identify this point mathematically. For example, we can find the combination of <span class="math inline">\(\text{Sensitivity}\)</span> and <span class="math inline">\(1 - \text{Specificity}\)</span> that minimizes the following:</p>
-<p><span class="math display">\[
-\sqrt{(1 - \text{Specificity})^2 + (\text{Sensitivity} - 1)^2}
-\]</span></p>
+<p><span class="math display">\[\sqrt{(1 - \text{Specificity})^2 + (\text{Sensitivity} - 1)^2}\]</span></p>
 <!--# verify this equation is correct.-->
-<p>In terms of the ROC curve in <span class="quarto-unresolved-ref">?fig-aidrive-roc</span>, this point is at a false positive rate of and true positive rate of 0.612, corresponding to a threshold of 0.552.</p>
+<p>In terms of the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a>, this point is at a false positive rate of 0.357 and true positive rate of 0.612, corresponding to a threshold of 0.552.</p>
 <p>While this may be a reasonable approach for identifying a threshold in many contexts, we often need to consider the practical implications when making analysis decisions in practice. For example, suppose we build a logistic regression model to diagnosis a medical illness. A classification of “1” means the patient has the illness and undergoes a treatment plan. A classification of “0” means the patient does not have the illness and does not undergo a treatment plan.</p>
 <div class="yourturn">
-<p>What is a “true positive” in this scenario? What is a “false positive”?<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>What is a “true positive” in this scenario? What is a “false positive”?<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 </div>
-<p>When determining the probability threshold for classification, we need to think carefully about the implications of the analysis decision. More specifically, one thing we need to consider is the severity of the treatment the patient will undergo. If the treatment is minimal, then perhaps we might be willing to set a threshold that results in more false positives. If the treatment is very invasive, however, we want to minimize false positives. Otherwise, there will be many patients who do not need the treatment who will undergo an invasive treatment. Similarly, we want to consider the implications of lower sensitivity and not diagnosing individuals who actually have the illness.</p>
+<p>When determining the probability threshold for classification, we need to think carefully about the implications of the analysis decision. More specifically, one thing we need to consider is the severity of the treatment the patient will undergo. If the treatment is minimal, then perhaps we might be willing to set a threshold that results in more false positives. If the treatment is very invasive, however, we want to minimize false positives. Otherwise, many patients will undergo an invasive treatment that they do not need. Similarly, we want to consider the implications of lower sensitivity and not diagnosing individuals who actually have the illness.</p>
 <div class="yourturn">
 <ul>
 <li><p>If the main objective is high sensitivity, do we set a probability threshold closer to 0 or to 1?</p></li>
-<li><p>If the main objective is high specificity, do we set a probability threshold closer to 0 or to 1?<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p></li>
+<li><p>If the main objective is high specificity, do we set a probability threshold closer to 0 or to 1?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p></li>
 </ul>
 </div>
 </section><section id="sec-logistic-model-eval" class="level2" data-number="12.5"><h2 data-number="12.5" class="anchored" data-anchor-id="sec-logistic-model-eval">
@@ -1303,7 +1297,7 @@ Observed class
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples-auc" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div id="fig-roc-curve-examples-auc-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-auc-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-1.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.5&nbsp;(a): AUC = 0.57"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-1.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.6&nbsp;(a): AUC = 0.57"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-auc-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) AUC = 0.57
@@ -1313,7 +1307,7 @@ Observed class
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples-auc" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div id="fig-roc-curve-examples-auc-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-auc-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-2.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.5&nbsp;(b): AUC = 0.79"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-2.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.6&nbsp;(b): AUC = 0.79"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-auc-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) AUC = 0.79
@@ -1323,7 +1317,7 @@ Observed class
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-roc-curve-examples-auc" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div id="fig-roc-curve-examples-auc-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-roc-curve-examples-auc-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-3.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.5&nbsp;(c): AUC = 0.99"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-3.png" class="lightbox" data-gallery="fig-roc-curve-examples-auc" title="Figure&nbsp;12.6&nbsp;(c): AUC = 0.99"><img src="12-logistic-prediction_files/figure-html/fig-roc-curve-examples-auc-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-roc-curve-examples-auc"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-roc-curve-examples-auc-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (c) AUC = 0.99
@@ -1333,23 +1327,21 @@ Observed class
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-curve-examples-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.5: Examle ROC curves with corresponding AUC
+Figure&nbsp;12.6: Examle ROC curves with corresponding AUC
 </figcaption></figure>
 </div>
-<p><a href="#fig-roc-curve-examples-auc" class="quarto-xref">Figure&nbsp;<span>12.5</span></a> shows the ROC curves from <a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> along with the AUC for each curve. Similar to <span class="math inline">\(R^2\)</span> for linear regression (<a href="04-slr.html#sec-slr-sum-sq" class="quarto-xref"><span>Section 4.7.2</span></a>), we prefer models with AUC close to 1. However, there is no single threshold that defines “good” AUC. What is considered a “good” AUC depends on the subject matter context and complexity of the modeling task.</p>
+<p><a href="#fig-roc-curve-examples-auc" class="quarto-xref">Figure&nbsp;<span>12.6</span></a> shows the ROC curves from <a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.5</span></a> along with the AUC for each curve. Similar to <span class="math inline">\(R^2\)</span> for linear regression (<a href="04-slr.html#sec-slr-sum-sq" class="quarto-xref"><span>Section 4.7.2</span></a>), we prefer models with AUC close to 1. However, there is no single threshold that defines “good” AUC. What is considered a “good” AUC depends on the subject matter context and complexity of the modeling task.</p>
 <p>The AUC for the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> is 0.664. Predicting individuals’ opinions is a complex modeling task, so the model is a reasonably good fit for the data. We are only using three predictors, however, so we will consider other predictors in <a href="#sec-logistic-workflow" class="quarto-xref"><span>Section 12.7</span></a> to potentially improve the model performance.</p>
 <div class="analysis_in_practice">
 <p>Though we prefer models with high values of AUC (close to 1), we do not want a model in which <span class="math inline">\(AUC = 1\)</span> exactly. When the <span class="math inline">\(AUC  =1\)</span>, it means the model has perfect separation, the ability to perfectly distinguish between the true positives and false positives. Though this may seem like ideal model performance, it is often a sign that the model is overfit <!--# do a i make a call back to the earlier section--> and will not effectively classify observations in new data.</p>
 </div>
 </section><section id="sec-logistic-aic-bic" class="level3" data-number="12.5.2"><h3 data-number="12.5.2" class="anchored" data-anchor-id="sec-logistic-aic-bic">
 <span class="header-section-number">12.5.2</span> Comparing models using AIC and BIC</h3>
-<p>Similar to linear regression, we can use the Akaike’s Information Criterion (AIC) <span class="citation" data-cites="akaike1974">(<a href="references.html#ref-akaike1974" role="doc-biblioref">Akaike 1974</a>)</span> and the Bayesian Schwarz’s Criterion (BIC) <span class="citation" data-cites="schwarz1978estimating">(<a href="references.html#ref-schwarz1978estimating" role="doc-biblioref">Schwarz 1978</a>)</span> as relative measures for comparing logistic regression models. The equations for AIC and BIC in logistic regression are the same as these in linear regression <a href="10-model-eval.html#sec-aic-bic" class="quarto-xref"><span>Section 10.2.3</span></a>.</p>
-<p><span class="math display">\[
-\begin{aligned}
+<p>Similar to linear regression, we can use the Akaike’s Information Criterion (AIC) <span class="citation" data-cites="akaike1974">(<a href="references.html#ref-akaike1974" role="doc-biblioref">Akaike 1974</a>)</span> and the Bayesian Schwarz’s Criterion (BIC) <span class="citation" data-cites="schwarz1978estimating">(<a href="references.html#ref-schwarz1978estimating" role="doc-biblioref">Schwarz 1978</a>)</span> as relative measures for comparing logistic regression models. The equations for AIC and BIC in logistic regression are the same as these in linear regression (<a href="10-model-eval.html#sec-aic-bic" class="quarto-xref"><span>Section 10.2.3</span></a>).</p>
+<p><span class="math display">\[\begin{aligned}
 &amp;\text{AIC} = -2 \log L + 2(p+1) \\[5pt]
 &amp;\text{BIC} = -2 \log L + \log(n)(p+1)
-\end{aligned}
-\]</span></p>
+\end{aligned}\]</span></p>
 <p>where <span class="math inline">\(\log L\)</span> is the log-likelihood of the model, <span class="math inline">\(n\)</span> is the number of observations, and <span class="math inline">\(p + 1\)</span> is the number of terms in the model. The penalty applied by BIC for the number of predictors in the model is greater than the penalty applied in AIC, as <span class="math inline">\(\log(n) &gt; 2\)</span> (when <span class="math inline">\(n &gt; 8\)</span>). Therefore, BIC will tend to preference more parsimonious models, those with a fewer number of predictors. The values of AIC and BIC are not meaningful to interpret for individual models. These values are most useful for comparing models in the model selection process. When using AIC and BIC to compare models, we can use the guidelines in <span class="quarto-unresolved-ref">?tbl-aic-bic-guidelines</span>, the same as with linear regression.</p>
 <p>Let’s use AIC and BIC to compare the model from <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> to a model that includes the same predictors along with <code>polviews</code> (how individuals rate their political views) and <code>tech_harm</code> (whether an individual thinks technology generally does more harm than good).</p>
 <div class="cell">
@@ -1454,7 +1446,7 @@ Prediction   0   1
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">aidrive_conf_mat</span>, type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1485,7 +1477,7 @@ Prediction   0   1
 <span><span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"ROC Curve"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1515,8 +1507,8 @@ Prediction   0   1
 </div>
 <p>Note that the output from <code>glance()</code> does not include <span class="math inline">\(R^2\)</span> and Adj. <span class="math inline">\(R^2\)</span> as it does in linear regression, because we do not use the ANOVA-based statistics in logistic regression.</p>
 </section></section><section id="sec-logistic-workflow" class="level2" data-number="12.7"><h2 data-number="12.7" class="anchored" data-anchor-id="sec-logistic-workflow">
-<span class="header-section-number">12.7</span> Modeling building workflow in R</h2>
-<p>Let’s put together what we learned about model selection in <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a> and evaluating logistic regression models in <a href="#sec-logistic-model-eval" class="quarto-xref"><span>Section 12.5</span></a> to illustrate an example model building workflow for logistic regression. Here, we will split the data into training and testing sets, and use cross validation with AUC as the criteria for choosing between two candidate models.</p>
+<span class="header-section-number">12.7</span> Modeling-building workflow in R</h2>
+<p>Let’s put together what we learned about model selection in <a href="10-model-eval.html" class="quarto-xref"><span>Chapter 10</span></a> and evaluating logistic regression models in <a href="#sec-logistic-model-eval" class="quarto-xref"><span>Section 12.5</span></a> to illustrate an example model-building workflow for logistic regression. Here, we will split the data into training and testing sets, and use cross validation with AUC as the criteria for choosing between two candidate models.</p>
 <p>The first model is the one we’ve analyzed in this chapter that includes the predictors <code>age</code>, <code>tech_easy</code> and <code>income</code>. The second model will use these predictors along with <code>polviews</code> and <code>tech_harm</code>.</p>
 <p>First, we define the training and testing sets. We’ll use simple random sampling to assign 80% of the observations to the training set and 20% of the observations to the testing set.</p>
 <div class="cell">
@@ -1588,7 +1580,8 @@ Prediction   0   1
 <span></span>
 <span><span class="co"># compute predicted probabilities </span></span>
 <span><span class="va">aidrive_test</span> <span class="op">&lt;-</span> <span class="va">aidrive_test</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>pred_prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">aidrive_comfort_final</span>, newdata <span class="op">=</span> <span class="va">aidrive_test</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>pred_prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">aidrive_comfort_final</span>, newdata <span class="op">=</span> <span class="va">aidrive_test</span>,</span>
+<span>                             type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># make roc curve </span></span>
 <span><span class="va">aidrive_test</span> <span class="op">|&gt;</span> </span>
@@ -1598,7 +1591,7 @@ Prediction   0   1
 <span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
+<figure class="figure"><p><a href="12-logistic-prediction_files/figure-html/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="12-logistic-prediction_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" style="width:100.0%"></a></p>
 </figure>
 </div>
 </div>
@@ -1757,18 +1750,16 @@ Schwarz, Gideon. 1978. <span>“Estimating the Dimension of a Model.”</span> <
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="fn1"><p>Yes, the coefficients and confidence intervals for the indicators for <code>income_fct s</code>upport the observations from the EDA. The indicators for higher income, <code>$50-110K</code>, and <code>$110k or more</code> are positive. Thus, those with higher income are more likely to be comfortable with driverless cars compared to individuals in the lowest level, after adjusting for <code>age</code> and <code>tech_easy</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2">
-<p><strong>Log odds:</strong> <span class="math inline">\(\log \Big(\frac{\hat{\pi}}{1-\hat{\pi}}\Big) =  0.032 - 0.016  \times 19 + 0.075   \times 0 +  0.576 \times 0
-- 0.436  \times 0 +  0.264 \times 0 +  0.526  \times 0
-+ 1.223  \times 1 + 0.265 \times 0 = 0.951\)</span></p>
-<p><strong>Odds:</strong> <span class="math inline">\(e^{\log(\frac{\hat{\pi}}{1-\hat{\pi}})} = e^{0.953} = 2.59\)</span></p>
-<p><strong>Probability:</strong> <span class="math inline">\(\frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{2.593}{1 + 2.593} = 0.722\)</span><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p>
+<li id="fn2"><p>These values may differ slightly from the values in the the table, because we are computing predictions using rounded coefficient.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3">
+<p><strong>Odds:</strong> <span class="math inline">\(e^{\log(\frac{\hat{\pi}}{1-\hat{\pi}})} = e^{0.953} = 2.593\)</span></p>
+<p><strong>Probability:</strong> <span class="math inline">\(\frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{2.593}{1 + 2.593} = 0.722\)</span><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p>
 </li>
-<li id="fn3"><p><span class="math display">\[\text{misclassification} = \frac{\text{False negative} + \text{False positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}
-\]</span><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p><span class="math display">\[\begin{aligned}\text{Sensitivity} &amp;= 601/ (228 + 601) = 0.725 \\ \text{Specificity} &amp;= 349 / (349 + 343) = 0.504 \\\text{Precision} &amp;= 601 / (343 + 601) = 0.637\end{aligned}\]</span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>A true positive is correctly classifying a patient with the illness as a “1”, having the illness. A “false positive” is incorrectly classifying a patient that doesn’t have the illness as a “1”, having the illness.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>If the main objective is high sensitivity, we set a low threshold close to 0. If the main objective is high specificity, we set a high threshold close to 1.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><span class="math display">\[\text{misclassification} = \frac{\text{False negative} + \text{False positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}}\]</span><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><span class="math display">\[\begin{aligned}\text{Sensitivity} &amp;= 601/ (228 + 601) = 0.725 \\ \text{Specificity} &amp;= 349 / (349 + 343) = 0.504 \\\text{Precision} &amp;= 601 / (343 + 601) = 0.637\end{aligned}\]</span><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><span class="math inline">\(\text{Sensitivity } = \frac{622}{207 + 622} = 0.75\)</span> and <span class="math inline">\(\text{Specificity } = \frac{329}{329 + 363} = 0.475\)</span><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>A true positive is correctly classifying a patient with the illness as a “1”, having the illness. A “false positive” is incorrectly classifying a patient that doesn’t have the illness as a “1”, having the illness.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>If the main objective is high sensitivity, we set a low threshold close to 0. If the main objective is high specificity, we set a high threshold close to 1.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
