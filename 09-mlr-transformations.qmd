@@ -38,7 +38,7 @@ The EADA is a very rich data set with over 300 hundred variables about basketbal
 
 [^09-mlr-transformations-1]: Interested readers are encouraged to visit the EADA for further data exploration!
 
-The data in `ncaa-basketball-DI-2023-2024.csv` contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.
+The dataset `ncaa-basketball-DI-2023-2024.csv` contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.
 
 - `expenditure_m`: Total expenditure on basketball programs (in millions of US dollars)
 - `enrollment_th`: Total student enrollment (in thousands)
@@ -323,7 +323,7 @@ p <- ggplot() +
 print(p)
 ```
 
-From the bivariate exploratory data analysis in @fig-ncaa-bivariate-eda-1, there appears to be a strong positive relationship between the enrollment and expenditure. This aligns with what we might expect; colleges with more students are likely to spend more on basketball programs. We note that this trend does seem to level off for colleges with very high enrollment, because their expenditure is lower than what we would expect if expenditure increased as a constant rate for values of enrollment (called *monotonically increasing*).
+From the bivariate exploratory data analysis in @fig-ncaa-bivariate-eda-1, there appears to be a strong positive relationship between the enrollment and expenditure. This aligns with what we might expect; colleges with more students are likely to spend more on basketball programs. We note that this trend does seem to level off for colleges with very high enrollment, because their expenditure is lower than what we would expect if expenditure increased as a constant rate for values of enrollment.
 
 The plot also shows two other interesting features of the relationship. The first is that the variability in the expenditure increases as enrollment increases. Thus, there is more variability in how much colleges with larger enrollments spend on basketball programs compared to colleges with small enrollments. We will keep this issue of the changing variability in mind as we fit a model and evaluate the model conditions. The second observation is the appearance of a "V" shape in the trend, indicating two different trajectories. This could be an indication of a potential interaction, so let's look at multivariate plots to explore a potential interaction between enrollment and type and one between enrollment and region.
 
@@ -482,16 +482,15 @@ Some commonly used variance-stabilizing transformations are the square-root tran
 
 Let's consider another transformation for the response variable that can help address the violations in the equal variance condition while also being easily interpreted by the reader. We can apply a natural log transformation on the response variable, $\log(y)$ (also written as $\ln(y)$), such that $\log(y)$ has the linear relationship with the predictor variables. @eq-log-y shows the statistical model when applying such transformation to the response variable.
 
-$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$
- {#eq-log-y}
+$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$ {#eq-log-y}
 
 ::: {.math_rules latex=""}
 **log = ln**
 
-In statistics, the term "log" refers to the natural log (typically denoted $\ln$ in mathematics).
+In statistics, "$\log$" refers to the natural log (typically denoted "$\ln$" in mathematics).
 :::
 
-As shown in @eq-log-y, the log transformation is applied to the individual values of $Y$, and the transformed values are used in the model. Therefore, when we use a log (or any) transformation on the response variable, we assume the assumptions from @sec-slr-foundation apply to the relationship between the predictors and the transformed values of $Y$. Using @eq-log-y, this means we make assumptions about the relationship between the predictors and $\log(y_i)$. The full analysis, including evaluating conditions and diagnostics, conducting inference, and computing predictions are done in terms of $\log(y)$. Interpretations, however, are in terms of the original variable $y$. Although we can write interpretations in terms of $\log(y)$ (we'll see an example of this shortly), it is not as intuitive for readers to understand interpretations on a log-scale as on the natural scale.
+As shown in @eq-log-y, the log transformation is applied to the individual values of $Y$, and the transformed values are used in the model. Therefore, when we use a log (or any) transformation on the response variable, we apply the assumptions from @sec-slr-foundation to the relationship between the predictors and the transformed values of $Y$. Using @eq-log-y, this means we make assumptions about the relationship between the predictors and $\log(y_i)$. The full analysis, including evaluating conditions and diagnostics, conducting inference, and computing predictions are done in terms of $\log(y)$. Interpretations, however, are in terms of the original variable $y$. Although we can write interpretations in terms of $\log(y)$ (we'll see an example of this shortly), it is not as intuitive for readers to understand interpretations on a log-scale as on the natural scale.
 
 Let's begin by looking at the distribution of `log(expenditure_m)`, its relationship with `enrollment_th`, and how these compare to the exploratory data analysis in @sec-transform-eda.
 
@@ -548,8 +547,7 @@ $$\begin{aligned}
 \widehat{\log(\text{expenditure\_m})} = & 1.783 + 0.056 \times \text{enrollment\_th}\\ 
 &- 0.311 \times \text{Northeast} - 0.176 \times \text{South} \\
 & - 0.218 \times \text{West} - 0.672 \times \text{Public}
-\end{aligned}$$
- {#eq-ncaa-model-logy}
+\end{aligned}$$ {#eq-ncaa-model-logy}
 
 Before using the model, we analyze the residuals versus predicted values to evaluate whether the concerns with equal variance have been addressed by the transformation. @fig-ncaa-logy-resid shows the original plot of the residuals versus predicted values and the plot for the model using the log-transformed response variable.
 
@@ -596,8 +594,7 @@ Given @eq-log-y with a log-transformed response variable, the predicted values i
 $$\begin{aligned}
 \hat{y}_i &= e^{\hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2}+ \dots + \hat{\beta}_px_{ip}} \\[10pt]
 & = e^{\hat{\beta}_0}e^{\hat{\beta}_1x_{i1}}e^{\hat{\beta}_2x_{i2}} \dots e^{\hat{\beta}_px_{ip}}
-\end{aligned}$$
- {#eq-log-y-orig}
+\end{aligned}$$ {#eq-log-y-orig}
 
 From @eq-log-y-orig, the interpretations in terms of the original response variable are about a multiplicative change in the response when the predictor variable changes. Specifically, when $X_j$ increases by one unit, $Y$ is expected to multiply by a factor of $e^{\hat{\beta}_j}$. The mathematical details for @eq-log-y-orig and the interpretations are in @sec-transform-y-math.
 
@@ -637,16 +634,14 @@ In the exploratory data analysis in @sec-ncaa-eda, we observed that the relation
 
 The general form of the linear regression model with a log-transformed predictor variable $x_j$ is shown in @eq-mlr-logx .
 
-$$y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$
- {#eq-mlr-logx}
+$$y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$ {#eq-mlr-logx}
 
 @eq-ncaa-logx shows the form of the model for NCAA Division I basketball expenditure using log-transformed values of enrollment.
 
 $$\begin{aligned}
 \text{expenditure\_m}_i = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
 &+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}$$
- {#eq-ncaa-logx}
+\end{aligned}$$ {#eq-ncaa-logx}
 
 At this point, we are using the original response variable, `expenditure_m`, so we can focus on understanding the log-transformed predictor variable. In the next section, we will look at the scenario in which both the response variable and one or more predictor variables is transformed. The output of the model with log-transformed enrollment is in @tbl-ncaa-model-logx.
 
@@ -722,16 +717,14 @@ Models with transformations on both the response variable and one or more quanti
 
 @eq-mlr-logx-logy is the general form of the model with a log-transformed response variable and a log-transformed predictor variable $x_j$ is shown in
 
-$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$
- {#eq-mlr-logx-logy}
+$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$ {#eq-mlr-logx-logy}
 
 @eq-ncaa-logx-logy shows the form of the model for NCAA Division I basketball expenditure, and the output of the estimated model is in @tbl-ncaa-model-logx-logy.
 
 $$\begin{aligned}
 \log(\text{expenditure\_m}_i) = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
 &+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
-\end{aligned}$$
- {#eq-ncaa-logx-logy}
+\end{aligned}$$ {#eq-ncaa-logx-logy}
 
 ```{r}
 #| label: tbl-ncaa-model-logx-logy
