@@ -98,7 +98,7 @@ m <- glm(aidrive_comfort ~ sex + age + income_fct + tech_harm + tech_easy, data 
 
 Artificial Intelligence (AI) has quickly become ubiquitous, with generative AI tools such as ChatGPT being widely adopted in the workplace, school, and throughout every day life. One area in particular where AI is continuing to grow is in self-driving cars. The notion of riding in car that drives around as an individual reads a book has increasingly become a reality, with some cities already having self-driving taxis on the road. Waymo, a company that deploys a fleet self-driving taxis (called "robotaxis"), describes its robotaxi as "the world's most experienced driver." and is operating in five United States cities with plans to expand to two more at the time of this writing. ([waymo.com](https://waymo.com)). Additionally, Amazon has launched a robotaxi service in Las Vegas called Zoox [@Liedtke2025Zoox].
 
-Despite the growth of self-driving cars, there are still complex moral questions [e.g., @Maxmen2018SelfDrivingCarEthics, @Vemoori2024EthicalDilemmasForbes] and the general readiness individuals have with this new technology and driving experience. David LI, co-founder of Hesai, a remote-sensing technology company, said that the adoption of self-driving cars are not just a question about technology development, but "it is a social question, it is a regulatory question, it is a political question" [@White2025HesaiSensors]. Therefore, it is important to understand how people, some of who may already will one day purchase a self-driving car, view this technological phenomenon.
+Despite the growth of self-driving cars, there are still complex moral questions [e.g., @Maxmen2018SelfDrivingCarEthics; @Vemoori2024EthicalDilemmasForbes] and uncertainty about the general readiness and experience individuals have driving with this new technology. David Li, co-founder of Hesai, a remote-sensing technology company, said that the adoption of self-driving cars are not just a question about technology development, but "it is a social question, it is a regulatory question, it is a political question" [@White2025HesaiSensors]. Therefore, it is important to understand how people, some of who may already will one day purchase a self-driving car, view this technological phenomenon.
 
 ::: {.objective latex=""}
 The goal of the analysis in this chapter is to use data from the 2024 General Social Survey (GSS) to explore individual characteristics associated with one's comfort with self-driving cars.
@@ -272,7 +272,7 @@ ggplot(data = gss24_ai, aes(x = tech_easy, fill = aidrive_comfort)) +
   scale_fill_manual(values = c("#1d457f", "#cc5c76"))
 ```
 
-@fig-aidrive-bivariate-eda shows the relationship between the response and each of the predictor variables. Here we use a segmented bar plot <!--# is there a ref to EDA section?--> to visualize the relationship between the categorical predictors, `sex` and `tech_easy` and the categorical response, `aidrive_comfort`. As we look at the segmented bar plot, we are evaluating distribution of the response variable is approximately equal for each category of the predictor ([@sec-bivar-eda-cat-cat]). Unequal proportions suggests some relationship between the response and predictor variable. In @fig-aidrive-bivariate-eda, a higher proportion of males have comfort with driverless cars compared to the proportion of females. This indicates a potential relationship between sex and comfort with driverless cars. @fig-aidrive-bivariate-eda shows overlap in the distribution of age among those who have comfort with driverless cars versus those who do not, but the distribution among those who have comfort with driverless cars tends to skew younger. As with linear regression, however, we will use statistical inference [@sec-logistic-inf] to determine if the data provide evidence that such relationships exist.
+@fig-aidrive-bivariate-eda shows the relationship between the response and each of the predictor variables. Here we use a segmented bar plot <!--# is there a ref to EDA section?--> to visualize the relationship between the categorical predictors, `sex` and `tech_easy` and the categorical response, `aidrive_comfort`. As we look at the segmented bar plot, we are evaluating distribution of the response variable is approximately equal for each category of the predictor ([@sec-bivar-eda-cat-cat]). Unequal proportions suggests some relationship between the response and predictor variable. In @fig-aidrive-bivariate-eda, a higher proportion of males have comfort with driverless cars compared to the proportion of females. This indicates a potential relationship between sex and comfort with driverless cars. @fig-aidrive-bivariate-eda shows overlap in the distribution of age among those who have comfort with driverless cars versus those who do not, but the distribution among those who have comfort with driverless cars tends to skew younger. As with linear regression, however, we will use statistical inference ([@sec-logistic-inf]) to determine if the data provide evidence that such relationships exist.
 
 ::: {.yourturn latex=""}
 Based on @fig-aidrive-bivariate-eda , does there appear to be a relationship between opinions about whether technology makes life easier and comfort with driverless cars? Explain.[^11-logistic-1]
@@ -328,8 +328,7 @@ Before moving to modeling, let's take some time to focus on the response variabl
 
 The **probability** $Y=1$, denoted $Pr(Y=1)$, is a measure of the chance that the event $Y = 1$ occurs. Probabilities take values between 0 and 1, with 0 indicating an event is impossible and never occurs, and 1 indicating that an event always occurs. The **odds** $Y = 1$ are the ratio of the probability $Y = 1$ occurs versus the probability $Y = 0$ occurs. This is computed as
 
-$$\text{odds(Y = 1)} = \frac{Pr(Y = 1)}{Pr(Y = 0)} = \frac{Pr(Y = 1)}{1 - Pr(Y = 1)}$$
- {#eq-odds}
+$$\text{odds(Y = 1)} = \frac{Pr(Y = 1)}{Pr(Y = 0)} = \frac{Pr(Y = 1)}{1 - Pr(Y = 1)}$$ {#eq-odds}
 
 Note that the odds that $Y = 0$ are equal to $1/ \text{odds}(Y = 1)$ .
 
@@ -397,8 +396,7 @@ Each cell in the table is the number of observations that take the values indica
 $$\begin{aligned}
 Pr(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127 + 90}  \approx 0.415 \\[5pt]
 \text{odds}(Y = 1| \text{tech\_easy = Neutral}) = \frac{90}{127} = \frac{0.415}{1 - 0.415}\approx{0.709}
-\end{aligned}$$
- {#eq-prob-odds-cond}
+\end{aligned}$$ {#eq-prob-odds-cond}
 
 $Pr(Y=1 | \text{tech\_easy = Neutral})$ is called a **conditional probability**, because it is the probability that a randomly selected respondent is comfortable with driverless cars conditioned on (given) they are neutral about whether technology makes life easier. Similarly, $\text{odds}(Y=1 | \text{tech\_easy = Neutral})$ are **conditional odds**.
 
@@ -416,8 +414,7 @@ Compute the probability and corresponding odds of being comfortable with driverl
 
 From @tbl-aidrive-two-way, the odds a respondent who is neutral about technology making life easier is comfortable with driverless cars are 0.709, and the odds a respondent who agrees technology makes life easier are 1.43. We quantify how the odds for these two groups compare using an odds ratio. An **odds ratio** is computed as the odds for one group divided the odds for another, as shown in @eq-odds-ratio
 
-$$\text{odds ratio} = \frac{\text{odds}_{group 1}}{\text{odds}_{group 2}}$$
- {#eq-odds-ratio}
+$$\text{odds ratio} = \frac{\text{odds}_{group 1}}{\text{odds}_{group 2}}$$ {#eq-odds-ratio}
 
 Let's compute the odds ratio for those who agree that technology makes life easier versus those who are neutral.
 
@@ -455,8 +452,7 @@ The two-way table and odds ratios from the previous section helped us being to e
 
 Suppose we want to fit a model of the relationship between `age` and `aidrive_comfort`. Our first thought may be to use the linear regression model from @sec-ch-slr to model this relationship. In this case, the estimated model would be of the form
 
-$$\widehat{\text{aidrive\_comfort}} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}$$
- {#eq-aidrive-age-linear}
+$$\widehat{\text{aidrive\_comfort}} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}$$ {#eq-aidrive-age-linear}
 
 ```{r}
 #| label: fig-try-linear
@@ -480,8 +476,7 @@ ggplot(data = gss24_ai, aes(x = age, y = comfort_num)) +
 
 Next, we might consider fitting a linear model such that the response variable is the $\pi = Pr(Y = 1)$, the probability of being comfortable with driverless cars. This estimated model takes the form
 
-$$\hat{\pi} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}$$
- {#eq-aidrive-age-prob}
+$$\hat{\pi} = \hat{\beta}_0 + \hat{\beta}_1 \times \text{age}$$ {#eq-aidrive-age-prob}
 
 ```{r}
 #| label: fig-try-prob
@@ -506,8 +501,7 @@ ggplot(data = comfort_age, aes(x = age, y = prob)) +
 
 When there is a binary categorical response variable, we use a **logistic regression model** to model the relationship between the binary response and one or more predictor variables as in @eq-logistic-model.
 
-$$\log\Big(\frac{\pi}{1 - \pi}\Big) = \beta_0 + \beta_1x_1 + \dots + \beta_px_p$$
- {#eq-logistic-model}
+$$\log\Big(\frac{\pi}{1 - \pi}\Big) = \beta_0 + \beta_1x_1 + \dots + \beta_px_p$$ {#eq-logistic-model}
 
 where $\pi = Pr(Y = 1)$ and $\log\big(\frac{\pi}{1 - \pi}\big)$ is the **logit transformation**, also called the "log odds". The log odds can take any value $-\infty$ to $\infty$, so it does not have the boundary constraints of the probability and odds. The log odds output from @eq-logistic-model can be transformed back to the odds and probabilities, and we will the probabilities to assign each observation to a predicted class `aidrive_comfort = 0` or `aidrive_comfort = 1`. We'll discuss this more in @sec-ch-logistic-prediction.
 
@@ -541,7 +535,7 @@ In contrast, the output of the logistic regression model are the log odds that $
 
 <!--# make sure I actually talk about the likelihood function as promised in the model comparison chapter-->
 
-In @sec-mlr-estimate-coef, we showed that the model coefficients for linear regression are estimated by the least-squares method, finding the values of the coefficients that minimizes the sum of squared residuals. There is no error term in the logistic regression model (see @eq-logistic-model-2), so we cannot use least-squares in this case. The model coefficients for logistic regression are estimated using **maximum likelihood estimation**. Recall from @sec-model-compare-stats that the likelihood is a function that quantifies how likely the observed data are to have occurred given a combination of coefficients. <!--# this definition is clunky.--> Thus, maximum likelihood estimation is used to find the combination of coefficients that makes the observed data the most likely to have occurred, i.e., that maximizes the value of the likelihood function. The mathematical details for estimating logistic regression coefficients using maximum likelihood estimation are available in @sec-logistic-estimation-matrix.
+In @sec-mlr-estimate-coef, we showed that the model coefficients for linear regression are estimated by the least-squares method, finding the values of the coefficients that minimizes the sum of squared residuals. There is no error term in the logistic regression model (see @eq-logistic-model), so we cannot use least-squares in this case. The model coefficients for logistic regression are estimated using **maximum likelihood estimation**. Recall from @sec-model-compare-stats that the likelihood is a function that quantifies how likely the observed data are to have occurred given a combination of coefficients. <!--# this definition is clunky.--> Thus, maximum likelihood estimation is used to find the combination of coefficients that makes the observed data the most likely to have occurred, i.e., that maximizes the value of the likelihood function. The mathematical details for estimating logistic regression coefficients using maximum likelihood estimation are available in @sec-logistic-estimation-matrix.
 
 ### Predictor in simple logistic regression
 
@@ -565,8 +559,7 @@ tidy(comfort_tech_fit) |>
 
 $$\begin{aligned}
 \log\Big(\frac{\hat{\pi}}{1 - \hat{\pi}}\Big) = -0.344 + -0.061 \times \text{Can't choose}  + 0.699 \times \text{Agree}   - 0.562 \times \text{Disagree}
-\end{aligned}$$
- {#eq-logistic-comfort-tech}
+\end{aligned}$$ {#eq-logistic-comfort-tech}
 
 where $\hat{\pi}$ is the predicted probability a respondent is comfortable with driverless cars.
 
@@ -580,8 +573,7 @@ The intercept, -0.344, is the estimated log odds for respondents in the baseline
 
 $$\begin{aligned}
 \frac{\hat{\pi}}{1 - \hat{\pi}} = e^{-0.344} \times e^{-0.061 \times \text{Can't choose}} \times e^{0.699 \times \text{Agree}}  \times e^{-0.562 \times \text{Disagree}}
-\end{aligned}$$
- {#eq-logistic-comfort-tech-exp}
+\end{aligned}$$ {#eq-logistic-comfort-tech-exp}
 
 From @eq-logistic-comfort-tech-exp, we see that the estimated odds a respondent who is neutral about whether technology makes life easier is comfortable with driverless cars is `r round(exp(-0.344), 3)` ( $e^{-0.344}$). This equals the odds that was computed from the two-way table in @eq-prob-odds-cond.
 
@@ -632,8 +624,7 @@ To write the interpretation in terms of the odds, we need to exponentiate both s
 
 $$\begin{aligned}
 \frac{\hat{\pi}}{1 - \hat{\pi}} = e^{0.420} \times e^{-0.118 \times \text{Can't choose}} \times e^{0.678 \times \text{Agree}}  \times e^{-0.499 \times \text{Disagree}} \times e^{-0.015 \times \text{age}}
-\end{aligned}$$
- {#eq-logistic-comfort-tech-age-exp}
+\end{aligned}$$ {#eq-logistic-comfort-tech-age-exp}
 
 where $\hat{\pi}$ is the predicted probability a respondent is comfortable with driverless cars.
 
@@ -670,8 +661,7 @@ $$\begin{aligned}
 \text{log odds (comfort | age + 1)}  - \text{log odds (comfort | age)} &= -0.015 \times ( \text{age} + 1) - (-  0.015 \times \text{age}) \\
 & = -0.015 ( \text{age} + 1 - \text{age}) \\
 & = -0.015 
-\end{aligned}$$
- {#eq-age-interpret-log-odds}
+\end{aligned}$$ {#eq-age-interpret-log-odds}
 
 From @eq-age-interpret-log-odds, $\text{log odds (comfort | age + 1)} = \text{log odds (comfort | age)} - 0.015$.
 
@@ -694,8 +684,7 @@ $$\begin{aligned}
 \Rightarrow \log\Bigg(\frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}}\Bigg) & = -0.015 \\[8pt]
 *\text{exponetiate both sides}* \\[8pt]
 \Rightarrow \frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}} & = e^{-0.015}
-\end{aligned}$$
- {#eq-age-interpret-odds}
+\end{aligned}$$ {#eq-age-interpret-odds}
 
 From @eq-age-interpret-odds, $\text{odds (comfort | age + 1)} = e^{-0.015} \times \text{odds (comfort | age)}$. The value $\frac{\text{odds (comfort | age + 1)}}{\text{odds (comfort | age)}}$ is the odds ratio of being comfortable with driverless cars between `age` versus `age + 1`. Thus, given $\beta_j$ is the coefficient for a quantitative predictor $X_j$, the value $e^{\beta_j}$ is the (adjusted) odds ratio between $X_j + 1$ and $X_j$.
 
@@ -704,10 +693,10 @@ Use the model in @tbl-logistic-comfort-tech-age. Assume opinions about technolog
 
 - How are the log odds of being comfortable with driverless cars expected to change when age increases by 5 years?
 
-- How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years? [^11-logistic-8]
+- How are the odds of being comfortable with driverless cars expected to change when age increases by 5 years?[^11-logistic-8]
 :::
 
-[^11-logistic-8]: When age increases by 5, the log odds are expected to decrease by `r round(abs(-0.015 * 5), 3)` ($-0.015 \times 5$ ) . The expected odds change by a multiplicative factor of `r round(exp(-0.015 * 5), 3)` ( $e^{-0.015 \times 5}$).
+[^11-logistic-8]: When age increases by 5, the log odds are expected to decrease by `r round(abs(-0.015 * 5), 3)` ($-0.015 \times 5$ ). The expected odds change by a multiplicative factor of `r round(exp(-0.015 * 5), 3)` ( $e^{-0.015 \times 5}$).
 
 <!--# do i discuss marginal effects and the change in probability? -->
 
@@ -744,8 +733,7 @@ Hypothesis tests is used to test a claim about a population parameter. In the ca
 $$\begin{aligned}
 &H_0: \beta_j = 0 - \text{There is no relationship between }X_j\text{ and the response}\\
 &H_a: \beta_j \neq 0 - \text{There is a relationship between }X_j\text{ and the response}
-\end{aligned}$$
- {#eq-logistic-hypotheses}
+\end{aligned}$$ {#eq-logistic-hypotheses}
 
 The hypothesis test is conducted assuming the null hypothesis is true. When doing simulation-based inference, we use permutation sampling to generate the null distribution under this assumption. The process for permutation sampling is the same for logistic regression as with linear regression in @sec-slr-testing-sim. The values of the predictor of interest $X_j$ are permuted, such that the values are randomly assigned to each observation. There is no relationship between the permuted values of $X_j$ and the response variable. The logistic model is fit to each permuted sample, and the estimated coefficients $\hat{\beta}_j$ from the permuted samples make up the null distribution. The null distribution is used to compute the p-value and draw a conclusion about the hypotheses.
 
@@ -900,8 +888,7 @@ $$H_0: \beta_j = 0 \hspace{2mm} \text{ vs }\hspace{2mm} H_a: \beta_j \neq 0$$
 
 The test statistic, in @eq-logistic-test-stat, is called the Wald test statistic [@wald1943tests], <!--# make sure this is the correct reference-->because it is based on the approximation of the mean and standard error as $n$ is large.
 
-$$z = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}$$
- {#eq-logistic-test-stat}
+$$z = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}$$ {#eq-logistic-test-stat}
 
 The test statistic, denoted by $z$, is the number of standard errors the estimated coefficient $\hat{\beta}_j$ is from 0, the hypothesized mean of the distribution. It follows a standard normal distribution, $N(0, 1)$, because it is based on asymptotic results (compared to the $t$ test statistic in linear regression which applies even for small $n$). Because the alternative hypothesis is two-sided, the p-value is computed as $P(|Z| \geq |z|)$ , where $Z \sim N(0, 1)$. <!--# did i do > or >= in linear regression?--> The p-value is interpreted as before, with small p-values providing stronger evidence against the null hypothesis.
 
@@ -939,8 +926,7 @@ We can use a decision-making threshold $\alpha$ when using the p-value to draw c
 
 The equation to compute the confidence interval for coefficients in logistic regression is very similar to the formula in linear regression from @sec-slr-inf-clt. The difference is the critical value $z^*$ is computed from the $N(0, 1)$ distribution
 
-$$\hat{\beta}_j \pm z^* \times SE_{\hat{\beta}_j}$$
- {#eq-logistic-theory-ci}
+$$\hat{\beta}_j \pm z^* \times SE_{\hat{\beta}_j}$$ {#eq-logistic-theory-ci}
 
 In practice, the confidence interval is produced in the model output. Let's show how the 95% confidence interval for `age` is computed in @tbl-comfort-tech-age-2.
 
@@ -1001,8 +987,7 @@ Similar to linear regression, we check model conditions to evaluate whether thes
 
 The linearity assumption for logistic regression states that there is a linear relationship between the predictors and the logit of the response variable. We check this assumption by looking at plots of the quantitative predictors versus the empirical logit of the response. The **empirical logit** is the log-odds of a binary variable ("logit") calculated from the data ("empirical"). For example, @eq-emp-logit is the empirical logit for the comfort with driverless cars in the sample data set.
 
-$$\text{empirical logit} = \log\Big(\frac{\pi}{1 - \pi}\Big) = \log\Big(\frac{0.545}{1 - 0.545}\Big) = 0.180$$
- {#eq-emp-logit}
+$$\text{empirical logit} = \log\Big(\frac{\pi}{1 - \pi}\Big) = \log\Big(\frac{0.545}{1 - 0.545}\Big) = 0.180$$ {#eq-emp-logit}
 
 We can also look at the empirical logit by subgroup of a categorical variable. For example, @tbl-emp-logit-tech shows the empirical logit by opinion on whether technology makes life easier.
 
@@ -1197,7 +1182,7 @@ tidy(comfort_tech_age_fit, conf.int = TRUE ,conf.level = 0.95,
 
 ### Simulation-based inference
 
-The code for simulation-based inference is the same for logistic regression as the code for linear regression introduced in @sec-slr-R. Behind the scenes, the functions in the **infer** R package use the response variable to determine whether to fit a linear or logistic regression model.
+The code for simulation-based inference for logistic regression is the same as the code for linear regression introduced in @sec-slr-R. Behind the scenes, the functions in the **infer** R package use the response variable to determine whether to fit a linear or logistic regression model.
 
 Below is the code for the bootstrap confidence intervals and permutation test conducted in @sec-logistic-sim-inf. We refer the reader to @sec-mlr-sim-inf-R for more a more detailed explanation about the code.
 
