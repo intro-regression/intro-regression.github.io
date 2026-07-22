@@ -341,7 +341,7 @@ From @fig-coffee-normality, we see the distribution of the residuals is approxim
 
 ### Equal variance
 
-The last condition is **equal variance** (also called *constant variance*), that the variability of the residuals is approximately equal for each predicted value. This condition stems from the assumption in @sec-slr-foundation that $\sigma_{\epsilon}^2$ is equal for all values of the predictor, and thus for all predicted values.
+The last condition is **equal variance** (also called *constant variance*or *homoskedasticity*), that the variability of the residuals is approximately equal for each predicted value. This condition stems from the assumption in @sec-slr-foundation that $\sigma_{\epsilon}^2$ is equal for all values of the predictor, and thus for all predicted values.
 
 To check this condition, we will go back to the plot of the residuals versus predicted values from @fig-coffee-linearity. We look to see if the vertical spread of the residuals is approximately equal as we move along the $x$-axis. Since we are working with sample data, we don't expect the vertical spread of the residuals to be exactly equal as we move along the $x$-axis (for example, there may be outliers). Therefore, similar to previous conditions, we are looking for obvious departures from equal variance to conclude that the condition is not met. @fig-equal-var-not-met shows an example using simulated data of plot of residuals versus fitted when the equal variance condition is not satisfied. There is a distinguishable "fan-shape" showing that the spread of the residuals increases as the predicted value increases. Additionally, keep in mind that we are examining the vertical spread for the majority of the data, not including outliers in the assessments as shown by the dotted lines in @fig-coffee-equal-var to serve as a guide as we assess equal variance.
 
@@ -473,7 +473,7 @@ There are approaches for handling violations in the equal variance condition. Th
 | Equal variance  | Not needed            | Not needed                 | Important                                                                           |
 +-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
 
-: Summary of necessary conditions for various analysis tasks on the slope {#tbl-slr-conditions}
+: Summary of necessary conditions for various analysis tasks on the slope
 
 So far we have discussed the model conditions to assess whether the assumptions for simple linear regression reasonably hold true for our data. We have not, however, dealt with the presence of outliers in the data and the potential impact (or "influence") they may have on the regression model. In the next section, we discuss measures we can use to identify and assess the potential impact of such outlying observations.
 

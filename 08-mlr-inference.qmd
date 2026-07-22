@@ -625,9 +625,9 @@ Thus, we are 95% confident that the interval 128.882 to 144.924 contains $\beta_
 ::: {.yourturn latex=""}
 Confidence intervals typically have confidence levels between 90% and 99%. Suppose you are considering three possible confidence levels: 90%, 95%, and 99%.
 
-- Which confidence level will you choose to get the most accurate interval?
+- Which confidence level will you choose to get the most accurate interval (interval most likely to contain the true parameter)?
 
-- Which confidence level will you choose to get the most precise interval?[^08-mlr-inference-9]
+- Which confidence level will you choose to get the most precise interval (interval with smallest margin of error)?[^08-mlr-inference-9]
 :::
 
 [^08-mlr-inference-9]: The confidence level 99% produces the most accurate interval. The confidence level 90% produces the most precise interval.
@@ -826,7 +826,7 @@ The normality assumption is important when computing intervals for predictions o
 
 #### Equal variance {.unnumbered}
 
-The final model condition in LINE is the equal variance condition. This condition comes from the assumption about the distribution of the error terms, $\epsilon_i \sim N(0, \sigma^2_{\epsilon})$, that the variance in this distribution, $\sigma^2_{\epsilon}$ is the same for all observations regardless of the values of the predictors. Thus, the variability of the residuals should be the same for all predicted values (combinations of predictors).
+The final model condition in LINE is the equal variance condition (also called *constant variance*or *homoskedasticity*). This condition comes from the assumption about the distribution of the error terms, $\epsilon_i \sim N(0, \sigma^2_{\epsilon})$, that the variance in this distribution, $\sigma^2_{\epsilon}$ is the same for all observations regardless of the values of the predictors. Thus, the variability of the residuals should be the same for all predicted values (combinations of predictors).
 
 ```{r}
 #| label: fig-mlr-equal-var
@@ -844,7 +844,7 @@ ggplot(data = lemurs_model_aug, aes(x = .fitted, y = .resid)) +
        y = "Residual")
 ```
 
-@fig-mlr-equal-var shows a plot of th residuals versus predicted values, similar to @fig-mlr-resid-plot. As we move along the $x$-axis, we are looking to see if the vertical spread is approximately equal for all observations. To help evaluate this, we have added vertical lines encompassing the majority of the data. Note as we move along the $x$-axis, the vertical spread fo the residuals is largely captured in by these vertical lines. Thus, the equal variance condition is [**satisfied**]{.underline}. As with other conditions, we can ignore the high outlier when assessing the condition. Additionally, we are looking for noticeable violations in the conditions rather than perfect adherence when making the determination.
+@fig-mlr-equal-var shows a plot of th residuals versus predicted values, similar to @fig-mlr-resid-plot. As we move along the $x$-axis, we are looking to see if the vertical spread is approximately equal for all observations. To help evaluate this, we have added horizontal lines encompassing the majority of the data. Note as we move along the $x$-axis, the vertical spread of the residuals is largely captured within these horizontal linse. Thus, the equal variance condition is [**satisfied**]{.underline}. As with other conditions, we can ignore the high outlier when assessing the condition. Additionally, we are looking for noticeable violations in the conditions rather than perfect adherence when making the determination.
 
 Simulation-based inference does not rely on any assumptions about the distribution of the residuals, so it is robust to violations in the equal variance condition. The regression standard error $\hat{\sigma}_{\epsilon}$ is used to compute $SE_{\hat{\beta}_j}$ in theory-based inference, so violations in the equal variance condition could lead to unreliable inference results. Therefore, any violations should be addressed before moving forward with inference. @sec-ch-transformations introduces model transformations that can be used to address such violations.
 
@@ -977,7 +977,7 @@ $$VIF_j = \frac{1}{1 - R^2_j}$$ {#eq-vif}
 
 where $R^2_j$ is the proportion of variation in predictor $X_j$ that is explained by the other predictors. In other words, VIF considers not only if predictor $X_j$ is correlated with one other predictor, but also if it can explained as a linear combination of two or more other predictors.
 
-Because we expect at least some correlation between the predictors, we conclude that concerning multicollinearity exists if VIF is 10 or greater. @tbl-lemur-vif are the VIF for the predictors in @tbl-lemur-model-inf.
+Because we expect at least some correlation between the predictors, a commonly used threshold for identifying concerning collinearity VIF \> 10. @tbl-lemur-vif are the VIF for the predictors in @tbl-lemur-model-inf. Because all the VIFs are less than 10, there are no concerns with multicollinearity in this model. Thus, we can proceed with the analysis.
 
 ```{r}
 #| label: tbl-lemur-vif
@@ -987,9 +987,7 @@ vif(lemurs_model) |>
   kable(digits = 1)
 ```
 
-Because all the VIFs are less than 10, there are no concerns with multicollinearity in this model. Thus, we can proceed with the analysis.
-
-If there is concerning multicollinearity, there are some strategies to deal with it. The first is to remove one of the predictors that is part of the correlated set. We can use model performance statistics, such as those in @sec-model-assessment and @sec-model-compare-stats to determine which predictor we'd like to remove from the model. If there is multicollinearity between indicators for a categorical predictor, this is generally an indication that there are too few observations in the baseline level. Therefore changing the baseline level will reduce issues with multicollinearity among the indicators. These are just two of the many creative ways the data scientist can deal with multicollinearity.
+If there is concerning multicollinearity (VIF \> 10), there are some strategies to deal with it. The first is to remove one of the predictors that is part of the correlated set. We can use model performance statistics, such as those in @sec-model-assessment and @sec-model-compare-stats to determine which predictor we'd like to remove from the model. If there is multicollinearity between indicators for a categorical predictor, this is generally an indication that there are too few observations in the baseline level. Therefore changing the baseline level will reduce issues with multicollinearity among the indicators. These are just two of the many creative ways the data scientist can deal with multicollinearity.
 
 ## Inference for multiple linear regression in R
 
