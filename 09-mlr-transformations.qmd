@@ -864,9 +864,9 @@ We put together the concepts from @sec-mlr-interaction and @sec-transform-logx-l
 
 Below are the interpretations of the relationship between enrollment and expenditure for public and private schools given a 10% increase in the enrollment.
 
-> *For each additional 10% increase (* $C = 1.1$*) in enrollment at **private** NCAA Division I **private** colleges, the expenditure on basketball programs is expected to multiply by `r round(exp(enrollment_private), 3)`* $(e^{0.524})$*, holding region constant.*
+> *For each additional 10% increase (* $C = 1.1$*) in enrollment at **private** NCAA Division I **private** colleges, the expenditure on basketball programs is expected to multiply by `r round(1.1^(enrollment_private), 3)`* $(1.1^{0.524})$*, holding region constant.*
 >
-> *For each additional 10% increase (* $C = 1.1$*) in enrollment at **public** NCAA Division I colleges, the expenditure on basketball programs is expected to multiply by `r round(exp(enrollment_private + enrollment_public_int), 3)`* $(e^{0.524 + 0.255})$*, holding region constant.*
+> *For each additional 10% increase (* $C = 1.1$*) in enrollment at **public** NCAA Division I colleges, the expenditure on basketball programs is expected to multiply by `r round(1.1^(enrollment_private + enrollment_public_int), 3)`* $(1.1^{0.524 + 0.255})$*, holding region constant.*
 
 <!--# maybe clarify the wording here to make it clear that is addition-->
 
