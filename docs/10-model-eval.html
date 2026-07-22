@@ -790,16 +790,16 @@ Figure&nbsp;10.2: Bivariate exploratory data analysis for Spotify data. In each 
 <section id="sec-adj-rsq" class="level3" data-number="10.2.1">
 <h3 data-number="10.2.1" class="anchored" data-anchor-id="sec-adj-rsq"><span class="header-section-number">10.2.1</span> Adjusted <span class="math inline">\(R^2\)</span></h3>
 <p>Recall from <a href="04-slr.html#sec-model-assessment" class="quarto-xref"><span>Section 4.7</span></a> that <span class="math inline">\(R^2\)</span> is the proportion of variability in the response variable that is explained by the model. This value is based on the process Analysis of Variance (ANOVA), in which the variability in the response variable is decomposed into variability that can be explained by the model and variability left unexplained in the residuals. Thus, <span class="math inline">\(R^2\)</span> is computed as</p>
-<p><span class="math display">\[R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}\]</span> {#eq-rsq}</p>
+<p><span id="eq-rsq"><span class="math display">\[R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST} \tag{10.1}\]</span></span></p>
 <p>where <span class="math inline">\(SSM\)</span> is the model sum of squares (explained variability), <span class="math inline">\(SSR\)</span> is the residual sum of squares (unexplained variability), and <span class="math inline">\(SST\)</span> is the total variability in the response variable.</p>
 <p>Thus far, we have used <span class="math inline">\(R^2\)</span> to describe how well a model fits the data and to compare two models with the same number of predictors (for example, in <a href="09-mlr-transformations.html#sec-transform-choose-model" class="quarto-xref"><span>Section 9.5</span></a>). Now as we prepare to do model selection, we will often be comparing models that have different numbers of predictor variables, since the model selection process is often us answering the question “should we include predictor <span class="math inline">\(X_j\)</span> in the model given the other predictors currently in the model?”. Recall from <a href="07-mlr.html#sec-mlr-estimate-coef" class="quarto-xref"><span>Section 7.3</span></a> that the coefficients for a least-squares regression model are the ones that minimize the sum of square residuals (<span class="math inline">\(SSR\)</span>). Thus, if we estimate non-zero coefficients for new predictors, <span class="math inline">\(SSR\)</span> will decrease (even if it’s just by a very small amount) by definition. Thus, we cannot use <span class="math inline">\(R^2\)</span> to compare models with different numbers of predictors, because <span class="math inline">\(R^2\)</span> tends to preference the model with more predictors. This can lead to <strong>overfitting</strong>, the case in which a model fits so closely to the sample data that it cannot be reliably used on new data.</p>
 <p>When comparing models with different numbers of predictors, we can use a related statistic, called Adjusted<span class="math inline">\(R^2\)</span> that takes into account the number of predictor variables in the model.</p>
 <p>The formula for Adjusted <span class="math inline">\(R^2\)</span> is</p>
-<p><span class="math display">\[\text{Adjusted }R^2 = 1 - \frac{SSR / (n - p - 1)}{SST / (n - 1)}\]</span> {#eq-adj-rsq}</p>
+<p><span id="eq-adj-rsq"><span class="math display">\[\text{Adjusted }R^2 = 1 - \frac{SSR / (n - p - 1)}{SST / (n - 1)} \tag{10.2}\]</span></span></p>
 <p>where <span class="math inline">\(SSR\)</span> and <span class="math inline">\(SST\)</span> are defined as before, <span class="math inline">\(n\)</span> is the number of observations in the data, and <span class="math inline">\(p\)</span> is the number of predictors.</p>
 <p>The numerator <span class="math inline">\(SSR / (n - p - 1)\)</span>, the residual sum of squares divided by the associated degrees of freedom, is a measure of the average variability about the regression line. We showed in <a href="08-mlr-inference.html#sec-mlr-inf-foundation" class="quarto-xref"><span>Section 8.4.1</span></a> that the regression standard error, <span class="math inline">\(\hat{\sigma} = \sqrt{\frac{SSR}{n - p -1}}\)</span>, is the square root of this value. The variability about the regression line will be smaller for models that are a better fit for the data. Thus, <span class="math inline">\(SSR / (n - p - 1)\)</span> will decrease only if adding new predictors makes the model a better fit for the data.</p>
 <p>The denominator, <span class="math inline">\(SST/(n-1)\)</span>, is the sum of squares total divided by the associated degrees of freedom. This is the variance of the response variable, <span class="math inline">\(s^2_{Y}\)</span> . It will remain the same for all candidate models, because the same sample data is used throughout the analysis.</p>
-<p>Putting what we know about the numerator and denominator together, the second term in the <span class="quarto-unresolved-ref">?eq-adj-rsq</span> is smaller for models that better fit the data. Therefore, the Adjusted <span class="math inline">\(R^2\)</span> will be greater for models that are a better fit. Adjusted <span class="math inline">\(R^2\)</span> ranges from 0 to 1, so we choose models that have values close to 1.</p>
+<p>Putting what we know about the numerator and denominator together, the second term in the <a href="#eq-adj-rsq" class="quarto-xref">Equation&nbsp;<span>10.2</span></a> is smaller for models that better fit the data. Therefore, the Adjusted <span class="math inline">\(R^2\)</span> will be greater for models that are a better fit. Adjusted <span class="math inline">\(R^2\)</span> ranges from 0 to 1, so we choose models that have values close to 1.</p>
 <div class="math_rules">
 <p>The <strong>degrees of freedom (df)</strong> are the number of observations available to understand variability.</p>
 <p>When we fit a regression line with <span class="math inline">\(p\)</span> predictors, we need a minimum of <span class="math inline">\(p + 1\)</span> observations to fit the line, where <span class="math inline">\(p+1\)</span> is the number of terms in the model (including the intercept). We are left with <span class="math inline">\(n - (p + 1) = n - p - 1\)</span> observations to understand any variability in the residuals about the line. Thus, the degrees of freedom associated with SSR is <span class="math inline">\(n -  p - 1\)</span>.</p>
@@ -844,12 +844,12 @@ Table&nbsp;10.1: Comparing <span class="math inline">\(R^2\)</span> and Adjusted
 <p>From <a href="#tbl-rsq-adjrsq-compare" class="quarto-xref">Table&nbsp;<span>10.1</span></a>, we see the model fits are very similar. Though <span class="math inline">\(R^2\)</span> is slightly higher for the model with the additional predictors <code>mode</code> and <code>liveness</code>, Adj. <span class="math inline">\(R^2\)</span> is higher for the model that only includes <code>danceability</code> . This means that adding <code>mode</code> and <code>liveness</code> to the model dose not explain much additional variability in a song’s valence after accounting for <code>danceability</code>. Thus, we might prefer the model that only contains <code>danceability</code> given the goal of choosing of the simplest model possible that is still effective.</p>
 <div class="analysis_in_practice">
 <p>Below are guidelines for using <span class="math inline">\(R^2\)</span> and Adjusted <span class="math inline">\(R^2\)</span> in practice.</p>
-<p><span class="math inline">\(R^2\)</span></p>
+<p><span class="math inline">\(\mathbf{R}^2\)</span></p>
 <ul>
-<li>Use to describe the proportion of variability in the response that is explained by the model.</li>
-<li>Do <u><strong>not</strong></u> use to compare models with different numbers of predictors.</li>
+<li><p>Use to describe the proportion of variability in the response that is explained by the model.</p></li>
+<li><p>Do <u><strong>not</strong></u> use to compare models with different numbers of predictors.</p></li>
 </ul>
-<p><strong>Adjusted</strong> <span class="math inline">\(R^2\)</span></p>
+<p><strong>Adjusted</strong> <span class="math inline">\(\mathbf{R}^2\)</span></p>
 <ul>
 <li>Use for model selection and to compare models with different numbers of predictors.</li>
 <li>Do <u><strong>not</strong></u> use as a direct interpretation of the proportion of variability in the response that is explained by the model.</li>
@@ -858,8 +858,8 @@ Table&nbsp;10.1: Comparing <span class="math inline">\(R^2\)</span> and Adjusted
 </section>
 <section id="root-mean-square-error-rmse" class="level3" data-number="10.2.2">
 <h3 data-number="10.2.2" class="anchored" data-anchor-id="root-mean-square-error-rmse"><span class="header-section-number">10.2.2</span> Root Mean Square Error (RMSE)</h3>
-<p>Another statistic for model comparison is the Root Mean Square Error introduced in <a href="04-slr.html#sec-model-assessment" class="quarto-xref"><span>Section 4.7</span></a>. The <strong>Root Mean Square Error (RMSE)</strong> is a measure of the average error in the model predictions. From <span class="quarto-unresolved-ref">?eq-rmse</span>, we can see it is very similar to <span class="math inline">\(\hat{\sigma}\)</span> (<a href="08-mlr-inference.html#eq-mlr-sigma" class="quarto-xref">Equation&nbsp;<span>8.3</span></a>). In fact, the difference between these values is negligible when the number of observations, <span class="math inline">\(n\)</span>, is large.</p>
-<p><span class="math display">\[RMSE = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}} = \sqrt{\frac{SSR}{n}}\]</span> {#eq-rmse}</p>
+<p>Another statistic for model comparison is the Root Mean Square Error introduced in <a href="04-slr.html#sec-model-assessment" class="quarto-xref"><span>Section 4.7</span></a>. The <strong>Root Mean Square Error (RMSE)</strong> is a measure of the average error in the model predictions. From <a href="#eq-rmse" class="quarto-xref">Equation&nbsp;<span>10.3</span></a>, we can see it is very similar to <span class="math inline">\(\hat{\sigma}\)</span> (<a href="08-mlr-inference.html#eq-mlr-sigma" class="quarto-xref">Equation&nbsp;<span>8.3</span></a>). In fact, the difference between these values is negligible when the number of observations, <span class="math inline">\(n\)</span>, is large.</p>
+<p><span id="eq-rmse"><span class="math display">\[RMSE = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}} = \sqrt{\frac{SSR}{n}} \tag{10.3}\]</span></span></p>
 <p>The RMSE is typically used over other model comparison statistics, such as Adjusted <span class="math inline">\(R^2\)</span>, when the primary modeling objective is prediction.</p>
 <div class="yourturn">
 <p>We use RMSE to compare two models. In general, do we select the model with the higher or lower value of RMSE?<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
@@ -896,18 +896,18 @@ Table&nbsp;10.2: RMSE for two candidate models of valence
 </figure>
 </div>
 </div>
-<p>Recall that RMSE has the same units and scale as the response variable, so we take these into consideration when interpreting RMSE and using it to compare models. Based on <a href="#tbl-rmse-compare" class="quarto-xref">Table&nbsp;<span>10.2</span></a>, the values of RMSE for the two models are equal down to three digits. From <a href="#sec-spotify-intro" class="quarto-xref"><span>Section 10.1</span></a>, <code>valence</code> takes values 0 to 1, so a difference less than 0.001 in the prediction error is very small. This is consistent with the very small difference in Adjusted <span class="math inline">\(R^2\)</span> values in <a href="#tbl-rsq-adjrsq-compare" class="quarto-xref">Table&nbsp;<span>10.1</span></a>. In general, we select the model that has the smallest value of RMSE; however, in cases like this with negligible to no difference between the two models, we use our judgment as the data scientist, along with subject matter expertise and the analysis objectives to choose a model.</p>
+<p>Recall from <a href="04-slr.html#sec-model-assessment" class="quarto-xref"><span>Section 4.7</span></a> that RMSE has the same units and scale as the response variable, so we take these into consideration when interpreting RMSE and using it to compare models. Based on <a href="#tbl-rmse-compare" class="quarto-xref">Table&nbsp;<span>10.2</span></a>, the values of RMSE for the two models are equal down to three digits. From <a href="#sec-spotify-intro" class="quarto-xref"><span>Section 10.1</span></a>, <code>valence</code> takes values 0 to 1, so a difference less than 0.001 in the prediction error is very small. This is consistent with the very small difference in Adjusted <span class="math inline">\(R^2\)</span> values in <a href="#tbl-rsq-adjrsq-compare" class="quarto-xref">Table&nbsp;<span>10.1</span></a>. In general, we select the model that has the smallest value of RMSE; however, in cases like this with negligible to no difference between the two models, we use our judgment as the data scientist, along with subject matter expertise and the analysis objectives to choose a model.</p>
 </section>
 <section id="sec-aic-bic" class="level3" data-number="10.2.3">
 <h3 data-number="10.2.3" class="anchored" data-anchor-id="sec-aic-bic"><span class="header-section-number">10.2.3</span> AIC and BIC</h3>
 <p>Adjusted <span class="math inline">\(R^2\)</span> and RMSE are computed by quantifying the variability in the residuals (the unexplained variability). In addition to these statistics are two other statistics, AIC and BIC, that are based on another measure of model fit called a likelihood function. We will talk about the likelihood in more detail in <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, but in short, a <strong>likelihood function</strong> quantifies how plausible it is to obtain the observed data given a particular model is the true model of the relationship between the response and predictor variables. <!--# need less clunky definiiton--> Models with higher values for the likelihood are a better fit for the data compared to models with lower values. It is common to work with the natural log of the likelihood function, denoted <span class="math inline">\(\log L\)</span>, for ease of calculations. The natural log is monotonic, so higher values of <span class="math inline">\(\log L\)</span> correspond to higher values of the likelihood and vice versa.</p>
 <p>The <strong>Akaike’s Information Criterion (AIC)</strong> <span class="citation" data-cites="akaike1974">(<a href="references.html#ref-akaike1974" role="doc-biblioref">Akaike 1974</a>)</span> and <strong>Schwarz’s Bayesian Information Criterion (BIC)</strong> <span class="citation" data-cites="schwarz1978estimating">(<a href="references.html#ref-schwarz1978estimating" role="doc-biblioref">Schwarz 1978</a>)</span> are two measures of model fit based on the likelihood. Their equations are</p>
-<p><span class="math display">\[\begin{aligned}
+<p><span id="eq-aic-bic"><span class="math display">\[\begin{aligned}
 AIC &amp;= -2\log L + 2(p+1) \\
 BIC &amp;= -2\log L + \log(n)(p+1)
-\end{aligned}\]</span> {#eq-aic-bic}</p>
+\end{aligned} \tag{10.4}\]</span></span></p>
 <p>where <span class="math inline">\(\log L\)</span> is the log-likelihood, <span class="math inline">\(n\)</span> is the number of observations, and <span class="math inline">\(p+1\)</span> is the number of terms in the model.</p>
-<p>In <span class="quarto-unresolved-ref">?eq-aic-bic</span>, the first term for both AIC and BIC is <span class="math inline">\(-2 \log L\)</span>. Because the log-likelihood is greater for better fitting models, this term decreases as the model fit improves. The second term in each equation is the “penalty” for the number of predictors in the model. As new predictors are added to a model, AIC and BIC are a balance between the decreasing first term and increasing second term. Where AIC and BIC differ is on the strength of the penalty for the number of terms in the model. When <span class="math inline">\(n &gt; 8\)</span> (essentially all the time!), <span class="math inline">\(\log(n)(p+1) &gt; 2(p + 1)\)</span>, so we say BIC has the “stronger penalty”. This results in BIC tending to preference models with fewer predictor variables than AIC.</p>
+<p>In <a href="#eq-aic-bic" class="quarto-xref">Equation&nbsp;<span>10.4</span></a>, the first term for both AIC and BIC is <span class="math inline">\(-2 \log L\)</span>. Because the log-likelihood is greater for better fitting models, this term decreases as the model fit improves. The second term in each equation is the “penalty” for the number of predictors in the model. As new predictors are added to a model, AIC and BIC are a balance between the decreasing first term and increasing second term. Where AIC and BIC differ is on the strength of the penalty for the number of terms in the model. When <span class="math inline">\(n &gt; 8\)</span> (essentially all the time!), <span class="math inline">\(\log(n)(p+1) &gt; 2(p + 1)\)</span>, so we say BIC has the “stronger penalty”. This results in BIC tending to preference models with fewer predictor variables than AIC.</p>
 <p>The AIC and BIC for a single model is generally not meaningful in practice, so these values are used to compare two or more models. Small values of AIC and BIC correspond to better model fit, so we select the model that minimizes these statistics when comparing multiple models. In practice, a difference of 10 or greater in the AIC or BIC between models, is considered meaningful enough to choose one model over the other. <span class="quarto-unresolved-ref">?tbl-aic-bic-guidelines</span> provides more specific guidelines for model comparison based on the differences in AIC and BIC.</p>
 <table class="caption-top table">
 <caption>Guidelines for comparing two models, <span class="math inline">\(M_1\)</span> and <span class="math inline">\(M_2\)</span>, using AIC and BIC</caption>
@@ -991,10 +991,10 @@ Table&nbsp;10.3: Comparing models using AIC and BIC
 <table class="caption-top table">
 <caption>: Model comparison statistics</caption>
 <colgroup>
-<col style="width: 23%">
-<col style="width: 26%">
-<col style="width: 23%">
-<col style="width: 26%">
+<col style="width: 24%">
+<col style="width: 25%">
+<col style="width: 24%">
+<col style="width: 25%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1036,7 +1036,7 @@ Table&nbsp;10.3: Comparing models using AIC and BIC
 </section>
 <section id="sec-stepwise-selection" class="level2" data-number="10.3">
 <h2 data-number="10.3" class="anchored" data-anchor-id="sec-stepwise-selection"><span class="header-section-number">10.3</span> Stepwise model selection</h2>
-<p>Now that we have a suite of model comparison statistics, let’s develop a workflow for using these statistics to choose a final model. In <a href="#sec-model-compare-stats" class="quarto-xref"><span>Section 10.2</span></a>, we compared two models with a small number of predictor variables. From <a href="#sec-spotify-intro" class="quarto-xref"><span>Section 10.1</span></a>, we see there are nine potential predictor variables. Even with nine potential predictors, it would be time consuming and computationally intensive to test every possible combination of predictors. <!--# make this less clunky--> In practice, we may even have as many as 20, 50, or many more predictors to consider for inclusion in a model. Therefore, we need methods that help us choose variables to include in the model in a systematic way. This is called <strong>model selection</strong>.</p>
+<p>Now that we have a suite of model comparison statistics, let’s develop a workflow for using these statistics to choose a final model. In <a href="#sec-model-compare-stats" class="quarto-xref"><span>Section 10.2</span></a>, we compared two models with a small number of predictor variables. From <a href="#sec-spotify-intro" class="quarto-xref"><span>Section 10.1</span></a>, we see there are nine potential predictor variables. Even with nine potential predictors, it would be time consuming and computationally intensive to test every possible combination of predictors. <!--# make this less clunky--> In practice, we may even have as many as 20, 50, or many more predictors to consider for inclusion in a model. Therefore, we need methods that help us systematically choose variables to include in the model. This is called <strong>model selection</strong>.</p>
 <p>In particular, we will use a set of methods called <strong>stepwise selection</strong>, where were considering adding and/or removing one variable or a small subset of variables at a time (the steps).</p>
 <!--# Key terms: Model selection: The process of choosing variables for a final model in a systematic way Stepwise selection: Model selection process in which variables are added or removed one at a time or a small subset at a time-->
 <section id="sec-stepwise-forward" class="level3" data-number="10.3.1">
@@ -1194,86 +1194,86 @@ Table&nbsp;10.6: Model selected by forward selection using AIC as criteria
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">-0.423</td>
-<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.4226</td>
+<td style="text-align: right;">0.0461</td>
 <td style="text-align: right;">-9.16</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">danceability</td>
-<td style="text-align: right;">0.639</td>
-<td style="text-align: right;">0.029</td>
-<td style="text-align: right;">21.88</td>
+<td style="text-align: right;">0.6392</td>
+<td style="text-align: right;">0.0292</td>
+<td style="text-align: right;">21.87</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">playlist_genrelatin</td>
-<td style="text-align: right;">0.203</td>
-<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.2026</td>
+<td style="text-align: right;">0.0127</td>
 <td style="text-align: right;">15.90</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">playlist_genrepop</td>
-<td style="text-align: right;">0.162</td>
-<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.1619</td>
+<td style="text-align: right;">0.0126</td>
 <td style="text-align: right;">12.82</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">playlist_genrer&amp;b</td>
-<td style="text-align: right;">0.209</td>
-<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.2093</td>
+<td style="text-align: right;">0.0136</td>
 <td style="text-align: right;">15.44</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">playlist_genrerap</td>
-<td style="text-align: right;">0.135</td>
-<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.1352</td>
+<td style="text-align: right;">0.0128</td>
 <td style="text-align: right;">10.57</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">playlist_genrerock</td>
-<td style="text-align: right;">0.224</td>
-<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.2237</td>
+<td style="text-align: right;">0.0143</td>
 <td style="text-align: right;">15.66</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">energy</td>
-<td style="text-align: right;">0.439</td>
-<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">0.4389</td>
+<td style="text-align: right;">0.0317</td>
 <td style="text-align: right;">13.85</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">acousticness</td>
-<td style="text-align: right;">0.101</td>
-<td style="text-align: right;">0.020</td>
+<td style="text-align: right;">0.1007</td>
+<td style="text-align: right;">0.0196</td>
 <td style="text-align: right;">5.12</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">duration_min</td>
-<td style="text-align: right;">-0.018</td>
-<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">-0.0179</td>
+<td style="text-align: right;">0.0037</td>
 <td style="text-align: right;">-4.80</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">loudness</td>
-<td style="text-align: right;">-0.007</td>
-<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">-0.0072</td>
+<td style="text-align: right;">0.0017</td>
 <td style="text-align: right;">-4.13</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">tempo</td>
-<td style="text-align: right;">0.000</td>
-<td style="text-align: right;">0.000</td>
-<td style="text-align: right;">3.29</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">3.28</td>
 <td style="text-align: right;">0.001</td>
 </tr>
 </tbody>
@@ -1440,85 +1440,85 @@ Table&nbsp;10.9: Model selected using backward selection with AIC as selection c
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">-0.423</td>
-<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.4226</td>
+<td style="text-align: right;">0.0461</td>
 <td style="text-align: right;">-9.16</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">playlist_genrelatin</td>
-<td style="text-align: right;">0.203</td>
-<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.2026</td>
+<td style="text-align: right;">0.0127</td>
 <td style="text-align: right;">15.90</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">playlist_genrepop</td>
-<td style="text-align: right;">0.162</td>
-<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.1619</td>
+<td style="text-align: right;">0.0126</td>
 <td style="text-align: right;">12.82</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">playlist_genrer&amp;b</td>
-<td style="text-align: right;">0.209</td>
-<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.2093</td>
+<td style="text-align: right;">0.0136</td>
 <td style="text-align: right;">15.44</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">playlist_genrerap</td>
-<td style="text-align: right;">0.135</td>
-<td style="text-align: right;">0.013</td>
+<td style="text-align: right;">0.1352</td>
+<td style="text-align: right;">0.0128</td>
 <td style="text-align: right;">10.57</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">playlist_genrerock</td>
-<td style="text-align: right;">0.224</td>
-<td style="text-align: right;">0.014</td>
+<td style="text-align: right;">0.2237</td>
+<td style="text-align: right;">0.0143</td>
 <td style="text-align: right;">15.66</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">danceability</td>
-<td style="text-align: right;">0.639</td>
-<td style="text-align: right;">0.029</td>
-<td style="text-align: right;">21.88</td>
+<td style="text-align: right;">0.6392</td>
+<td style="text-align: right;">0.0292</td>
+<td style="text-align: right;">21.87</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">energy</td>
-<td style="text-align: right;">0.439</td>
-<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">0.4389</td>
+<td style="text-align: right;">0.0317</td>
 <td style="text-align: right;">13.85</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">loudness</td>
-<td style="text-align: right;">-0.007</td>
-<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">-0.0072</td>
+<td style="text-align: right;">0.0017</td>
 <td style="text-align: right;">-4.13</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">acousticness</td>
-<td style="text-align: right;">0.101</td>
-<td style="text-align: right;">0.020</td>
+<td style="text-align: right;">0.1007</td>
+<td style="text-align: right;">0.0196</td>
 <td style="text-align: right;">5.12</td>
 <td style="text-align: right;">0.000</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tempo</td>
-<td style="text-align: right;">0.000</td>
-<td style="text-align: right;">0.000</td>
-<td style="text-align: right;">3.29</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">3.28</td>
 <td style="text-align: right;">0.001</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">duration_min</td>
-<td style="text-align: right;">-0.018</td>
-<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">-0.0179</td>
+<td style="text-align: right;">0.0037</td>
 <td style="text-align: right;">-4.80</td>
 <td style="text-align: right;">0.000</td>
 </tr>
@@ -1529,6 +1529,7 @@ Table&nbsp;10.9: Model selected using backward selection with AIC as selection c
 </figure>
 </div>
 </div>
+<p>In this example, the same model was chosen based on forward and backward selection; however, forward and backward selection may not always agree in practice. When different models are chosen by these two methods, we can evaluate the chosen models using the model performance statistics introduced in <a href="#sec-model-compare-stats" class="quarto-xref"><span>Section 10.2</span></a> . If our analysis objective is building a model to produce predictions on future observations, the model performance statistics on the selected model may not be the best evaluation on how a model performs on new data. In the next section, we introduce strategies for splitting our data to get reliable evaluations of how models may perform on new data.</p>
 <!--# add comemnts about the criticisms of these methods. If short enough, this can be a callout box-->
 <!--# Section 4.3 of Harrell's Regression Modeling Strategies, Section 11.4 of the Feature Engineering book. -->
 <!--# talk about some strategies to mitigate some of these issues like having the the testing set (coming in upcoming section) and bootstrapping-->
@@ -1543,7 +1544,7 @@ Table&nbsp;10.9: Model selected using backward selection with AIC as selection c
 <p>In contrast, if the primary analysis objective is prediction, then we do not get all the information needed to evaluate model performance when we use all the data to build the model. Specifically, if all of the data is used in the model building process, then there is no data left to evaluate how well the model predicts for new observations. In general, we do not want to implement a model for widespread use without having some evaluation of how it performs on new data, particularly if there are serious implications for inaccurate model results, such as models used to inform business decisions or health diagnoses.</p>
 <section id="using-training-and-testing-sets" class="level3" data-number="10.4.1">
 <h3 data-number="10.4.1" class="anchored" data-anchor-id="using-training-and-testing-sets"><span class="header-section-number">10.4.1</span> Using training and testing sets</h3>
-<p>One way to evaluate the model performance on new data is to collect more data. This is often not a feasible solution in practice, because data collection is often time consuming and expensive. Another solution, then, is to split the sample data so that some observations are set aside to act as “new data”. Thus, we can split the sample data into two subsets, the training and testing set. The <strong>training set</strong> is the subset that is used to build the model, and the <strong>testing set</strong> is the subset that is used to evaluate how well the final model performs on new data. The testing set is only used to evaluate the final model. The final model is not changed based on the results from the testing set in order to prevent overfitting the model.</p>
+<p>One way to evaluate the model performance on new data is to collect more data. This is often not a feasible solution in practice, because data collection is often time consuming and expensive. Another solution, then, is to split the sample data so that some observations are set aside to act as “new data”. Thus, we can split the sample data into two subsets, the training and testing set. The <strong>training set</strong> is the subset that is used to build the model, and the <strong>testing set</strong> is the subset that is used to evaluate how well the final model performs on new data. The testing set is only used to evaluate the final model. In order to prevent overfitting the model, we do not use testing set to inform the model selection process.</p>
 <!--# Key terms: Sample data: Full data set used in the analysis Training set: Subset of the sample data used for model building Testing set: Subset of the sample data used to evaluate performance of final model Overfitting: Fitting a model so closely to the model building data that it performs poorly on new data.-->
 <p>There are multiple ways to split the data into training and testing sets as shown in <a href="#fig-train-test" class="quarto-xref">Figure&nbsp;<span>10.3</span></a>.</p>
 <div id="fig-train-test" class="quarto-layout-panel">

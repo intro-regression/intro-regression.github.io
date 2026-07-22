@@ -297,8 +297,7 @@ We begin by discussing model fit and performance statistics used to compare mode
 
 Recall from @sec-model-assessment that $R^2$ is the proportion of variability in the response variable that is explained by the model. This value is based on the process Analysis of Variance (ANOVA), in which the variability in the response variable is decomposed into variability that can be explained by the model and variability left unexplained in the residuals. Thus, $R^2$ is computed as
 
-$$R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}$$
- {#eq-rsq}
+$$R^2 = \frac{SSM}{SST} = 1 - \frac{SSR}{SST}$$ {#eq-rsq}
 
 where $SSM$ is the model sum of squares (explained variability), $SSR$ is the residual sum of squares (unexplained variability), and $SST$ is the total variability in the response variable.
 
@@ -308,8 +307,7 @@ When comparing models with different numbers of predictors, we can use a related
 
 The formula for Adjusted $R^2$ is
 
-$$\text{Adjusted }R^2 = 1 - \frac{SSR / (n - p - 1)}{SST / (n - 1)}$$
- {#eq-adj-rsq}
+$$\text{Adjusted }R^2 = 1 - \frac{SSR / (n - p - 1)}{SST / (n - 1)}$$ {#eq-adj-rsq}
 
 where $SSR$ and $SST$ are defined as before, $n$ is the number of observations in the data, and $p$ is the number of predictors.
 
@@ -360,12 +358,13 @@ From @tbl-rsq-adjrsq-compare, we see the model fits are very similar. Though $R^
 ::: {.analysis_in_practice latex=""}
 Below are guidelines for using $R^2$ and Adjusted $R^2$ in practice.
 
-$R^2$
+$\mathbf{R}^2$
 
 - Use to describe the proportion of variability in the response that is explained by the model.
+
 - Do [**not**]{.underline} use to compare models with different numbers of predictors.
 
-**Adjusted** $R^2$
+**Adjusted** $\mathbf{R}^2$
 
 - Use for model selection and to compare models with different numbers of predictors.
 - Do [**not**]{.underline} use as a direct interpretation of the proportion of variability in the response that is explained by the model.
@@ -375,8 +374,7 @@ $R^2$
 
 Another statistic for model comparison is the Root Mean Square Error introduced in @sec-model-assessment. The **Root Mean Square Error (RMSE)** is a measure of the average error in the model predictions. From @eq-rmse, we can see it is very similar to $\hat{\sigma}$ ([@eq-mlr-sigma]). In fact, the difference between these values is negligible when the number of observations, $n$, is large.
 
-$$RMSE = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}} = \sqrt{\frac{SSR}{n}}$$
- {#eq-rmse}
+$$RMSE = \sqrt{\frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{n}} = \sqrt{\frac{SSR}{n}}$$ {#eq-rmse}
 
 The RMSE is typically used over other model comparison statistics, such as Adjusted $R^2$, when the primary modeling objective is prediction.
 
@@ -406,7 +404,7 @@ rmse(model1_aug, truth = valence, estimate = .fitted) |>
   kable(digits = 3, col.names =c("Model", "RMSE"))
 ```
 
-Recall that RMSE has the same units and scale as the response variable, so we take these into consideration when interpreting RMSE and using it to compare models. Based on @tbl-rmse-compare, the values of RMSE for the two models are equal down to three digits. From @sec-spotify-intro, `valence` takes values 0 to 1, so a difference less than 0.001 in the prediction error is very small. This is consistent with the very small difference in Adjusted $R^2$ values in @tbl-rsq-adjrsq-compare. In general, we select the model that has the smallest value of RMSE; however, in cases like this with negligible to no difference between the two models, we use our judgment as the data scientist, along with subject matter expertise and the analysis objectives to choose a model.
+Recall from @sec-model-assessment that RMSE has the same units and scale as the response variable, so we take these into consideration when interpreting RMSE and using it to compare models. Based on @tbl-rmse-compare, the values of RMSE for the two models are equal down to three digits. From @sec-spotify-intro, `valence` takes values 0 to 1, so a difference less than 0.001 in the prediction error is very small. This is consistent with the very small difference in Adjusted $R^2$ values in @tbl-rsq-adjrsq-compare. In general, we select the model that has the smallest value of RMSE; however, in cases like this with negligible to no difference between the two models, we use our judgment as the data scientist, along with subject matter expertise and the analysis objectives to choose a model.
 
 ### AIC and BIC {#sec-aic-bic}
 
@@ -417,8 +415,7 @@ The **Akaike’s Information Criterion (AIC)** [@akaike1974] and **Schwarz’s B
 $$\begin{aligned}
 AIC &= -2\log L + 2(p+1) \\
 BIC &= -2\log L + \log(n)(p+1)
-\end{aligned}$$
- {#eq-aic-bic}
+\end{aligned}$$ {#eq-aic-bic}
 
 where $\log L$ is the log-likelihood, $n$ is the number of observations, and $p+1$ is the number of terms in the model.
 
@@ -473,7 +470,7 @@ In this example, the same model minimizes both AIC and BIC. In fact, based on th
 Below is a summary of the model comparison statistics:
 
 | Statistic | Equation | Values that indicate good fit | Prioritize when analysis objective is... |
-|-----------------|-------------------|-----------------|-------------------|
+|------------------|-------------------|------------------|-------------------|
 | Adjusted $R^2$ | $\frac{SSR/ (n - p - 1}{SST / (n - 1)}$ | Higher | Explanation |
 | RMSE | $\sqrt{\frac{SSR}{n}}$ | Lower | Prediction |
 | AIC | $-2\log L + 2(p+1)$ | Lower | Explanation |
@@ -484,7 +481,7 @@ Below is a summary of the model comparison statistics:
 
 ## Stepwise model selection {#sec-stepwise-selection}
 
-Now that we have a suite of model comparison statistics, let's develop a workflow for using these statistics to choose a final model. In @sec-model-compare-stats, we compared two models with a small number of predictor variables. From @sec-spotify-intro, we see there are nine potential predictor variables. Even with nine potential predictors, it would be time consuming and computationally intensive to test every possible combination of predictors. <!--# make this less clunky--> In practice, we may even have as many as 20, 50, or many more predictors to consider for inclusion in a model. Therefore, we need methods that help us choose variables to include in the model in a systematic way. This is called **model selection**.
+Now that we have a suite of model comparison statistics, let's develop a workflow for using these statistics to choose a final model. In @sec-model-compare-stats, we compared two models with a small number of predictor variables. From @sec-spotify-intro, we see there are nine potential predictor variables. Even with nine potential predictors, it would be time consuming and computationally intensive to test every possible combination of predictors. <!--# make this less clunky--> In practice, we may even have as many as 20, 50, or many more predictors to consider for inclusion in a model. Therefore, we need methods that help us systematically choose variables to include in the model. This is called **model selection**.
 
 In particular, we will use a set of methods called **stepwise selection**, where were considering adding and/or removing one variable or a small subset of variables at a time (the steps).
 
@@ -575,7 +572,7 @@ forward_model <- stats::step(null_model,
                       direction = "forward",
                       trace = 0)
 tidy(forward_model) |> 
-  kable(digits = 3)
+  kable(digits = 4)
 ```
 
 @tbl-forward-final shows the model selected using forward selection with AIC as the selection criteria. Using this model selection approach, all predictors except `liveness` and `mode` were included in the final model. The AIC for this model is `r round(AIC(forward_model), 3)`.
@@ -690,8 +687,10 @@ backward_selection <- stats::step(full_model,
                            trace = 0)
 
 tidy(backward_selection) |> 
-  kable(digits = 3)
+  kable(digits = 4)
 ```
+
+In this example, the same model was chosen based on forward and backward selection; however, forward and backward selection may not always agree in practice. When different models are chosen by these two methods, we can evaluate the chosen models using the model performance statistics introduced in @sec-model-compare-stats . If our analysis objective is building a model to produce predictions on future observations, the model performance statistics on the selected model may not be the best evaluation on how a model performs on new data. In the next section, we introduce strategies for splitting our data to get reliable evaluations of how models may perform on new data.
 
 <!--# add comemnts about the criticisms of these methods. If short enough, this can be a callout box-->
 
@@ -713,7 +712,7 @@ In contrast, if the primary analysis objective is prediction, then we do not get
 
 ### Using training and testing sets
 
-One way to evaluate the model performance on new data is to collect more data. This is often not a feasible solution in practice, because data collection is often time consuming and expensive. Another solution, then, is to split the sample data so that some observations are set aside to act as "new data". Thus, we can split the sample data into two subsets, the training and testing set. The **training set** is the subset that is used to build the model, and the **testing set** is the subset that is used to evaluate how well the final model performs on new data. The testing set is only used to evaluate the final model. The final model is not changed based on the results from the testing set in order to prevent overfitting the model.
+One way to evaluate the model performance on new data is to collect more data. This is often not a feasible solution in practice, because data collection is often time consuming and expensive. Another solution, then, is to split the sample data so that some observations are set aside to act as "new data". Thus, we can split the sample data into two subsets, the training and testing set. The **training set** is the subset that is used to build the model, and the **testing set** is the subset that is used to evaluate how well the final model performs on new data. The testing set is only used to evaluate the final model. In order to prevent overfitting the model, we do not use testing set to inform the model selection process.
 
 <!--# Key terms: Sample data: Full data set used in the analysis Training set: Subset of the sample data used for model building Testing set: Subset of the sample data used to evaluate performance of final model Overfitting: Fitting a model so closely to the model building data that it performs poorly on new data.-->
 
