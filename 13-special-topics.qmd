@@ -88,7 +88,9 @@ The data set was adapted from the `cuisines` data frame in the **tastyR** packag
 
 - `reviews`: Number of reviews
 
-Our analysis objective is to use the various recipe characteristics to explain variability in the average rating. Here we will focus on handling missing data while using the analysis objective to inform our analysis decisions.
+::: {.objective latex=""}
+The analysis objective is to use the various recipe characteristics to explain variability in the average rating. Here we will focus on handling missing data while using the analysis objective to inform our analysis decisions.
+:::
 
 ```{r}
 #| eval: false
@@ -244,7 +246,8 @@ Hot deck imputation is done using `hotdeck()` from the **VIM** package[@VIM]. Ob
 #| echo: true
 
 
-recipes_sub <- hotdeck(recipes_sub, variable = "calories",  ord_var = c("fat", "carbs", "protein"))
+recipes_sub <- hotdeck(recipes_sub, variable = "calories", 
+                       ord_var = c("fat", "carbs", "protein"))
 ```
 
 This function imputes the missing values and creates a new logical variable with the suffix `_imp` that is `TRUE` if the value was imputed and `FALSE` otherwise. The summary statistics for the variable `calories` with the missing values imputed are in table @tbl-missing-data-calories-imputed.
@@ -252,16 +255,16 @@ This function imputes the missing values and creates a new logical variable with
 ```{r}
 #| label: tbl-missing-data-calories-imputed
 #| tbl-cap: "Summary of `calories` with imputed values"
-recipes |>
+recipes_sub|>
   skim(calories) |>
   select(-numeric.hist)
 ```
 
-Multiple imputation is conducted using `mice()` in the **mice** package[@mice]. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is `m = 5`. The argument `printFlag = FALSE` suppress output about each iteration. We save the results as a new data frame, `recipes_sub_mice`.
+Multiple imputation is conducted using `mice()` in the **mice** package [@mice]. In the code below, we input the data frame that contains missing values and the number of complete data sets we want to generate to compute the final results. Note that the default value is `m = 5`. The argument `printFlag = FALSE` suppress output about each iteration. We save the results as a new data frame, `recipes_sub_mice`.
 
 ```{r}
-#| echo: false 
-recipes_sub_mice <- mice(recipes_sub, m = 5, printFlag = FALSE)
+#| echo: true
+recipes_sub_mice <- mice(recipes, m = 5, printFlag = FALSE)
 ```
 
 The `complete()` function is used to view the completed data frames. In the code below, we view the first complete data frame and provide a summary of the variables in the completed data frame.
@@ -270,17 +273,17 @@ The `complete()` function is used to view the completed data frames. In the code
 #| echo: true
 #| eval: false
 
-recipes_sub_mice_1 <- complete(recipes_sub_mice, 1)
+recipes_mice_complete_1 <- complete(recipes_sub_mice, 1)
 
-skim(recipes_sub_mice_1)
+skim(recipes_mice_complete_1)
 ```
 
 ```{r}
 #| echo: false
 
-recipes_sub_mice_1 <- complete(recipes_sub_mice, 1)
+recipes_mice_complete_1 <- complete(recipes_sub_mice, 1)
 
-skim(recipes_sub_mice_1) |>
+skim(recipes_mice_complete_1) |>
   select(-numeric.hist)
 ```
 
@@ -303,7 +306,7 @@ Because the ultimate analysis goal is modeling `avg_rating`, we can evaluate whe
 
 ```{r}
 #| label: fig-ggmice-reviews-v-rating
-#| fig-cap: "Relationship betwen `reviews` and `avg_rating` for observed and imputed data. Note that `avg_rating` has missing data, so imputed data could be mputed for either variable or both variables."
+#| fig-cap: "Relationship betwen `reviews` and `avg_rating` for observed and imputed data. Note that `avg_rating` has missing data, so values could be imputed for either variable or both variables."
 #| echo: true
 
 ggmice(recipes_sub_mice, aes(x = reviews, y = avg_rating)) +
@@ -543,7 +546,7 @@ Let's interpret the coefficients in terms of having the voter frequency of `spor
 
 The interpretation in terms of the odds is the following:
 
-> **For each additional year older, the** <b>odds</b> of an individual voting sporadically versus rarely/never are expected to multiply by `r round(exp(0.041), 3)` $(e^{0.041})$, holding political affiliation constant.
+> *For each additional year older, the odds of an individual voting sporadically versus rarely/never are expected to multiply by `r round(exp(0.041), 3)`* $(e^{0.041})$*, holding political affiliation constant.*
 
 Next, we interpret the effect of political affiliation on the voting frequency. As with other models, we write the interpretation in reference to the baseline level of the categorical predictor. The interpretation of the coefficients for `party_id` in terms of the log odds are the following:
 
@@ -553,9 +556,9 @@ Next, we interpret the effect of political affiliation on the voting frequency. 
 
 The interpretations in terms of the odds are as follows:
 
-> *The* <b>odds</b> an individual who has no political affiliation votes sporadically versus rarely/never are `r round(exp(-0.677), 3)` $(e^{-0.872})$ times the odds of an individual whose party affiliation is Democrat, holding age constant.
+> *The odds an individual who has no political affiliation votes sporadically versus rarely/never are `r round(exp(-0.677), 3)`* $(e^{-0.872})$ *times the odds of an individual whose party affiliation is Democrat, holding age constant.*
 
-> *The* <b>odds</b> an individual whose political affiliation is Republican votes sporadically versus rarely/never are `r round(exp(-0.106), 3)` $(e^{-0.106})$ times the odds of an individual whose party affiliation is Democrat, holding age constant.
+> *The odds an individual whose political affiliation is Republican votes sporadically versus rarely/never are `r round(exp(-0.106), 3)`* $(e^{-0.106})$ *times the odds of an individual whose party affiliation is Democrat, holding age constant.*
 
 Along with the coefficients in @tbl-voter-model are 95% confidence intervals for the population coefficients. These confidence intervals are estimated in a similar way as those for logistic regression in @sec-logistic-inf. As with previous models, we look to see whether the confidence interval contains 0 to determine whether it is a useful predictor in explaining variability in voting frequency after adjusting for the other predictors. In both equations in @tbl-voter-model, none of the confidence intervals for `age` and `party_idNoaffiliation` include 0. Thus, both of these indicators are helpful in understanding voting frequency. In contrast, the confidence intervals for `party_idRepublican` do contain 0, so the voting behavior for Republicans does not differ significantly from Democrats, after adjusting for age. This is consistent with the observations from @fig-voting-bivar-eda-2.
 
@@ -624,7 +627,7 @@ Use @fig-confmat-voters-model to compute
 There are `r nrow(voters)` observations in the data.
 :::
 
-[^13-special-topics-3]: The accuracy is the `r (563 + 2219 + 94)/nrow(voters)` $(563 + 2219 + 94)/5836)$. The misclassification rate is `r 1 - (563 + 2219 + 94) / nrow(voters)` $(1 - 0.407)$.
+[^13-special-topics-3]: The accuracy is the `r (563 + 2219 + 94)/nrow(voters)` $((563 + 2219 + 94)/5836)$. The misclassification rate is `r 1 - (563 + 2219 + 94) / nrow(voters)` $(1 - 0.493)$.
 
 @fig-confmat-voters-model can also be used to compute more specific statistics about how well the model identifies observations from a particular class. For example, among those who are actually classified voting rarely/never, the model correctly identified `r 563/ (563 + 884 + 4) * 100` % of them.
 
@@ -718,7 +721,7 @@ voters <- voters |>
 
 The syntax for the confusion matrix, ROC curves, and AUC are similar to logistic regression in @sec-logistic-prediction-R.
 
-The confusion matrix is produced using `conf_mat()` from the **yardstick** R package [@yardstick]. We use `autoplot()` to format the confusion matrix such that the cells are shaded by the number of observations.
+The confusion matrix is produced using `conf_mat()` from the **yardstick** package [@yardstick]. We use `autoplot()` to format the confusion matrix such that the cells are shaded by the number of observations.
 
 ```{r}
 #| echo: true
@@ -898,7 +901,16 @@ The linear regression (and logistic regression) models we've seen thus have a si
 
 GLMMs differ from the GLMs we've studied thus far, because they include both fixed and random effects. The **fixed effects** are the variables we are interested in studying or explicitly adjusting for in the model. These are the variables for which we want to obtain an estimated coefficient. In the lemurs analysis, the fixed effects are `age`, `taxon`, `sex`, and `litter_size`. The **random effects** are those we don't want to estimate explicitly but whose variability we want to understand. These are generally defined by the grouping variable in the data. In this analysis, the random effect is the individual lemur, captured by the variable `dlc_id`.
 
-The **random intercepts model** includes fixed and random effects, such that the random effects account for random variability in the intercept. The general form of the model is <!--# think about how to write this./ do i need it?-->
+The **random intercepts model** includes fixed and random effects, such that the random effects account for random variability in the intercept. The general form of the model is
+
+$$\begin{aligned}
+y_{ij} = \beta_0 &+ \beta_1x_{i1} + \dots \beta_qx_{iq} \\
+&+ \beta_{q+1}x_{ij(q+1)} + \dots + \beta_px_{ijp} \\ 
+&+ u_i + \epsilon_{ij} \\
+&u_i \sim N(0, \sigma^2_u) \hspace{5mm} \epsilon_{ij} \sim (0,\sigma^2_{\epsilon})
+\end{aligned}$$
+
+where $\beta_0$ is the global intercept, $\beta_1, \ldots, \beta_q$ are the coefficients associated fixed effects at the second level of the data, $\beta_{q+1}, \dots, \beta_p$ are the coefficients associated with the fixed effects at the first level of the data, $u_i$ is the random effect on the intercept, and $\epsilon_{ij}$ is the error term. Let's look at the model for the lemurs analysis and break down these components further.
 
 Let $\text{weight}_{ij}$ be the weight in the $j^{th}$ observation for lemur $i$. Then, the random intercepts model for the lemurs analysis is
 
@@ -909,7 +921,7 @@ $$\begin{aligned}
 &u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})
 \end{aligned}$$ {#eq-lemurs-random-int}
 
-Let's break down the components of @eq-lemurs-random-int. The subscript indicate whether the variable is at the first or second level of the data. The variable `age` is the only predictor in the second level that changes for each observation, so the subscript indicates that we plug in the age for lemur $i$ at the $j^{th}$ observation. The other predictors are measured at the second level of the data, so the subscript $i$ indicates that we plug in the same value for lemur $i$ across all its observations. The term $\beta_0$ is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.
+Let's break down the components of @eq-lemurs-random-int. The subscript indicate whether the variable is at the first or second level of the data. The variable `age` is the only predictor in the first level that changes for each observation, so the subscript indicates that we plug in the age for lemur $i$ at the $j^{th}$ observation. The other predictors are measured at the second level of the data, so the subscript $i$ indicates that we plug in the same value for lemur $i$ across all its observations. The term $\beta_0$ is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.
 
 The error term $\epsilon_{ij}$ is like the error term previously introduced for linear models. It is the difference between the observed and expected value of the weight for the $j^{th}$ observation from lemur $i$. As in linear regression, these error terms follow a normal distribution with mean of 0 and variance of $\sigma^2_{\epsilon}$. This $\sigma^2_{\epsilon}$ is a measure of the variability in the weights (response variable) within an individual lemur (group).
 
@@ -1015,7 +1027,7 @@ ggplot(data = ncaa_basketball, aes(x = log(expenditure_m))) +
        y = "Count")
 ```
 
-The distribution of `expenditure_m` is heavily right-skewed [@fig-ncaa-expenditure-1], so we will use the log-transformed variable `log(expenditure_m)` in the model [@fig-ncaa-expenditure-2].
+The distribution of `expenditure_m` is heavily right-skewed ([@fig-ncaa-expenditure-1]), so we will use the log-transformed variable `log(expenditure_m)` in the model ([@fig-ncaa-expenditure-2]).
 
 ::: {.analysis_in_practice latex=""}
 When the response variable is strongly skewed, it is good practice to use the transformed version in the regression tree. Though regression trees do not rely on the same assumptions as linear regression, their results can be strongly influenced by extreme observations when the distribution of the response variable is heavily skewed. Predictor variables do not need to be transformed for regression trees, because the tree does not depend on a linear relationship between the response and predictor variables.
@@ -1087,11 +1099,11 @@ The RMSE for the testing data is `r round(rmse_test, 3)`. This is the terms of t
 
 ### Classification trees {#sec-classification-trees}
 
-Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression [@sec-ch-logistic] or multinomial logistic regression [@sec-multinomial]. They are very similar to regression trees with two primary differences. The first is that predictions in the **terminal nodes** are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the **Gini Index** shown in [@eq-gini-index]
+Classification trees are decision trees for predicting categorical outcomes. We might use such a tree as an alternative to logistic regression ([@sec-ch-logistic]) or multinomial logistic regression ([@sec-multinomial]). They are very similar to regression trees with two primary differences. The first is that predictions in the **terminal nodes** are the predicted classes. The second is that the potential variables and associated cutoffs to define each split are evaluated using different criteria. The default in most software is the **Gini Index** shown in [@eq-gini-index]
 
 $$\text{Gini index} = 1 - \sum_{k = 1}^K p_{mk}^2$$ {#eq-gini-index}
 
-where $p_{mk}$ is the proportion of observations in the $m^{th}$ node that belong to class $k$. Similar to RSS, the model selects the variable and cutoff that minimizes the Gini index at each step. Low values of the Gini index indicate a large proportion of observations in a given node are from the same class.
+where $p_{mk}$ is the proportion of observations in the $m^{th}$ node that belong to class $k$. Similar to SSR the model selects the variable and cutoff that minimizes the Gini index at each step. Low values of the Gini index indicate a large proportion of observations in a given node are from the same class.
 
 Let's go back to the voter frequency data introduced in @sec-voters-data. We'll use a classification tree to predict the `voter_category` (`rarely/never`, `sporadic`, `always`) using `age`, `party_id`, and an additional variable `income_cat`. We split the data into training (80%) and testing sets (20%), so we can evaluate the model's performance on new data.
 
@@ -1113,7 +1125,7 @@ rpart.plot(voters_tree)
 
 @fig-voters-tree is the output from the classification tree. Something that may stand out is that the predictor `party_id` is not used in the tree. This means there was never a point where using `party_id` was more useful in classifying observations compared to the other predictors.
 
-The first split in @fig-voters-tree is at `age < 34`. About 21% of the observations have `age < 34`, and this group leads to a terminal node. Among those with `age < 34`, 34% of them are classified as `rarely/never`, 21% are classified as `sporadic`, and 30% are classified as `always` in the data. Therefore, if `age < 34`, the predicted class is `rarely/never` based on the classification tree. There is a bit more work among those with `age >= 34`. The next split is `age < 61`. If `age < 61`, then there is a terminal node with the predicted class `sporadic`. Otherwise, `income_cat` is taken into account, with a split at `income_cat = Less than $40k`. If yes, then the predicted class is `sporadic`; if no, the predicted class is `always`.
+The first split in @fig-voters-tree is at `age < 34`. About 21% of the observations have `age < 34`, and this group leads to a terminal node. Among those with `age < 34`, 49% of them are classified as `rarely/never`, 21% are classified as `sporadic`, and 30% are classified as `always` in the data. Therefore, if `age < 34`, the predicted class is `rarely/never` based on the classification tree. There is a bit more work among those with `age >= 34`. The next split is `age < 61`. If `age < 61`, then there is a terminal node with the predicted class `sporadic`. Otherwise, `income_cat` is taken into account, with a split at `income_cat = Less than $40k`. If yes, then the predicted class is `sporadic`; if no, the predicted class is `always`.
 
 ::: {.yourturn latex=""}
 Based on @fig-voters-tree, what is the predicted voting frequency for an a 40 year old individual whose party affiliation is Democrat and annual income is \$70,000?[^13-special-topics-7]
@@ -1361,7 +1373,7 @@ ace_matched |>
   kable()
 ```
 
-Sometimes there are **exact matches**, where an observation in the treatment group is matched with an observation in the control group with an equal propensity score. Matches 50 and 118 in the table are examples of this. This generally indicates that the two observations are the same in terms of the characteristics included in the propensity score model [@eq-propensity-score-model]. In other cases, such as Match 14, the scores are close but not exact.
+Sometimes there are **exact matches**, where an observation in the treatment group is matched with an observation in the control group with an equal propensity score. Matches 50 and 118 in the table are examples of this. This generally indicates that the two observations are the same in terms of the characteristics included in the propensity score model ([@eq-propensity-score-model]). In other cases, such as Match 14, the scores are close but not exact.
 
 ```{r}
 #| label: tbl-match-14
@@ -1421,7 +1433,7 @@ ggplot(data = ace_matched, aes(x = Tracking.Pathway, fill = ELL)) +
   scale_fill_manual(values = sunset2)
 ```
 
-In @fig-compare-distributions-matched, the distributions of these student characteristics are now the same for the treatment and control groups (compare to @fig-compare-distributions). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model [@eq-propensity-score-model]. Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere-->
+In @fig-compare-distributions-matched, the distributions of these student characteristics are now the same for the treatment and control groups (compare to @fig-compare-distributions). For brevity, we only show three variables here, but we could look at the distributions for all variables in the propensity score model ([@eq-propensity-score-model]). Now the data look more like what we would expect in a randomized experiment. Therefore, we can be more confident that any differences in the GPA (response variable) are due to the treatment and not underlying confounding variables. <!--# need to make sure I define confounding somewhere-->
 
 Once we have the matched data set, it's time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.
 
@@ -1454,7 +1466,7 @@ We interpret the model just as we interpret other linear regression models (see 
 Interpret the 95% confidence interval for the effect of participating in Project ACE in the context of the data.[^13-special-topics-8]
 :::
 
-[^13-special-topics-8]: We are 95% confident that improvement in GPA from participating in Project ACE is between 0.003 and 0.39 points.
+[^13-special-topics-8]: We are 95% confident that improvement in GPA from participating in Project ACE is between 0.017 and 0.401 points.
 
 As we use these results to inform decision-making, one thing to keep in mind is that this is the average treatment effect in the matched population. Therefore, the results may not generalize to the entire population if the discarded individuals in the control group are significantly different from the individuals in the matched group. One way to mitigate this is to include more observations from the control group. Strategies for this are available in the resources at the end of this section.
 
