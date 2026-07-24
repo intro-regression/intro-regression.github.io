@@ -39,7 +39,7 @@ We will use the following variables:
 
 - `flipper_length_mm` : Flipper length in millimeters
 
-- `sex` : Penguins sex (female, male)
+- `sex` : Penguin's sex (female, male)
 
 - `year` : Study year (2007, 2008, 2009)
 
@@ -71,7 +71,7 @@ CRAN is the official network for hosting R packages and documentation, and packa
 install.packages("tidyverse")
 ```
 
-Packages that are not available on CRAN are typically available through a GitHub repository created by the package developer. This is often the cases for new packages or in-development versions of existing packages. We use the code `remotes::install_github("Package repo")` to install packages from GitHub. The code `remotes::` calls the **remotes** package [@remotes] that contains the `install_github` function.[^02-review-r-2]
+Packages that are not available on CRAN are typically available through a GitHub repository created by the package developer. This is often the case for new packages or in-development versions of existing packages. We use the code `remotes::install_github("Package repo")` to install packages from GitHub. The code `remotes::` calls the **remotes** package [@remotes] that contains the `install_github` function.[^02-review-r-2]
 
 [^02-review-r-2]: Use `install.packages("remotes")` if the **remotes** package is not installed.
 
@@ -97,7 +97,7 @@ The **tidyverse** [@tidyverse] is an "an opinionated collection of R packages de
 library(tidyverse)
 ```
 
-This chapter focuses on **dplyr** [@dplyr], the package for data manipulation, and **ggplot2** [@ggplot2], the package data visualization. We will introduce other packages, as needed, in subsequent chapters. <!--# confirm if I actually do this--> See [https://tidyverse.org](https://tidyverse.orghttps://tidyverse.org/) for a full description of all the core **tidyverse** packages.
+This chapter focuses on **dplyr** [@dplyr], the package for data manipulation, and **ggplot2** [@ggplot2], the package for data visualization. We will introduce other packages, as needed, in subsequent chapters. <!--# confirm if I actually do this--> See [https://tidyverse.org](https://tidyverse.orghttps://tidyverse.org/) for a full description of all the core **tidyverse** packages.
 
 ### Tidy data {#sec-tidy-data}
 
@@ -144,7 +144,7 @@ The data sets in the tidyverse are stored as tibbles. **Tibbles** are like data 
 
 ### **The pipe**
 
-One benefit of the **tidyverse** syntax is its readability. Though it can be more verbose than other coding styles, its naming convention and structure makes it easy <!--# better word here--> to read and understand. A key part of the readability is due to the pipe. The **pipe**, coded as `|>`, is used to pass data from one function to the next. If we think of reading code aloud in English, we say "and then" when we see a pipe [@cetinkaya2021educator].
+One benefit of the **tidyverse** syntax is its readability. Though it can be more verbose than other coding styles, its naming convention and structure make it easy <!--# better word here--> to read and understand. A key part of the readability is due to the pipe. The **pipe**, coded as `|>`, is used to pass data from one function to the next. If we think of reading code aloud in English, we say "and then" when we see a pipe [@cetinkaya2021educator].
 
 For example, let's suppose we write code to describe the steps to make a ham and cheese sandwich. <!--# idea from me, code inspiration from chat gpt-->
 
@@ -221,7 +221,7 @@ penguins |>
 
 #### `arrange()` {.unnumbered}
 
-The `arrange` function is used to sort the data based on the values in one or more columns. This can be useful as we explore the data to identify outlying observations with unusually high or unusually low values. In the code below, the observations are sorted in ascending order (smallest to largest) based on values of `bill_length_mm` .
+The `arrange` function is used to sort the data based on the values in one or more columns. This can be useful as we explore the data to identify outlying observations with unusually high or unusually low values. In the code below, the observations are sorted in ascending order (smallest to largest) based on values of `bill_length_mm`.
 
 ```{r}
 penguins |> 
@@ -408,7 +408,7 @@ penguins |>
             sd_bill_length = sd(bill_length_mm, na.rm = TRUE))
 ```
 
-All functions following `group_by()` in the pipeline will be performed separately for each subgroup. The `ungroup`function removes the grouping structure, so any functions following `ungroup()` are applied to all observations.
+All functions following `group_by()` in the pipeline will be performed separately for each subgroup. The `ungroup` function removes the grouping structure, so any functions following `ungroup()` are applied to all observations.
 
 ::: {.yourturn latex=""}
 Use `median()` to compute the median bill length separately for each combination of island and species. What is the median bill length for Adelie penguins on Dream island? [^02-review-r-7]
@@ -553,7 +553,7 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm)) +
        title = "Bill length versus Flipper length ")
 ```
 
-The second way to apply aesthetics is to map them to specific variables. This adds makes the visualization engaging and adds additional information about the data. This is useful in data analysis when we want to make comparisons across subgroups of data.
+The second way to apply aesthetics is to map them to specific variables. This makes the visualization engaging and adds additional information about the data. This is useful in data analysis when we want to make comparisons across subgroups of data.
 
 The aesthetics are defined inside `aes()` to map them to a particular variable (similar to defining the variables that go on each axis). For example, the code below colors the points based on `species`. We also add a subtitle and update the `color` label in `labs()`.
 
@@ -678,7 +678,7 @@ Thus far, we have relied on the default color palette in **ggplot2** when we've 
 
 Packages such as **viridis** [@viridis] and **PNWColors** [@PNWColors] have pre-defined color palettes. Both packages are available on CRAN. In the code below, we apply the *Bay* color palette from the **PNWColors** package to @fig-ggplot-color-by-species, the scatterplot of `bill_length_mm` versus `flipper_length_mm` colored by `species`.
 
-The argument `values = pnw_palette("Bay", 3)` indicates that the colors are mapped to the *Bay* color palette using there colors (one for each species).\
+The argument `values = pnw_palette("Bay", 3)` indicates that the colors are mapped to the *Bay* color palette using their colors (one for each species).\
 
 ```{r}
 #| label: fig-color-palette
@@ -702,7 +702,7 @@ We may also wish to create a color palette. For example, here we apply the palet
 
 ```{r}
 #| label: fig-custom-color-palette
-#| fig-cap: Scatterplot with user-define color palette
+#| fig-cap: Scatterplot with user-defined color palette
 
 my_color_palette <- c("#F87666", "#58B09C", "#7272AB")
 
@@ -716,7 +716,7 @@ ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm,
   scale_color_manual(values = my_color_palette)
 ```
 
-When choosing a color palette, it is important to consider the accessibility of the color choices, how they may be viewed by individuals with color-blindness <!--# is this correct-->, and how they appear in gray scale. There are multiple ways to check the accessibility of color palettes. The Color Palette Finder on the R Graph Gallery website (<https://r-graph-gallery.com/color-palette-finder>) is a tool for checking the accessibility of pre-defined color palettes. The **colorblindcheck** R package [@colorblindcheck] allows users to check the accessibility of pre-defined or custom color palettes.
+When choosing a color palette, it is important to consider the accessibility of the color choices, how they may be viewed by individuals with color-blindness<!--# is this correct-->, and how they appear in gray scale. There are multiple ways to check the accessibility of color palettes. The Color Palette Finder on the R Graph Gallery website (<https://r-graph-gallery.com/color-palette-finder>) is a tool for checking the accessibility of pre-defined color palettes. The **colorblindcheck** R package [@colorblindcheck] allows users to check the accessibility of pre-defined or custom color palettes.
 
 ## Quarto {#sec-quarto}
 
@@ -730,7 +730,7 @@ Quarto is "an open-source scientific and technical publishing system" [@quarto20
 
 @fig-quarto is an example of a Quarto (`.qmd`) document. All code, output, and narrative are in a single document, and the resulting output updates as changes are made to the document. This eliminates the need to copy and paste results from one document to another throughout the analysis, a process that is prone to error. Let's take a look at the parts of the Quarto document in @fig-quarto.
 
-The **YAML** ("Yet Another Markup Language" or "YAML Ain't Markup Language") is considered the "front matter" of the document. This is where we include content for the heading, such as title, author, and date. This is also where we specify the format type and other global features to be applied for the entire document. The YAML in @fig-quarto shows global code chunk options applied so that the code is displayed when the document is rendered `echo: true` , but all additional warnings and messages are suppressed `warning: false` and `message: false`
+The **YAML** ("Yet Another Markup Language" or "YAML Ain't Markup Language") is considered the "front matter" of the document. This is where we include content for the heading, such as title, author, and date. This is also where we specify the format type and other global features to be applied for the entire document. The YAML in @fig-quarto shows global code chunk options applied so that the code is displayed when the document is rendered `echo: true`, but all additional warnings and messages are suppressed `warning: false` and `message: false`
 
 The **code chunk** is where we put all code that is executed when the document is rendered. R code chunks[^02-review-r-13] can be added to the document by starting with ```` ```{r} ```` and ending with ```` ``` ````. They can also be added from the *Insert* menu in the tool bar of the visual editor. A variety of options can be applied to code chunks primarily to customize how they display code and results in the rendered document. Section 28.5 in *R for Data Science* [@wickham2023r] provides an extensive overview of code chunks and the set of options to customize them.
 
@@ -752,6 +752,6 @@ The assignments in the supplemental materials for this book are designed to be w
 
 ## Summary
 
-In this chapter, we introduced data wrangling and data visualization using the **tidyverse** (specifically **dplyr** and **ggplot2** packages), focusing on code for the analysis tasks frequently used in this book. We also showed ways to customize plots for effective communication and accessibility, and we introduced Quarto for writing reproducible reports. There are many online resources about the **tidyverse** and Quarto. A few primary resources for additional reference and practice are the following: *R for Data Science* [@wickham2023r], [tidyverse.org](https://tidyverse.org), and [quarto.org](https://quarto.org).
+In this chapter, we introduced data wrangling and data visualization using the **tidyverse** (specifically the **dplyr** and **ggplot2** packages), focusing on code for the analysis tasks frequently used in this book. We also showed ways to customize plots for effective communication and accessibility, and we introduced Quarto for writing reproducible reports. There are many online resources about the **tidyverse** and Quarto. A few primary resources for additional reference and practice are the following: *R for Data Science* [@wickham2023r], [tidyverse.org](https://tidyverse.org), and [quarto.org](https://quarto.org).
 
 In @sec-ch-eda, we utilize the computing from this chapter as we begin analyzing data in the exploratory data analysis.
