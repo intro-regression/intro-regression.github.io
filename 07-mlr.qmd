@@ -567,7 +567,7 @@ The other categorical predictor in the model in @tbl-lemurs-model is `sex`.
 - What is the intercept for female lemurs? For male lemurs?[^07-mlr-4]
 :::
 
-[^07-mlr-4]: The baseline level for sex is "F" (Female). The average weight for male lemurs is about `r round(abs(sex_coef), 3)` grams less than the average weight for female lemurs, holding taxon, age, and litter size constant. The intercept for female lemurs is `r round(lemurs_model_intercept, 3)`.The intercept for male lemurs is `r round(lemurs_model_intercept, 3) + round(sex_coef, 3)` (`r round(lemurs_model_intercept, 3)` + `r round(sex_coef, 3)` ).
+[^07-mlr-4]: The baseline level for sex is "F" (Female). The average weight for male lemurs is about `r round(abs(sex_coef), 3)` grams less than the average weight for female lemurs, holding taxon, age, and litter size constant. The intercept for female lemurs is `r round(lemurs_model_intercept, 3)`. The intercept for male lemurs is `r round(lemurs_model_intercept, 3) + round(sex_coef, 3)` (`r round(lemurs_model_intercept, 3)` + `r round(sex_coef, 3)` ).
 
 ### Interpreting the intercept {#sec-intercept}
 

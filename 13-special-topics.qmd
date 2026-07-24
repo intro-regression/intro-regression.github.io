@@ -772,7 +772,7 @@ Multinomial logistic regression is part of a larger class of models called *gene
 
 ## Multilevel models {#sec-random-intercepts}
 
-One of the key assumptions we've made throughout this book is that the observations in the sample data are independent of each other. Often in practice, however, there is an underlying grouping structure in the data, and the observations are not completely independent of one another. For example, the data may contain multiple measurements from each individual (call repeated measures) as in @fig-repeated-measures.
+One of the key assumptions we've made throughout this book is that the observations in the sample data are independent of each other. Often in practice, however, there is an underlying grouping structure in the data, and the observations are not completely independent of one another. For example, the data may contain multiple measurements from each individual (called **repeated measures**) as in @fig-repeated-measures.
 
 ![Repeated measures data structure](images/13-repeated-measures-structure.png){#fig-repeated-measures fig-align="center" width="100%"}
 
