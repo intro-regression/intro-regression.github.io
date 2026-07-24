@@ -136,7 +136,7 @@ See @zarulli2021health for a full codebook.
 
 ggplot(data = life_exp, aes(x = life_exp)) + 
   geom_histogram(color = "black", fill = "steelblue") + 
-  labs(x = "Life epxectancy (in years)", 
+  labs(x = "Life expectancy (in years)", 
        y = "Count") + 
   theme_bw()
 

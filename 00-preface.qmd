@@ -16,7 +16,7 @@ The following are the key points we aim for readers to learn about regression as
 1.  Regression is an powerful tool for exploring relationships in the world around us. <!--# don't like this wording - powerful or relationships.-->
 2.  Regression is as much art as it is science. There is rarely a single "correct" way to approach a problem. In fact, all approaches have inherent advantages and limitations.
 3.  Analysis decisions are largely informed by the data and analysis objective. It is important to understand the data, what question(s) can be answered from the data, and the scope of conclusions that can be drawn from the data.
-4.  It is important to understand of the decisions made throughout the analysis process in order to effectively use regression models to draw insights and conclusions.
+4.  It is important to understand the decisions made throughout the analysis process in order to effectively use regression models to draw insights and conclusions.
 
 ## Audience
 
@@ -30,7 +30,7 @@ We also assume readers interested in the computing aspects of this book have som
 
 The book is divided into four parts: Getting started, Simple linear regression, Multiple linear regression, and Beyond linear regression.
 
-- **Part 1: Getting started** - This part introduces foundational concepts that are <!--# maybe not the correct word--> utilized throughout the book. [Chapter @sec-ch-intro] is an introduction to regression analysis and how it fits in the data science landscape. It also introduces a data science workflow that is used in the assignments in the supplemental materials. [Chapter @sec-ch-computing] provides a review (or brief introduction) to R and the tidyverse. It focuses on many of the data manipulation and data analysis functions that are used in the text. It also introduces Quarto, a system for technical documents that is used in the assignments. [Chapter @sec-ch-eda] introduces exploratory data analysis and it is used to understand distributions of individual variables and the relationships between multiple variables. It also discusses strategies for cleaning data and handling unusual features in the data.
+- **Part 1: Getting started** - This part introduces foundational concepts that are <!--# maybe not the correct word--> utilized throughout the book. [Chapter @sec-ch-intro] is an introduction to regression analysis and how it fits in the data science landscape. It also introduces a data science workflow that is used in the assignments in the supplemental materials. [Chapter @sec-ch-computing] provides a review (or brief introduction) to R and the tidyverse. It focuses on many of the data manipulation and data analysis functions that are used in the text. It also introduces Quarto, a system for technical documents that is used in the assignments. [Chapter @sec-ch-eda] introduces exploratory data analysis, which is used to understand distributions of individual variables and the relationships between multiple variables. It also discusses strategies for cleaning data and handling unusual features in the data.
 
 - **Part 2: Simple linear regression** - This part covers the details of regression in the context of simple linear regression. The concepts introduced in this section extend to the multiple linear regression models introduced in Part 3. [Chapter @sec-ch-slr] introduces the simple linear regression model, estimating and interpreting model coefficients, prediction, and model evaluation. [Chapter @sec-ch-slr-inf] introduces simulation-based and theory-based inference for model coefficients. [Chapter @sec-ch-slr-conditions] discusses model conditions and diagnostics.
 
@@ -64,7 +64,7 @@ The content and structure of this book are based on undergraduate regression ana
   - [Chapter @sec-ch-computing] primarily covered in a computing lab or review assignments.
 - [Chapter @sec-ch-slr] (1 week)
 - [Chapter @sec-mlr-matrix], [Chapter @sec-mlr-estimation-matrix] (1 week)
-  - Introduced in context of simple linear regression.
+  - Introduced in the context of simple linear regression.
 - [Chapter @sec-ch-mlr] (1 week)
 - [Chapter @sec-ch-slr-inf], [Chapter @sec-ch-mlr-inf, @sec-assumptions-matrix], [Chapter @sec-beta-dist-matrix] (2 weeks)
 - [Chapter @sec-ch-slr-conditions], [Chapter @sec-mlr-conditions-diagnositics] (1 week)
@@ -76,7 +76,7 @@ The content and structure of this book are based on undergraduate regression ana
 
 ## Key features
 
-Beginning with @sec-ch-eda, the chapters are written as case studies based on a real-world data and stated analysis objective. The case studies in this book show the variety of contexts in which regression analysis can be applied. The chapters begin with an introduction to the data and exploratory data analysis that is focused on the variables and relationships relevant to the chapter. The data sets used in each chapter are available in @sec-appendix-datasets. An analysis objective anchors the chapter and readers are walked through the analysis process as they learn and apply new concepts.
+Beginning with @sec-ch-eda, the chapters are written as case studies based on a real-world data and stated analysis objective. The case studies in this book show the variety of contexts in which regression analysis can be applied. The chapters begin with an introduction to the data and exploratory data analysis that is focused on the variables and relationships relevant to the chapter. The data sets used in each chapter are available in @sec-appendix-datasets. An analysis objective anchors the chapter, and readers are walked through the analysis process as they learn and apply new concepts.
 
 There are call out boxes throughout the book to help guide the reading experience.
 
@@ -92,7 +92,7 @@ There are call out boxes throughout the book to help guide the reading experienc
 
 ## Computing
 
-Computing is an important and necessary aspect of conducting regression analysis in practice. Therefore, R output and code are included in each chapter. The code is the book primarily follows the tidyverse [@tidyverse] and tidymodels [@tidymodels] syntax; they are introduced in [Chapter @sec-ch-computing].
+Computing is an important and necessary aspect of conducting regression analysis in practice. Therefore, R output and code are included in each chapter. The code in the book primarily follows the tidyverse [@tidyverse] and tidymodels [@tidymodels] syntax; they are introduced in [Chapter @sec-ch-computing].
 
 Inspired by the structure of *An* *Introduction to Statistical Learning* [@james2021introduction], each chapter contains a section about the code used to apply the new concepts. This format is intended to help readers focus on conceptual understanding before diving into the code. Additionally, it is intended to make the text more accessible to readers not using R.
 
