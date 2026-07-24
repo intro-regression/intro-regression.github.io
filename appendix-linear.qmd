@@ -25,12 +25,12 @@ Therefore, we want to find $\hat{\beta}_0$ and $\hat{\beta}_1$ that satisfy the 
 $$\begin{aligned}
 &-2 \sum\limits_{i=1}^{n}(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0 \\[10pt]
 &-2 \sum\limits_{i=1}^{n}x_i(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0 
-\end{aligned}$$ {#eq-par-deriv-estimates}
+\end{aligned}$$ {#eq-par-deriv-estimators}
 
 Let's focus on $\hat{\beta}_0$ for now and find $\hat{\beta}_0$ that satisfies the first equality in @eq-par-deriv-estimators. The mathematical steps are below in @eq-est-beta0
 
 $$\begin{aligned}&-2 \sum\limits_{i=1}^{n}(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0 \\[10pt]
-&\Rightarrow \sum\limits_{i=1}^{n}(y_i - \sum\limits_{i=1}^{n} \hat{\beta}_0 - \sum\limits_{i=1}^{n} \hat{\beta}_1 x_i) = 0 \\[10pt]
+&\Rightarrow \sum\limits_{i=1}^{n}y_i - \sum\limits_{i=1}^{n} \hat{\beta}_0 - \sum\limits_{i=1}^{n} \hat{\beta}_1 x_i = 0 \\[10pt]
 &\Rightarrow  \sum\limits_{i=1}^{n}y_i - n\hat{\beta}_0 - \hat{\beta}_1\sum\limits_{i=1}^{n}x_i = 0 \\[10pt]
 &\Rightarrow \sum\limits_{i=1}^{n}y_i - \hat{\beta}_1\sum\limits_{i=1}^{n}x_i = n\hat{\beta}_0  \\[10pt]
 &\Rightarrow \frac{1}{n}\Big(\sum\limits_{i=1}^{n}y_i - \hat{\beta}_1\sum\limits_{i=1}^{n}x_i\Big) = \hat{\beta}_0  \\[10pt]
@@ -41,11 +41,11 @@ $$\begin{aligned}&-2 \sum\limits_{i=1}^{n}(y_i - \hat{\beta}_0 - \hat{\beta}_1 x
 The last line of @eq-est-beta0 is derived from the fact that $\bar{y} = \frac{1}{n}\sum_{i=1}^ny_i$ and $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i$.
 :::
 
-From @eq-est-beta0, we know the $\hat{\beta}_0$ that satisfies the first equality in @eq-par-deriv-estimates is
+From @eq-est-beta0, we know the $\hat{\beta}_0$ that satisfies the first equality in @eq-par-deriv-estimators is
 
 $$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$$ {#eq-beta0}
 
-The formula for $\hat{\beta}_0$ contains $\hat{\beta}_1$, so now let's find the value of $\hat{\beta}_1$ that satisfies the second equality in @eq-par-deriv-estimates. The mathematical steps are below in @eq-beta1-pt1.
+The formula for $\hat{\beta}_0$ contains $\hat{\beta}_1$, so now let's find the value of $\hat{\beta}_1$ that satisfies the second equality in @eq-par-deriv-estimators. The mathematical steps are below in @eq-beta1-pt1.
 
 $$\begin{aligned}
 &-2 \sum\limits_{i=1}^{n}x_i(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) = 0  \\[10pt]
@@ -53,7 +53,7 @@ $$\begin{aligned}
 \text{(Fill in }\hat{\beta}_0\text{)}&\Rightarrow \sum\limits_{i=1}^{n}x_iy_i - (\bar{y} - \hat{\beta}_1\bar{x})\sum\limits_{i=1}^{n}x_i - \hat{\beta}_1\sum\limits_{i=1}^{n}x_i^2 = 0 \\[10pt]
 &\Rightarrow \sum\limits_{i=1}^{n}x_iy_i = (\bar{y} - \hat{\beta}_1\bar{x})\sum\limits_{i=1}^{n}x_i + \hat{\beta}_1\sum\limits_{i=1}^{n}x_i^2 \\[10pt]
 &\Rightarrow \sum\limits_{i=1}^{n}x_iy_i =  \bar{y}\sum\limits_{i=1}^{n}x_i - \hat{\beta}_1\bar{x}\sum\limits_{i=1}^{n}x_i + \hat{\beta}_1\sum\limits_{i=1}^{n}x_i^2\\[10pt]
-(\text{Given }\bar{x} = \sum_{i=1}^n x_i)&\Rightarrow \sum\limits_{i=1}^{n}x_iy_i  = n\bar{y}\bar{x} - \hat{\beta}_1n\bar{x}^2 + \hat{\beta}_1\sum\limits_{i=1}^{n}x_i^2\\[10pt]
+(\text{Given }\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i)&\Rightarrow \sum\limits_{i=1}^{n}x_iy_i  = n\bar{y}\bar{x} - \hat{\beta}_1n\bar{x}^2 + \hat{\beta}_1\sum\limits_{i=1}^{n}x_i^2\\[10pt]
 &\Rightarrow \sum\limits_{i=1}^{n}x_iy_i - n\bar{y}\bar{x} = \hat{\beta}_1\sum\limits_{i=1}^{n}x_i^2 - \hat{\beta}_1n\bar{x}^2\\[10pt]
 &\Rightarrow \sum\limits_{i=1}^{n}x_iy_i - n\bar{y}\bar{x} = \hat{\beta}_1\Big(\sum\limits_{i=1}^{n}x_i^2 -n\bar{x}^2\Big)\\[10pt] 
 &\Rightarrow \frac{\sum\limits_{i=1}^{n}x_iy_i - n\bar{y}\bar{x}}{\sum\limits_{i=1}^{n}x_i^2 -n\bar{x}^2} = \hat{\beta}_1 
@@ -84,11 +84,11 @@ Therefore, $$\text{Cov}(x,y) = r s_xs_y$$
 where $s_x$ and $s_y$ are the sample standard deviations of $x$ and $y$, respectively.
 :::
 
-Plugging in the formula for $Cov(x,y)$ into @eq-est-beta1-pt2, we have
+Plugging in the formula for $\text{Cov}(x,y)$ into @eq-est-beta1-pt2, we have
 
 $$\hat{\beta}_1 = \frac{\text{Cov}(x,y)}{s_x^2} = r\frac{s_ys_x}{s_x^2} = r\frac{s_y}{s_x}$$
 
-We have found values of $\hat{\beta}_0$ and $\hat{\beta}_1$ that satisfy @eq-par-deriv-estimates. Now we need to confirm that we have found the minimum value (rather than a maximum value or saddle point). To do, we use the second partial derivative. If it is positive, then we know we have found a minimum.
+We have found values of $\hat{\beta}_0$ and $\hat{\beta}_1$ that satisfy @eq-par-deriv-estimators. Now we need to confirm that we have found the minimum value (rather than a maximum value or saddle point). To do, we use the second partial derivative. If it is positive, then we know we have found a minimum.
 
 The second partial derivatives are
 
@@ -221,7 +221,9 @@ From @eq-linear-matrix and @eq-linear-matrix-expand, we have the following compo
 As before the error terms are normally distributed, centered at $\mathbf{0}$, a column vector of 0's, with a variance $\sigma^2_{\epsilon}\mathbf{I}$, where $\mathbf{I}$ is the identity matrix.
 
 ::: {.math_rules latex=""}
-The variance of the error terms $\boldsymbol{\epsilon}$ is $$\sigma^2_{\epsilon}\mathbf{I} = \sigma^2_{\epsilon} \begin{bmatrix}
+The variance of the error terms $\boldsymbol{\epsilon}$ is
+
+$$\sigma^2_{\epsilon}\mathbf{I} = \sigma^2_{\epsilon} \begin{bmatrix}
 1 & 0 & \dots & 0 \\
 0 & 1 &\dots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
@@ -245,9 +247,13 @@ $$\hat{\mathbf{y}} = \mathbf{X}\boldsymbol{\beta}$$
 
 ### Least-squares estimation {#sec-least-sq-matrix}
 
-In matrix notation, the error terms can be written as $$\boldsymbol{\epsilon} = \mathbf{y} - \mathbf{X}\boldsymbol{\beta}$$ {#eq-errors-matrix}
+In matrix notation, the error terms can be written as
 
-As with simple linear regression in @sec-least-sq-math, the least-squares estimator of the vector of coefficients, $\hat{\boldsymbol{\beta}}$, is the vector that minimizes the sum of squares in @eq-sum-sq-matrix. $$\sum\limits_{i=1}^{n} \epsilon_{i}^2 = \boldsymbol{\epsilon}^\mathsf{T}\boldsymbol{\epsilon} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$$ {#eq-sum-sq-matrix}
+$$\boldsymbol{\epsilon} = \mathbf{y} - \mathbf{X}\boldsymbol{\beta}$$ {#eq-errors-matrix}
+
+As with simple linear regression in @sec-least-sq-math, the least-squares estimator of the vector of coefficients, $\hat{\boldsymbol{\beta}}$, is the vector that minimizes the sum of squares in @eq-sum-sq-matrix.
+
+$$\sum\limits_{i=1}^{n} \epsilon_{i}^2 = \boldsymbol{\epsilon}^\mathsf{T}\boldsymbol{\epsilon} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$$ {#eq-sum-sq-matrix}
 
 where $\boldsymbol{\epsilon}^\mathsf{T}$, the transpose of the vector $\boldsymbol{\epsilon}$.
 
@@ -303,7 +309,9 @@ Thus, the least-squares estimator is the $\hat{\boldsymbol{\beta}}$ that satisfi
 
 $$-2\mathbf{X}^\mathsf{T}\mathbf{y} + 2\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{0}$$ {#eq-ssr-deriv-2}
 
-The steps to find this $\hat{\boldsymbol{\beta}}$ are below. $$\begin{aligned}
+The steps to find this $\hat{\boldsymbol{\beta}}$ are below.
+
+$$\begin{aligned}
 &- 2 \mathbf{X}^\mathsf{T}\mathbf{y} + 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} = 0 \\[10pt]
 & \Rightarrow 2 \mathbf{X}^\mathsf{T}\mathbf{y} = 2 \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow \mathbf{X}^\mathsf{T}\mathbf{y} = \mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{X}\hat{\boldsymbol{\beta}} \\[10pt]& \Rightarrow (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y} = \hat{\boldsymbol{\beta}}\end{aligned}$$ {#eq-ssr-deriv-3}<!--# is it correct to call it the second derivative here?-->
 
@@ -398,7 +406,7 @@ where $\mathbf{x}_i^\mathsf{T}$ is the $i^{th}$ row of the design matrix $\mathb
 
 [^appendix-linear-2]: Note that when there is a single predictor, @eq-leverage-slr and @eq-leverage-mlr produce the same result.
 
-The sum of the leverages for all observation $p+1$ where $p$ is the number of predictors in the model. Thus, $\text{rank}(\mathbf{H}) = \sum_{i=1}^n h_{ii} = p+1$. The average value of leverage is $\bar{h} = \frac{p+1}{n}$. Observations with leverage greater than $2\bar{h}$ are considered to have high leverage. <!--# am i using "high" or "large"-->
+The sum of the leverages for all observations is $p+1$, where $p$ is the number of predictors in the model. Thus, $\text{rank}(\mathbf{H}) = \sum_{i=1}^n h_{ii} = p+1$. The average value of leverage is $\bar{h} = \frac{p+1}{n}$. Observations with leverage greater than $2\bar{h}$ are considered to have high leverage. <!--# am i using "high" or "large"-->
 
 Using $\mathbf{H}$, we can write the residuals as
 
@@ -420,6 +428,8 @@ From these assumptions, we write the distribution of $\mathbf{y}$ given the regr
 $$\mathbf{y}|\mathbf{X} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2_{\epsilon}\mathbf{I})$$ {#eq-dist-y-matrix}
 
 In @sec-mlr-matrix, we showed Assumption 4 from the distribution of the error terms. Here we will show Assumptions 1 - 3.
+
+<!-- # could I move the linear combination property down to the next section where I use it?-->
 
 ::: {.math_rules latex=""}
 Suppose $\mathbf{z}$ is a (multivariate) normal random variable such that $\mathbf{z} \sim N(\boldsymbol{\mu}, \boldsymbol{\Sigma})$. A linear transformation of $\mathbf{z}$ is also multivariate normal, such that
@@ -456,7 +466,9 @@ Let $\mathbf{z}$ be a $p \times 1$ vector of random variables. Then
 $$Var(\mathbf{z}) = E[(\mathbf{z} - E(\mathbf{z}))(\mathbf{z} - E(\mathbf{z}))^\mathsf{T}]$$
 :::
 
-Lastly, we show Assumption 3 that $Var(\mathbf{y}) = \sigma^2_{\epsilon}\mathbf{I}$ in linear regression. Similar to the expected value, we can get the variance from the mathematical property used to show Assumption 1. Here, we show Assumption 3 directly from the properties of variance. $$\begin{aligned}
+Lastly, we show Assumption 3 that $Var(\mathbf{y}) = \sigma^2_{\epsilon}\mathbf{I}$ in linear regression. Similar to the expected value, we can get the variance from the mathematical property used to show Assumption 1. Here, we show Assumption 3 directly from the properties of variance. 
+
+$$\begin{aligned}
 Var(\mathbf{y}) &= E[(\mathbf{y} - E(\mathbf{y}))(\mathbf{y} - E(\mathbf{y}))^\mathsf{T}] \\[10pt]
 & = E[(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon} - \mathbf{X}\boldsymbol{\beta})(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}] \\[10pt]
 & = E[\boldsymbol{\epsilon}\boldsymbol{\epsilon}^\mathsf{T}] \\[10pt]
@@ -504,7 +516,7 @@ $$\begin{aligned}
 & = \boldsymbol{\beta} + (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\boldsymbol{\epsilon}
 \end{aligned}$$ {#eq-rewrite-beta-matrix}
 
-From @eq-rewrite-beta-matrix, we see that $\hat{\boldsymbol{\beta}}$ is a linear combination of the error terms $\boldsymbol{\epsilon}$. From the math property in @sec-assumptions-matrix, because $\boldsymbol{\epsilon}$ is normally distributed, the linear combination is also normally distributed. Thus, the distribution of the coefficients $\hat{\boldsymbol{\beta}}$ is normal. <!--# make sure this is correct reasoning.-->
+From @eq-rewrite-beta-matrix, we see that $\hat{\boldsymbol{\beta}}$ is a linear combination of the error terms $\boldsymbol{\epsilon}$. Because $\boldsymbol{\epsilon}$ is normally distributed, the linear combination is also normally distributed (see @sec-assumptions-matrix). Thus, the distribution of the coefficients $\hat{\boldsymbol{\beta}}$ is normal.
 
 ## Prediction intervals {#sec-predict-intervals-matrix}
 
@@ -552,7 +564,7 @@ where $a_1, a_2, \ldots, a_p$ are not all 0.
 
 In practice, we rarely have perfect linear dependencies. In fact, this is mathematically why we only include $k-1$ terms in the model for a categorical predictor with $k$ levels. Ideally the columns of $\mathbf{X}$ would be orthogonal, indicating the predictors are completely independent on one another. In practice, we expect there to be some dependence between predictors (we see this from the non-zero off diagonals in $Var(\hat{\boldsymbol{\beta}})$). If two or more variables are highly correlated, then there will be near linear dependence in the columns. This near-linear dependence is called **multicollinearity.**
 
-In @sec-mlr-multicollinearity we discussed the practical issues that come from the presence of multicollinearity. These primarily stem from the fact that when there is multicollinearity, $\mathbf{X}^\mathsf{T}\mathbf{X}$ is near-singular (almost a singular matrix) to a, thus making $(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}$ very large and unstable. Consequently, $Var(\hat{\boldsymbol{\beta}})$ is then large and unstable, thus making hard to find stable values for the least-squares estimators.
+In @sec-mlr-multicollinearity we discussed the practical issues that come from the presence of multicollinearity. These primarily stem from the fact that when there is multicollinearity, $\mathbf{X}^\mathsf{T}\mathbf{X}$ is near-singular (almost a singular matrix), thus making $(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}$ very large and unstable. Consequently, $Var(\hat{\boldsymbol{\beta}})$ is then large and unstable, thus making hard to find stable values for the least-squares estimators.
 
 ## Maximum Likelihood Estimation {#sec-appendix-linear-mle}
 
@@ -604,7 +616,7 @@ In this text, $\log(a)$ is the natural log of $a$ (also denoted as $\ln(a)$).
 - $e^{b\log(a)} = a^b$
 :::
 
-From @sec-ch-mlr, we have that the change in $\log(Y)$ when $X_j$ increase by 1 unit is $\beta_j$. Thus $\beta_j = \log(Y|{X_j+1}) - \log(Y|X_j)$, where $Y|X_{j}+1$ is the value of $Y$ when we plug in $X_j+1$ and $Y|{X_j}$ is the value of $Y$ when we plug in $X_j$. In practice, we interpret the model coefficients $\beta_j$ in terms of the original variable $Y$, so we can use the rules of logarithms and exponents to rewrite this in terms of the original units of the response variable.
+From @sec-ch-mlr, we have that the change in $\log(Y)$ when $X_j$ increases by 1 unit is $\beta_j$. Thus $\beta_j = \log(Y|{X_j+1}) - \log(Y|X_j)$, where $Y|X_{j}+1$ is the value of $Y$ when we plug in $X_j+1$ and $Y|{X_j}$ is the value of $Y$ when we plug in $X_j$. In practice, we interpret the model coefficients $\beta_j$ in terms of the original variable $Y$, so we can use the rules of logarithms and exponents to rewrite this in terms of the original units of the response variable.
 
 $$\begin{aligned}
 \beta_j &= \log(Y|X_j+1) - \log(Y|X_j) \\[10pt]
@@ -624,7 +636,7 @@ Now, we because the predictor $X_j$ has been transformed to the logarithmic scal
 
 $$\begin{aligned}
 Y|CX_j - Y|CX &= \beta_j\log(CX_j) - \beta_j\log(X_j) \\
-& = \beta_j[\log(CX_j) - \log(X_j) \\
+& = \beta_j[\log(CX_j) - \log(X_j)] \\
 & = \beta_j[\log(C) + \log(X_j) - \log(X_j)] \\
 &= \beta_j\log(C) \\[10pt]
 \Rightarrow Y|CX_j &=Y|X_j + \beta_j\log(C)
@@ -647,4 +659,4 @@ $$\begin{aligned}
 \Rightarrow Y|CX_j &= Y|X_jC^{\beta_j}
 \end{aligned}$$ {#eq-log-xy-math}
 
-Therefore, given the model in @eq-model-log-xy with a transformed response variable and transformed predictor, when $X_j$ is multiplied by a constant $C$, why is expected to multiply by $C^{\beta_j}$, holding all other predictors constant.
+Therefore, given the model in @eq-model-log-xy with a transformed response variable and transformed predictor, when $X_j$ is multiplied by a constant $C$, $Y$ is expected to multiply by $C^{\beta_j}$, holding all other predictors constant.
