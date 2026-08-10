@@ -44,15 +44,15 @@ lemurs_sample_young <- read_csv("data/lemurs-sample-young.csv") |>
 In @sec-ch-mlr, we introduced the data set `lemurs-sample-young.csv` that includes the weight and other characteristics of young lemurs (24 months old or younger) living in the Duke Lemur Center. We will continue analyzing the data set here as we use statistical inference to draw conclusions about the relationships between various characteristics and weight. The analysis focuses on the variables below. See @sec-lemurs-intro for exploratory data analysis.
 
 - `weight`: Weight of the lemur (in grams)
-- `taxon` : Code made as a combination of the lemur's genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxon:
+- `taxon` : Code made as a combination of the lemur's genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxa:
   - `ERUF`: Eulemur rufus, commonly known as Red-fronted brown lemur
 
   - `PCOQ`: Propithecus coquereli, commonly known as Coquerel's sifaka
 
   - `VRUB`: Varecia rubra, commonly known as Red ruffed lemur
-- `sex` : Sex of lemur (`M`: Male, `F`: Female)
-- `age`: Age of lemur when weight was recorded (in months)
-- `litter_size`: Total number of lemurs the litter the lemur was born into
+- `sex` : Sex of the lemur (`M`: Male, `F`: Female)
+- `age`: Age of the lemur when weight was recorded (in months)
+- `litter_size`: Total number of lemurs in the litter the lemur was born into
 
 The multiple linear regression model using taxon, age, sex, and litter size, to explain variability in the weight of young lemurs is in @tbl-lemur-model-inf.
 
@@ -70,7 +70,7 @@ tidy(lemurs_model) |>
   kable(digits = 3)
 ```
 
-The interpretations of the coefficients for the model in @tbl-lemur-model-inf describe the exact relationship between the response and each predictor for the `r nrow(lemurs_sample_young)` young lemurs in the sample (see @sec-mlr-interpret). In practice, the analysis objective is not to just understand the observations in our sample, but instead use the sample to draw conclusions about a broader population. We do so using **statistical inference**.
+The interpretations of the coefficients for the model in @tbl-lemur-model-inf describe the exact relationship between the response and each predictor for the `r nrow(lemurs_sample_young)` young lemurs in the sample (see @sec-mlr-interpret). In practice, the analysis objective is not just to understand the observations in our sample, but instead to use the sample to draw conclusions about a broader population. We do so using **statistical inference**.
 
 ::: {.objective latex=""}
 Use statistical inference to answer the following:
@@ -87,7 +87,7 @@ For the remainder of the chapter, we will build on the concepts introduced in @s
 
 Here we will do a brief review of the general ideas and methods for statistical inference. A more detailed discussion of these ideas is in @sec-ch-slr-inf.
 
-The objective of statistical inference to use the sample data to draw conclusions about the population of interest. In the context of linear regression, this means using the sample data to draw conclusions about the relationship between the response variable and the predictors. This done through one of two inferential procedures:
+The objective of statistical inference is to use the sample data to draw conclusions about the population of interest. In the context of linear regression, this means using the sample data to draw conclusions about the relationship between the response variable and the predictors. This is done through one of two inferential procedures:
 
 - **Hypothesis tests**: Test a claim about a population coefficient
 
@@ -101,12 +101,12 @@ Recall the inference questions introduced in @sec-mlr-inf-intro:
 1.  Is age a useful predictor of weight, after accounting for sex, taxon, and number of lemurs in the litter?
 2.  After taking into account sex, taxon, and number of lemurs in the litter, about how much does a young lemur's weight increase, on average, as they get older?
 
-Can we answer the question using a confidence interval, hypothesis test, or both?[^08-mlr-inference-1]
+Can we answer each question using a confidence interval, hypothesis test, or both?[^08-mlr-inference-1]
 :::
 
-[^08-mlr-inference-1]: Question 1: This can be answered by hypothesis test and confidence interval. Question 2: This question can be answered by a confidence interval.
+[^08-mlr-inference-1]: Question 1: This can be answered by a hypothesis test and confidence interval. Question 2: This question can be answered by a confidence interval.
 
-We are using the results from a single sample to draw conclusions about the population. If we were to take another random sample of `r nrow(lemurs_sample_young)` young lemurs and fit a model using `sex`, `age`, `taxon`, and `litter_size` to explain variability in `weight`, we would expect the model coefficient of `age`, for example, to be similar but not exactly the same as the coefficient in @tbl-lemur-model-inf. If we repeat this process many times, we will have a distribution of the coefficient of age, and we can use this distribution to understand the sample-to-sample variability in the estimated coefficients of age, called the sampling variability <!--# maybe add reference or callout or something to vocab-->. This is true for the other predictors as well.
+We are using the results from a single sample to draw conclusions about the population. If we were to take another random sample of `r nrow(lemurs_sample_young)` young lemurs and fit a model using `sex`, `age`, `taxon`, and `litter_size` to explain variability in `weight`, we would expect the model coefficient of `age`, for example, to be similar but not exactly the same as the coefficient in @tbl-lemur-model-inf. If we repeat this process many times, we will have a distribution of the coefficient of age, and we can use this distribution to understand the sample-to-sample variability in the estimated coefficients of age, called the sampling variability<!--# maybe add reference or callout or something to vocab-->. This is true for the other predictors as well.
 
 It is not feasible (or sometimes even possible) to take repeated samples from the population. Thus, we rely on methods to quantify the sampling variability in the estimated coefficients. This variability can be quantified in two ways:
 
@@ -116,17 +116,17 @@ It is not feasible (or sometimes even possible) to take repeated samples from th
 
 <!--# make sure the language matches the inference chapter -->
 
-The concepts and general steps to conduct inference is the same in multiple linear regression as in simple linear regression. Therefore, much of what we see in the following sections will overlap with @sec-ch-slr-inf. The primary difference is that now we are drawing conclusions about a model coefficient for a given predictor, after taking into account the other predictors in the model. Thus, we expect the sampling variability for a coefficient to be different in the multiple linear regression model compared to the simple linear regression model.
+The concepts and general steps to conduct inference are the same in multiple linear regression as in simple linear regression. Therefore, much of what we see in the following sections will overlap with @sec-ch-slr-inf. The primary difference is that now we are drawing conclusions about a model coefficient for a given predictor, after taking into account the other predictors in the model. Thus, we expect the sampling variability for a coefficient to be different in the multiple linear regression model compared to the simple linear regression model.
 
 ## Simulation-based inference {#sec-mlr-sim-inf}
 
-As introduced in @sec-bootstrap-ci, with simulation-based inference, we use the sample data, instead of mathematical equations, to generate the relevant distributions for confidence intervals and hypothesis tests. This approach can be preferred at times, because it does not rely on as strict adherence to the LINE model conditions (@sec-ch-slr-conditions), particularly in regards to the equal variance condition. These methods can be computationally intensive, however, so it is up to the data scientist to weigh these advantages and disadvantages when deciding whether to use this approach.
+As introduced in @sec-bootstrap-ci, with simulation-based inference, we use the sample data, instead of mathematical equations, to generate the relevant distributions for confidence intervals and hypothesis tests. This approach can be preferred at times, because it does not rely on as strict adherence to the LINE model conditions (@sec-ch-slr-conditions), particularly in regard to the equal variance condition. These methods can be computationally intensive, however, so it is up to the data scientist to weigh these advantages and disadvantages when deciding whether to use this approach.
 
 We use two simulation procedures to conduct statistical inference for a population coefficient - bootstrapping for confidence intervals and permutation for hypothesis tests. Here we will show these methods in the context of multiple linear regression. See @sec-bootstrap-ci and @sec-slr-testing-sim for a detailed introduction to these procedures.
 
 ### Bootstrap confidence intervals {#sec-mlr-bootstrap-ci}
 
-Let $\beta_j$ be the population coefficient for the predictor $X_j$. The estimated coefficient $\hat{\beta}_j$ is the "best guess" for the value of $\beta_j$; however, we do not expect that $\hat{\beta}_j$ is exactly equal to $\beta_j$. In fact, if we take another sample of the same size and fit a model of the same form, we will likely get a different (and hopefully close) estimate of the coefficient. Therefore, instead of relying solely on $\hat{\beta}_j$ to tell us something about the true population coefficient, we compute a confidence interval, a range of values that is reasonable for $\beta_j$ to take based on our data <!--# i need to work on this wording--> This confidence interval is found based on the sampling distribution constructed by bootstrap sampling.
+Let $\beta_j$ be the population coefficient for the predictor $X_j$. The estimated coefficient $\hat{\beta}_j$ is the "best guess" for the value of $\beta_j$; however, we do not expect that $\hat{\beta}_j$ is exactly equal to $\beta_j$. In fact, if we take another sample of the same size and fit a model of the same form, we will likely get a different (and hopefully close) estimate of the coefficient. Therefore, instead of relying solely on $\hat{\beta}_j$ to tell us something about the true population coefficient, we compute a confidence interval, a range of values that is reasonable for $\beta_j$ to take based on our data. <!--# i need to work on this wording--> This confidence interval is found based on the sampling distribution constructed by bootstrap sampling.
 
 Let's use a bootstrap confidence interval to answer the following question posed in @sec-mlr-inf-intro:
 
@@ -134,7 +134,7 @@ Let's use a bootstrap confidence interval to answer the following question posed
 
 The question focuses on the predictor `age`, so we are computing the confidence interval for the coefficient of age, $\beta_{age}$. Note that the question states "after taking into account sex, taxon, and number of lemurs." This means that we want to compute the confidence interval for the coefficient of `age` given a model of the form in @tbl-lemur-model-inf.
 
-Bootstrapping is the process of sampling, with replacement, to generate a new sample the same size as the observed data. For the analysis of weights for young lemurs, each bootstrap sample will have `r nrow(lemurs_sample_young)` observations. When obtaining the bootstrap sample, each observation remains in tact. This means the values of the response and predictor variable for an individual lemur in the bootstrap sample are the same as the combination of values for a lemur in the original sample.
+Bootstrapping is the process of sampling, with replacement, to generate a new sample the same size as the observed data. For the analysis of weights for young lemurs, each bootstrap sample will have `r nrow(lemurs_sample_young)` observations. When obtaining the bootstrap sample, each observation remains intact. This means the values of the response and predictor variable for an individual lemur in the bootstrap sample are the same as the combination of values for a lemur in the original sample.
 
 We will use 1000 bootstrap samples in this analysis. <!--# need a reference on this. what is a good number? Is it consistent with slr inf chapter?--> @tbl-mlr-inf-bootstrap shows five observations from the first and last bootstrap samples. <!--# add a row of vertical dots between the replicates--> The column `replicate` indicates the bootstrap sample.
 
@@ -244,7 +244,7 @@ boot_dist |>
   theme_bw()
 ```
 
-@fig-mlr-inf-bootstrap-ci shows the upper and lower bounds for a 95% confidence interval on the bootstrap sampling distribution. The 95% confidence interval for the $\beta_{age}$, the coefficient of `age` is `r round(age_boot_ci$lower_ci, 3)` to `r round(age_boot_ci$upper_ci, 3)`. Similar to the confidence interval in simple linear regression, we are 95% confident that this interval contains the true coefficient for `age`. Let's interpret what this means in terms of the relationship between `age` and `weight` for young lemurs.
+@fig-mlr-inf-bootstrap-ci shows the upper and lower bounds for a 95% confidence interval on the bootstrap sampling distribution. The 95% confidence interval for $\beta_{age}$, the coefficient of `age` is `r round(age_boot_ci$lower_ci, 3)` to `r round(age_boot_ci$upper_ci, 3)`. Similar to the confidence interval in simple linear regression, we are 95% confident that this interval contains the true coefficient for `age`. Let's interpret what this means in terms of the relationship between `age` and `weight` for young lemurs.
 
 > *We are 95% confident that the weight of young lemurs increase between `r round(age_boot_ci$lower_ci, 3)` and `r round(age_boot_ci$upper_ci, 3)` grams, on average, for each additional month older, holding taxon, sex, and number of lemurs in the litter constant.*
 
@@ -260,7 +260,7 @@ pcoq_boot_ci <- get_confidence_interval(pcoq_dist, level = 0.90, type = "percent
 ```
 
 ::: {.yourturn latex=""}
-The 90% bootstrap confidence interval for `taxonPCOQ` based on the model in @tbl-lemur-model-inf is `r round(pcoq_boot_ci$lower_ci, 3)` to `r round(pcoq_boot_ci$upper_ci, 3)` . Interpret the interval in the context of the data.[^08-mlr-inference-3]
+The 90% bootstrap confidence interval for `taxonPCOQ` based on the model in @tbl-lemur-model-inf is `r round(pcoq_boot_ci$lower_ci, 3)` to `r round(pcoq_boot_ci$upper_ci, 3)`. Interpret the interval in the context of the data.[^08-mlr-inference-3]
 :::
 
 [^08-mlr-inference-3]: We are 90% confident that the weight of PCOQ lemurs is `r round(pcoq_boot_ci$lower_ci, 3)` to `r round(pcoq_boot_ci$upper_ci, 3)` grams higher, on average, compared the weight of ERUF lemurs, holding age, sex, and litter size constant.
@@ -271,7 +271,7 @@ The 90% bootstrap confidence interval for `taxonPCOQ` based on the model in @tbl
 
 Sometimes we wish to evaluate a claim made about the relationship between the response variable and one of the predictors, $X_j$ using a hypothesis test. When conducting hypothesis tests to evaluate such a claim, the null hypothesis is the "baseline" condition of no linear relationship between the response and the predictor variable ($H_0: \beta_j = 0$) , and the alternative hypothesis is that there is a linear relationship ($H_a: \beta_j \neq 0$). Hypothesis tests can be used to evaluate other claims as well; however, we will focus on evaluating whether there is a linear relationship, because this is the claim being evaluated in output of most statistical software. See @sec-hypothesis-test-overview for an introduction to hypothesis tests.
 
-@sec-slr-testing-sim provides an introduction more specifically to permutation tests, so here we will show how to conduct the test for multiple linear regression and answer the question posed in @sec-mlr-inf-intro :
+@sec-slr-testing-sim provides an introduction more specifically to permutation tests, so here we will show how to conduct the test for multiple linear regression and answer the question posed in @sec-mlr-inf-intro:
 
 > Is age a useful predictor of weight, after accounting for sex, taxon, and number of lemurs in the litter?
 
@@ -284,7 +284,7 @@ The hypotheses in mathematical notation are the following:
 
 $$H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0$$
 
-In @sec-hypothesis-test-overview, we explained how hypothesis tests are conducted assuming null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of $\hat{\beta}_{age}$ under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the **null distribution**, and we construct it using permutation sampling.
+In @sec-hypothesis-test-overview, we explained how hypothesis tests are conducted assuming the null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of $\hat{\beta}_{age}$ under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the **null distribution**, and we construct it using permutation sampling.
 
 Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In this case, because we are conducting inference for a single predictor `age`, we will create new samples by shuffling the values of `age`, so that they are randomly paired with values of weight. We do [**not**]{.underline} shuffle the columns of the other predictors, because we are evaluating the relationship between `age` and `weight` after accounting for the relationships between `weight` and the predictors `sex`, `taxon`, and `litter_size`. By shuffling the columns of `age`, we are simulating the null condition of no linear relationship between `age` and `weight`.
 
@@ -404,7 +404,7 @@ Here we used permutation sampling to construct the null distribution for the hyp
 ::: {.yourturn latex=""}
 The 95% bootstrap confidence interval for $\beta_{age}$ is `r round(age_boot_ci$lower_ci, 3)` to `r round(age_boot_ci$upper_ci, 3)`.
 
-- This interval corresponds to a hypothesis test with what $\alpha$ -level?
+- This interval corresponds to a hypothesis test with what $\alpha$-level?
 - Is this interval consistent with the conclusion that there is evidence of a linear relationship between age and weight, after accounting for sex, taxon, and number of lemurs in the litter? Explain. [^08-mlr-inference-5]
 :::
 
@@ -469,23 +469,23 @@ The 95% confidence in @fig-bootstrap-lemur-pred is `r round(boot_pred_lb, 3)` to
 
 ## Theory-based inference {#sec-mlr-theory-inf}
 
-The other approach for inference is using theory-based methods based on mathematical models and the Central Limit Theorem. Theory-based methods have formulas to quantify the sampling variability in the estimated coefficient and uses distributions to compute exact confidence intervals and p-values. Because these methods rely on formulas rather than resampling methods, they are very computationally efficient. Results from theory-based inferential methods are displayed in the model output from most statistical software. For example, you can see the inferential results we'll discuss in the model output in @tbl-lemur-model-inf.
+The other approach for inference is using theory-based methods based on mathematical models and the Central Limit Theorem. Theory-based methods have formulas to quantify the sampling variability in the estimated coefficient and use distributions to compute exact confidence intervals and p-values. Because these methods rely on formulas rather than resampling methods, they are very computationally efficient. Results from theory-based inferential methods are displayed in the model output from most statistical software. For example, you can see the inferential results we'll discuss in the model output in @tbl-lemur-model-inf.
 
 Theory-based inference for coefficients in a multiple linear regression model is very similar to inference in simple linear regression. Therefore, this section will provide a brief description of these methods, show how they apply to answer the questions in @sec-mlr-inf-intro, and highlight differences from simple linear regression. See @sec-slr-inf-clt for a thorough introduction to these methods. The mathematical details utilize linear algebra and are found in @sec-assumptions-matrix and @sec-beta-dist-matrix.
 
 ### Foundations for inference {#sec-mlr-inf-foundation}
 
-When doing multiple linear regression, we assume a model structure of the from in @eq-mlr-stat-model.
+When doing multiple linear regression, we assume a model structure of the form in @eq-mlr-stat-model.
 
 $$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-mlr-stat-model}
 
-The equation written in terms of the distribution of $Y$ given a combination of predictors $X_1, X_2, \ldots, X_p$ in @eq-mlr-dist-y.
+The equation is written in terms of the distribution of $Y$ given a combination of predictors $X_1, X_2, \ldots, X_p$ in @eq-mlr-dist-y.
 
 $$Y|X \sim N(\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p, \sigma^2_{\epsilon})$$ {#eq-mlr-dist-y}
 
 By @eq-mlr-dist-y, the distribution of the response variable $Y$ given a combination of predictors $X_1, X_2, \ldots, X_p$ is normally distributed, centered at $\beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p$ with variance $\sigma^2_{\epsilon}$. Based on this distribution, the following assumptions are made when we conduct multiple linear regression:
 
-1.  The distribution of the response $Y$ is normal for a given combination of the predictors$X_1, X_2, \ldots, X_p$.
+1.  The distribution of the response $Y$ is normal for a given combination of the predictors $X_1, X_2, \ldots, X_p$.
 
 2.  The expected value (mean) of the distribution of $Y$ given $X_1, X_2, \ldots, X_p$ is $\beta_0 + \beta_1 X_1 + \beta_2X_2 + \dots + \beta_pX_p$. There is a linear relationship between the response and the predictor variables.
 
@@ -527,7 +527,7 @@ tidy(lemurs_model) |>
   kable(digits = 3)
 ```
 
-The estimated standard error for `age` in the simple linear regression model is 5.883 compared to 4.858 in the multiple linear regression model. In the case of multiple linear regression, the other predictors in the model are accounted for in two ways when computing $SE_{\hat{\beta}{age}}$ . First the other predictors are accounted for when computing $\hat{\sigma}_\epsilon$, as they are used to compute the $\hat{y}_i$ in the @eq-mlr-sigma. Second, the other predictors are accounted for in $(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}$, as this matrix quantifies any relationship between the predictor variables (see @sec-beta-dist-matrix for details). Thus, based on the models in @tbl-mlr-age-compare, there is less sampling variability in $\hat{\beta}_{age}$ after we account for the other potential predictors of weight.
+The estimated standard error for `age` in the simple linear regression model is 5.883 compared to 4.858 in the multiple linear regression model. In the case of multiple linear regression, the other predictors in the model are accounted for in two ways when computing $SE_{\hat{\beta}{age}}$. First the other predictors are accounted for when computing $\hat{\sigma}_\epsilon$, as they are used to compute the $\hat{y}_i$ in the @eq-mlr-sigma. Second, the other predictors are accounted for in $(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}$, as this matrix quantifies any relationship between the predictor variables (see @sec-beta-dist-matrix for details). Thus, based on the models in @tbl-mlr-age-compare, there is less sampling variability in $\hat{\beta}_{age}$ after we account for the other potential predictors of weight.
 
 In addition to estimating the sampling variability for model coefficients, by the Central Limit Theorem, we know the full sampling distribution of the model coefficient $\hat{\beta}_j$ is normally distributed, with a mean at the true population coefficient $\beta_j$ and variance $SE_{\hat{\beta}_j}^2$, the standard error squared as shown in @eq-mlr-beta-dist. We use this distribution as the basis for conducting hypothesis tests and computing confidence intervals.
 
@@ -567,7 +567,7 @@ The test statistic for $\hat{\beta}_{age}$ is
 
 $$T = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}} = \frac{136.903 - 0}{4.858} = 28.181$$
 
-This means that given the null hypothesis is true ($\beta_{age} = 0$) , the coefficient estimated from the model 136.903 is about 28.181 standard errors above the mean of the distribution.
+This means that given the null hypothesis is true ($\beta_{age} = 0$), the coefficient estimated from the model 136.903 is about 28.181 standard errors above the mean of the distribution.
 
 ::: {.yourturn latex=""}
 The test statistic is 28.181. Do you think this provides evidence in support of or against the null hypothesis?[^08-mlr-inference-7]
@@ -581,7 +581,7 @@ Sometimes the test statistic has a magnitude that is so small or so large that w
 
 The definition of the p-value is similar for theory-based inference as with simulation-based inference. The key difference is that we will compare the test statistic, instead of the estimated coefficient, against a distribution. Thus, the p-value is the probability of observing a test statistic in the distribution at least as extreme as the observed test statistic, assuming the null hypothesis is true.
 
-Under the null hypothesis, the test statistic follows a $t$ distribution with $n- p-1$ degrees of freedom, $T \sim t_{n-p-1}$ . The $t$ distribution is used, instead of the standard normal distribution, to account for the extra variability that results from using the estimated regression standard error $\hat{\sigma}_\epsilon$ to compute the standard error of the coefficient in @eq-mlr-se-beta (see @sec-slr-inf-hypotheses for more detail about $t$ distribution). Because the alternative hypothesis is not equal to, we conduct a two-sided test and compute the p-value as $P(|t| > |T|) = P(t < -|T|) + P(t > |T|)$, the probability of obtaining a test statistic with magnitude greater than the test statistic $T$.
+Under the null hypothesis, the test statistic follows a $t$ distribution with $n- p-1$ degrees of freedom, $T \sim t_{n-p-1}$. The $t$ distribution is used, instead of the standard normal distribution, to account for the extra variability that results from using the estimated regression standard error $\hat{\sigma}_\epsilon$ to compute the standard error of the coefficient in @eq-mlr-se-beta (see @sec-slr-inf-hypotheses for more detail about the $t$ distribution). Because the alternative hypothesis is not equal to, we conduct a two-sided test and compute the p-value as $P(|t| > |T|) = P(t < -|T|) + P(t > |T|)$, the probability of obtaining a test statistic with magnitude greater than the test statistic $T$.
 
 In the hypothesis test for $\beta_{age}$, the p-value is computed as
 
@@ -603,7 +603,7 @@ In @sec-mlr-bootstrap-ci, we used bootstrapping to simulate the sampling distrib
 
 $$\hat{\beta}_j \pm t^*_{n-p-1} \times SE_{\hat{\beta}_j}$$ {#eq-mlr-beta-ci}
 
-where $t^*_{n-p-1}$ is the critical value marking the middle $C\%$ of the $t$ distribution with $n - p - 1$ degrees of freedom. Let's construct a 95% confidence interval for `age` to answer the question posed in @sec-mlr-inf-intro :
+where $t^*_{n-p-1}$ is the critical value marking the middle $C\%$ of the $t$ distribution with $n - p - 1$ degrees of freedom. Let's construct a 95% confidence interval for `age` to answer the question posed in @sec-mlr-inf-intro:
 
 > After taking into account sex, taxon, and number of lemurs in the litter, about how much does a young lemur's weight increase, on average, as they get older?
 
@@ -702,7 +702,7 @@ Use the intervals in @tbl-lemur-prediction-intervals.
 
 ## Model conditions and diagnostics {#sec-mlr-conditions-diagnositics}
 
-The simulation- and theory-based inference methods rely on a set of assumptions about the relationship between the response and predictor variables in the population ([@sec-mlr-inf-foundation]). We are unable to check whether these assumptions truly hold in the population, so we use the sample data to evaluate whether they hold in the data using model conditions. We also use model diagnostics to assess whether there are outliers in the data that are having an out-sized influence on the model results. These model conditions and diagnostics are the same the ones for simple linear regression (@sec-ch-slr-conditions) with some additional considerations for the multiple predictor variables. Here we will show the conditions and diagnostics applied to the lemur model. See @sec-ch-slr-conditions for a detailed introduction to these topics.
+The simulation- and theory-based inference methods rely on a set of assumptions about the relationship between the response and predictor variables in the population ([@sec-mlr-inf-foundation]). We are unable to check whether these assumptions truly hold in the population, so we use the sample data to evaluate whether they hold in the data using model conditions. We also use model diagnostics to assess whether there are outliers in the data that are having an out-sized influence on the model results. These model conditions and diagnostics are the same as the ones for simple linear regression (@sec-ch-slr-conditions) with some additional considerations for the multiple predictor variables. Here we will show the conditions and diagnostics applied to the lemur model. See @sec-ch-slr-conditions for a detailed introduction to these topics.
 
 ### Model conditions
 
@@ -715,11 +715,11 @@ There are four model conditions that align with the assumptions outlined in @sec
 
 #### Linearity {.unnumbered}
 
-In the context of multiple linear regression, the linearity condition means that the relationship between the response and the predictor variables can be adequately described using the linear regression model. When this is the case, the residuals $y_i - \hat{y}_i$ captures random variability that stems from the fact that there are factors other than the ones in the model that explain variability in weight and the natural random differences in weight we'd expect in a group of lemurs. To examine this, we use a plot of the residuals versus predicted values. Ideally, the residuals are randomly scattered, indicating the systematic relationship between the response and predictor variables has been capture by the model. The linearity condition is important for simulation-based and theory-based inference, so any violations in linearity should be addressed before conducting inference.
+In the context of multiple linear regression, the linearity condition means that the relationship between the response and the predictor variables can be adequately described using the linear regression model. When this is the case, the residuals $y_i - \hat{y}_i$ capture random variability that stems from the fact that there are factors other than the ones in the model that explain variability in weight and the natural random differences in weight we'd expect in a group of lemurs. To examine this, we use a plot of the residuals versus predicted values. Ideally, the residuals are randomly scattered, indicating the systematic relationship between the response and predictor variables has been captured by the model. The linearity condition is important for simulation-based and theory-based inference, so any violations in linearity should be addressed before conducting inference.
 
 ```{r}
 #| label: fig-mlr-resid-plot
-#| fig-cap: Residuals versus predicted for lemurs model
+#| fig-cap: Residuals versus predicted for the lemurs model
 #| echo: false
 #| fig-align: center
 
@@ -740,7 +740,7 @@ When the plot of residuals versus fitted values is randomly scattered as the one
 
 ```{r}
 #| label: fig-mlr-resid-plot-by-var
-#| fig-cap: Residuals verus each predictor for lemurs model
+#| fig-cap: Residuals versus each predictor in the lemurs model
 #| fig-subcap: 
 #|  - "Residuals versus age"
 #|  - "Residuals versus taxon"
@@ -826,7 +826,7 @@ The normality assumption is important when computing intervals for predictions o
 
 #### Equal variance {.unnumbered}
 
-The final model condition in LINE is the equal variance condition (also called *constant variance*or *homoskedasticity*). This condition comes from the assumption about the distribution of the error terms, $\epsilon_i \sim N(0, \sigma^2_{\epsilon})$, that the variance in this distribution, $\sigma^2_{\epsilon}$ is the same for all observations regardless of the values of the predictors. Thus, the variability of the residuals should be the same for all predicted values (combinations of predictors).
+The final model condition in LINE is the equal variance condition (also called *constant variance*or *homoskedasticity*). This condition comes from the assumption about the distribution of the error terms, $\epsilon_i \sim N(0, \sigma^2_{\epsilon})$, that the variance in this distribution, $\sigma^2_{\epsilon}$, is the same for all observations regardless of the values of the predictors. Thus, the variability of the residuals should be the same for all predicted values (combinations of predictors).
 
 ```{r}
 #| label: fig-mlr-equal-var
@@ -844,7 +844,7 @@ ggplot(data = lemurs_model_aug, aes(x = .fitted, y = .resid)) +
        y = "Residual")
 ```
 
-@fig-mlr-equal-var shows a plot of th residuals versus predicted values, similar to @fig-mlr-resid-plot. As we move along the $x$-axis, we are looking to see if the vertical spread is approximately equal for all observations. To help evaluate this, we have added horizontal lines encompassing the majority of the data. Note as we move along the $x$-axis, the vertical spread of the residuals is largely captured within these horizontal linse. Thus, the equal variance condition is [**satisfied**]{.underline}. As with other conditions, we can ignore the high outlier when assessing the condition. Additionally, we are looking for noticeable violations in the conditions rather than perfect adherence when making the determination.
+@fig-mlr-equal-var shows a plot of the residuals versus predicted values, similar to @fig-mlr-resid-plot. As we move along the $x$-axis, we are looking to see if the vertical spread is approximately equal for all observations. To help evaluate this, we have added horizontal lines encompassing the majority of the data. Note as we move along the $x$-axis, the vertical spread of the residuals is largely captured within these horizontal lines. Thus, the equal variance condition is [**satisfied**]{.underline}. As with other conditions, we can ignore the high outlier when assessing the condition. Additionally, we are looking for noticeable violations in the conditions rather than perfect adherence when making the determination.
 
 Simulation-based inference does not rely on any assumptions about the distribution of the residuals, so it is robust to violations in the equal variance condition. The regression standard error $\hat{\sigma}_{\epsilon}$ is used to compute $SE_{\hat{\beta}_j}$ in theory-based inference, so violations in the equal variance condition could lead to unreliable inference results. Therefore, any violations should be addressed before moving forward with inference. @sec-ch-transformations introduces model transformations that can be used to address such violations.
 
@@ -858,7 +858,7 @@ We begin by using Cook's distance to determine whether there are influential poi
 
 ```{r}
 #| label: fig-mlr-cooks-d
-#| fig-cap: Cook's distance for each observation in lemur analysis
+#| fig-cap: Cook's distance for each observation in the lemur analysis
 #| echo: false
 
 lemurs_model_aug <- lemurs_model_aug |> 
@@ -882,7 +882,7 @@ max_cooks_d <- lemurs_model_aug |>
   pull()
 ```
 
-@fig-mlr-cooks-d shows Cook's distance for each observation. There is a horizontal line at $\text{Cook's distance} = 1$ marking the threshold for influential observations. In this analysis, all the values of Cook's distance are well below 1 (the maximum value is `r round(max_cooks_d, 3)`), so there are no influential points in the data. Thus, even though we have identified the an outlier, this observations did not have an out-sized impact on the estimated model coefficients.
+@fig-mlr-cooks-d shows Cook's distance for each observation. There is a horizontal line at $\text{Cook's distance} = 1$ marking the threshold for influential observations. In this analysis, all the values of Cook's distance are well below 1 (the maximum value is `r round(max_cooks_d, 3)`), so there are no influential points in the data. Thus, even though we have identified an outlier, this observation did not have an out-sized impact on the estimated model coefficients.
 
 Using the modeling workflow outlined in @sec-model-in-practice, if we have no influential points, we do not need to examine the components of Cook's distance, leverage and standardized residuals. If we do identify an influential point, however, we can use leverage and standardized residuals to better understand how a given observation differs from the general trend of the data.
 
@@ -904,7 +904,7 @@ An observation has *high leverage* if its combination of predictors is far away 
 
 ```{r}
 #| label: fig-mlr-leverage
-#| fig-cap: Leverage for observations in lemurs analysis
+#| fig-cap: Leverage for observations in the lemurs analysis
 #| echo: false
 
 leverage_threshold <- 2 * (5 + 1) / nrow(lemurs_sample_young)
@@ -925,7 +925,7 @@ Standardized residuals are used to identify observations that have large magnitu
 
 ```{r}
 #| label: fig-mlr-std-resid
-#| fig-cap: Standardized residuals versus predicted values for lemur model 
+#| fig-cap: Standardized residuals versus predicted values for the lemur model 
 #| echo: false
 
 max_std_resid <- lemurs_model_aug |> 
@@ -959,13 +959,13 @@ Consider the outlier observation. The residual for this observation is `r round(
 - Explain what the value of the standardized residual means in the context of the data.[^08-mlr-inference-13]
 :::
 
-[^08-mlr-inference-13]: The residual means that the observed weight for this lemur is `r round(max_resid, 3)` grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is `r round(max_std_resid,3)`standard errors above the mean of the distribution of residuals.
+[^08-mlr-inference-13]: The residual means that the observed weight for this lemur is `r round(max_resid, 3)` grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is `r round(max_std_resid,3)` standard errors above the mean of the distribution of residuals.
 
 We did not have any influential points in this analysis, but there will be times when do have such points in modeling. @sec-outliers-impact discuses strategies for handling influential points in modeling.
 
 ### Multicollinearity {#sec-mlr-multicollinearity}
 
-Ideally the predictors in a multiple linear regression model would be completely independent of one another, so knowing something about one predictor would not provide information other predictors. In practice, however, there is often some correlation between a subset of the predictors. This is why some data scientists prefer to interpret coefficients using the language "after adjusting for all other predictors" rather than "holding all else constant" (see @sec-mlr-interpret). This is typically not an issue for the model, but issues may arise if two or more predictors are too highly correlated. High correlation among predictors is called **multicollinearity**. More specifically, multicollinearity means there is near-linear dependencies between the predictors. More details of the mathematics behind multicollinearity are in @sec-multicollinearity-matrix.
+Ideally the predictors in a multiple linear regression model would be completely independent of one another, so knowing something about one predictor would not provide information about the other predictors. In practice, however, there is often some correlation between a subset of the predictors. This is why some data scientists prefer to interpret coefficients using the language "after adjusting for all other predictors" rather than "holding all else constant" (see @sec-mlr-interpret). This is typically not an issue for the model, but issues may arise if two or more predictors are too highly correlated. High correlation among predictors is called **multicollinearity**. More specifically, multicollinearity means there is near-linear dependencies between the predictors. More details of the mathematics behind multicollinearity are in @sec-multicollinearity-matrix.
 
 If two or more predictors are exactly correlated, then we are unable to compute estimates for some of the model coefficients. This will often show up as `NA` in the model output where the estimated coefficient should be, so software provides a clear signal when this is the case. The more challenging issue, then, is when predictors are strongly correlated, i.e., when there is multicollinearity. Though we are still able to obtain estimates for the model coefficients, there are other concerns with the associated inferential statistics.
 
@@ -1017,7 +1017,7 @@ get_confidence_interval(level = 0.95, type = "percentile")
 
 ```
 
-Next, the code to construct the null distribution and compute p-value for the permutation test is below. Note that the argument `variables = age` is used in `generate()` to specify that `age` is the only column that is permuted (shuffled). The default for `generate()` is to permute all columns.
+Next, the code to construct the null distribution and compute the p-value for the permutation test is below. Note that the argument `variables = age` is used in `generate()` to specify that `age` is the only column that is permuted (shuffled). The default for `generate()` is to permute all columns.
 
 ```{r}
 #| label: mlr-permute-test-code
@@ -1089,6 +1089,6 @@ vif(lemurs_model)
 
 ## Summary
 
-In this chapter, we built upon inference for simple linear regression introduced @sec-ch-slr-inf and showed how inference can be used to draw conclusions about model coefficients in multiple linear regression models. We showed how to conduct simulation-based inference using bootstrapping for confidence intervals and permutation tests for hypothesis testing. Then, we showed how to compute the values shown the regression output by conducting inference using mathematical models based on the Central Limit Theorem. Lastly, we showed how to check model conditions and diagnostics for multiple linear regression, building off of the introduction to these topics in @sec-ch-slr-conditions.
+In this chapter, we built upon inference for simple linear regression introduced @sec-ch-slr-inf and showed how inference can be used to draw conclusions about model coefficients in multiple linear regression models. We showed how to conduct simulation-based inference using bootstrapping for confidence intervals and permutation tests for hypothesis testing. Then, we showed how to compute the values shown in the regression output by conducting inference using mathematical models based on the Central Limit Theorem. Lastly, we showed how to check model conditions and diagnostics for multiple linear regression, building off of the introduction to these topics in @sec-ch-slr-conditions.
 
 Sometimes the data shows violations in the model conditions that need to be addressed to make reliable conclusions and predictions from the model. In the next chapter, we will introduce variable transformations that can be used to address violations in the model conditions, particularly in the linearity and equal variance conditions.
