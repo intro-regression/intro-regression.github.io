@@ -404,7 +404,7 @@ ncaa_orig_resid
 ncaa_orig_resid_dist
 ```
 
-There is a "fan" shape in @fig-ncaa-orig-resid, so the equal variance condition is not met. Because the equal variance condition is not met, the results of theory-based inference output in @tbl-ncaa-model-orig cannot reliably be used to draw conclusions about the relationships between the response and predictor variables. For example, the inferential results suggest the interaction between enrollment and institution type is not useful in this model, despite what we observed in @fig-ncaa-eda-multivariate. Before making a final conclusion about the interaction term ad any other term in the model, let's first address the issue with the equal variance condition.
+There is a "fan" shape in @fig-ncaa-orig-resid, so the equal variance condition is not met. Because the equal variance condition is not met, the results of theory-based inference output in @tbl-ncaa-model-orig cannot reliably be used to draw conclusions about the relationships between the response and predictor variables. For example, the inferential results suggest the interaction between enrollment and institution type is not useful in this model, despite what we observed in @fig-ncaa-eda-multivariate. Before making a final conclusion about the interaction term and any other term in the model, let's first address the issue with the equal variance condition.
 
 Here is a summary of some of the points of interest we've observed thus far in the exploratory data analysis and initial modeling attempt.
 
@@ -462,7 +462,7 @@ ggplot(data = ncaa_basketball, aes(x = log(enrollment_th), y = log(expenditure_m
 Which relationship visualized in @fig-ncaa-model-compare would be best summarized by a linear regression model?[^09-mlr-transformations-3]
 :::
 
-[^09-mlr-transformations-3]: From the figure, it appears @fig-ncaa-model-compare-4 with with a log transformation on both `enrollment_th` and `expenditure_m` would be best represented by a linear model, because the shape is most linear.
+[^09-mlr-transformations-3]: From the figure, it appears @fig-ncaa-model-compare-4 with a log transformation on both `enrollment_th` and `expenditure_m` would be best represented by a linear model, because the shape is most linear.
 
 The plots in @fig-ncaa-model-compare can help provide intuition on what to expect as we do the analysis. In this chapter, we will look at the transformations presented in Plots B - D in the order they are plotted. In practice, however, you can use insights from the exploratory data analysis to start with the model that appears to be the best fit for the data. We do not draw definitive conclusions from the exploratory data analysis, so we will use inference, model conditions, and model fit statistics to select the best fit model. For now, we will just discuss these transformations in terms of a main effects model. In @sec-transform-choose-model, we add the interaction term to our selected model.
 
@@ -478,7 +478,7 @@ One solution to this is to use the simulation-based inference methods introduced
 
 <!--# i really need to figure out syntax..upper or lower case y and x-->
 
-Some commonly used variance-stabilizing transformations are the square-root transformation, $\sqrt{y}$ , and the reciprocal transformation, $1/y$ . In fact, the square root and reciprocal transformations are just two examples from the class of transformations called the **Box-Cox transformations** [@box1964analysis]. These transformations are designed to handle a non-normal response variable of any shape. While Box-Cox transformations, such as $\sqrt{y}$ and $1/y$, can be the optional choice for stabilizing variance and making the distribution of the response variable more normal (recall the normality condition), it is often difficult to interpret the coefficients for models with such transformed response variables in a way that an be easily understood by readers. Therefore, this text will not focus on Box-Cox transformations in general, but we will focus on a special case, the log transformation.
+Some commonly used variance-stabilizing transformations are the square-root transformation, $\sqrt{y}$, and the reciprocal transformation, $1/y$ . In fact, the square root and reciprocal transformations are just two examples from the class of transformations called the **Box-Cox transformations** [@box1964analysis]. These transformations are designed to handle a non-normal response variable of any shape. While Box-Cox transformations, such as $\sqrt{y}$ and $1/y$, can be the optional choice for stabilizing variance and making the distribution of the response variable more normal (recall the normality condition), it is often difficult to interpret the coefficients for models with such transformed response variables in a way that can be easily understood by readers. Therefore, this text will not focus on Box-Cox transformations in general, but we will focus on a special case, the log transformation.
 
 Let's consider another transformation for the response variable that can help address the violations in the equal variance condition while also being easily interpreted by the reader. We can apply a natural log transformation on the response variable, $\log(y)$ (also written as $\ln(y)$), such that $\log(y)$ has the linear relationship with the predictor variables. @eq-log-y shows the statistical model when applying such transformation to the response variable.
 
@@ -530,7 +530,7 @@ ncaa_bivariate_orig
 ncaa_bivariate_logy
 ```
 
-Now we fit the main effects model using `log(expenditure_m)`, the log-transformed expenditure, as the response variable. The output for the new is in @tbl-ncaa-model-logy and the equation is in @eq-ncaa-model-logy.
+Now we fit the main effects model using `log(expenditure_m)`, the log-transformed expenditure, as the response variable. The output for the new model is in @tbl-ncaa-model-logy and the equation is in @eq-ncaa-model-logy.
 
 ```{r}
 #| label: tbl-ncaa-model-logy
@@ -573,7 +573,7 @@ ncaa_orig_resid
 ncaa_logy_resid
 ```
 
-Comparing the plots in @fig-ncaa-logy-resid, the first observation is that the $y$-axis differs on the plots. This is the because the residuals are on the same scale and use the same units as the response variable. The residuals in @fig-ncaa-logy-resid-1 are in terms of the original variable `expenditure_m`, and the residuals in @fig-ncaa-logy-resid-2 are in terms of `log(expenditure_m)`. The same is true for the predicted values on the $x$-axis. The second observation is that the vertical spread of the residuals is much more equal @fig-ncaa-logy-resid-2 with the log-transformed response variable. Given this, it appears applying a log transformation on the response variable has addressed some of the problems with the equal variance condition.
+Comparing the plots in @fig-ncaa-logy-resid, the first observation is that the $y$-axis differs on the plots. This is the because the residuals are on the same scale and use the same units as the response variable. The residuals in @fig-ncaa-logy-resid-1 are in terms of the original variable `expenditure_m`, and the residuals in @fig-ncaa-logy-resid-2 are in terms of `log(expenditure_m)`. The same is true for the predicted values on the $x$-axis. The second observation is that the vertical spread of the residuals is much more equal in @fig-ncaa-logy-resid-2 with the log-transformed response variable. Given this, it appears applying a log transformation on the response variable has addressed some of the problems with the equal variance condition.
 
 We can consider other transformations to improve the model fit even more; we'll discuss those as the chapter continues. For now, let's interpret the coefficients for the model in @tbl-ncaa-model-logy. The approach for interpreting the model coefficients in terms of the log-transformed response variable is the same as the one introduced in @sec-transform-logy for other multiple linear regression models. Below are the interpretations for `enrollment_th` and `regionNortheast` in terms of `log(expenditure)`.
 
@@ -624,7 +624,7 @@ The intercept, the expected response when all predictors are equal to 0, is $e^{
 Is the interpretation of the intercept for the model in @tbl-ncaa-model-logy meaningful? If not, what can we do to make the interpretation meaningful?[^09-mlr-transformations-5]
 :::
 
-[^09-mlr-transformations-5]: No. The interpretation of the intercept is not meaningful, because there cannot be a college with 0 students. We could center `enrollment_th` , so that the intercept represents colleges with some other value of enrollment (e.g., the mean enrollment in the data).
+[^09-mlr-transformations-5]: No. The interpretation of the intercept is not meaningful, because there cannot be a college with 0 students. We could center `enrollment_th`, so that the intercept represents colleges with some other value of enrollment (e.g., the mean enrollment in the data).
 
 ## Transformation on predictor variable(s) {#sec-transform-logx}
 
@@ -647,7 +647,7 @@ At this point, we are using the original response variable, `expenditure_m`, so 
 
 ```{r}
 #| label: tbl-ncaa-model-logx
-#| tbl-cap: "Output of model with log-transformed `enrollment_th`"
+#| tbl-cap: "Output of the model with log-transformed `enrollment_th`"
 #| eval: true
 
 ncaa_model_logx <- lm(expenditure_m ~ log(enrollment_th) + region + type, data = ncaa_basketball)
@@ -685,7 +685,7 @@ $\beta_j\log(CX_j) = \beta_j[\log(C) + \log(X_j)] = \beta_j\log(C) + \beta_j \lo
 
 Now let's interpret the effect of `enrollment_th` in terms of the expected change in `expenditure_m` when `enrollment_th` doubles ($C = 2$).
 
-> When the enrollment doubles (is multiplied by 2), the expenditure on basketball programs at NCAA Division 1 institutions is expected to increase by `r round(log(2) * model_logx_enrollment, 3)` (`r round(model_logx_enrollment, 3)` $\times$ log(2)) million dollar, on average, holding type and region constant.
+> *When the enrollment doubles (is multiplied by 2), the expenditure on basketball programs at NCAA Division 1 institutions is expected to increase by `r round(log(2) * model_logx_enrollment, 3)` (`r round(model_logx_enrollment, 3)`* $\times$ *log(2)) million dollars, on average, holding type and region constant.*
 
 When writing these interpretations, the constant $C$ can take any value between $-\infty$ and $\infty$. When choosing $C$, however, we need to be mindful about potential extrapolation and writing interpretations for values far outside the range of the data. Use values of $C$ between 1 and 2 to reduce potential extrapolation. Values in this range provide straightforward interpretations about the expected change when there is some percentage increase in the predictor (for example, $C = 1.1$ equals a 10% increase in the value of the predictor). Note, however, that there is a risk of extrapolating for observations with values at or near the maximum value of the predictor. For example, there is a college in the data with enrollment around 59,000. We should be cautious when using the model to interpret the expected change when enrollment doubles for this institution. This would equal an enrollment of over 118,000 students, which is far outside the range of the data. We cannot safely assume the relationship between `enrollment_th` and `expenditure_m` observed in @tbl-ncaa-model-logx is the same for colleges with such high enrollment (or that such colleges even exist!).
 
@@ -713,7 +713,7 @@ The plot of the residuals versus fitted values for the model @tbl-ncaa-model-log
 
 ## Transformation on the response variable and predictor variable(s) {#sec-transform-logx-logy}
 
-Models with transformations on both the response variable and one or more quantitative predictor variables can both address violations in the equal variance condition and capture non-linear relationships. Given what we have observed in the exploratory data analysis in @sec-ncaa-eda and the residual plots in @fig-ncaa-orig-resid, @fig-ncaa-logy-resid , and @fig-ncaa-logx-resid, we will now fit a model using both `log(expenditure_m)` and `log(enrollment_th)`.
+Models with transformations on both the response variable and one or more quantitative predictor variables can both address violations in the equal variance condition and capture non-linear relationships. Given what we have observed in the exploratory data analysis in @sec-ncaa-eda and the residual plots in @fig-ncaa-orig-resid, @fig-ncaa-logy-resid, and @fig-ncaa-logx-resid, we will now fit a model using both `log(expenditure_m)` and `log(enrollment_th)`.
 
 @eq-mlr-logx-logy is the general form of the model with a log-transformed response variable and a log-transformed predictor variable $x_j$ is shown in
 
@@ -728,7 +728,7 @@ $$\begin{aligned}
 
 ```{r}
 #| label: tbl-ncaa-model-logx-logy
-#| tbl-cap: Output of model with log-transformed expenditure and log-transformed enrollment
+#| tbl-cap: Output of the model with log-transformed expenditure and log-transformed enrollment
 
 ncaa_model_logx_logy <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type, data = ncaa_basketball)
 
@@ -761,9 +761,9 @@ The interpretation for $\beta_j$, the coefficient for $\log(X_j)$ in @eq-mlr-log
 $e^{a\log(b)} = b^a$
 :::
 
-Note that this interpretation is very similar to the interpretation from @sec-transform-logx, when there is a log-transformed predictor variable. The full mathematical details to get back to the original response variable are in @sec-transform-x-y-math .The final interpretation in terms of the original response variable when $X_j$ is multiplied by $C$ is
+Note that this interpretation is very similar to the interpretation from @sec-transform-logx, when there is a log-transformed predictor variable. The full mathematical details to get back to the original response variable are in @sec-transform-x-y-math. The final interpretation in terms of the original response variable when $X_j$ is multiplied by $C$ is
 
-> *When* $X_j$ *multiplies by a factor of* $C$*,* $Y$ *is expected multiply by a factor of* $C^{\beta_j}$ *, holding all else constant.*
+> *When* $X_j$ *multiplies by a factor of* $C$*,* $Y$ *is expected multiply by a factor of* $C^{\beta_j}$*, holding all else constant.*
 
 Now let's use this to interpret `enrollment_th` for the model in @tbl-ncaa-model-logx-logy. Below is the interpretation in terms of a 20% increase in enrollment, $C = 1.2$.
 
@@ -939,7 +939,7 @@ ncaa_model_final <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type +
                        data = ncaa_basketball)
 ```
 
-The function `exp()` is used to exponentiate coefficients when writing interpretations for models with a log-transformed response variable. For example, $e^2$ is computed as `exp(2)` in R. Below is code and output to make a new column with the exponentiated coefficients for the final model with `log(enrollment_th)`, `log(expenditure_m)`, and the interaction term. Note when displaying results using `tidy()` the coefficients are contained in the column `estimate` .
+The function `exp()` is used to exponentiate coefficients when writing interpretations for models with a log-transformed response variable. For example, $e^2$ is computed as `exp(2)` in R. Below is code and output to make a new column with the exponentiated coefficients for the final model with `log(enrollment_th)`, `log(expenditure_m)`, and the interaction term. Note when displaying results using `tidy()` the coefficients are contained in the column `estimate`.
 
 ```{r}
 #| echo: true
@@ -954,7 +954,7 @@ Below is the code and output for the model in @tbl-ncaa-model-logx-logy-int in t
 
 ```{r}
 #| label: tbl-ncaa-final-exponentiated
-#| tbl-cap: Exponentiated coefficients for model using log-transformed repsonse and predictor
+#| tbl-cap: Exponentiated coefficients for model using log-transformed response and predictor
 #| echo: true
 
 
