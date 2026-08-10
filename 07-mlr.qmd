@@ -84,7 +84,7 @@ lemurs_sample_young |> write_csv("data/lemurs-sample-young.csv")
 
 <!--# Lemur Tidy Tuesday: https://github.com/rfordatascience/tidytuesday/blob/main/data/2021/2021-08-24/readme.md -->
 
-About 95% of lemur species are at risk of extinction, so it is important for researchers to study and better understand lemurs to more effectively save these species [@tidytuesday]. The Duke Lemur Center currently has over 250 lemurs from 12 species. It has the most diverse population of lemurs outside of Madagascar, the native home for lemurs [@duke2025meetlemurs]. <!--# do i need more specific citation?--> In this chapter, we will use various characteristics to understand the variability in the weight of lemurs who are 24 months old or younger. We refer to this group of lemurs as "young lemurs" throughout the analysis. <!--# Insert some reasoning about why we would care to study these lemurs or what's different when they are young--> The data contains the weight and other features of young lemurs from three taxon (ERUF, PCOQ, and VRUB) <!--# reference image?--> who lived at the Duke Lemur Center at the time the data were collected. The data were originally from @zehrlife and were featured as part of the TidyTuesday weekly data visualization challenge in August 2021 [@tidytuesday].
+About 95% of lemur species are at risk of extinction, so it is important for researchers to study and better understand lemurs to more effectively save these species [@tidytuesday]. The Duke Lemur Center currently has over 250 lemurs from 12 species. It has the most diverse population of lemurs outside of Madagascar, the native home for lemurs [@duke2025meetlemurs]. <!--# do i need more specific citation?--> In this chapter, we will use various characteristics to understand the variability in the weight of lemurs who are 24 months old or younger. We refer to this group of lemurs as "young lemurs" throughout the analysis. <!--# Insert some reasoning about why we would care to study these lemurs or what's different when they are young--> The data contains the weight and other features of young lemurs from three taxa (ERUF, PCOQ, and VRUB) <!--# reference image?--> who lived at the Duke Lemur Center at the time the data were collected. The data were originally from @zehrlife and were featured as part of the TidyTuesday weekly data visualization challenge in August 2021 [@tidytuesday].
 
 ::: {#fig-lemurs layout-ncol="3"}
 ![Eulemur rufus (ERUF)](images/06-eruf-lemur.jpg){fig-align="center"}
@@ -107,8 +107,8 @@ The data are in `lemurs-sample-young.csv`. This analysis in this chapter focuses
   - `PCOQ`: Propithecus coquereli, commonly known as Coquerel's sifaka
 
   - `VRUB`: Varecia rubra, commonly known as Red ruffed lemur
-- `sex` : Sex of lemur (`M`: Male, `F`: Female)
-- `age`: Age of lemur when weight was recorded (in months)
+- `sex` : Sex of the lemur (`M`: Male, `F`: Female)
+- `age`: Age of the lemur when weight was recorded (in months)
 - `litter_size`: Total number of infants in the litter the lemur was born into (this includes the observed lemur)
 
 ::: {.objective latex=""}
@@ -249,7 +249,7 @@ Based on the medians and large overlap in the boxplots in @fig-mlr-bivariate-3, 
 
 @fig-mlr-bivariate-4 shows the relationship between `litter_size` and `weight`. Random noise (a very small value drawn from a uniform distribution) was added to make the relationship easier to visualization. Because `litter_size` is discrete, the observations would fall into straight vertical lines, making it more challenging to understand the relationship between the two variables. Based on this scatterplot, the relationship between `litter_size` and `weight` appears to be positive and relatively weak.
 
-Now that we have a better understanding of the variables in this analysis, we will use a multiple linear regression model to understand how taxon, litter size, age, and sex explains variability in the weight of lemurs. Before looking at the model specific to this data, we will discuss the details of the multiple linear regression model, in general, and to determine if a multiple linear regression model is appropriate for the data.
+Now that we have a better understanding of the variables in this analysis, we will use a multiple linear regression model to understand how taxon, litter size, age, and sex explain variability in the weight of lemurs. Before looking at the model specific to this data, we will discuss the details of the multiple linear regression model, in general, and to determine if a multiple linear regression model is appropriate for the data.
 
 <!--# add something about the outlier and you'll explore as an exercise if this is an influential point-->
 
@@ -263,7 +263,7 @@ Recall from @sec-fit-regression that the general form of a model for a response 
 
 $$Y = \text{Model} + \text{Error}$$ {#eq-general-model-recap}
 
-In the case of simple linear regression, $\text{Model} = f(X)$ where $X$ is the predictor variable used to explain the variability in $Y$. Now we will expand @eq-general-model-recap to the case in which multiple predictor variables, denoted $\mathbf{X} = X_1, X_2, \ldots, X_p$ are used in combination to explain variability in the response variable $Y$. The values of the response variable $Y$ are generated based on the following equation
+In the case of simple linear regression, $\text{Model} = f(X)$ where $X$ is the predictor variable used to explain the variability in $Y$. Now we will expand @eq-general-model-recap to the case in which multiple predictor variables, denoted $\mathbf{X} = X_1, X_2, \ldots, X_p$, are used in combination to explain variability in the response variable $Y$. The values of the response variable $Y$ are generated based on the following equation
 
 $$\begin{aligned}
 Y &= \text{Model} + \text{Error} \\[5pt]
@@ -362,7 +362,7 @@ The fitted model for explaining variability in the weight of young lemurs is in 
 
 ```{r}
 #| label: tbl-lemurs-model
-#| tbl-cap: Output of model using various characteristics to explain variability in weight of young lemurs
+#| tbl-cap: Output of the model using various characteristics to explain variability in weight of young lemurs
 #| echo: false
 
 lemurs_model <- lm(weight ~ age + sex + 
@@ -400,10 +400,10 @@ age_coef_slr <- lm(weight ~ age, data = lemurs) |>
     round(3)
 ```
 
-In the model in @tbl-lemurs-age-model-slr that only uses `age` to predict `weight`, the weight is expected to increase by `r age_coef_slr` grams, on average for each month increase in age. If we also take into account sex, taxon, and litter size in addition to age, then the weight is expected to increase by `r round(age_coef, 3)` grams, on average, as age increases by one month. This means some of the change in weight as age increases in @tbl-lemurs-age-model-slr can be explained by the other predictors in @tbl-lemurs-model.
+In the model in @tbl-lemurs-age-model-slr that only uses `age` to predict `weight`, the weight is expected to increase by `r age_coef_slr` grams, on average, for each month increase in age. If we also take into account sex, taxon, and litter size in addition to age, then the weight is expected to increase by `r round(age_coef, 3)` grams, on average, as age increases by one month. This means some of the change in weight as age increases in @tbl-lemurs-age-model-slr can be explained by the other predictors in @tbl-lemurs-model.
 
 \
-We write the interpretation of the coefficients in a multiple linear regression models in a way that indicates there are other variables being taken into account in the model. There are two commonly used ways to word this. The first is by interpreting the coefficient $\beta_j$ as the expected change in the response variable when $x_j$ increases by one unit, *adjusting for all other predictors in the model*. This interpretation means that once we have taken into account the relationship between all the other predictors and the response variable, then we have isolated the effect of the predictor $x_j$ and thus can explain the relationship between the response variable and the predictor $x_j$. The second way is to specify that *all other predictors are held constant*. This means that if have two observations with the same values for all other predictors, then we see how the value of the response is expected to change between these two observations as $x_j$ changes. <!--# Add something noting that these are th same thing-->
+We write the interpretation of the coefficients in a multiple linear regression model in a way that indicates there are other variables being taken into account in the model. There are two commonly used ways to word this. The first is by interpreting the coefficient $\beta_j$ as the expected change in the response variable when $x_j$ increases by one unit, *adjusting for all other predictors in the model*. This interpretation means that once we have taken into account the relationship between all the other predictors and the response variable, then we have isolated the effect of the predictor $x_j$ and thus can explain the relationship between the response variable and the predictor $x_j$. The second way is to specify that *all other predictors are held constant*. This means that if have two observations with the same values for all other predictors, then we see how the value of the response is expected to change between these two observations as $x_j$ changes. <!--# Add something noting that these are th same thing-->
 
 Let's apply this to interpret `age` in the model in @tbl-lemurs-model. The following are two acceptable forms of the interpretation:
 
@@ -533,7 +533,7 @@ lemurs_model_intercept <- tidy(lemurs_model) |> filter(term == "(Intercept)") |>
 
 - PCOQ: `r round(pcoq_coef, 3) + round(lemurs_model_intercept, 3)` (`r round(lemurs_model_intercept,3)` + `r round(pcoq_coef, 3)`)
 
-- VRUB: `r round(vrub_coef, 3) + round(lemurs_model_intercept, 3)` (`r round(lemurs_model_intercept,3)` + `r round(vrub_coef, 3)` )
+- VRUB: `r round(vrub_coef, 3) + round(lemurs_model_intercept, 3)` (`r round(lemurs_model_intercept,3)` + `r round(vrub_coef, 3)`)
 
 This shift in the intercept is visually represented in the scatterplot of `age` versus `weight` by `taxon` in @fig-lemur-intercepts.
 
@@ -567,7 +567,7 @@ The other categorical predictor in the model in @tbl-lemurs-model is `sex`.
 - What is the intercept for female lemurs? For male lemurs?[^07-mlr-4]
 :::
 
-[^07-mlr-4]: The baseline level for sex is "F" (Female). The average weight for male lemurs is about `r round(abs(sex_coef), 3)` grams less than the average weight for female lemurs, holding taxon, age, and litter size constant. The intercept for female lemurs is `r round(lemurs_model_intercept, 3)`. The intercept for male lemurs is `r round(lemurs_model_intercept, 3) + round(sex_coef, 3)` (`r round(lemurs_model_intercept, 3)` + `r round(sex_coef, 3)` ).
+[^07-mlr-4]: The baseline level for sex is "F" (Female). The average weight for male lemurs is about `r round(abs(sex_coef), 3)` grams less than the average weight for female lemurs, holding taxon, age, and litter size constant. The intercept for female lemurs is `r round(lemurs_model_intercept, 3)`. The intercept for male lemurs is `r round(lemurs_model_intercept, 3) + round(sex_coef, 3)` (`r round(lemurs_model_intercept, 3)` + `r round(sex_coef, 3)`).
 
 ### Interpreting the intercept {#sec-intercept}
 
@@ -578,7 +578,7 @@ As with simple linear regression, the intercept is the expected value of the res
 - `age = 0`: The lemur is 0 months old at the time of the weight
 - `sexM = 0`: The lemur is female.
 - `taxonPCOQ = 0` and `taxonVRUB = 0`: The lemur is from the ERUF taxon. (See @tbl-indicators to confirm this)
-- `litter_size = 0`: There were 0 lemurs in the litter size in which the lemurs born. (Note that this is not a possible in the data set).
+- `litter_size = 0`: There were 0 lemurs in the litter size in which the lemurs born. (Note that this is not possible in the data set).
 
 Based on the model, the expected weight for such lemurs is about `r round(lemurs_model_intercept, 3)` grams.
 
@@ -602,7 +602,7 @@ Based on these criteria, do you think the interpretation of the intercept is mea
 
 The same process is used to predict for multiple linear regression as the one introduced in @sec-slr-predict for simple linear regression. Now that there are two or more predictor variables, we need to input a value for every predictor variable.
 
-For example, suppose we wish to use the model in @tbl-lemurs-model to compute the predicted weight for a 10-month old male lemur in the VRUB taxon who was born into a litter of 4 lemurs. We compute this value by plugging in the value for the new observation into the model equation as shown in @eq-lemurs-predict.\
+For example, suppose we wish to use the model in @tbl-lemurs-model to compute the predicted weight for a 10-month old male lemur in the VRUB taxon who was born into a litter of 4 lemurs. We compute this value by plugging the value for the new observation into the model equation as shown in @eq-lemurs-predict.\
 
 $$\begin{aligned}
 \widehat{\text{weight\_g}} &= 43.844 \\ &+ 136.903 \times 10 \\ &- 88.838 \times 1 \\ &+ 471.715 \times 0 \\ &+ 1037.323 \times 1 \\ &- 19.607 \times 4 \\
@@ -615,7 +615,7 @@ Use the equation in @tbl-lemurs-model to compute the predicted value for a 14-mo
 
 [^07-mlr-6]: $\widehat{\text{weight\_g}} = 43.844 + 136.903 \times 14 - 88.838 \times 0 + 471.715 \times 0 + 1037.323 \times 0 - 19.607 \times 2 = 1921.272$\$
 
-It is important to avoid extrapolation when making predictions using a multiple linear regression model. This can sometimes to be challenging to assess, as extrapolation might occur both in terms of a single predictor variable being far outside the range in the data but also in terms of a combination of predictors being outside the general patterns observed in the data. When working with real-world data, we can consider if the combination of predictor values can be realistically observed in the population being studied. If that is the case, and the data are representative of the population, then the combination of values if likely to be within the trend represented in the data.
+It is important to avoid extrapolation when making predictions using a multiple linear regression model. This can sometimes to be challenging to assess, as extrapolation might occur both in terms of a single predictor variable being far outside the range in the data but also in terms of a combination of predictors being outside the general patterns observed in the data. When working with real-world data, we can consider if the combination of predictor values can be realistically observed in the population being studied. If that is the case, and the data are representative of the population, then the combination of values is likely to be within the trend represented in the data.
 
 One more consideration for prediction is that we expect there to be some uncertainty in the predicted values, because they are computed based on a model fit using sample data. <!--# We will discuss this uncertainty further in @sec-ch-mlr-inf.--> <!--# need to add something about prediction intervals-->
 
@@ -635,7 +635,7 @@ We need an intercept to fit the least-squares regression model, but it may not h
 
 **Centering** a predictor means to shift every observation of that predictor by a single constant, denoted $C$. For example, given a predictor $X$, then the centered version of the predictor is $X_{cent} = X - C$. Thus when $X_{cent}$ is a predictor in the model (instead of $X$), then the intercept is now the expected response when $X_{cent} = X - C = 0$, which occurs when $X = C$.
 
-In the previous section, we determined that it is not possible for the litter size to be 0, because the litter size includes the observed lemur. Therefore, we can use centering to create a new variable `litter_size_cent` by shifting `litter_size` by 1, so that `litter_size_cent = 0` means `litter_size = 1` . Though it is not always the case, the newly centered variable `litter_size_cent` has a new meaningful interpretation. It is the number of siblings of in the litter. Putting this together, `litter_size_cent` = 0 means the lemur was born into a litter with no siblings.
+In the previous section, we determined that it is not possible for the litter size to be 0, because the litter size includes the observed lemur. Therefore, we can use centering to create a new variable `litter_size_cent` by shifting `litter_size` by 1, so that `litter_size_cent = 0` means `litter_size = 1` . Though it is not always the case, the newly centered variable `litter_size_cent` has a new meaningful interpretation. It is the number of siblings in the litter. Putting this together, `litter_size_cent` = 0 means the lemur was born into a litter with no siblings.
 
 Because this centered variable has its own meaningful interpretation, we will rename the variable to more clearly indicate what this variable is measuring. We call the centered variable `litter_size_siblings` and use this name for the centered variable moving forward. The distributions of the original and centered variables are shown in @fig-centering and @tbl-centering.
 
@@ -677,7 +677,7 @@ lemurs |>
         digits = 1)
 ```
 
-From @fig-centering and @tbl-centering, we see that the only statistics that have changed are those about location (e.g., $Q1$, $Q3$, min, max) and those related the center (mean and median). The shape of the distribution and statistics regarding the spread (standard deviation and IQR) have remained the same after centering. By centering the variable we have essentially moved the distribution along the number line by some constant amount.
+From @fig-centering and @tbl-centering, we see that the only statistics that have changed are those about location (e.g., $Q1$, $Q3$, min, max) and those related to the center (mean and median). The shape of the distribution and statistics regarding the spread (standard deviation and IQR) have remained the same after centering. By centering the variable we have essentially moved the distribution along the number line by some constant amount.
 
 @fig-centering-bivariate shows the relationship between weight versus the original and centered values of `litter_size`. Both plots have the same slope, illustrating that the slope of the relationship between the predictor and response has not changed by centering. All that has changed is what in means to be "zero", what observations whose expected response is at the intercept. This is illustrated by the different intercepts for the models shown in the two plots.
 
@@ -738,7 +738,7 @@ lemurs |>
         digits = 1)
 ```
 
-Note that we do not mean-center the categorical predictors `sex` and `taxon`, because there is already a meaningful interpretation for the indicator variables for these predictors being equal to 0, and there is not a realistic notion of the "average taxon" or "average sex". Unlike the categorical predictors, we could mean-center `litter_size` as well.; however, we created the new variable `litter_size_siblings` by shifting by 1.
+Note that we do not mean-center the categorical predictors `sex` and `taxon`, because there is already a meaningful interpretation for the indicator variables for these predictors being equal to 0, and there is not a realistic notion of the "average taxon" or "average sex". Unlike the categorical predictors, we could mean-center `litter_size` as well; however, we created the new variable `litter_size_siblings` by shifting by 1.
 
 <!--# Key terms: Centering a variable is the process of shifting each observation by a constant amount $(X_{cent} = X - C$) -->
 
@@ -813,7 +813,7 @@ Thus far, we have interpreted the coefficients to understand the relationship be
 
 $$X_{std} = \frac{X - \bar{X}}{s_X}$$
 
-where $\bar{X}$ is the mean of $X$ and $s_{X}$ is the standard deviation of $X$. In addition to shifting the centered of the new distribution to be equal to 0, the standardized variable is rescaled such the standard deviation (and variance) of the standardized variable is 1. This is similar to computing a $z$- score from the normal distribution.
+where $\bar{X}$ is the mean of $X$ and $s_{X}$ is the standard deviation of $X$. In addition to shifting the center of the new distribution to be equal to 0, the standardized variable is rescaled such the standard deviation (and variance) of the standardized variable is 1. This is similar to computing a $z$-score from the normal distribution.
 
 <!--# Key term: Standardizing a variable is shifting it by its mean and dividing by its standard deviation-->
 
@@ -858,7 +858,7 @@ tidy(lemurs_model) |>
 ```
 
 ::: {.yourturn latex=""}
-The coefficients for `sexM` , `taxonPCOQ`, and `taxonVRUB` are the same across all three models. Why do these coefficients stay the same?[^07-mlr-7]
+The coefficients for `sexM`, `taxonPCOQ`, and `taxonVRUB` are the same across all three models. Why do these coefficients stay the same?[^07-mlr-7]
 :::
 
 [^07-mlr-7]: We only centered or standardized the quantitative predictors; we have not changed the categorical predictors. Recall that the indicator variables shift the intercept, and thus this did not change though the relationship between the response and the quantitative predictors may have changed.
@@ -893,7 +893,7 @@ We often standardize predictors when we want to identify which predictors are mo
 Based on @tbl-lemurs-model-std, which predictor is the least important for predicting the weight of lemurs?[^07-mlr-8]
 :::
 
-[^07-mlr-8]: The variable `litter_size` , because it has the coefficient with the smallest magnitude, \|`r abs(litter_std_coef)` \|= `r abs(litter_std_coef)` .
+[^07-mlr-8]: The variable `litter_size` , because it has the coefficient with the smallest magnitude, \|`r abs(litter_std_coef)` \| = `r abs(litter_std_coef)`.
 
 ## Interaction terms {#sec-mlr-interaction}
 
@@ -973,15 +973,15 @@ age_int_vrub <- tidy(lemurs_age_taxon_int) |>
 
 ```
 
-The model wit the interaction between `age` and `taxon` is in @tbl-lemurs-age-taxon-int-model. The interaction terms are indicated in the output in the format `var1:var2`; for example, the interaction term of `age` for the PCOQ taxon is labeled as `age:taxonPCOQ`.[^07-mlr-10] This individual term is an estimate of how much the slope of `age` differs between the taxa PCOQ and ERUF, the baseline. Thus, the interpretation is
+The model with the interaction between `age` and `taxon` is in @tbl-lemurs-age-taxon-int-model. The interaction terms are indicated in the output in the format `var1:var2`; for example, the interaction term of `age` for the PCOQ taxon is labeled as `age:taxonPCOQ`.[^07-mlr-10] This individual term is an estimate of how much the slope of `age` differs between the taxa PCOQ and ERUF, the baseline. Thus, the interpretation is
 
 [^07-mlr-10]: Another common format for interaction terms is $\text{age} \times \text{taxonPCOQ}$.
 
 > *The slope of age for lemurs in the PCOQ taxon is about `r age_int_pcoq` greater for lemurs in PCOQ compared to lemurs in the ERUF taxon. This means for each additional month older a lemur is, the weight of a PCOQ lemur is expected to increase by `r age_int_pcoq` grams [**more**]{.underline}, on average, compared to an ERUF lemur, holding sex and litter size constant.*
 
-This interpretation aligns with the steep slope of the line for the PCOQ species in @fig-lemurs-age-taxon-int. Note from the interpretation that coefficient of the interaction effect is how much the relationship between age and weight differ for the PCOQ species compared to the ERUF species, but it is [**not**]{.underline} the overall relationship between age and weight for PCOQ lemurs. To get that value, we must add the main effect of age (`age`) and the interaction effect (`age:taxonPCOQ`).
+This interpretation aligns with the steep slope of the line for the PCOQ species in @fig-lemurs-age-taxon-int. Note from the interpretation that the coefficient of the interaction effect is how much the relationship between age and weight differ for the PCOQ species compared to the ERUF species, but it is [**not**]{.underline} the overall relationship between age and weight for PCOQ lemurs. To get that value, we must add the main effect of age (`age`) and the interaction effect (`age:taxonPCOQ`).
 
-> *The overall slope of age for PCOQ lemurs is `r age_main + age_int_pcoq` (`r age_main` + `r age_int_pcoq` ). This means that among PCOQ lemurs, for each additional month in age, the weight is expected to be greater by `r age_main + age_int_pcoq` grams, on average, holding sex and litter size constant.*
+> *The overall slope of age for PCOQ lemurs is `r age_main + age_int_pcoq` (`r age_main` + `r age_int_pcoq`). This means that among PCOQ lemurs, for each additional month in age, the weight is expected to be greater by `r age_main + age_int_pcoq` grams, on average, holding sex and litter size constant.*
 
 ::: {.yourturn latex=""}
 What is the slope of `age` for lemurs in the VRUB taxon? Interpret it in the context of the data.[^07-mlr-11]
@@ -1062,7 +1062,7 @@ sex_int_vrub <- tidy(lemurs_sex_taxon_int) |>
 
 <!--# if i want to ignore the pvalues, figure out how other texts deal with this-->
 
-Similar to the interpretations in the previous section, the interaction terms tell us how much the effect of sex among PCOQ or VRUB lemurs differ compared to the effect of sex for the baseline, ERUF lemurs. For example, the interaction term for PCOQ lemurs, `sexM:taxonPCOQ` = `r sex_int_pcoq`. This interpretation of this value is as follows:
+Similar to the interpretations in the previous section, the interaction terms tell us how much the effect of sex among PCOQ or VRUB lemurs differ compared to the effect of sex for the baseline, ERUF lemurs. For example, the interaction term for PCOQ lemurs, `sexM:taxonPCOQ` = `r sex_int_pcoq`. The interpretation of this value is as follows:
 
 > *The difference in the average weight of male lemurs compared to female lemurs is predicted to be `r abs(sex_int_pcoq)` grams less for lemurs from the PCOQ taxon compared to those in the ERUF taxon, holding age and litter size constant.*
 
@@ -1079,7 +1079,7 @@ As before, to get the overall difference in the average weight between male and 
 
 ### Interaction between two quantitative predictors
 
-The last type of interaction is between two quantitative predictors. This type of interaction is less common than the interactions including at least one categorical predictor, but they can be found in some scientific contexts<!--# be more specific and find a reference / example here-->. For the lemurs analysis, we will look at the interaction effect between `age` and `litter_size`. As with the interaction effect between two categorical predictors, we can interpret the interaction between `age` and `litter_size` as how much the effect of litter size changes as age changes or how much the effect of age changes as litter size changes. While either of these interpretations would be statistically valid, we will focus on the how the effect of litter size changes as age changes. This will allow us to more directly explore whether the impact of a lemur's birth conditions (represented by the litter size) changes as the lemur gets older.
+The last type of interaction is between two quantitative predictors. This type of interaction is less common than the interactions including at least one categorical predictor, but they can be found in some scientific contexts<!--# be more specific and find a reference / example here-->. For the lemurs analysis, we will look at the interaction effect between `age` and `litter_size`. As with the interaction effect between two categorical predictors, we can interpret the interaction between `age` and `litter_size` as how much the effect of litter size changes as age changes or how much the effect of age changes as litter size changes. While either of these interpretations would be statistically valid, we will focus on how the effect of litter size changes as age changes. This will allow us to more directly explore whether the impact of a lemur's birth conditions (represented by the litter size) changes as the lemur gets older.
 
 Visualizations for the potential interaction effect between two quantitative predictors can be complex, because a continuous predictor can take on infinitely many values. Therefore, when visualizing the potential interaction effect, we will create bins for one of the predictors and use the bins to see how the value of one of the predictors changes based on the other. <!--# this sentence is very muddled--> @fig-lemurs-age-litter-int is a scatterplot exploring the potential interaction between age and litter size.
 
@@ -1103,7 +1103,7 @@ lemurs |>
        linetype = "Age")
 ```
 
-Because we are specifically interested in interpreting how the effect of litter size changes as age changes, we have created bins to mark off age ranges and looked a the scatterplot of litter size and weight for each bin.
+Because we are specifically interested in interpreting how the effect of litter size changes as age changes, we have created bins to mark off age ranges and looked at the scatterplot of litter size and weight for each bin.
 
 In @fig-lemurs-age-litter-int, the relationship between litter size and weight appears flatter for the older age groups, in particular the 20 - 25 month age group. This means it appears that litter size has much more impact on the weight among very young lemurs compared to those closer to two years old. As with all exploratory data analysis, we can not make a definitive conclusion based on this visualization alone, so we will fit a model with this interaction using the code below.
 
@@ -1150,7 +1150,7 @@ The coefficient of the main effect of `litter_size` is the effect of litter size
 What is the overall effect of litter size for lemurs who are 20 months old? Interpret this value in the context of the data.[^07-mlr-14]
 :::
 
-[^07-mlr-14]: The overall effect of litter size for lemurs who are 20 months old is `r litter_main + age_litter_int` . This means that for lemurs who are 20 months old, for each additional sibling in their litter, their weight is expected to be less by `r abs(litter_main + 20 * age_litter_int)` (`r litter_main` + `r 20` $\times$ `r age_litter_int` ), on average, holding sex and taxon constant.
+[^07-mlr-14]: The overall effect of litter size for lemurs who are 20 months old is `r litter_main + age_litter_int`. This means that for lemurs who are 20 months old, for each additional sibling in their litter, their weight is expected to be less by `r abs(litter_main + 20 * age_litter_int)` (`r litter_main` + `r 20` $\times$ `r age_litter_int`), on average, holding sex and taxon constant.
 
 ::: {.analysis_in_practice latex=""}
 In this section we only discussed interactions between two variables, but there can be interactions between three or more variables. Though such interactions are possible, they should be used with caution to avoid fitting the model too closely to the sample data and losing generalizability (called model overfit). These complex interactions also become difficult to interpret and can be harder to explain to a general audience.
@@ -1184,11 +1184,11 @@ tidy(lemurs_model) |>
   kable(digits = 3)
 ```
 
-The `tidy` function structures the model output into a data data frame, and `kable()` is used to display the results as a neatly formatted table.
+The `tidy` function structures the model output into a data frame, and `kable()` is used to display the results as a neatly formatted table.
 
 ### Prediction
 
-We use `predict()` to compute predicted values from multiple linear regression models. We begin by making a tibble that contains the values fo the new observation. The variable names in the tibble of new observations must match the column names in the original data exactly, including letter case. Additionally, the observed values of the categorical predictors are put in the tibble, not indicator variables. As with variable names, the values of the categorical predictors must be input exactly as they show in the data set (including case).
+We use `predict()` to compute predicted values from multiple linear regression models. We begin by making a tibble that contains the values of the new observation. The variable names in the tibble of new observations must match the column names in the original data exactly, including letter case. Additionally, the observed values of the categorical predictors are put in the tibble, not indicator variables. As with variable names, the values of the categorical predictors must be input exactly as they show in the data set (including case).
 
 ```{r}
 #| echo: true
@@ -1268,7 +1268,7 @@ lemurs_age_litter_int <- lm(weight ~ age + sex + taxon +
 
 ## Summary
 
-In this chapter, we introduced multiple linear regression, in which two or more predictor variables are used to understand variability and compute predictions for a quantitative response variable. We introduced a various different predictors that can be in the model, including categorical predictors and interaction terms. We showed how to use R to estimate model coefficients and compute predictions from the model. We expect there is uncertainty in the coefficient estimates produced by the regression model, given it was fit using sample data. In the next chapter, we will discuss inference for multiple linear regression and use it to draw conclusions about the relationships between the response and predictor variables.
+In this chapter, we introduced multiple linear regression, in which two or more predictor variables are used to understand variability and compute predictions for a quantitative response variable. We introduced various different predictors that can be in the model, including categorical predictors and interaction terms. We showed how to use R to estimate model coefficients and compute predictions from the model. We expect there is uncertainty in the coefficient estimates produced by the regression model, given it was fit using sample data. In the next chapter, we will discuss inference for multiple linear regression and use it to draw conclusions about the relationships between the response and predictor variables.
 
 <!--# Exercise-->
 
