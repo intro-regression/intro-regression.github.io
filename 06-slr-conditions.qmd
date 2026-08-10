@@ -48,7 +48,7 @@ library(skimr)
 
 <!--# add definitions of aroma and flavor from salt, acid, fat, heat in the "how salt affects flavor section-->
 
-What makes a delicious cup of coffee? Is there a relationship between a coffee's aroma and its flavor? We will consider these questions by analyzing data from the Coffee Quality Database (<https://database.coffeeinstitute.org/>). The data set used in this analysis was curated by James LeDoux and was featured as part of the TidyTuesday weekly data visualization challenge in July 2020 [@tidytuesday]. It contains a variety of features and quality ratings for over 1,000 coffees scraped from the Coffee Quality Database in 2018.<!--# add something about how the grades are determined-->The data are in `coffee-grades.csv`. We will use the following variables in this chapter:
+What makes a delicious cup of coffee? Is there a relationship between a coffee's aroma and its flavor? We will consider these questions by analyzing data from the Coffee Quality Database (<https://database.coffeeinstitute.org/>). The data set used in this analysis was curated by James LeDoux and was featured as part of the TidyTuesday weekly data visualization challenge in July 2020 [@tidytuesday]. It contains a variety of features and quality ratings for over 1,000 coffees scraped from the Coffee Quality Database in 2018. <!--# add something about how the grades are determined-->The data are in `coffee-grades.csv`. We will use the following variables in this chapter:
 
 - `aroma` : Aroma grade (0: worst aroma - 10: best aroma)
 
@@ -161,7 +161,7 @@ We use the model in @tbl-coffee-model to describe the relationship between the a
 
 From the interval in @tbl-coffee-model, we are 95% confident that for each additional point in the aroma grade, the flavor grade increases by `r round(conf_int$conf.low, 3)` to `r round(conf_int$conf.high, 3)` points, on average. In summary, coffees that smell better are expected to taste better!
 
-The inferential methods introduced in @sec-ch-slr-inf used to make conclusions about the relationship between the response and predictor variables rely on a set of underlying assumptions about the data. Though we are unable to check if these underlying conditions hold for the entire population, we will see in @sec-model-conditions how we are able to check a set of model conditions to evaluate whether these assumptions reasonably hold in the sample data.
+The inferential methods introduced in @sec-ch-slr-inf that are used to make conclusions about the relationship between the response and predictor variables rely on a set of underlying assumptions about the data. Though we are unable to check if these underlying conditions hold for the entire population, we will see in @sec-model-conditions how we are able to check a set of model conditions to evaluate whether these assumptions reasonably hold in the sample data.
 
 As seen in @fig-coffee-eda-3, there is an outlying observation that is outside the general trend of the data, given its aroma grade is much lower than the others but its flavor grade is around the average. This is a valid data point and not the result of data entry error; therefore, we'd like to evaluate whether this outlier has a noticeable impact on the estimated regression model and inferential conclusions. In @sec-model-diagnostics, we will introduce a set of model diagnostics to assess the potential impact of this observation on the results, and the impact of outliers more generally.
 
@@ -202,7 +202,7 @@ coffee_model_aug <- augment(coffee_model) |>
 
 The **linearity** condition states that there is a linear relationship between the response and predictor variable. Though we don't expect the relationship between the two variables to be perfectly linear, it should be linear enough that it would be reasonable to summarize the relationship between the two variables using the linear regression model.
 
-Recall from @sec-coffee-intro that we used a scatterplot and the correlation coefficient to describe the shape and other features of the relationship between the `aroma` (predictor) and `flavor` (response). This exploratory data analysis provides an initial assessment of whether the linear regression model seems like a reasonable fit for the data. For example, if we saw a clear curve in the scatterplot or calculated a correlation coefficient close to 0, we might conclude that the proposed linear regression model would not sufficiently capture the relationship between the two variables and thus rethink the modeling strategy. While the exploratory data analysis can help provide initial assessment and help us thoughtfully consider our modeling approach, it should [**not**]{.underline} be solely relied upon as the final evaluation of whether the proposed model sufficiently captures the relationship between the two variables. We analyze the residuals for that assessment.
+Recall from @sec-coffee-intro that we used a scatterplot and the correlation coefficient to describe the shape and other features of the relationship between the `aroma` (predictor) and `flavor` (response). This exploratory data analysis provides an initial assessment of whether the linear regression model seems like a reasonable fit for the data. For example, if we saw a clear curve in the scatterplot or calculated a correlation coefficient close to 0, we might conclude that the proposed linear regression model would not sufficiently capture the relationship between the two variables and thus rethink the modeling strategy. While the exploratory data analysis can help provide an initial assessment and help us thoughtfully consider our modeling approach, it should [**not**]{.underline} be solely relied upon as the final evaluation of whether the proposed model sufficiently captures the relationship between the two variables. We analyze the residuals for that assessment.
 
 <!--# Why not rely on EDA to conclude linearity?-->
 
@@ -235,7 +235,7 @@ When we fit a linear regression model, we are using the predictor to explain som
 
 ```{r}
 #| label: fig-linearity-not-met
-#| fig-cap: Example of violation in linearity condition. The residuals are not randomly scattered around 0. Based on the plot, we can generally guess with some certainty whether the residual will be positive or negative for a given predicted value or range of predicted values. 
+#| fig-cap: Example of violation in the linearity condition. The residuals are not randomly scattered around 0. Based on the plot, we can generally guess with some certainty whether the residual will be positive or negative for a given predicted value or range of predicted values. 
 #| echo: false
 
 set.seed(0321) # march 21, the day i made this plot :)
@@ -312,7 +312,7 @@ The next condition is **normality**, that the residuals are normally distributed
 
 ```{r}
 #| label: fig-coffee-normality
-#| fig-cap: "The distribution of the residuals for model of `flavor` and `aroma` with normal density curve"
+#| fig-cap: "The distribution of the residuals for the model of `flavor` and `aroma` with normal density curve"
 #| echo: false
 
 mean_resid <- mean(coffee_model_aug$.resid)
@@ -331,7 +331,7 @@ ggplot(data = coffee_model_aug, aes(x = .resid)) +
 
 ```
 
-@fig-coffee-normality shows the distribution of the residuals along with the theoretical curve for a normal distribution that is centered at `r round(mean_resid, 3)` the mean of the residuals, and a standard deviation of `r round(sd_resid, 3)`, the standard deviation of the residuals. Similar to the other conditions, we are looking for obvious departures from normality when assessing this condition. This might include strong skewness, multiple modes, large outliers, or other major departures from normality.
+@fig-coffee-normality shows the distribution of the residuals along with the theoretical curve for a normal distribution that is centered at `r round(mean_resid, 3)`, the mean of the residuals, and a standard deviation of `r round(sd_resid, 3)`, the standard deviation of the residuals. Similar to the other conditions, we are looking for obvious departures from normality when assessing this condition. This might include strong skewness, multiple modes, large outliers, or other major departures from normality.
 
 From @fig-coffee-normality, we see the distribution of the residuals is approximately normal, as the shape of the histogram is unimodal and symmetric, the general shape of the normal curve. Therefore, we conclude that **the normality condition is satisfied**.
 
@@ -341,9 +341,9 @@ From @fig-coffee-normality, we see the distribution of the residuals is approxim
 
 ### Equal variance
 
-The last condition is **equal variance** (also called *constant variance*or *homoskedasticity*), that the variability of the residuals is approximately equal for each predicted value. This condition stems from the assumption in @sec-slr-foundation that $\sigma_{\epsilon}^2$ is equal for all values of the predictor, and thus for all predicted values.
+The last condition is **equal variance** (also called *constant variance* or *homoskedasticity*), that the variability of the residuals is approximately equal for each predicted value. This condition stems from the assumption in @sec-slr-foundation that $\sigma_{\epsilon}^2$ is equal for all values of the predictor, and thus for all predicted values.
 
-To check this condition, we will go back to the plot of the residuals versus predicted values from @fig-coffee-linearity. We look to see if the vertical spread of the residuals is approximately equal as we move along the $x$-axis. Since we are working with sample data, we don't expect the vertical spread of the residuals to be exactly equal as we move along the $x$-axis (for example, there may be outliers). Therefore, similar to previous conditions, we are looking for obvious departures from equal variance to conclude that the condition is not met. @fig-equal-var-not-met shows an example using simulated data of plot of residuals versus fitted when the equal variance condition is not satisfied. There is a distinguishable "fan-shape" showing that the spread of the residuals increases as the predicted value increases. Additionally, keep in mind that we are examining the vertical spread for the majority of the data, not including outliers in the assessments as shown by the dotted lines in @fig-coffee-equal-var to serve as a guide as we assess equal variance.
+To check this condition, we will go back to the plot of the residuals versus predicted values from @fig-coffee-linearity. We look to see if the vertical spread of the residuals is approximately equal as we move along the $x$-axis. Since we are working with sample data, we don't expect the vertical spread of the residuals to be exactly equal as we move along the $x$-axis (for example, there may be outliers). Therefore, similar to previous conditions, we are looking for obvious departures from equal variance to conclude that the condition is not met. @fig-equal-var-not-met shows an example using simulated data in a plot of residuals versus fitted when the equal variance condition is not satisfied. There is a distinguishable "fan-shape" showing that the spread of the residuals increases as the predicted value increases. Additionally, keep in mind that we are examining the vertical spread for the majority of the data, not including outliers in the assessments as shown by the dotted lines in @fig-coffee-equal-var to serve as a guide as we assess equal variance.
 
 ```{r}
 #| label: fig-equal-var-not-met
@@ -392,7 +392,7 @@ From @fig-coffee-equal-var, the vertical spread of the residuals is approximatel
 
 - **Linearity**: Plot residuals versus predicted values. Look for points to be randomly scattered around 0 on the $y$-axis $(\text{residuals} = 0)$ .
 
-- **Independence**: Use the description of the data and data collection process to assess if the observations can reasonably be treated as independent. If data are collected over time, examine plot of residuals versus time to assess potential serial effect. If unaccounted for subgroups are represented in the data, examine plot of residuals versus predicted for each subgroup.
+- **Independence**: Use the description of the data and data collection process to assess if the observations can reasonably be treated as independent. If data are collected over time, examine the plot of residuals versus time to assess potential serial effect. If unaccounted for subgroups are represented in the data, examine the plot of residuals versus predicted for each subgroup.
 
 - **Normality**: Plot the distribution of the residuals. Look for a distribution that is approximately unimodal and symmetric.
 
@@ -401,13 +401,13 @@ From @fig-coffee-equal-var, the vertical spread of the residuals is approximatel
 
 ## Strategies when conditions aren't satisfied {#sec-conditions-not-satisfied}
 
-If all the model conditions are satisfied, we can move on to the next step in the analysis; however, that is sometimes not the case in practice. The good news is we there are a variety of methods to address violations in the model conditions. Additionally, many of the analysis tasks we do are robust to violations in some of the model conditions, meaning we can still obtain reliable analysis results, even if some conditions are not satisfied.
+If all the model conditions are satisfied, we can move on to the next step in the analysis; however, that is sometimes not the case in practice. The good news is there are a variety of methods to address violations in the model conditions. Additionally, many of the analysis tasks we do are robust to violations in some of the model conditions, meaning we can still obtain reliable analysis results, even if some conditions are not satisfied.
 
 For each model condition we will discuss the analysis tasks for which satisfying the model condition is very important and some approaches we can take to address the violations in the condition.
 
 ### Linearity
 
-The linearity condition is the most important condition, because the regression analysis relies on the assumption that the linear regression model adequately summarizes the relationship between the response and predictor variable (see @sec-slr-appropriate). Therefore, the linearity condition must be satisfied in order for any interpretations and conclusions from the regression analysis to be useful and reliable. This means it is necessary for fitting the linear model, interpreting the model coefficients, drawing conclusions inference conducted using simulation-based or theory-based methods.
+The linearity condition is the most important condition, because the regression analysis relies on the assumption that the linear regression model adequately summarizes the relationship between the response and predictor variable (see @sec-slr-appropriate). Therefore, the linearity condition must be satisfied in order for any interpretations and conclusions from the regression analysis to be useful and reliable. This means it is necessary for fitting the linear model, interpreting the model coefficients, and drawing conclusions from inference conducted using simulation-based or theory-based methods.
 
 If the linearity condition is not satisfied, we can ask ourselves a few questions:
 
@@ -436,7 +436,7 @@ By the Central Limit Theorem, we know the distribution of the estimate slope (th
 
 The normality condition is more important, however, when computing the interval for the predicted value for an individual observation. Recall from @sec-slr-theory-predict, that the standard error for these intervals takes into account variability about the regression line (variability in $\mu_{Y|X}$) in addition to variability in the distribution of $Y$ for a the given value of $X$. We assume the shape of this distribution is normal, thus the calculations of $SE_{\hat{y}}$ may be misleading if there are large departures from normality.
 
-A common threshold for a "large enough" sample size is 30. This means if the sample has at least 30 observations (which is often the case for modern data sets!), we can use all the methods we've discussed to fit a simple linear regression model and draw conclusions from inference, even if the residuals are not normally distributed. Thus the inferential methods based on the Central Limit Theorem are considered robust to violations in the normality assumption, because we can feel confident about the conclusions from the inferential procedures even if the normality condition is not satisfied (given $n > 30$). One note of caution is that 30 should be used as a general guideline but not a strict threshold. Therefore, if the sample size is very close to 30, then the inferential methods based on the Central Limit Theorem are not robust to major departures form normality such as extreme skewness or outliers.
+A common threshold for a "large enough" sample size is 30. This means if the sample has at least 30 observations (which is often the case for modern data sets!), we can use all the methods we've discussed to fit a simple linear regression model and draw conclusions from inference, even if the residuals are not normally distributed. Thus the inferential methods based on the Central Limit Theorem are considered robust to violations in the normality assumption, because we can feel confident about the conclusions from the inferential procedures even if the normality condition is not satisfied (given $n > 30$). One note of caution is that 30 should be used as a general guideline but not a strict threshold. Therefore, if the sample size is very close to 30, then the inferential methods based on the Central Limit Theorem are not robust to major departures from normality such as extreme skewness or outliers.
 
 Recall from @sec-ch-slr-inf the objective of simulation-based inference is to use the data to generate the sample distribution. Therefore, we do not make any assumptions about the sampling distribution of the estimated slopes. Because there are no assumptions about the sampling distribution, the normality condition is not required for simulation-based inferential procedures.
 
@@ -449,7 +449,7 @@ Thirty should not be treated as an absolute threshold. In other words, we should
 
 ### Equal variance
 
-The equal variance condition is as assessment of whether the distribution of the residuals is approximately equal for each value of the predictor variable. This is equivalent to the distribution of the response about the line for each predictor variable. The **regression standard error** $\hat{\sigma}_{\epsilon}$ is the estimated value of this variability about the line, and it is the assumed to be the same for all values of the predictor (see @sec-slr-foundation for more detail). When conducting inference based on the Central Limit Theorem, this regression standard error is used to calculate $SE_{\hat{\beta}_1}$, the estimated standard error for the estimated slopes. Thus similar to violations in the independence condition, if the variability about the regression line is not equal for all values of the predictor, the regression standard error will not be accurate and thus the standard error of the slope, our estimate of the sampling variability in this statistic will be inaccurate as well. The calculation of the confidence interval and test statistic for hypothesis testing both use $SE_{\hat{\beta}_1}$, so these values will likely be inaccurate as well. Therefore, we should approach conclusions from the theory-based inferential procedures with caution if the equal variance condition is not met.
+The equal variance condition is an assessment of whether the distribution of the residuals is approximately equal for each value of the predictor variable. This is equivalent to the distribution of the response about the line for each predictor variable. The **regression standard error** $\hat{\sigma}_{\epsilon}$ is the estimated value of this variability about the line, and it is the assumed to be the same for all values of the predictor (see @sec-slr-foundation for more detail). When conducting inference based on the Central Limit Theorem, this regression standard error is used to calculate $SE_{\hat{\beta}_1}$, the estimated standard error for the estimated slopes. Thus similar to violations in the independence condition, if the variability about the regression line is not equal for all values of the predictor, the regression standard error will not be accurate and thus the standard error of the slope, our estimate of the sampling variability in this statistic will be inaccurate as well. The calculation of the confidence interval and test statistic for hypothesis testing both use $SE_{\hat{\beta}_1}$, so these values will likely be inaccurate as well. Therefore, we should approach conclusions from the theory-based inferential procedures with caution if the equal variance condition is not met.
 
 Similar to the normality condition, the equal variance condition is not required for simulation-based inference, because $SE_{\hat{\beta}_1}$ is estimated from the sampling distribution simulated from the data.
 
@@ -489,11 +489,11 @@ A single observation could fall into multiple categories. For example look at th
 
 ### Influential points
 
-An observation is considered an **influential point** if the estimated regression coefficients noticeably differ when the point is included in the data used to fit the model versus when it is not. @fig-influential-point illustrates the potential impact an influential point can have on the estimated regression line. Additionally, influential points can affect $SE_{\hat{\beta}_1}$, estimated standard error of the slope, which can result in unreliable inferential conclusions as described in the previous section.
+An observation is considered an **influential point** if the estimated regression coefficients noticeably differ when the point is included in the data used to fit the model versus when it is not. @fig-influential-point illustrates the potential impact an influential point can have on the estimated regression line. Additionally, influential points can affect $SE_{\hat{\beta}_1}$, the estimated standard error of the slope, which can result in unreliable inferential conclusions as described in the previous section.
 
 ```{r}
 #| label: fig-influential-point
-#| fig-cap: Simulated data showing the effect of an infulential point representd by the red triangle. The slope of the line changes when the influential point is removed from the data set.
+#| fig-cap: Simulated data showing the effect of an influential point represented by the red triangle. The slope of the line changes when the influential point is removed from the data set.
 #| fig-subcap: 
 #|   - "With influential point"
 #|   - "Without influential point" 
@@ -537,7 +537,7 @@ Ultimately, we are most interested in examining Cook's distance, because it prov
 
 ### Leverage {#sec-slr-leverage}
 
-The **leverage** of the $i^{th}$ observation is a measure of how much influence an observation has on the predicted values, and thus the estimated coefficients (@hoaglin1978hat). It is computed by computing the distance between $x_i$ and the average value of the predictor across all $n$ observations, $\bar{x} = \frac{1}{n}\sum_{j=1}^n x_j$, relative to this distance across all observations.
+The **leverage** of the $i^{th}$ observation is a measure of how much influence an observation has on the predicted values, and thus the estimated coefficients (@hoaglin1978hat). It is computed as the distance between $x_i$ and the average value of the predictor variable across all $n$ observations, $\bar{x} = \frac{1}{n}\sum_{j=1}^n x_j$, relative to this distance across all observations.
 
 When doing simple linear regression, an observation's leverage, denoted $h_i$, is calculated using @eq-slr-leverage.
 
@@ -601,7 +601,7 @@ coffee_model_aug |>
   kable(digits = 3, col.names = c("Leverage", "aroma", "flavor"))
 ```
 
-Recall that the leverage only depends on the values of the predictor variable, so we only need to consider `aroma` to better understand why these points are high leverage. From the EDA in @sec-coffee-intro, the average aroma grade in the data set is `r round(mean(coffee_ratings$aroma), 3)` points and the standard deviation is `r round(sd(coffee_ratings$aroma), 3)` . The observations with the highest values of leverage have aroma grades that are either much higher (e.g., 8.75) or much lower (e.g., 5.08) than the average. Thus the high leverage points includes coffees that both smell much better and perhaps much worse than the majority of the coffees in the data.
+Recall that the leverage only depends on the values of the predictor variable, so we only need to consider `aroma` to better understand why these points are high leverage. From the EDA in @sec-coffee-intro, the average aroma grade in the data set is `r round(mean(coffee_ratings$aroma), 3)` points and the standard deviation is `r round(sd(coffee_ratings$aroma), 3)`. The observations with the highest values of leverage have aroma grades that are either much higher (e.g., 8.75) or much lower (e.g., 5.08) than the average. Thus the high leverage points include coffees that both smell much better and perhaps much worse than the majority of the coffees in the data.
 
 Even when we identify points with high leverage, we still want to understand how these points are (or are not) influencing the model results. Thus, knowing an observation has high leverage is not enough to warrant any specific action. We'll examine Cook's distance to determine if the observation is influential in the model in @sec-cooks-distance and discuss approaches to deal with such influential points in @sec-outliers-impact .
 
@@ -609,11 +609,11 @@ Even when we identify points with high leverage, we still want to understand how
 
 The residual is an indication of how well the regression model predicts the value of the response for a given observation. One reason the model may predict poorly for an observation is because it has an observed value of the response that is much different than the rest of the data. Therefore residuals can be used to identify observations that are outliers based on Scenario 2 in @sec-model-diagnostics. We will examine the magnitude of the residuals $|e_i|$ to identify such points, because residuals can be positive (model underpredicted) or negative (model overpredicted).
 
-The residuals have the same units as the response variable, so what is considered a residual with large magnitude depends on the scale and range of the response variable. This means what is considered a "large" residuals can be different for every analysis. We can address this by instead examining **standardized residuals**, defined as the residual divided by its standard error. @eq-std-resid shows the formula to calculate the standardized residual for the $i^{th}$ observation.
+The residuals have the same units as the response variable, so what is considered a residual with large magnitude depends on the scale and range of the response variable. This means what is considered a "large" residual can be different for every analysis. We can address this by instead examining **standardized residuals**, defined as the residual divided by its standard error. @eq-std-resid shows the formula to calculate the standardized residual for the $i^{th}$ observation.
 
 $$std.resid_i = \frac{e_i}{SE_{e_i}} = \frac{e_i}{\hat{\sigma}_{\epsilon} \sqrt{1 - h_i}}$$ {#eq-std-resid}
 
-The residuals for every analysis are now on the same scale. Thus, we can use a common threshold to determine residuals that are considered to have large magnitude. An observation is an outlier in the response if it its standardized residual has a magnitude greater than two, $|std.resid_i| > 2$ ($std.resid_i < - 2 \hspace{1mm} \text{ or }\hspace{1mm} std.resid_i > 2$). For large data sets, we recommend a more restrictive threshold of 3, so there is not an overwhelming number of observations considered outliers that may require further evaluation.
+The residuals for every analysis are now on the same scale. Thus, we can use a common threshold to determine residuals that are considered to have large magnitude. An observation is an outlier in the response if its standardized residual has a magnitude greater than two, $|std.resid_i| > 2$ ($std.resid_i < - 2 \hspace{1mm} \text{ or }\hspace{1mm} std.resid_i > 2$). For large data sets, we recommend a more restrictive threshold of 3, so there is not an overwhelming number of observations considered outliers that may require further evaluation.
 
 ::: {.analysis_in_practice latex=""}
 One assumption for linear regression is that the residuals are normally distributed and centered at 0 (see @sec-slr-foundation). This means the standardized residuals are normally distributed with mean of 0 and standard deviation of 1, $N(0,1)$. In a standard normal distribution, we expect about 95% of the observations to have values between -2 and 2. By setting 2 as the threshold, we are essentially identifying the 5% of observations with the most extreme (high and low) residuals.
@@ -657,9 +657,9 @@ coffee_large_resid <- coffee_model_aug |>
 
 <!--# maybe use visualization to show why these have big std residuals-->
 
-@fig-coffee-stdresid shows `r nrow(coffee_large_resid)` observations with large magnitude residuals based on the threshold $\pm 3$ . This includes observations that have positive residuals with large magnitude (indicating the model greatly underpredicted) and observations with negative residuals with large magnitude (indicating the model greatly overpredicted).
+@fig-coffee-stdresid shows `r nrow(coffee_large_resid)` observations with large magnitude residuals based on the threshold $\pm 3$. This includes observations that have positive residuals with large magnitude (indicating the model greatly underpredicted) and observations with negative residuals with large magnitude (indicating the model greatly overpredicted).
 
-These five observations with the largest magnitude residuals are shown in @tbl-coffee-large-resid.
+These are the five observations with the largest magnitude residuals are shown in @tbl-coffee-large-resid.
 
 <!--# think of a way to visualize observations with large magnitude residuals-->
 
@@ -676,7 +676,7 @@ coffee_large_resid |>
   kable(digits = 3)
 ```
 
-We see from @tbl-coffee-large-resid and @fig-coffee-large-resid that these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual that has a higher actual flavor rating than the model predicts based on its very low aroma rating.
+We see from @tbl-coffee-large-resid and @fig-coffee-large-resid that most of these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual which has a higher actual flavor rating than the model predicts based on its very low aroma rating.
 
 ```{r}
 #| echo: false
@@ -706,7 +706,7 @@ As with observations that have high leverage, we want to assess whether these po
 
 At this point we have introduced a diagnostic to identify outliers in the predictor variable (leverage) and one to identify outliers in the response variable (standardized residuals). Now we will use a single measure that combines information from the leverage and standardized residuals to identify potential influential points. This measure is called Cook's distance.
 
-**Cook's distance** [@cooksdistance] is a measure of an observation's overall impact on the estimated model coefficients. In @eq-cooks-d, we see that Cook's distance takes into account an observation's leverage, $h_i$, the standardized residuals, $std.resid_i$, and the number of predictors in the model, $p$ ( $p=1$ for simple linear regression).
+**Cook's distance** [@cooksdistance] is a measure of an observation's overall impact on the estimated model coefficients. In @eq-cooks-d, we see that Cook's distance takes into account an observation's leverage, $h_i$, the standardized residuals, $std.resid_i$, and the number of predictors in the model, $p$ ($p=1$ for simple linear regression).
 
 $$D_i = \frac{1}{p}(std.resid_i)^2\Big(\frac{h_i}{1-h_i}\Big)$$ {#eq-cooks-d}
 
@@ -748,7 +748,7 @@ To better understand the impact of influential points, let's take a look at our 
 
 ```{r}
 #| label: tbl-influential-impact
-#| tbl-cap: Estimated model coefficients for model with and without influential observation
+#| tbl-cap: Estimated model coefficients for the model with and without the influential observation
 #| echo: false
 
 with_influential <- tidy(coffee_model, conf.int = TRUE) |> 
@@ -784,7 +784,7 @@ If the outlier is influential, one approach is to build the model with and witho
 
 In this chapter, we have introduced a set of model conditions and diagnostics to evaluate how well the model fits the data and satisfies the assumptions for linear regression. Now we'll conclude the chapter by discussing how we might incorporate these tools in practice.
 
-1.  **Exploratory data analysis (EDA)**: Start every regression analysis with some exploratory data analysis, as in @sec-coffee-intro . The EDA will help you better understand the data, particularly the variables that will be used in the regression model. Through the EDA we may also notice points that stand out as potential outliers and potential influential points that may be of interest for further exploration. The EDA can provide valuable insights about the data; however, it cannot be used alone to confirm whether the model is a good fit or confirm if a point is influential. We need the model conditions and diagnostics to make such a robust assessment. The EDA is important, however, to help determine the best analysis approach and to understand the data enough to more fully understand the model interpretations and influential conclusions.
+1.  **Exploratory data analysis (EDA)**: Start every regression analysis with some exploratory data analysis, as in @sec-coffee-intro. The EDA will help you better understand the data, particularly the variables that will be used in the regression model. Through the EDA we may also notice points that stand out as potential outliers and potential influential points that may be of interest for further exploration. The EDA can provide valuable insights about the data; however, it cannot be used alone to confirm whether the model is a good fit or confirm if a point is influential. We need the model conditions and diagnostics to make such a robust assessment. The EDA is important, however, to help determine the best analysis approach and to understand the data enough to more fully understand the model interpretations and influential conclusions.
 
 2.  **Model fitting:** Fit the regression model.
 
@@ -792,7 +792,7 @@ In this chapter, we have introduced a set of model conditions and diagnostics to
 
     Then, check Cook's distance to determine if there are potential influential points in the data.
 
-    - If there are influential points, check the leverage and standardized residuals to try to understand why these points are influential. Use this information, along with the analysis objective and subject matter expertise, to determine how to best proceed with the dealing with these points.
+    - If there are influential points, check the leverage and standardized residuals to try to understand why these points are influential. Use this information, along with the analysis objective and subject matter expertise, to determine how to best proceed with dealing with these points.
 
     - If there are no influential points, we can examine the leverage and standardized residuals for a deeper understanding of the data; however, no further action is needed in terms of refitting the model.
 
@@ -810,7 +810,7 @@ In this chapter, we have introduced a set of model conditions and diagnostics to
 
 ## Model conditions and diagnostics in R {#sec-conditions-in-r}
 
-The residuals, along with other observation-level statistics, can be obtained using `augment()` in the **broom** R package [@broom]. This package is in the suite of packages that are included as part of **tidymodels**[@tidymodels]. The output produced by this function is shown in @tbl-coffee-aug.
+The residuals, along with other observation-level statistics, can be obtained using `augment()` in the **broom** R package [@broom]. This package is in the suite of packages that are included as part of **tidymodels** [@tidymodels]. The output produced by this function is shown in @tbl-coffee-aug.
 
 ```{r}
 #| label: coffee-augment
