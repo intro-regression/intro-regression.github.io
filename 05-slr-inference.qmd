@@ -44,13 +44,13 @@ update_geom_defaults("line",   list(color = "steelblue"))
 
 The [Trust for Public Land](https://www.tpl.org/parks-and-an-equitable-recovery-parkscore-report) is a non-profit organization that advocates for equitable access to outdoor spaces in cities across the United States. In the 2021 report *Parks and an Equitable Recovery*, the organization stated that "parks are not just a nicety—they are a necessity" [@publicland]. The report details the many health, social, and environmental benefits of having ample access to public outdoor space in cities, along with the various factors that impede the access to parks and other outdoor space for some residents.
 
-One type of outdoor space the authors study in the report is playgrounds. The report describes playgrounds as outdoor spaces that "bring children and adults together" [@publicland, pp. 13] and a place that was important for distributing "fresh food and prepared meals to those in need, particularly school-aged children" [@publicland, pp. 9] during the global COVID-19 pandemic.
+One type of outdoor space the authors study in the report is playgrounds. The report describes playgrounds as outdoor spaces that "bring children and adults together" [@publicland, pp. 13], and in one example the playground was a place that was important for distributing "fresh food and prepared meals to those in need, particularly school-aged children" [@publicland, pp. 9] during the global COVID-19 pandemic.
 
 ::: {.objective latex=""}
 Given the impact of playgrounds for both children and adults in a community, we want to understand factors associated with variability in the access to playgrounds. In particular, we want to (1) investigate whether local government spending is useful in understanding variability in playground access, and if so, (2) quantify the true relationship between local government spending and playground access.
 :::
 
-The data includes information on 97 of the most populated cities in the United States (US) in the year 2020. The data were originally collected by the Trust for Public Land and was a featured as part of the TidyTuesday weekly data visualization challenge in June 2021 [@tidytuesday]. The data are in `parks.csv`. The analysis in this chapter focuses on two variables:
+The data includes information on 97 of the most populated cities in the United States (US) in the year 2020. The data were originally collected by the Trust for Public Land and were featured as part of the TidyTuesday weekly data visualization challenge in June 2021 [@tidytuesday]. The data are in `parks.csv`. The analysis in this chapter focuses on two variables:
 
 <!--# instead of "spending", should I refer to this as how much a city invests in its residents?-->
 
@@ -132,9 +132,9 @@ parks |>
         digits = 1)
 ```
 
-The distribution of `playgrounds`, the number of playgrounds per 10,000 residents (the response variable), is unimodal and right-skewed. The center of the distribution is the median of about `r median(parks$playgrounds)` playgrounds per 10,000 residents, and the the spread of the middle 50% of the distribution (the IQR) is `r IQR(parks$playgrounds)`. There appear to be two potential outlying cities with more than 6 playgrounds per 10,000 residents, indicating high playground access relative to the other cities in the data set.
+The distribution of `playgrounds`, the number of playgrounds per 10,000 residents (the response variable), is unimodal and right-skewed. The center of the distribution is the median of about `r median(parks$playgrounds)` playgrounds per 10,000 residents, and the spread of the middle 50% of the distribution (the IQR) is `r IQR(parks$playgrounds)`. There appear to be two potential outlying cities with more than 6 playgrounds per 10,000 residents, indicating high playground access relative to the other cities in the data set.
 
-The distribution of `per_capita_expend`, a city's expenditure per resident (the predictor variable), is also unimodal and right-skewed. The center of the distribution is around `r median(parks$per_capita_expend)` dollars per resident, and the middle 50% of the distribution has a spread of about `r IQR(parks$per_capita_expend)` dollars per resident. Similar to the response variable, there are some potential outliers. There are `r parks |> filter(per_capita_expend > 300) |> nrow()` cities that invests more than 300 dollars per resident.
+The distribution of `per_capita_expend`, a city's expenditure per resident (the predictor variable), is also unimodal and right-skewed. The center of the distribution is around `r median(parks$per_capita_expend)` dollars per resident, and the middle 50% of the distribution has a spread of about `r IQR(parks$per_capita_expend)` dollars per resident. Similar to the response variable, there are some potential outliers. There are `r parks |> filter(per_capita_expend > 300) |> nrow()` cities that invest more than 300 dollars per resident.
 
 ```{r}
 #| echo: false
@@ -158,7 +158,7 @@ ggplot(data = parks, aes(x = per_capita_expend, y = playgrounds)) +
   )
 ```
 
-From @fig-parks-bivariate-eda there appears to be a positive relationship between a city's per capita expenditure and the number of playgrounds per 10,000 residents. The correlation is `r round(corr_spend_playground, 3)`, indicating the relationship between playground access and city expenditure is not strong.This is partially influenced by the outlying observations in that have relatively low values of per capita expenditure but high numbers of playgrounds per 10,000 residents.
+From @fig-parks-bivariate-eda there appears to be a positive relationship between a city's per capita expenditure and the number of playgrounds per 10,000 residents. The correlation is `r round(corr_spend_playground, 3)`, indicating the relationship between playground access and city expenditure is not strong. This is partially influenced by the outlying observations that have relatively low values of per capita expenditure but high numbers of playgrounds per 10,000 residents.
 
 #### Linear regression model {.unnumbered}
 
@@ -191,10 +191,10 @@ $$\widehat{\text{playgrounds}} = 2.418 + 0.003 \times \text{per\_capita\_expend}
 - Does the intercept have a meaningful interpretation? [^05-slr-inference-2]
 :::
 
-[^05-slr-inference-2]: Slope: For each additional dollar a city spends per resident, is expected to be 0.003 more playgrounds per 10,000 residents, on average.\
+[^05-slr-inference-2]: Slope: For each additional dollar a city spends per resident, there is expected to be 0.003 more playgrounds per 10,000 residents, on average.\
     Intercept: We would not expect a city to invest \$0 on services and facilities for its residents, so the interpretation of the intercept is not meaningful in practice.
 
-From the sample of 97 cities in 2020, the estimated slope of `r round(spend_slope, 3)`. This estimated slope is likely close to but not the exact value of the true population slope we would obtain using data from every city in the United States. Based on the equation alone, we are also not sure if this slope indicates an actual meaningful relationship between the two variables, or if the slope is due to random variability in the data. We will use statistical inference methods to help answer these questions and use the model to draw conclusions about the relationship between `per_capita_expend` and `playgrounds` beyond these 97 cities.
+From the sample of 97 cities in 2020, the estimated slope is `r round(spend_slope, 3)`. This estimated slope is likely close to but not the exact value of the true population slope we would obtain using data from every city in the United States. Based on the equation alone, we are also not sure if this slope indicates an actual meaningful relationship between the two variables, or if the slope is due to random variability in the data. We will use statistical inference methods to help answer these questions and use the model to draw conclusions about the relationship between `per_capita_expend` and `playgrounds` beyond these 97 cities.
 
 ## Objectives of statistical inference {#sec-mlr-inf-objective}
 
@@ -213,9 +213,9 @@ There are two types of statistical inference procedures:
 
 This chapter focuses on statistical inference for the slope $\beta_1$, but the concepts introduced here can be applied to inference on the population-level intercept $\beta_0$ and other population-level parameters.
 
-As we'll see throughout the chapter, a key component of statistical inference is quantifying the **sampling variability**, sample-to-sample variability in the statistic that is the "best guest" estimate for the parameter. For example, when we conduct statistical inference on the slope of per capita expenditure $\beta_1$, we need to quantify the sampling the variability of the statistic $\hat{\beta}_1$, the estimated (sample) slope. This is the amount of variability in $\hat{\beta}_1$ that is expected if we repeated the following process many times: (1) collect a new sample that is the same size as our sample data ( `r nrow(parks)` in this analysis), and (2) use the new sample to fit a model using `per_capita_expend` to predict `playgrounds` to obtain an estimate of the slope. The idea is that $\hat{\beta}_1$ would not be the same for each new sample, so we need a way to quantify the variability in these estimated slopes to understand this natural variation. The $\hat{\beta}_1$ values from the new samples make up the **sampling distribution**.
+As we'll see throughout the chapter, a key component of statistical inference is quantifying the **sampling variability**, sample-to-sample variability in the statistic that is the "best guest" estimate for the parameter. For example, when we conduct statistical inference on the slope of per capita expenditure $\beta_1$, we need to quantify the sampling variability of the statistic $\hat{\beta}_1$, the estimated (sample) slope. This is the amount of variability in $\hat{\beta}_1$ that is expected if we repeated the following process many times: (1) collect a new sample that is the same size as our sample data (`r nrow(parks)` in this analysis), and (2) use the new sample to fit a model using `per_capita_expend` to predict `playgrounds` to obtain an estimate of the slope. The idea is that $\hat{\beta}_1$ would not be the same for each new sample, so we need a way to quantify the variability in these estimated slopes to understand this natural variation. The $\hat{\beta}_1$ values from the new samples make up the **sampling distribution**.
 
-While the process described above would be an approach for constructing the sampling distribution, it is not feasible to collect a lot of new samples in practice. Instead, there are two approaches for obtaining the sampling distribution, in order to quantify the variability in the estimated slopes and conduct statistical inference.
+While the process described above would be an approach for constructing the sampling distribution, it is not feasible to collect a lot of new samples in practice. Instead, there are two approaches for obtaining the sampling distribution in order to quantify the variability in the estimated slopes and conduct statistical inference.
 
 - **Simulation-based methods**: Quantify the sampling variability by generating a sampling distribution directly from the data
 
@@ -287,7 +287,7 @@ Whenever we fit linear regression models and conduct inference on the slope, we 
 
 We'll begin by looking at simulation-based methods for statistical inference: bootstrap confidence intervals and permutation tests (@sec-slr-permutation-r). In these procedures, we use the sample data to construct a simulated sampling distribution to quantify the sample-to-sample variability in $\hat{\beta}_1$. Let's start with the simulation-based approach to construct confidence intervals.
 
-A **confidence interval** is a range of values the population-level slope $\beta_1$ may reasonably take. Though we have $\hat{\beta}_1$, the best guess for the population slope (called a *point estimate*) , we are more likely to capture the value of the true population slope by computing a range of plausible values than by solely relying on a single estimate. We get this range by constructing $C\%$ confidence intervals, where $C\%$ is how confident we are the interval contains $\beta_1$ based on the statistical methods.
+A **confidence interval** is a range of values the population-level slope $\beta_1$ may reasonably take. Though we have $\hat{\beta}_1$, the best guess for the population slope (called a *point estimate*), we are more likely to capture the value of the true population slope by computing a range of plausible values than by solely relying on a single estimate. We get this range by constructing $C\%$ confidence intervals, where $C\%$ is how confident we are the interval contains $\beta_1$ based on the statistical methods.
 
 In order to obtain this range of values we must understand the sampling variability of the statistic. Suppose we repeatedly take samples of size $n$ (the same size as the sample data) and fit regression models to compute $\hat{\beta}_1$, the estimated slope. Recall that the sampling variability is the variability in these estimated slopes. In practice, it is generally not feasible to collect multiple samples from the population, so we use our sample data to simulate the process of obtaining new samples. We generate these new samples by **bootstrapping**, a simulation process in which we generate a sample of size $n$ by sampling with replacement from the current data. <!--# Add the origin of calling this bootstrap?-->
 
@@ -312,7 +312,7 @@ A bootstrap confidence interval for the population slope, $\beta_1$, is construc
 3.  Collect the $n_{iter}$ values of $\hat{\beta}_1$ from the previous step to obtain the **bootstrapped sampling distribution**. It is an approximation of the sampling distribution of $\hat{\beta}_1$, and thus provides information about sample-to-sample variability of $\hat{\beta}_1$.
 4.  Use the distribution from the previous step to calculate the $C\%$ confidence interval. The lower and upper bounds of the interval are the points in the distribution that mark the middle $C\%$ of the distribution.
 
-Using these four steps, let's construct the 95% confidence for the population slope $\beta_1$ of the relationship between `per_capita_spend` and `playgrounds`.
+Using these four steps, let's construct the 95% confidence interval for the population slope $\beta_1$ of the relationship between `per_capita_spend` and `playgrounds`.
 
 1.  Generate 1000 bootstrap samples (`r nrow(parks)` observations in each sample) by sampling with replacement from the current sample data of `r nrow(parks)` observations. The first 10 observations from the first bootstrapped sample are shown in @tbl-parks-boot-samples.
 
@@ -390,12 +390,12 @@ Why are there `r nrow(parks)` observations in each bootstrap sample?[^05-slr-inf
     ```
 
 ::: {.yourturn latex=""}
-How many values of $\hat{\beta}_1$ make up the bootstrap sampling distribution shown in @fig-parks-boot-dist and summarized in @tbl-parks-boot-dist ?[^05-slr-inference-5]
+How many values of $\hat{\beta}_1$ make up the bootstrap sampling distribution shown in @fig-parks-boot-dist and summarized in @tbl-parks-boot-dist?[^05-slr-inference-5]
 :::
 
 [^05-slr-inference-5]: There are 1000 values, the number of iterations, in the bootstrapped sampling distribution.
 
-4.  As the final step, we use the bootstrap distribution to calculate the lower and upper bounds of the 95% confidence interval. These bounds are calculated as the points that mark off the middle 95% of the distribution. These are the points that at the $2.5^{th}$ and $97.5^{th}$ percentiles, as shown by the vertical lines in @fig-parks-boot-ci.
+4.  As the final step, we use the bootstrap distribution to calculate the lower and upper bounds of the 95% confidence interval. These bounds are calculated as the points that mark off the middle 95% of the distribution. These are the points at the $2.5^{th}$ and $97.5^{th}$ percentiles, as shown by the vertical lines in @fig-parks-boot-ci.
 
 ```{r}
 #| label: fig-parks-boot-ci
@@ -443,7 +443,7 @@ The general interpretation of the 95% confidence interval for $\beta_1$, the slo
 
 > *We are 95% confident that the interval `r round(lb, 3)` to `r round(ub, 3)` contains the population slope for per capita expenditure in the model of the relationship between a city's per capita expenditure and number of playgrounds per 10,000 residents.*
 
-Though this interpretation indicates the range of values that may reasonably contain the true population slope for `per_capita_expend`, it still requires the reader to further interpret what it means about the relationship between `per_capita_expend` and `playgrounds`. It is more informative to interpret the confidence interval in a way that also utilizes the interpretation of the slope from @sec-parks-eda-model , so the reader more clearly understands what the confidence interval is conveying. Thus, a more complete and informative interpretation of the confidence interval is as follows:
+Though this interpretation indicates the range of values that may reasonably contain the true population slope for `per_capita_expend`, it still requires the reader to further interpret what it means about the relationship between `per_capita_expend` and `playgrounds`. It is more informative to interpret the confidence interval in a way that also utilizes the interpretation of the slope from @sec-parks-eda-model, so the reader more clearly understands what the confidence interval is conveying. Thus, a more complete and informative interpretation of the confidence interval is as follows:
 
 > *We are 95% confident that for each additional dollar a city spends per resident, there are between `r round(lb,3)` to `r round(ub,3)` more playgrounds per 10,000 residents, on average.*
 
@@ -451,7 +451,7 @@ This interpretation not only indicates the range of values as before, but it als
 
 ### What does "confidence" mean?
 
-The beginning of the interpretation for a confidence interval is "We are $C\%$ confident...". What does "$C\%$ confident" mean? The notion of "confidence" refers to the statistical process used construct the confidence interval. This means if we replicate the process thousands of times - obtain a sample of `r nrow(parks)` cities, construct a bootstrap distribution for $\hat{\beta}_1$, and calculate the bounds that mark the middle $C\%$ of the distribution<!--# is thousands correct here? what do others say about this long-run confidence?-->, the intervals defined by the upper and lower bounds would contain the value of $\beta_1$, the true population slope, $C\%$ of the time.
+The beginning of the interpretation for a confidence interval is "We are $C\%$ confident...". What does "$C\%$ confident" mean? The notion of "confidence" refers to the statistical process used construct the confidence interval. This means if we replicate the process thousands of times - obtain a sample of `r nrow(parks)` cities, construct a bootstrap distribution for $\hat{\beta}_1$, and calculate the bounds that mark the middle $C\%$ of the distribution<!--# is thousands correct here? what do others say about this long-run confidence?-->, the intervals defined by the upper and lower bounds would contain the value of $\beta_1$ (the true population slope) $C\%$ of the time.
 
 In reality we don't know the value of the population slope (if we did, we wouldn't need statistical inference!), so we can't definitively conclude if the interval constructed in @sec-construct-bootstrap-ci is one of the $C\%$ that contains the population slope or not. Though we aren't certain that our interval contains the population slope, we can conclude with some level of confidence, $C\%$ confidence to be exact, that we think it does based on the process.
 
@@ -481,7 +481,7 @@ In the US judicial system, a defendant is deemed innocent unless proven otherwis
 
 ### Evaluate the evidence
 
-The primary component of trial (or hypothesis test) is a presenting and evaluating the evidence. In a trial, this is the point when the evidence is presented and it is evaluated under the assumption the null hypothesis (defendant is not guilty) is true. Thus, the lens in which the evidence is being evaluated is "given the defendant is not guilty, how likely is it that this evidence would exist?"
+The primary component of a trial (or hypothesis test) is presenting and evaluating the evidence. In a trial, this is the point when the evidence is presented and it is evaluated under the assumption the null hypothesis (defendant is not guilty) is true. Thus, the lens in which the evidence is being evaluated is "given the defendant is not guilty, how likely is it that this evidence would exist?"
 
 For example, suppose an individual is on trial for a robbery at a jewelry store. The null hypothesis is that they are not guilty and did not rob the jewelry store. The alternative hypothesis is they are guilty and did rob the jewelry store. If there is evidence that the person was in a different city during the time of the jewelry store robbery, the evidence would be more in support of the null hypothesis of innocence. It seems plausible the individual could have been in a different city at the time of the robbery if the null hypothesis is true. Alternatively, if some of the missing jewelry was found in the individual's car, the evidence would seem to be strongly in support of the alternative hypothesis. If the null hypothesis is true, it does not seem likely that the individual would have the missing jewelry in their car.
 
@@ -642,7 +642,7 @@ The null distribution helps us understand the values $\hat{\beta}_1$, the slope 
 
 This comparison is quantified using a p-value. The **p-value** is the probability of observing estimated slopes at least as extreme as the value estimated from the sample data, given the null hypothesis is true. In the context of the parks data, the p-value is the probability of observing values of the slope that are at least as extreme as $\hat{\beta}_1 =$ `r  round(spend_slope,3)` in the null distribution.
 
-In the context of statistical inference, the phrase "more extreme" means the area between the estimated value ( $\hat{\beta}_1$ in our case), and the outer tail(s) of the simulated null distribution. The alternative hypothesis determines which tail(s) to include when calculating the p-value.
+In the context of statistical inference, the phrase "more extreme" means the area between the estimated value ($\hat{\beta}_1$ in our case) and the outer tail(s) of the simulated null distribution. The alternative hypothesis determines which tail(s) to include when calculating the p-value.
 
 - If $H_a: \beta_1 > 0$, the p-value is the probability of obtaining a value in the null distribution that is greater than or equal to $\hat{\beta}_1$.
 
@@ -689,7 +689,7 @@ spend_null_dist |>
 Use the definition of the p-value at the beginning of this section to interpret the p-value of `r round(pvalue,3)` in the context of the data.[^05-slr-inference-8]
 :::
 
-[^05-slr-inference-8]: Given there is no linear relationship between spending per resident and playgrounds per 10,000 residents ( $H_0$ is true), the probability of observing a slope of `r round(spend_slope, 3)` or more extreme in a random sample of `r nrow(parks)` cities is `r round(pvalue, 3)`.
+[^05-slr-inference-8]: Given there is no linear relationship between spending per resident and playgrounds per 10,000 residents ($H_0$ is true), the probability of observing a slope of `r round(spend_slope, 3)` or more extreme in a random sample of `r nrow(parks)` cities is `r round(pvalue, 3)`.
 
 ### Draw conclusion {#sec-slr-inf-conclusion}
 
@@ -706,7 +706,7 @@ We use a predetermined decision-making threshold called an $\boldsymbol{\alpha}$
 
 - If $\text{p-value} \geq \alpha$, then fail to reject $H_0$.
 
-A commonly used threshold is $\alpha = 0.05$. If stronger evidence is required to reject the null hypothesis,<!--# Maybe explain why this might be the case--> then a lower threshold can be used to make a conclusion. If such strong evidence is not required (this may be the case in analyses with very small sample sizes), then a threshold can be used. It is general convention to use a threshold 0.1 or less, so any p-value 0.1 is considered large enough to fail to reject the null hypothesis.
+A commonly used threshold is $\alpha = 0.05$. If stronger evidence is required to reject the null hypothesis,<!--# Maybe explain why this might be the case--> then a lower threshold can be used to make a conclusion. If such strong evidence is not required (this may be the case in analyses with very small sample sizes), then higher a threshold can be used. It is general convention to use a threshold 0.1 or less, so any p-value greater than 0.1 is considered large enough to fail to reject the null hypothesis.
 
 Back to the parks analysis. We will use the common threshold of $\alpha = 0.05$.
 
@@ -766,11 +766,11 @@ At this point, we might wonder whether there is any connection between the confi
 
 Testing a claim with the two-sided alternative $H_a: \beta_1 \neq 0$ and decision-making threshold $\alpha$ is equivalent to using the $C\%$ confidence interval to evaluate the claim, where $C = (1 - \alpha)\times100$. This means we can also use confidence intervals to evaluate two-sided hypotheses. When using a confidence interval to draw conclusions about a claim, we use the following guide:
 
-- If the null hypothesized value ( $0$ based on the tests defined in @sec-slr-inf-hypotheses ) is within the range of the confidence interval, *fail to reject* $H_0$ at the $\alpha$-level.
+- If the null hypothesized value ($0$ based on the tests defined in @sec-slr-inf-hypotheses) is within the range of the confidence interval, *fail to reject* $H_0$ at the $\alpha$-level.
 
 - If the null hypothesized value is not within the range of the confidence interval, *reject* $H_0$ at the $\alpha$-level.
 
-This illustrates the power of confidence intervals; they can not only be used to draw a conclusion about a claim (reject or fail to reject $H_0$), but they also give the range values that the population slope may take. Thus, it is good practice to always report the confidence interval, because the confidence interval provides more detail about a population slope $\beta_1$ beyond the reject/fail to reject conclusion of the hypothesis test.
+This illustrates the power of confidence intervals; they can not only be used to draw a conclusion about a claim (reject or fail to reject $H_0$), but they also give the range of values that the population slope may take. Thus, it is good practice to always report the confidence interval, because the confidence interval provides more detail about a population slope $\beta_1$ beyond the reject/fail to reject conclusion of the hypothesis test.
 
 ::: {.analysis_in_practice latex=""}
 When we reject a null hypothesis, we conclude that there is a statistically significant linear relationship <!--# do i want to use other term, i.e., statistically discernible--> between the response and predictor variables. Concluding there is *statistically significant* relationship between the response and predictor, however, does not necessarily mean that the relationship is *practically significant*. The practical significance, how meaningful the results are in the real world, is determined by the magnitude of the estimated slope of the predictor on the response and what an effect of that magnitude means in the context of the data and analysis question.
@@ -848,13 +848,13 @@ Recall from @sec-slr-specify that the output of the linear regression model is t
 
 <!--# figure out how to use pictures to illustrate concepts here-->
 
-Thus far we have approached inference using simulation-based methods (bootstrapping and permutation) to generate sampling distributions and null distributions. When certain conditions are met, however, we can use theoretical results about the sampling distribution to understand the variability in $\hat{\beta}_1$. In this section, we present that theory, then use it to conduct statistical inference for the population slope. Notice as we go through this section is that the inferential procedures and conclusions are very similar as before. The primary difference is in how we understand the sampling variability in $\hat{\beta}_1$ and obtain the null distribution.
+Thus far we have approached inference using simulation-based methods (bootstrapping and permutation) to generate sampling distributions and null distributions. When certain conditions are met, however, we can use theoretical results about the sampling distribution to understand the variability in $\hat{\beta}_1$. In this section, we present that theory, then use it to conduct statistical inference for the population slope. Notice as we go through this section that the inferential procedures and conclusions are very similar as before. The primary difference is in how we understand the sampling variability in $\hat{\beta}_1$ and obtain the null distribution.
 
 ### Central Limit Theorem {#sec-slr-clt}
 
 <!--# maybe add something in the appendix that the CLT is not needed if we have normal errors-->
 
-The **Central Limit Theorem (CLT)** is a foundational theorem in statistics about the distribution of a statistic and the associated mathematical properties of that distribution. <!--# find a source for a good statement of CLT-->For the purposes of this text, we will focus on what the Central Limit Theorem says the distribution of an estimated slope $\hat{\beta}_1$, but note that this theorem applies to statistics other than the slope. We will also focus on the results of the theorem and less so on derivations or advanced mathematical details of the Central Limit Theorem.<!--# Texts such as [insert references] or the appendix may be of interest to those seeking more detail about the theorem.-->
+The **Central Limit Theorem (CLT)** is a foundational theorem in statistics about the distribution of a statistic and the associated mathematical properties of that distribution. <!--# find a source for a good statement of CLT-->For the purposes of this text, we will focus on what the Central Limit Theorem says about the distribution of an estimated slope $\hat{\beta}_1$, but note that this theorem applies to statistics other than the slope. We will also focus on the results of the theorem and less so on derivations or advanced mathematical details of the Central Limit Theorem.<!--# Texts such as [insert references] or the appendix may be of interest to those seeking more detail about the theorem.-->
 
 By the Central Limit Theorem, we know under certain conditions (more on these conditions in the @sec-ch-slr-conditions) $$\hat{\beta}_1 \sim N(\beta_1, SE_{\hat{\beta}_1})$$ {#eq-slope-dist-clt}
 
@@ -872,7 +872,7 @@ As you will see in the following sections, we will use this estimate of the samp
 
 ### Estimating $\sigma_{\epsilon}$ {#sec-estimate-reg-std-err}
 
-As discussed in @sec-slr-specify, there are three parameters that need to be estimated for simple linear regression $\beta_0$, $\beta_1$, and $\sigma_{\epsilon}$. @sec-slr-estimation introduced least squares regression, a method for deriving $\hat{\beta}_0$ and $\hat{\beta}_1$ the estimates for intercept and slope, respectively. Now, we turn to the estimation of $\sigma_\epsilon$, also known as the **regression standard error*.***
+As discussed in @sec-slr-specify, there are three parameters that need to be estimated for simple linear regression $\beta_0$, $\beta_1$, and $\sigma_{\epsilon}$. @sec-slr-estimation introduced least squares regression, a method for deriving $\hat{\beta}_0$ and $\hat{\beta}_1$, the estimates for intercept and slope, respectively. Now, we turn to the estimation of $\sigma_\epsilon$, also known as the **regression standard error*.***
 
 <!--# maybe add a little aside here about standard deviation versus standard error-->
 
@@ -886,7 +886,7 @@ $$\hat{\sigma}_{\epsilon} = \sqrt{\frac{\sum_{i = 1}^ne_i^2}{n - 2}} = \sqrt{\fr
 You may have noticed that the denominator in @eq-slr-reg-se is $n - 2$ not $n$ or $n-1$. The value $n - 2$ is called the **degrees of freedom (df)**. The degrees of freedom are how many observations are available to understand variability about the regression line. We need at a minimum two observations to estimate the equation for the simple linear regression line, i.e., it takes at a minimum two points to make a line. The remaining $n-2$ observations help us understand variability about the line. We will talk more about how we use degrees of freedom as we define the distribution used to compute confidence intervals and conduct hypothesis tests. <!--# consider an illlustration here-->
 :::
 
-Recall that the standard deviation is the average distance between each observation and the mean of the distribution. Similarly, the regression standard error can be thought of as the average distance the observed value the response is from the regression line. The regression standard error $\hat{\sigma}_{\epsilon}$ is used to quantify the sampling variability in the estimated slope $\hat{\beta}_1$ (@eq-slr-se), so we will use this value as we conduct inference on the slope.
+Recall that the standard deviation is the average distance between each observation and the mean of the distribution. Similarly, the regression standard error can be thought of as the average distance the observed value of the response is from the regression line. The regression standard error $\hat{\sigma}_{\epsilon}$ is used to quantify the sampling variability in the estimated slope $\hat{\beta}_1$ (@eq-slr-se), so we will use this value as we conduct inference on the slope.
 
 ### Hypothesis tests for the slope {#sec-slr-inf-clt-hypothesis-test}
 
@@ -919,17 +919,17 @@ To calculate the test statistic, the estimated slope is shifted by the mean, and
 Since the hypothesized mean is $\beta_1 = 0$, we shift by 0 and rescale by $SE_{\hat{\beta}_1}$, defined in @eq-slr-se. Thus, the test statistic is the number of standard errors the estimated slope is from the hypothesized mean of the sampling distribution. The magnitude of the test statistic $|T|$ provides a measure of how far the observed slope is from the center of the distribution, and the sign of $T$ indicates whether the observed slope is above (positive sign) or below (negative sign) the hypothesized mean of 0.
 
 ::: {.yourturn latex=""}
-Consider the magnitude of the test statistic, $|T|$. Do you think test statistics with small magnitude provide evidence in support or against the null hypothesis? What about test statistics with large magnitude?[^05-slr-inference-12]
+Consider the magnitude of the test statistic, $|T|$. Do you think test statistics with small magnitude provide evidence in support of or against the null hypothesis? What about test statistics with large magnitude?[^05-slr-inference-12]
 :::
 
 [^05-slr-inference-12]: Test statistics with small magnitude provide evidence in support of the null hypothesis, as they are close to the hypothesized value. Conversely test statistics with large magnitude provide evidence against the null hypothesis, as they are very far away from the hypothesized value.
 
 Next, we use the test statistic to calculate a p-value and we will ultimately use the p-value to draw a conclusion about the strength of the evidence against the null hypothesis, as before. The test statistic, $T$, follows a $t$ distribution with $n -2$ degrees of freedom, denoted as $T \sim t_{n-2}$ . Similar to the simulated null distribution in @sec-slr-inf-permutation, we use this $t_{n-2}$ distribution to evaluate how far the estimated slope is from what we would expect given the null hypothesis is true.
 
-Though the sampling distribution of $\hat{\beta}_1$ is normal by the Central Limit Theorem (@eq-slope-dist-clt), the test statistic follows a $t$ distribution. The $t$ distribution is used, because the value $SE_{\hat{\beta}_1}$ in the test statistic is calculated using the regression standard error, $\hat{\sigma}_\epsilon$ (see @eq-slr-se) We know the estimates $\hat{\sigma}_\epsilon$ and $SE_{\hat{\beta}_1 }$ are likely not equal to the true population values, so we need a distribution that allows for a bit more variability when calculating the p-value. The $t$ distribution better accounts for this extra variability compared to the standard normal distribution.
+Though the sampling distribution of $\hat{\beta}_1$ is normal by the Central Limit Theorem (@eq-slope-dist-clt), the test statistic follows a $t$ distribution. The $t$ distribution is used because the value $SE_{\hat{\beta}_1}$ in the test statistic is calculated using the regression standard error, $\hat{\sigma}_\epsilon$ (see @eq-slr-se). We know the estimates $\hat{\sigma}_\epsilon$ and $SE_{\hat{\beta}_1 }$ are likely not equal to the true population values, so we need a distribution that allows for a bit more variability when calculating the p-value. The $t$ distribution better accounts for this extra variability compared to the standard normal distribution.
 
 ::: {.math_rules latex=""}
-@fig-normal-t-curves shows the standard normal distribution $N(0,1)$ and the $t$ distribution for different degrees of freedom. The $t$ distribution is very similar to the standard normal distribution: they are both centered at 0 and have a shape that is unimodal and symmetric. In other words, they both look like "bell curves" centered at 0. The difference is that the $t$ distribution allows for more variability than what is expected in the standard normal distribution. This is also referred to as having "heavier tails". The $t$ distribution has more area under the curve in the tails (or more extreme values) of the distribution, meaning that more extreme values are more likely under the $t$ distribution than under the $N(0,1)$ distribution. This is most clearly seen by th comparing the height of tails for $t_2$ and $N(0,1)$. As the degrees of freedom increase, the $t$ distribution becomes closer to the the standard normal distribution.\
+@fig-normal-t-curves shows the standard normal distribution $N(0,1)$ and the $t$ distribution for different degrees of freedom. The $t$ distribution is very similar to the standard normal distribution: they are both centered at 0 and have a shape that is unimodal and symmetric. In other words, they both look like "bell curves" centered at 0. The difference is that the $t$ distribution allows for more variability than what is expected in the standard normal distribution. This is also referred to as having "heavier tails". The $t$ distribution has more area under the curve in the tails (or more extreme values) of the distribution, meaning that more extreme values are more likely under the $t$ distribution than under the $N(0,1)$ distribution. This is most clearly seen by comparing the height of tails for $t_2$ and $N(0,1)$. As the degrees of freedom increase, the $t$ distribution becomes closer to the the standard normal distribution.\
 
 <!--# consider making this graph a bit easier to read-->
 
@@ -973,7 +973,7 @@ $$\begin{aligned}
 &H_a: \beta_{1} \neq 0
 \end{aligned}$$
 
-where $\beta_1$ is the true slope between `per_capita_expend` and `playgrounds`. The observed slope from @tbl-parks-model, we know the observed slope $\hat{\beta}_{1}$ is `r round(spend_slope, 4)` and the estimated standard error $SE_{\hat{\beta}_{1}}$ is `r round(spend_se, 4)`. The test statistic is
+where $\beta_1$ is the true slope between `per_capita_expend` and `playgrounds`. From @tbl-parks-model, we know the observed slope $\hat{\beta}_{1}$ is `r round(spend_slope, 4)` and the estimated standard error $SE_{\hat{\beta}_{1}}$ is `r round(spend_se, 4)`. The test statistic is
 
 $$T = \frac{0.0033 - 0}{0.0016} = 2.063$$
 
@@ -1176,7 +1176,7 @@ boot_dist <- parks |> # <3>
 ```
 
 1.  Set a seed to make the results reproducible.
-2.  Define the number of bootstrap samples (iterations). Bootstrapping can be computing intensive when using large data sets and a large number of iterations. We recommend using a small number of iterations ( 10 - 100) when testing code, then increasing the iterations once the code is finalized.
+2.  Define the number of bootstrap samples (iterations). Bootstrapping can be computing intensive when using large data sets and a large number of iterations. We recommend using a small number of iterations (10 - 100) when testing code, then increasing the iterations once the code is finalized.
 3.  Specify the data set and save the bootstrap distribution in the object `boot_dist`.
 4.  Specify the response and predictor variable.
 5.  Specify the type of simulation ("bootstrap") and the number of iterations.
@@ -1193,7 +1193,7 @@ boot_dist |>
   geom_histogram()
 ```
 
-Finally, we can compute the lower and upper bounds for the confidence interval using the `quantile` function. Note that the code includes `ungroup()` , so that the data are not grouped by `replicate`.
+Finally, we can compute the lower and upper bounds for the confidence interval using the `quantile` function. Note that the code includes `ungroup()` so that the data are not grouped by `replicate`.
 
 ```{r}
 #| echo: true
@@ -1242,7 +1242,7 @@ null_dist |>
   geom_histogram()
 ```
 
-Finally, we compute the the p-value using the `get_p_value()`.
+Finally, we compute the the p-value using `get_p_value()`.
 
 ```{r}
 #| echo: true
@@ -1347,7 +1347,7 @@ In the output for each interval, `fit` is the predicted value, $\hat{y}$, `lwr` 
 
 ## Summary
 
-In this chapter we introduced two approaches for conducting statistical inference to draw conclusions about a population slope, simulation-based methods and theory-based methods. The standard error, test statistic, p-value and confidence interval we calculated using the mathematical models from the Central Limit Theorem align with what it seen from the output produced by statistical software in @tbl-parks-model. Modern statistical software will produce these values for you, so in practice you will not typically derive these values "manually" as we did in this chapter. As the data scientist your role will be to interpret the output and use it to draw conclusions. It's still valuable, however, to have an understanding of where these values come from in order to interpret and apply them accurately. As more software has embedded artificial intelligence features, understanding how the values are computed also helps us check if the software's output makes sense given the data, analysis objective, and methods.
+In this chapter we introduced two approaches for conducting statistical inference to draw conclusions about a population slope, simulation-based methods and theory-based methods. The standard error, test statistic, p-value and confidence interval we calculated using the mathematical models from the Central Limit Theorem align with what is seen from the output produced by statistical software in @tbl-parks-model. Modern statistical software will produce these values for you, so in practice you will not typically derive these values "manually" as we did in this chapter. As the data scientist your role will be to interpret the output and use it to draw conclusions. It's still valuable, however, to have an understanding of where these values come from in order to interpret and apply them accurately. As more software has embedded artificial intelligence features, understanding how the values are computed also helps us check if the software's output makes sense given the data, analysis objective, and methods.
 
 Which of these two methods is preferred to use in practice? In the next chapter, we will discuss the model assumptions from @sec-slr-foundation and the conditions we use to evaluate whether the assumptions hold for our data. We will use these conditions in conjunction with other statistical and practical considerations to determine when we might prefer simulation-based methods or theory-based methods for inference.
 

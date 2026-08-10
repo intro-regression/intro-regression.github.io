@@ -112,7 +112,7 @@ The data are in `recipes.csv`. We will use the following variables: <!--# remove
 
 - `author`: User who posted the recipe
 
-- `chef_john`: Indicator of whether recipe was posted by American Chef John Mitzewich (known as Chef John), derived from the variable `author`. (`1`: Posted by Chef John, `0`: Not posted by Chef John)
+- `chef_john`: Indicator of whether the recipe was posted by American Chef John Mitzewich (known as Chef John), derived from the variable `author`. (`1`: Posted by Chef John, `0`: Not posted by Chef John)
 
 - `month`: Month in which the recipe posted, derived from the variable `date_published` in the `cuisines` data frame. (`1`: January, `2`: February, `3`: March, . . ., `12`: December).
 
@@ -154,9 +154,9 @@ Our goal is to use exploratory data analysis to understand the distributions of 
 
 ## Purpose of exploratory data analysis
 
-This book is about regression analysis, using statistical models to describe the relationship between a response variable and one or more predictor variables, as well as use predict values of the response variable. This chapter focuses exploratory data analysis, an important step of the workflow that happens before modeling as show @fig-data-science-workflow. **Exploratory data analysis** **(EDA)** is the process of examining the data to better understand the observations, distributions of variables, relationships between variables, and other interesting features of the data. It helps us identify **outliers,** observations that are far from the majority of the data, along with instances of missing data, and potential errors in the data <!--# such as errors in how the data were recorded or how the data set was loaded into the statistical software-->. Lastly, it is where we gain initial insights about potential relationships between variables that help inform the decisions we'll make as we do the regression analysis.
+This book is about regression analysis, using statistical models to describe the relationship between a response variable and one or more predictor variables and to predict values of the response variable. This chapter focuses exploratory data analysis, an important step of the workflow that happens before modeling as shown in @fig-data-science-workflow. **Exploratory data analysis** **(EDA)** is the process of examining the data to better understand the observations, distributions of variables, relationships between variables, and other interesting features of the data. It helps us identify **outliers,** observations that are far from the majority of the data, along with instances of missing data, and potential errors in the data<!--# such as errors in how the data were recorded or how the data set was loaded into the statistical software-->. Lastly, it is where we gain initial insights about potential relationships between variables that help inform the decisions we'll make as we do the regression analysis.
 
-In his 1977 book *Exploratory Data Analysis* , Statistician John Tukey described EDA as "looking at data to see what it seems to say" [@tukey1977exploratory, p. v]. This short definition emphasizes an important point about EDA. It is only used to glean initial insights from the data ("what it *seems* to say") [**not**]{.underline} to draw conclusions. We use statistical inference (@sec-ch-slr-inf and @sec-ch-mlr-inf) to draw conclusions from the data. Though we can't draw conclusions from EDA, it is still a critical step in th workflow. The insights gleaned from EDA help us more fully understand the implications of our results as we apply them in practice. It also helps us as data scientists better communicate the nuances in the data to collaborators and stakeholders. We typically don't publish all the results of EDA in a final report or presentation, but the knowledge gained from EDA is infused throughout any report or presentation as we describe the data, interpret results, and share conclusions. Simply put,
+In his 1977 book *Exploratory Data Analysis*, Statistician John Tukey described EDA as "looking at data to see what it seems to say" [@tukey1977exploratory, p. v]. This short definition emphasizes an important point about EDA. It is only used to glean initial insights from the data ("what it *seems* to say") [**not**]{.underline} to draw conclusions. We use statistical inference (@sec-ch-slr-inf and @sec-ch-mlr-inf) to draw conclusions from the data. Though we can't draw conclusions from EDA, it is still a critical step in th workflow. The insights gleaned from EDA help us more fully understand the implications of our results as we apply them in practice. It also helps us as data scientists better communicate the nuances in the data to collaborators and stakeholders. We typically don't publish all the results of EDA in a final report or presentation, but the knowledge gained from EDA is infused throughout any report or presentation as we describe the data, interpret results, and share conclusions. Simply put,
 
 > "Today, exploratory and confirmatory \[methods\] can — and should — proceed side by side." [@tukey1977exploratory, p. vii]
 
@@ -202,7 +202,7 @@ In addition to knowing the variable type, we also need to know how it is stored 
 
 In general, quantitative variables are stored in columns with *double / floating point number* formats, which are formats for columns that contain real numbers with decimals. In the output above, this is coded by the software as `dbl`, but you may also see this denoted by `float64` or similar codes. The software treats columns with this format as numeric data. Examples of these columns in the `recipes` data set are `avg_rating` and `prep_time`. These are both quantitative variables and are being stored in the *double/floating point number* format in the software. Therefore, the column format aligns with the variable type and will be treated as we expect by the software as we do the analysis.
 
-Columns that contain categorical data are typically stored as *character* or *factor* formats. The software treats both of these formats as text rather than numeric data. The primary difference between character and factor types is that the data stored as factors also have an ordering applied. Let's take a look at some categorical variables in the `recipe` data . The variables `country` and and `author` are two categorical variables that are correctly stored in the software as character (`<chr>`) data types.
+Columns that contain categorical data are typically stored as *character* or *factor* formats. The software treats both of these formats as text rather than numeric data. The primary difference between character and factor types is that the data stored as factors also have an ordering applied. Let's take a look at some categorical variables in the `recipe` data. The variables `country` and and `author` are two categorical variables that are correctly stored in the software as character (`<chr>`) data types.
 
 <!--# I might not need this? The variable season  is also a categorical stored as a character data type. By default, the software will arrange values of this variable in alphabetical order in graphs and analysis output. The seasons do have a specific calendar order that the software is unaware of currently. We can convert this variable to a factor data type and tell the software the calendar order.-->
 
@@ -219,7 +219,7 @@ recipes <- recipes |>
 
 <!--# Make a table for this mapping between variable type and column-->
 
-One of the most common mismatches between the variable's type and how it is stored occurs when categorical variables are stored in the software under numeric formats. From @tbl-glimpse-recipe, we see this has occurred with the variables `month` and `chef_john`. This often happens when the categories are represented by numbers (e.g., "1" instead of "January"). Though we know they are categorical from @sec-intro-recipes, they are currently stored as *double* column types by the software. This means the the software thinks we can do calculations, such as find the average or standard deviation; however, these types of operations would not make sense in the context of `month`, for example. This mismatch can become particularly troublesome in the regression models. As we'll see in @sec-ch-mlr, quantitative and categorical variables are handled differently in regression models.
+One of the most common mismatches between the variable's type and how it is stored occurs when categorical variables are stored in the software under numeric formats. From @tbl-glimpse-recipe, we see this has occurred with the variables `month` and `chef_john`. This often happens when the categories are represented by numbers (e.g., "1" instead of "January"). Though we know they are categorical from @sec-intro-recipes, they are currently stored as *double* column types by the software. This means the software thinks we can do calculations, such as finding the average or standard deviation; however, these types of operations would not make sense in the context of `month`, for example. This mismatch can become particularly troublesome in the regression models. As we'll see in @sec-ch-mlr, quantitative and categorical variables are handled differently in regression models.
 
 We address these mismatches before moving forward with the EDA by changing the type in which such variables are stored. Once we have made changes to the data, we examine the summary of the data again to check the changes we've made and address any remaining issues. In @tbl-glimpse-recipes-2, we see that `chef_john` and `month` are now correctly stored as factors, a format suitable for categorical variables. We are now ready to move on to the next step and explore the distributions of individual variables. <!--# [Add reference here to R for data science? Telling stories with data? Modern data science for more detail on data cleaning / prep?] --> <!--# may not need this detail? We specifically make month a factor variable type, because the months have a natural ordering.-->
 
@@ -242,7 +242,7 @@ glimpse(recipes)
 
 ## Distribution of a single variable {#sec-univar-eda}
 
-**Univariate exploratory data analysis** is the exploration of individual variables. The goal is to better understand the variables in the data before exploring at relationships between variables. This is also where we begin to see how the observations in our sample data compare to the population of interest by identifying ways in which the sample data are representative of the population and ways it differs. This helps us understand the scope of inferential conclusions we can draw and potential limitations of the analysis. Univariate EDA is also where we can more clearly see outliers and missing data, and continue cleaning data, as needed.
+**Univariate exploratory data analysis** is the exploration of individual variables. The goal is to better understand the variables in the data before exploring the relationships between variables. This is also where we begin to see how the observations in our sample data compare to the population of interest by identifying ways in which the sample data are representative of the population and ways it differs. This helps us understand the scope of inferential conclusions we can draw and potential limitations of the analysis. Univariate EDA is also where we can more clearly see outliers and missing data, and continue cleaning data, as needed.
 
 ### Categorical variable {#sec-univar-eda-cat}
 
@@ -265,7 +265,7 @@ ggplot(data = recipes, aes(x = month)) +
   theme_bw()
 ```
 
-As we look at @fig-univar-month, one thing that immediately stands out is the large number of recipes in November. We are unable to determine the reason for this large spike from the plot alone, but we may have some hypotheses about why this is the case based on our understanding the site's users and our collaborators' subject-matter expertise. One hypothesis is that there is a large uptick in recipes during the holiday season in the United States, Thanksgiving in particular, because it is a United States holiday in November that traditionally includes a large meal.
+As we look at @fig-univar-month, one thing that immediately stands out is the large number of recipes in November. We are unable to determine the reason for this large spike from the plot alone, but we may have some hypotheses about why this is the case based on our understanding of the site's users and our collaborators' subject-matter expertise. One hypothesis is that there is a large uptick in recipes during the holiday season in the United States, Thanksgiving in particular, because it is a United States holiday in November that traditionally includes a large meal.
 
 The bar chart in @fig-univar-month displays the frequencies, but perhaps we are more interested in visualizing the proportions, also called **relative frequencies**. In that case we can (1) remake the bar plot such that that height of the bars represent the proportions rather than frequencies ([@fig-univar-eda-month-prop-1]), (2) make a pie chart ([@fig-univar-eda-month-prop-2]), or (3) make a waffle chart ([@fig-univar-eda-month-prop-3]).
 
@@ -314,7 +314,7 @@ ggplot(data = recipes_prop, aes(fill = month, values = n)) +
   scale_fill_manual(values = sunset12)
 ```
 
-In @fig-univar-eda-month-prop-2, the distribution of `month` is visualized using a **pie chart**. In a pie chart, each slice represents the proportion of observations at a given level. As we observed from the bar chart, the slice for Month 11 (November) is the largest, indicating the large proportion of recipes in the data were published that month.
+In @fig-univar-eda-month-prop-2, the distribution of `month` is visualized using a **pie chart**. In a pie chart, each slice represents the proportion of observations at a given level. As we observed from the bar chart, the slice for Month 11 (November) is the largest, indicating the largest proportion of recipes in the data were published that month.
 
 In @fig-univar-eda-month-prop-3, the distribution of `month` is visualized using a **waffle chart**. In a waffle chart, the number of squares for each level represents the proportion of observations at that level. It is similar to a pie chart in that is shows how the parts (levels) make up the whole (variable). In fact, it is sometimes referred to as a "square pie chart". <!--# is that true widely or on one site? --> A nice feature of the waffle chart is that we can count the squares to approximate the proportion of observations at each level.
 
@@ -395,7 +395,7 @@ season_prop |>
 Use @fig-univar-season and @tbl-univar-eda-season to describe the distribution of `season`.[^03-eda-2]
 :::
 
-[^03-eda-2]: In general, there number of recipes posted is approximately equal across the winter, summer, and fall seasons. The smallest proportion of recipes are posted during the spring season.
+[^03-eda-2]: In general, the number of recipes posted is approximately equal across the winter, summer, and fall seasons. The smallest proportion of recipes are posted during the spring season.
 
 Both `month` and `season` provide information about when individuals post recipes to the site, so we wouldn't necessarily need both variables in later stages of the analysis. An advantage to `season` is that it has fewer levels, so visualizations are easier to interpret, particularly the pie chart and waffle chart, compared to `month` ([@fig-univar-eda-month-prop]). It will also be easier to interpret as we look at relationships between variables. An advantage to `month` is that we get the more specific detail, such as the large number of recipes posted in November. In practice, we could refer back to the analysis objective to determine which variable to use in later steps.
 
@@ -418,7 +418,7 @@ ggplot(data = recipes, aes(x = avg_rating)) +
   theme_bw()
 ```
 
-@fig-univar-eda-rating is the histogram of `avg_rating`. We now clearly see that a vast majority of the recipes have average ratings between 4 and 5. There are very few recipes with ratings less that 3, and at least one outlier with a an average rating around 1.
+@fig-univar-eda-rating is the histogram of `avg_rating`. We now clearly see that a vast majority of the recipes have average ratings between 4 and 5. There are very few recipes with ratings less than 3, and at least one outlier with a an average rating around 1.
 
 ::: {.analysis_in_practice latex=""}
 The width of the bins on a histogram can make it easier or harder to see the features of the distribution. In general, the default bin width set by the statistical software is a good choice. In some cases, however, we may wish to change the width to illuminate more detail in the distribution (decrease bin width) or smooth out the distribution (increase bin width).
@@ -458,7 +458,7 @@ ggplot(data = df, aes(x = x)) +
   labs(x = "")
 ```
 
-@fig-histogram-binwidth shows examples of the default bin width, very small bin widths, and very large bin widths. Small bin widths adds more detail the histogram. This can make the histogram more challenging to read without adding much useful information for the analysis. In contrast, large bin widths can aggregate the data so much that we lose key information about the distribution.
+@fig-histogram-binwidth shows examples of the default bin width, very small bin widths, and very large bin widths. Small bin widths add more detail the histogram. This can make the histogram more challenging to read without adding much useful information for the analysis. In contrast, large bin widths can aggregate the data so much that we lose key information about the distribution.
 
 In general, it is good practice to start with the default bins set by software and make small adjustments, if needed.
 :::
@@ -611,11 +611,11 @@ ggplot(data = df, aes(x = multimodal)) +
   theme_bw()
 ```
 
-In addition to the skewness, the shape of the distribution includes the **modality**, number of peaks. @fig-shape-mode shows examples of distributions with three different modalities: unimodal, bimodal, and multimodal. @fig-shape-mode-1 is an example of a **unimodal** distribution, a distribution with a single peak. The distribution of annual incomes for adults in the United States is an example of a unimodal distribution.
+In addition to the skewness, the shape of the distribution includes the **modality**, the number of peaks. @fig-shape-mode shows examples of distributions with three different modalities: unimodal, bimodal, and multimodal. @fig-shape-mode-1 is an example of a **unimodal** distribution, a distribution with a single peak. The distribution of annual incomes for adults in the United States is an example of a unimodal distribution.
 
-@fig-shape-mode-2 is an example of a **bimodal** distribution, a distribution with two peaks. Bimodal distributions generally indicate there are at least two subgroups represented in the data that we may want to take into account in the analysis. An example of a bimodal distribution is a city's average daily temperatures in a city across a year. If the city has four distinct seasons, there will typically be a peak around the mean temperature in the fall and winter (low temperatures) and a peak around the mean temperature for spring and summer (high temperatures).
+@fig-shape-mode-2 is an example of a **bimodal** distribution, a distribution with two peaks. Bimodal distributions generally indicate there are at least two subgroups represented in the data that we may want to take into account in the analysis. An example of a bimodal distribution is a city's average daily temperatures across a year. If the city has four distinct seasons, there will typically be a peak around the mean temperature in the fall and winter (low temperatures) and a peak around the mean temperature for spring and summer (high temperatures).
 
-@fig-shape-mode-3 is an example of a **multimodal** distribution, a distribution with three or more peaks. Similar to bimodal distributions, multimodal distributions generally indicate there are multiple subgroups in the data we want to take into account i the analysis. An example of a multimodal distribution is the distribution of heights for school-aged children across a large age range, about 5 - 18 years old. There will be a peak around the mean height for elementary school children (around ages 5 - 9), a peak around the mean height middle school children (around ages 10 - 14), and a peak around the mean height for high school children (around ages 14 - 18).
+@fig-shape-mode-3 is an example of a **multimodal** distribution, a distribution with three or more peaks. Similar to bimodal distributions, multimodal distributions generally indicate there are multiple subgroups in the data we want to take into account in the analysis. An example of a multimodal distribution is the distribution of heights for school-aged children across a large age range, about 5 - 18 years old. There will be a peak around the mean height for elementary school children (around ages 5 - 9), a peak around the mean height for middle school children (around ages 10 - 14), and a peak around the mean height for high school children (around ages 14 - 18).
 
 ::: {.analysis_in_practice latex=""}
 To determine the modality of a plot, think about using a pencil or finger to trace along the top of the distribution. The modality, then, is the number of peaks in the traced outline.
@@ -661,7 +661,7 @@ From @tbl-univar-eda-rating, the mean value of `avg_rating` in the data is about
 
 The standard deviation, interquartile range (IQR), and range are measures used to describe the **spread** of a distribution. If shape of the distribution is approximately symmetric with no (or few) outliers, the **standard deviation**, a measure of the average distance between each observation and the mean, is the preferred measure of the spread. Because the mean is used to to compute the standard deviation, it is impacted by skewness and outliers. When the distribution is skewed or there are outliers, the **interquartile range (IQR)** is the more representative measure of spread. The IQR is the difference between the $75^{th}$ and $25^{th}$ percentiles, $Q_3 - Q_1$.
 
-The **range** $(\text{max} - \text{min})$ should be used with caution and not reported as the only measure of spread. Because it only takes into account the minimum and maximum values, it only gives describes the spread of the extreme ends of the distribution, which is not typically the spread of the majority of the data. Additionally, it is impacted by skewness and outliers, and thus can make the spread of a distribution appear larger than what is true for the vast majority of the data.
+The **range** $(\text{max} - \text{min})$ should be used with caution and not reported as the only measure of spread. Because it only takes into account the minimum and maximum values, it only describes the spread of the extreme ends of the distribution, which is not typically the spread of the majority of the data. Additionally, it is impacted by skewness and outliers, and thus can make the spread of a distribution appear larger than what is true for the vast majority of the data.
 
 ::: {.analysis_in_practice latex=""}
 To describe the center and spread of a distribution, use
@@ -671,7 +671,7 @@ To describe the center and spread of a distribution, use
 - the median and IQR if skewness or outliers are present
 :::
 
-From @tbl-univar-eda-rating, the standard deviation of `avg_rating` is `r round(sd(recipes$avg_rating, na.rm = TRUE), 3)`, so the average rating for each recipe is about `r round(sd(recipes$avg_rating, na.rm = TRUE), 3)` points from the mean rating of `r round(mean(recipes$avg_rating, na.rm = TRUE), 3)`, on average. The IQR is `r IQR(recipes$avg_rating,na.rm = TRUE)`. This means the spread of the middle 50% of the distribution, $Q_3 - Q_1$ is about `r IQR(recipes$avg_rating, na.rm = TRUE)` points. Lastly, the range, the distance between the minimum and maximum values, is `r max(recipes$avg_rating, na.rm = TRUE) - min(recipes$avg_rating, na.rm = TRUE)` .
+From @tbl-univar-eda-rating, the standard deviation of `avg_rating` is `r round(sd(recipes$avg_rating, na.rm = TRUE), 3)`, so the average rating for each recipe is about `r round(sd(recipes$avg_rating, na.rm = TRUE), 3)` points from the mean rating of `r round(mean(recipes$avg_rating, na.rm = TRUE), 3)`, on average. The IQR is `r IQR(recipes$avg_rating,na.rm = TRUE)`. This means the spread of the middle 50% of the distribution, $Q_3 - Q_1$ is about `r IQR(recipes$avg_rating, na.rm = TRUE)` points. Lastly, the range, the distance between the minimum and maximum values, is `r max(recipes$avg_rating, na.rm = TRUE) - min(recipes$avg_rating, na.rm = TRUE)`.
 
 Because the distribution of `avg_rating` is skewed with outliers, the IQR `r IQR(recipes$avg_rating, na.rm = TRUE)` is the most representative measure of spread.
 
@@ -758,7 +758,7 @@ In @fig-univar-eda-cook-time-zoom, we compare a visualization of the full distri
 
 ## Relationship between two variables {#sec-bivar-eda}
 
-After we have explored the distributions of individual variables in the univariate EDA, we explore the relationships between variables. We begin with **bivariate EDA**, the exploration of the relationship between two variables. In @sec-multivar-eda, we extend this to the relationship between three or more variables. There are three types of bivariate relationships: relationship between two quantitative variables, relationship between one quantitative and one categorical variable, and the relationship between two categorical variables.
+After we have explored the distributions of individual variables in the univariate EDA, we explore the relationships between variables. We begin with **bivariate EDA**, the exploration of the relationship between two variables. In @sec-multivar-eda, we extend this to the relationship between three or more variables. There are three types of bivariate relationships: relationship between two quantitative variables, relationship between one quantitative and one categorical variable, and relationship between two categorical variables.
 
 ### Two quantitative variables {#sec-bivar-quant-eda}
 
@@ -780,13 +780,13 @@ ggplot(data = recipes, aes(x = calories, y = protein)) +
   theme_bw()
 ```
 
-@fig-bivar-eda-protein-calories is the scatterplot with `calories` on the x-axis and `protein` on the y-axis. From the visualization, we can see the shape and direction of the relationship, along with outliers. We also get an indication of the strength of the relationship that we will quantify using summary statistics.
+@fig-bivar-eda-protein-calories is the scatterplot with `calories` on the x-axis and `protein` on the y-axis. From the visualization, we can see the shape and direction of the relationship, along with outliers. We also get an indication of the strength of the relationship, which we will quantify using summary statistics.
 
 <!--# do i need to mention this? We may need to check some of these protein and calorie estimates - did some people misinterpret how to post these values. This is a good reason to do the EDA and fix before the analysis.-->
 
 #### Describe the relationship: Shape and direction {.unnumbered}
 
-In bivariate EDA, the **shape** is a description of the overall trend of the points in the scatterplot. Common shapes we are linear, quadratic, and logarithmic. There may also be no clear trend. These are shown in @fig-bivariate-shape. @fig-bivariate-shape shows examples of the commonly observed shapes. When we do linear regression, we generally assume that the relationship between the response variable and the predictor variable(s) is linear as in @fig-bivariate-shape-1. Additionally, there are methods to account for quadratic ([@fig-bivariate-shape-2]) and logarithmic ([@fig-bivariate-shape-3]) relationships in the model. A scatterplot with no clear trend as in @fig-bivariate-shape-4 indicates there is little to no relationship between the two variables.
+In bivariate EDA, the **shape** is a description of the overall trend of the points in the scatterplot. Common shapes are linear, quadratic, and logarithmic. There may also be no clear trend. @fig-bivariate-shape shows examples of the commonly observed shapes. When we do linear regression, we generally assume that the relationship between the response variable and the predictor variable(s) is linear as in @fig-bivariate-shape-1. Additionally, there are methods to account for quadratic ([@fig-bivariate-shape-2]) and logarithmic ([@fig-bivariate-shape-3]) relationships in the model. A scatterplot with no clear trend as in @fig-bivariate-shape-4 indicates there is little to no relationship between the two variables.
 
 ```{r}
 #| label: fig-bivariate-shape
@@ -896,11 +896,11 @@ ggplot(data = df_flat, aes(x = x, y = y)) +
 
 The direction is **positive** ([@fig-bivariate-direction-1]) if one variable tends to increase as the other increases. The direction is **negative** ([@fig-bivariate-direction-2]) if one variable tends to decrease as the other increases. Lastly, there **no direction** ([@fig-bivariate-direction-3]) if there is no clear pattern in how one variable changes as the other changes.
 
-From @fig-bivar-eda-protein-calories, relationship between `calories` and `protein` is positive and linear. In general, recipes with more calories per serving tend to also have more grams of protein per serving.
+From @fig-bivar-eda-protein-calories, the relationship between `calories` and `protein` is positive and linear. In general, recipes with more calories per serving tend to also have more grams of protein per serving.
 
 #### Describe the relationship: Strength {.unnumbered}
 
-The **strength** of the relationship between two variables is a measure how closely the observations follow the overall pattern or shape. Points that are tightly clustered together indicate a stronger relationship than points that are more dispersed. @fig-bivariate-strength shows examples of linear relationships with different strengths.
+The **strength** of the relationship between two variables is a measure of how closely the observations follow the overall pattern or shape. Points that are tightly clustered together indicate a stronger relationship than points that are more dispersed. @fig-bivariate-strength shows examples of linear relationships with different strengths.
 
 ```{r}
 #| label: fig-bivariate-strength
@@ -965,7 +965,7 @@ ggplot(data = df_weak, aes(x = x, y = y)) +
 
 When the shape between two variables is linear, we use the correlation to quantify the strength of the relationship. The **correlation**, denoted $r$, is a measure of the strength and direction of the [linear relationship]{.underline} between two variables. The correlation ranges from -1 to 1, with $r \approx -1$ indicating a nearly perfect negative linear relationship, $r \approx 1$ indicating a nearly perfect positive relationship, and $r \approx 0$ indicating a very weak to no linear relationship.
 
-The direction of the linear relationship between two variable is indicated by the sign of the correlation. The strength is indicated by the magnitude of the correlation, $|r|$.
+The direction of the linear relationship between two variables is indicated by the sign of the correlation. The strength is indicated by the magnitude of the correlation, $|r|$.
 
 ```{r}
 #| label: cor-calories-protein
@@ -1029,7 +1029,7 @@ ggplot(data = df2, aes(x = x, y = y)) +
 
 #### Describe the relationship: Outliers and notable features {.unnumbered}
 
-When looking at the relationship between two variables, outliers are observations fall outside the general trend of the data. Outliers may have out-sized influence when building a regression model. Therefore, it is important to identify outliers in the EDA, so we can take them into account when evaluating the results from the regression analysis. We discuss how the impact of outliers on regression modeling in @sec-outliers-impact.
+When looking at the relationship between two variables, outliers are observations that fall outside the general trend of the data. Outliers may have out-sized influence when building a regression model. Therefore, it is important to identify outliers in the EDA, so we can take them into account when evaluating the results from the regression analysis. We discuss the impact of outliers on regression modeling in @sec-outliers-impact.
 
 There are outliers in the relationship between `calories` and `protein` in @fig-bivar-eda-protein-calories. In particular, there are two observations with over 1500 calories per serving and protein close to 0 grams. These are far outside the general trend of the data, as the amount of protein is lower than expected based on the other observations with high calories per serving.
 
@@ -1153,7 +1153,7 @@ ggplot(data = recipes, aes(x = chef_john, y = avg_rating, fill = chef_john)) +
 
 The **side-by-side boxplot** in @fig-bivar-eda-chef-rating-1 shows a boxplot of the distribution of `avg_rating` for each level of `chef_john`. When evaluating whether there appears to be a relationship between the two variables, we want to see if the boxplots are relatively similar for the recipes posted by Chef John (`chef_john = 1`) and those posted by all other authors (`chef_john = 0`). In this plot, the median for Chef John's recipes is slightly higher than the median for all other posters, though there is overlap in the middle 50% of both distributions, as shown by the overlapping boxes. There is less variability in the average ratings among Chef John's recipes compared to the variability in the average ratings for all others. We also note that there are more extreme low outliers in the distribution of recipes posted by all other authors.
 
-The **ridgeline plot** in @fig-bivar-eda-chef-rating-2 shows the density plot of the distribution of `avg_rating` for each level of `chef_john`. These plots are useful for comparing the center and shape of the distribution at each level. They also show how the spreads of the distributions compare. As with the side-by-side boxplots, we see there is more spread (variability) in the average ratings for recipes posted by others compared to those posted by Chef John. The number of outliers is less apparent, however, compared to side-by-side boxplot.
+The **ridgeline plot** in @fig-bivar-eda-chef-rating-2 shows the density plot of the distribution of `avg_rating` for each level of `chef_john`. These plots are useful for comparing the center and shape of the distribution at each level. They also show how the spreads of the distributions compare. As with the side-by-side boxplots, we see there is more spread (variability) in the average ratings for recipes posted by others compared to those posted by Chef John. The number of outliers is less apparent, however, compared to the side-by-side boxplot.
 
 Lastly, the **violin plot** in @fig-bivar-eda-chef-rating-3 is like a combination of the boxplot and ridgeline plot. The plots show the density of `avg_rating` for each level of `chef_john` with the median marked by a horizontal line. This makes it easier to compare the center of the distributions. We can also easily compare the spreads of the distributions. As with the ridgeline plots, it is less clear which observations are outliers.
 
@@ -1254,7 +1254,7 @@ ggplot(data = recipes) +
 
 <!--# maybe put barplot by itself then mosaic and stacked barplot on a row-->
 
-The **grouped bar plot** in @fig-bivar-eda-chef-season-1 shows a bar chart of `season` based on the levels of `chef_john`. The height of the bars represent the number of observations that take a given level of `season` and given level of `chef_john`. As we evaluate whether there is a relationship between the two variables, we look to see whether the relative bar heights across seasons is the same for recipes posted by Chef John compared to the relative bar heights for other authors. The data give some indication of a relationship between the variables if the distribution of `season` differs based on values of `chef_john`.
+The **grouped bar plot** in @fig-bivar-eda-chef-season-1 shows a bar chart of `season` based on the levels of `chef_john`. The heights of the bars represent the number of observations that take a given level of `season` and given level of `chef_john`. As we evaluate whether there is a relationship between the two variables, we look to see whether the relative bar heights across seasons is the same for recipes posted by Chef John compared to the relative bar heights for other authors. The data give some indication of a relationship between the variables if the distribution of `season` differs based on values of `chef_john`.
 
 @fig-bivar-eda-chef-season-1 shows a limitation of the grouped bar chart. Because the heights of the bars represent the number of observations, these plots can be difficult to interpret when the data have a large imbalance. That is the case here, as there are `r recipes |> count(chef_john) |> filter(chef_john == 1) |> pull(n)` recipes were posted by Chef John and `r recipes |> count(chef_john) |> filter(chef_john == 0) |> pull(n)` were posted by all other authors.
 
@@ -1288,7 +1288,7 @@ Write two observations from @fig-bivar-eda-country-season. Does there appear to 
 :::
 
 [^03-eda-7]: Example observations: (1) A larger proportion of Filipino and French recipes are posted in the fall compared to recipes from other countries. (2) A much smaller proportion of Filipino recipes are posted in the spring compared to other countries.\
-    There does appear to be a relationship between `season` and `country` . There are differences in the distribution of season across countries.
+    There does appear to be a relationship between `season` and `country`. There are differences in the distribution of season across countries.
 
 ## Relationship between three or more variables {#sec-multivar-eda}
 
@@ -1323,7 +1323,7 @@ Much of the exploratory data analysis in this chapter is done using functions fr
 
 ### Data summaries {#sec-eda-data-summaries}
 
-The `skim()` function in the **skimr** R package [@skimr] provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data ([@sec-initial-check]) and univariate data analysis ([@sec-univar-eda]). The code below produces a summary for each column `recipes`. Different types of summary output is produced based on the column's data type.
+The `skim()` function in the **skimr** R package [@skimr] provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data ([@sec-initial-check]) and univariate data analysis ([@sec-univar-eda]). The code below produces a summary for each column in `recipes`. Different types of summary output are produced based on the column's data type.
 
 ```{r}
 #| label: tbl-skim-recipes 

@@ -178,11 +178,11 @@ The function $f(X)$ that describes the relationship between the response and pre
 
 $$f(X) = \mu_{Y|X} = \beta_0 + \beta_1X$$ {#eq-slr-function}
 
-where $\mu_{Y|X}$ is the mean value of $Y$ at a particular value of $X$, and $\beta_0$ and $\beta_1$ are the model coefficients. The error terms $\epsilon$ from @eq-general-model-2 are normally distributed with a mean of 0 and variance $\sigma_{\epsilon}^2$, represented as $N(0, \sigma^2_{\epsilon})$ (more on this in @sec-slr-foundation. The specification of the simple linear regression model written in terms of individual observations $(x_i, y_i)$ is
+where $\mu_{Y|X}$ is the mean value of $Y$ at a particular value of $X$, and $\beta_0$ and $\beta_1$ are the model coefficients. The error terms $\epsilon$ from @eq-general-model-2 are normally distributed with a mean of 0 and variance $\sigma_{\epsilon}^2$, represented as $N(0, \sigma^2_{\epsilon})$ (more on this in @sec-slr-foundation). The specification of the simple linear regression model written in terms of individual observations $(x_i, y_i)$ is
 
 $$y_i = \beta_0 + \beta_1 x_i + \epsilon_i \hspace{7mm} \epsilon_i \sim N(0, \sigma_{\epsilon}^2)$$ {#eq-slr-complete}
 
-such that $y_i$ is the response for the $i^{th}$ observation, $x_i$ is he predictor for the $i^{th}$ observation, and $\epsilon_i$ is the error for the $i^{th}$ observation. @eq-slr-complete is the **statistical model**, also called the *data-generating model* or *population-level model*. It is the theoretical form of the model that describes exactly how to generate the values of the response $Y$ given values of the predictor in the population. The model coefficients are the intercept $\beta_0$ and the slope $\beta_1$. The$\sigma^2_{\epsilon}$ is called the standard error. In practice we don't know the exact values of $\beta_0$, $\beta_1$, and $\sigma_{\epsilon}^2$, so our goal is to use sample data to estimate these values. We will focus on the coefficients $\beta_0$ and $\beta_1$ in this chapter. We discuss estimating $\sigma^2_{\epsilon}$ in @sec-estimate-reg-std-err.
+such that $y_i$ is the response for the $i^{th}$ observation, $x_i$ is the predictor for the $i^{th}$ observation, and $\epsilon_i$ is the error for the $i^{th}$ observation. @eq-slr-complete is the **statistical model**, also called the *data-generating model* or *population-level model*. It is the theoretical form of the model that describes exactly how to generate the values of the response $Y$ given values of the predictor in the population. The model coefficients are the intercept $\beta_0$ and the slope $\beta_1$. The $\sigma^2_{\epsilon}$ is called the standard error. In practice we don't know the exact values of $\beta_0$, $\beta_1$, and $\sigma_{\epsilon}^2$, so our goal is to use sample data to estimate these values. We will focus on the coefficients $\beta_0$ and $\beta_1$ in this chapter. We discuss estimating $\sigma^2_{\epsilon}$ in @sec-estimate-reg-std-err.
 
 ::: {.yourturn latex=""}
 In simple linear regression, we use sample data to estimate a model to understand trends in the population.
@@ -206,7 +206,7 @@ We can ask the following questions to evaluate whether simple linear regression 
 
 Mathematical equations or statistical software can be used to fit a linear regression model between any two quantitative variables. Therefore it is upon the judgment of the data scientist to determine if it is reasonable to proceed with a linear regression model or if doing so might result in misleading conclusions about the data. If the answer is "no" to any of the questions above, consider if a different analysis technique is better for the data, or proceed with caution if using regression. If we proceed with regression, be transparent about some of the limitations of the conclusions.
 
-From @sec-slr-intro, the goal of this analysis is understand the relationship between the critics scores and audience score for movies on Rotten Tomatoes. Therefore, there is a practical use for fitting the regression model. We observed from @fig-movies-bivariate that the relationship between the two variables is approximately linear, so it could reasonably be summarized a model of the form of @eq-slr-complete. Lastly, the data set includes all movies in `r min(movie_scores$year)` and `r max(movie_scores$year)` that has a sufficient number of ratings on popular movie ratings websites, so we can reasonably conclude the sample is representative of the population of movies on Rotten Tomatoes. Therefore, we are comfortable drawing conclusions about the population based on the analysis of our sample data. <!--# Not sure if this last point is a leap-->
+From @sec-slr-intro, the goal of this analysis is understand the relationship between the critics scores and audience score for movies on Rotten Tomatoes. Therefore, there is a practical use for fitting the regression model. We observed from @fig-movies-bivariate that the relationship between the two variables is approximately linear, so it could reasonably be summarized by a model of the form of @eq-slr-complete. Lastly, the data set includes all movies in `r min(movie_scores$year)` and `r max(movie_scores$year)` that have a sufficient number of ratings on popular movie ratings websites, so we can reasonably conclude the sample is representative of the population of movies on Rotten Tomatoes. Therefore, we are comfortable drawing conclusions about the population based on the analysis of our sample data. <!--# Not sure if this last point is a leap-->
 
 The form of the simple linear regression model for the movie scores data is
 
@@ -251,7 +251,7 @@ ggplot(data = movie_scores, mapping = aes(x = critics_score, y = audience_score)
   theme_bw()
 ```
 
-From @fig-movies-bivariate, we know that the value of the response is not necessarily the same for all observations with the same value of the predictor. For example, we wouldn't expect (nor do we observe) the same audience score for every movie with a critics score of 70. We know there are other factors other than the critics score that are related to how an audience reacts to a movie. Our analysis, however, only takes into account the critics score, so we do not capture these additional factors in our regression equation [@eq-movies-slr]. This is where the error terms come back in.
+From @fig-movies-bivariate, we know that the value of the response is not necessarily the same for all observations with the same value of the predictor. For example, we wouldn't expect (nor do we observe) the same audience score for every movie with a critics score of 70. We know there are factors other than the critics score that are related to how an audience reacts to a movie. Our analysis, however, only takes into account the critics score, so we do not capture these additional factors in our regression equation [@eq-movies-slr]. This is where the error terms come back in.
 
 Once we computed estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ for the regression equation, we can calculate how far the predicted values of the response produced by the regression equation differ from the actual values of the response variable observed in the data. This difference is called the **residual**, denoted $e_i$. <!--# Introduce residuals before explicitly before estimating the regression line. Maybe it's own subsection?-->
 
@@ -277,7 +277,7 @@ Would you rather see a movie that has a positive or negative residual? Explain y
 
 ### Least squares regression {#sec-least-squares}
 
-There are many possible regression lines (infinitely many, in fact) that we could use to summarize the relationship between `critics_score` and `audience_scores`. We see some fo the potential lines represented in @fig-many-lines. So how did we determine the line that "best" fits the data is the one described by @eq-movies-slr? We'll use the residuals to help us answer this question.
+There are many possible regression lines (infinitely many, in fact) that we could use to summarize the relationship between `critics_score` and `audience_scores`. We see some of the potential lines represented in @fig-many-lines. So how did we determine the line that "best" fits the data is the one described by @eq-movies-slr? We'll use the residuals to help us answer this question.
 
 ```{r}
 #| label: fig-many-lines
@@ -354,7 +354,7 @@ $$\hat{\beta}_1 = r\frac{s_Y}{s_X} \hspace{10mm} \hat{\beta}_0 = \bar{y} - \hat{
 
 where $\bar{x}$ and $\bar{y}$ are the mean values of the predictor and response variables, respectively, $s_X$ and $s_Y$ are the standard deviations of the predictor and response variables, respectively, and $r$ is the correlation between the response and predictor variables. See [Appendix @sec-least-sq-math] for the full details of the derivation from @eq-least-sq-pt2 to @eq-least-sq-estimates.
 
-@eq-slr-computations show the calculations of slope and intercept for the movie scores model based on the summary statistics in @tbl-movies-univariate. Note that the small differences in the values compared to @eq-movies-slr are due to rounding (versus coefficients computed by software).
+@eq-slr-computations shows the calculations of slope and intercept for the movie scores model based on the summary statistics in @tbl-movies-univariate. Note that the small differences in the values compared to @eq-movies-slr are due to rounding (versus coefficients computed by software).
 
 $$\begin{aligned}
 \hat{\beta}_1 &= 0.78 \times \frac{20.0}{30.2} = 0.517 \\ \hat{\beta}_0 &=  63.9 - 0.517 \times  60.8 = 32.467
@@ -392,7 +392,7 @@ The intercept in @eq-movies-slr of 32.316 is interpreted as the following:
 
 > *The expected audience score for movies on Rotten Tomatoes with a critics score of 0 is 32.316 points.*
 
-We always need to estimate the intercept in @eq-regression to get the line that best fit using least squares regression. The intercept, however, does not always have a meaningful interpretation. We ask the following questions to determine if the intercept has a meaningful interpretation:
+We always need to estimate the intercept in @eq-regression to get the line that best fits using least squares regression. The intercept, however, does not always have a meaningful interpretation. We ask the following questions to determine if the intercept has a meaningful interpretation:
 
 1.  Is it plausible for the predictor variable to take values at or near zero?
 
@@ -410,12 +410,12 @@ Is the interpretation of the intercept in @eq-movies-slr meaningful? Briefly exp
 Avoid using causal language and making declarative statements (e.g., "The audience score for a movie with a critics score of 0 points [**will**]{.underline} be 32.316 points.") when interpreting the slope and intercept. Remember the slope and intercept are estimates describing what is **expected** in the relationship between the response and predictor to be based on the sample data and linear regression model. They do not tell us exactly what will happen in the data.
 
 <br>\
-There is an area of statistics called *causal inference* about model that can be used to make causal statements from observational (non-experimental) data. See @sec-causal for a brief introduction to causal inference.
+There is an area of statistics called *causal inference* about models that can be used to make causal statements from observational (non-experimental) data. See @sec-causal for a brief introduction to causal inference.
 :::
 
 ## Prediction {#sec-slr-predict}
 
-One of the primary purposes of a regression model is to use for prediction. When a regression model is used for prediction, the estimated value of the response variable is computed based on a given value of the predictor. We've seen this in earlier sections when calculating the residuals. Let's take a look at the model predictions for two movies released in 2023.
+One of the primary purposes of a regression model is prediction. When a regression model is used for prediction, the estimated value of the response variable is computed based on a given value of the predictor. We've seen this in earlier sections when calculating the residuals. Let's take a look at the model predictions for two movies released in 2023.
 
 The movie *Barbie* was released in theaters on July 21, 2023. This movie was widely praised by critics, and it has a critics score of 88 at the time the data were obtained. Based on @eq-movies-slr, the predicted audience score is
 
@@ -447,7 +447,7 @@ The movie *Asteroid City* was released in theaters on June 23, 2023. The critics
 The regression model is most reliable when predicting the response for values of the predictor within the range of the sample data used to fit the regression model. Using the model to predict for values far outside this range is called **extrapolation*.*** The sample data provide information about the relationship between the response and predictor variables for values within the range of the predictor in the data. We can not safely assume that the linear relationship quantified by our model is the same for values of the predictor far outside of this range. Therefore, extrapolation often results in unreliable predictions that could be misleading if the linear relationship does not hold outside the range of the sample data.
 
 ::: {.analysis_in_practice latex=""}
-Only use the regression model to compute predictions for values of the predictor that are within (or very close) to the range of values in the sample data used to fit the model. Extrapolation, using a model to compute predictions for value so the predictor far outside the range in the data, can result in unreliable predictions.
+Only use the regression model to compute predictions for values of the predictor that are within (or very close) to the range of values in the sample data used to fit the model. Extrapolation, using a model to compute predictions for values of the predictor far outside the range in the data, can result in unreliable predictions.
 :::
 
 ## Model evaluation {#sec-model-assessment}
@@ -486,7 +486,7 @@ The RMSE for the movie scores model is `r round(rmse,3)`. The values of audience
 
 ### Analysis of variance and $R^2$ {#sec-slr-sum-sq}
 
-The **coefficient of determination**, $R^2$, the percentage of variability in the response variable that is explained by the predictor variable. In terms of the movie scores data, it is the percentage of variability in the audience score that is accounted for by changes in the critics score. Before talking more about how $R^2$ is used for model evaluation, let's discuss how this percentage is calculated.
+The **coefficient of determination**, $R^2$, is the percentage of variability in the response variable that is explained by the predictor variable. In terms of the movie scores data, it is the percentage of variability in the audience score that is accounted for by changes in the critics score. Before talking more about how $R^2$ is used for model evaluation, let's discuss how this percentage is calculated.
 
 There is variability in the response variable, as we see in the exploratory data analysis in @fig-movies-univariate and @tbl-movies-univariate. **Analysis of Variance (ANOVA)**, shown in @eq-anova, is the process of partitioning the various sources of variability.
 
@@ -509,9 +509,9 @@ SST &= SSM + SSR \\[10pt]
 
 <!--# add link to appendix to see mathematically-->
 
-**Sum of Squares Total (SST)** $= \sum_{i=1}^n(y_i - \bar{y})^2$, is the total variability, an overall measure of how far the observed values of the response variable are from the mean value of the response $\bar{y}$. The formula for SST may look familiar, as it is $(n-1)s_y^2$ , which equals$(n-1)$ times the variance of $y$. SST can be partitioned into two pieces, Sum of Squares Model (SSM) and Sum of Squares Residuals (SSR).
+**Sum of Squares Total (SST)** $= \sum_{i=1}^n(y_i - \bar{y})^2$, is the total variability, an overall measure of how far the observed values of the response variable are from the mean value of the response $\bar{y}$. The formula for SST may look familiar, as it is $(n-1)s_y^2$ , which equals $(n-1)$ times the variance of $y$. SST can be partitioned into two pieces, Sum of Squares Model (SSM) and Sum of Squares Residuals (SSR).
 
-**Sum of Squares Model (SSM)** $= \sum_{i=1}^n(\hat{y}_i - \bar{y})^2$, is the explained variability, an overall measure of how much the predicted value of the response variable (the expected mean value of the response given the predictor) differs from the overall mean value of the response. This indicates how much the observed response's deviation from the mean is accounted for by knowing the value of the predictor.
+**Sum of Squares Model (SSM)** $= \sum_{i=1}^n(\hat{y}_i - \bar{y})^2$, is the explained variability, an overall measure of how much of the predicted value of the response variable (the expected mean value of the response given the predictor) differs from the overall mean value of the response. This indicates how much the observed response's deviation from the mean is accounted for by knowing the value of the predictor.
 
 Lastly, the **Sum of Squares Residual (SSR)** $= \sum_{i=1}^n(y_i - \hat{y}_i)^2$, is the unexplained variability, an overall measure of how much the observed values of the response differ from the predicted values. This is the same sum of squared residuals used to estimate the least-squares regression model in @sec-least-squares.
 
@@ -619,7 +619,7 @@ The code below will only return $R^2$ from the output of `glance()`.
 glance(movie_fit)$r.squared
 ```
 
-RMSE is computed using the `rmse()` function from the **yardstick** package [@yardstick]. First, we use `augment()` from the **broom** package to compute the predicted value for each observation in the data set. These values are stored if the column `.fitted`. We may notice that many other columns are produced by `augment()` as well; these are discussed in @sec-ch-slr-conditions. We input the augmented data into `rmse()`.
+RMSE is computed using the `rmse()` function from the **yardstick** package [@yardstick]. First, we use `augment()` from the **broom** package to compute the predicted value for each observation in the data set. These values are stored in the column `.fitted`. We may notice that many other columns are produced by `augment()` as well; these are discussed in @sec-ch-slr-conditions. We input the augmented data into `rmse()`.
 
 ```{r}
 #| echo: true
