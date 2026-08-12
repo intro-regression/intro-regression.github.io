@@ -30,7 +30,7 @@ source("_common.R")
 
 ## Introduction: Predicting comfort with driverless cars
 
-In @sec-ch-logistic, we introduced data from the 2024 General Social Survey in which adults in the United States their opinions were asked on a variety of issues, including their comfort with driverless cars. In the previous chapter, we fit a logistic regression model used the model to describe the characteristics associated with the odds an adult is comfortable with driverless cars. We continue with the analysis in this chapter, with a focus on using the model for prediction. We will also evaluate the model performance and show an example workflow for comparing two logistic regression models.
+In @sec-ch-logistic, we introduced data from the 2024 General Social Survey in which adults in the United States were asked their opinons on a variety of issues, including their comfort with driverless cars. In the previous chapter, we fit a logistic regression model and used the model to describe the characteristics associated with the odds an adult is comfortable with driverless cars. We continue with the analysis in this chapter, with a focus on using the model for prediction. We will also evaluate the model performance and show an example workflow for comparing two logistic regression models.
 
 We use the variables below in this chapter. The variable definitions are based on survey prompts and variable definitions in the *General Social Survey Documentation and Public Use File Codebook* [@gss2024].
 
@@ -42,7 +42,7 @@ We use the variables below in this chapter. The variable definitions are based o
 
 - `age`: Respondent's age in years
 
-- `income`: Response to the question "In which of these groups did your total family income, from all sources, fall last year? That is, before taxes." Categories are `Less than $20k`, `$20-50k`, `$50-110k`, `$110k or more`, `Not reported` .
+- `income`: Response to the question "In which of these groups did your total family income, from all sources, fall last year? That is, before taxes." Categories are `Less than $20k`, `$20-50k`, `$50-110k`, `$110k or more`, `Not reported`.
 
   - Note: These categories were defined based on the 27 categories in `income16` from the original survey.
 
@@ -115,9 +115,9 @@ ggplot(data = gss24_ai, aes(x = tech_harm)) +
   
 ```
 
-@fig-aidrive-eda-2 shows the distributions of the predictors that are new in this chapter. From the distribution of `income` in @fig-aidrive-eda-2-1 , we see that the most common response for income is between \$50-110K. There is a sizable proportion of the respondents who did not report an income. Studies have shown that failure to report income in surveys is not random [e.g., @jabkowski2024not], so it will be worth noting if the `Not Reported` indicator has a statistically significant relationship with the response variable as we continue the analysis.
+@fig-aidrive-eda-2 shows the distributions of the predictors that are new in this chapter. From the distribution of `income` in @fig-aidrive-eda-2-1, we see that the most common response for income is between \$50-110K. There is a sizable proportion of the respondents who did not report an income. Studies have shown that failure to report income in surveys is not random [e.g., @jabkowski2024not], so it will be worth noting if the `Not Reported` indicator has a statistically significant relationship with the response variable as we continue the analysis.
 
-The distribution of `polviews_fct` in @fig-aidrive-eda-2-2 shows a relatively even distribution along the range of political views. A few respondents chose not to report their political views. Lastly, the distribution of `tech_harm` in @fig-aidrive-eda-2-3 shows that most people either disagree are have neutral feelings about the statement that technology causes more harm than good.
+The distribution of `polviews_fct` in @fig-aidrive-eda-2-2 shows a relatively even distribution along the range of political views. A few respondents chose not to report their political views. Lastly, the distribution of `tech_harm` in @fig-aidrive-eda-2-3 shows that most people either disagree or have neutral feelings about the statement that technology causes more harm than good.
 
 ### Bivariate EDA
 
@@ -238,7 +238,7 @@ $$\widehat{\text{odds}} = e^{\log \big( \frac{\hat{\pi}}{1-\hat{\pi}}\big)} = e^
 
 Lastly, we use the odds from @tbl-aidrive-comfort-predict to compute the predicted probability[^12-logistic-prediction-2]:
 
-[^12-logistic-prediction-2]: These values may differ slightly from the values in the the table, because we are computing predictions using rounded coefficient.
+[^12-logistic-prediction-2]: These values may differ slightly from the values in the the table, because we are computing predictions using rounded coefficients.
 
 $$\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.692}{1 + 3.692} = 0.787$$
 
@@ -281,13 +281,13 @@ Show how to compute the predicted odds and probability for individual #2 in @tbl
 
 Knowing the predicted odds and probabilities can be useful for understanding how likely individuals with various characteristics will be comfortable with driverless cars. In many contexts, however, we would like to group individuals based on whether or not the model predicts they are comfortable with driverless cars. For example, the marketing team for a robotaxi company may want to use targeted marketing strategies and offer discounts to potential new customers. To have a successful marketing campaign, they want to direct the marketing to those who are comfortable with driverless cars.
 
-As we've seen thus far, the logistic regression model does not directly produce predicted values of the binary response variable. Therefore, we can group observations based on the predicted probabilities computed from the model output. This process of grouping observations based on the predictions is called **classification**. The groups the observations are put into are the **predicted classes**. In the case of our analysis, we will use the model to classify observations into the class of those not comfortable with driverless cars (`aidrive_comfort = 0`) or the class of those comfortable with driverless cars (`aidrive_comfort = 1`) .
+As we've seen thus far, the logistic regression model does not directly produce predicted values of the binary response variable. Therefore, we can group observations based on the predicted probabilities computed from the model output. This process of grouping observations based on the predictions is called **classification**. The groups the observations are put into are the **predicted classes**. In the case of our analysis, we will use the model to classify observations into the class of those not comfortable with driverless cars (`aidrive_comfort = 0`) or the class of those comfortable with driverless cars (`aidrive_comfort = 1`).
 
 <!--# Key terms: Predicted class: Group assignment for an observation based on model predictions Classification: Process of using the model predictions to assign observations to classes-->
 
-We showed how to compute the predicted probabilities from the logistic regression output in @sec-logistic-prediction, and we will use those probabilities to classify observations. The question, then, is how large does the probability need to be to classify an observation as having the response $Y = 1$ ? In terms of our analysis, how large does the probability of being comfortable with driverless cars need to be to classify an individual as being comfortable with driverless cars, `aidrive_comfort = 1`?
+We showed how to compute the predicted probabilities from the logistic regression output in @sec-logistic-prediction, and we will use those probabilities to classify observations. The question, then, is how large does the probability need to be to classify an observation as having the response $Y = 1$? In terms of our analysis, how large does the probability of being comfortable with driverless cars need to be to classify an individual as being comfortable with driverless cars, `aidrive_comfort = 1`?
 
-When using the logistic regression model for classification, we define a threshold, such an observation is classified as $\hat{Y} = 1$ if the predicted probability is greater than the threshold. Otherwise, the observation is classified as $\hat{Y} = 0$. If we're unsure what threshold to set, we can start with a threshold of 0.5, the default threshold typically used in statistical software. This means if the model predicts an observation is more likely than not to have response $Y = 1$, even if just by a small amount, then the observation is classified as having response $\hat{Y} = 1$.
+When using the logistic regression model for classification, we define a threshold, such that an observation is classified as $\hat{Y} = 1$ if the predicted probability is greater than the threshold. Otherwise, the observation is classified as $\hat{Y} = 0$. If we're unsure what threshold to set, we can start with a threshold of 0.5, the default threshold typically used in statistical software. This means if the model predicts an observation is more likely than not to have response $Y = 1$, even if just by a small amount, then the observation is classified as having response $\hat{Y} = 1$.
 
 For now, let's use the threshold equal to 0.5 to assign the predicted classes of `aidrive_comfort` for the respondents in the sample data based on the predicted probabilities produced from the model in @tbl-aidrive-comfort-fit.
 
@@ -304,7 +304,7 @@ aidrive_comfort_aug |>
   kable(digits = 3, col.names = c("", "aidrive_comfort", "Pred. probability", "Pred. class" ))
 ```
 
-@tbl-aidrive-comfort-pred-class shows the observed value of the response (`aidrive_comfort`), predicted probability, and predicted class for ten respondents. For many of these respondents, the observed and predicted classes are equal. There are some, such as Observation 6, in which the predicted classes differs from the observed. In this instance, the respondent had a combination of `age`, `income`, and `tech_easy`, that are associated with a higher probability of being comfortable with driverless cars; however, the individual responded they are not comfortable with driverless cars in the General Social Survey.
+@tbl-aidrive-comfort-pred-class shows the observed value of the response (`aidrive_comfort`), predicted probability, and predicted class for ten respondents. For many of these respondents, the observed and predicted classes are equal. There are some, such as Observation 6, in which the predicted classes differ from the observed. In this instance, the respondent had a combination of `age`, `income`, and `tech_easy`, that are associated with a higher probability of being comfortable with driverless cars; however, the individual responded they are not comfortable with driverless cars in the General Social Survey.
 
 We need a way to more holistically evaluate how well the predicted classes align with the observed classes. To do so, we use a **confusion matrix**, a $2 \times 2$ table of the observed classes versus the predicted classes.
 
@@ -340,7 +340,7 @@ The **misclassification rate** is the proportion of observations that are not co
 
 $$\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375$$ {#eq-logistic-misclassification}
 
-Using the model in @tbl-aidrive-comfort-fit and the threshold of 0.5, 37.5% of the observations are incorrectly classified. Note that the misclassification rate is equal to $1 - \text{accuracy}$ ,and vice versa.
+Using the model in @tbl-aidrive-comfort-fit and the threshold of 0.5, 37.5% of the observations are incorrectly classified. Note that the misclassification rate is equal to $1 - \text{accuracy}$, and vice versa.
 
 ::: {.analysis_in_practice latex=""}
 When the distribution of the response variable is largely imbalanced, the accuracy can be a misleading measure of how well the observations are classified. For example, suppose there are 100 observations, such that 5% of the observations have an observed response $Y = 1$, and 95% of the observations have an observed response of $Y = 0$. We may observe an imbalanced distribution like this when building a model to detect the presence of a rare disease, for example.
@@ -360,7 +360,7 @@ tribble(
 ```
 
 \
-The accuracy for this model will be (95 + 0 ) / (95 + 5) = 0.95. Based on this value, it appears the classification has performed very well, even though we did not accurately classify any of the observations in which the observed response is $Y = 1$.
+The accuracy for this model will be (95 + 0) / (95 + 5) = 0.95. Based on this value, it appears the classification has performed very well, even though we did not accurately classify any of the observations in which the observed response is $Y = 1$.
 :::
 
 The accuracy and misclassification rate provide a nice initial indication of the how well the model classifies observations, but they do not give a complete picture. For example, suppose we want to know how many of the people who are actually comfortable with driverless cars are predicted to be comfortable based on the model predictions and threshold. Or suppose we want to know how many people who are actually not comfortable with driverless cars were incorrectly classified as being comfortable. To answer these and similar questions, let's take a more detailed look at the confusion matrix.
@@ -370,19 +370,19 @@ The accuracy and misclassification rate provide a nice initial indication of the
 | **Classified** **not comfortable**$(\hat{y}_i = 0)$ | True negative (TN) | False negative (FN) |
 | **Classified comfortable**$(\hat{y}_i = 1)$ | False positive (FP) | True positive (TP) |
 
-: Detailed confusion matrix {#tbl-confusion-matrix-detailed}
+: Detailed confusion matrix
 
 <!--# check the notation used in this table, y_i and p_i-->
 
 @tbl-confusion-matrix-detailed shows in greater detail what is being quantified in each cell of the confusion matrix. We will use these values to compute more granular values about the classification. As in @tbl-confusion-matrix, the rows define the predicted classes and the columns define the observed classes. The values in the cell indicate the following:
 
-- **True negative (TN):** The number of observations that are predicted to be not comfortable with driverless cars ( $\hat{y}_i = 0$) and have observed response of not comfortable ($y_i = 0$) .
+- **True negative (TN):** The number of observations that are predicted to be not comfortable with driverless cars ($\hat{y}_i = 0$) and have observed response of not comfortable ($y_i = 0$) .
 
-- **False negative (FN):** The number of observations that are predicted to be not comfortable with driverless cars ( $\hat{y}_i = 0$) and have observed response of comfortable ( $y_i = 1$) .
+- **False negative (FN):** The number of observations that are predicted to be not comfortable with driverless cars ($\hat{y}_i = 0$) and have observed response of comfortable ($y_i = 1$) .
 
-- **False positive (FP):** The number of observations that are predicted to be comfortable with driverless cars ( $\hat{y}_i = 1$) and have observed response of not comfortable ( $y_i = 0$) .
+- **False positive (FP):** The number of observations that are predicted to be comfortable with driverless cars ($\hat{y}_i = 1$) and have observed response of not comfortable ($y_i = 0$) .
 
-- **True positive (TP):** The number of observations that are predicted to be comfortable with driverless cars ( $\hat{y}_i = 1$) and have observed response of comfortable ( $y_i = 1$) .
+- **True positive (TP):** The number of observations that are predicted to be comfortable with driverless cars ($\hat{y}_i = 1$) and have observed response of comfortable ($y_i = 1$) .
 
 Using these definitions, the general form of accuracy computed in @eq-logistic-accuracy is
 
@@ -551,7 +551,7 @@ df3 |>
 
 @fig-roc-curve-examples shows example ROC curves for different model fits. @fig-roc-curve-examples-1 is the ROC curve for a model that does a poor job distinguishing between the true positives and false positives (close to the diagonal line) and @fig-roc-curve-examples-3 is the ROC curve for a model that almost perfectly distinguishes between the true and false positives (close to the top-left corner). Generally, we expect to see ROC curves somewhere in the middle, similar to @fig-roc-curve-examples-2. Here, the model generally does a good job distinguishing between the true and false positives, but we will expect to get some false positives if we want a high true positive rate (sensitivity).
 
-Each point in the ROC curve is $(1 - \text{Specificity, } \text{Sensitivity})$ at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in @fig-aidrive-comfort-roc-curve shows corresponds to $1 - \text{Specificity} = 0.525$ and $\text{Sensitivity} = 0.75$. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in @tbl-aidrive-roc-confmat. Observations with predicted probability $\hat{\pi}_i > 0.4888088$ are classified as being comfortable with driverless cars, and those with $\hat{\pi}_i \leq 0.4888088$ are classified as not being comfortable with driverless cars.
+Each point in the ROC curve is $(1 - \text{Specificity, } \text{Sensitivity})$ at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in @fig-aidrive-comfort-roc-curve corresponds to $1 - \text{Specificity} = 0.525$ and $\text{Sensitivity} = 0.75$. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in @tbl-aidrive-roc-confmat. Observations with predicted probability $\hat{\pi}_i > 0.4888088$ are classified as being comfortable with driverless cars, and those with $\hat{\pi}_i \leq 0.4888088$ are classified as not being comfortable with driverless cars.
 
 ```{r}
 #| label: tbl-aidrive-roc-confmat
@@ -585,7 +585,7 @@ roc_optimize <- aidrive_comfort_aug |>
   slice(1)
 ```
 
-In the next section, we will talk more about using the ROC curve to evaluate the model fit beyond a visual assessment. For now, let's discuss how to use the ROC curve to determine a probability threshold for classification. When we use a model for classification, we want a high true positive rate and a low false positive rate. Therefore, one of the most straightforward ways of using the ROC curve to identify a classification threshold is to choose the threshold that corresponds to the point on the curve that is closest to the top-left corner. <!--# This will be the point that has the best ratio of true positive rate to false positive rate. not sure if that is true--> <!--# does this relate to that F1 metric from machine learning?-->. There are many ways to identify this point mathematically. For example, we can find the combination of $\text{Sensitivity}$ and $1 - \text{Specificity}$ that minimizes the following:
+In the next section, we will talk more about using the ROC curve to evaluate the model fit beyond a visual assessment. For now, let's discuss how to use the ROC curve to determine a probability threshold for classification. When we use a model for classification, we want a high true positive rate and a low false positive rate. Therefore, one of the most straightforward ways of using the ROC curve to identify a classification threshold is to choose the threshold that corresponds to the point on the curve that is closest to the top-left corner. <!--# This will be the point that has the best ratio of true positive rate to false positive rate. not sure if that is true--> <!--# does this relate to that F1 metric from machine learning?-->There are many ways to identify this point mathematically. For example, we can find the combination of $\text{Sensitivity}$ and $1 - \text{Specificity}$ that minimizes the following:
 
 $$\sqrt{(1 - \text{Specificity})^2 + (\text{Sensitivity} - 1)^2}$$
 
@@ -694,7 +694,7 @@ Though we prefer models with high values of AUC (close to 1), we do not want a m
 
 ### Comparing models using AIC and BIC {#sec-logistic-aic-bic}
 
-Similar to linear regression, we can use the Akaike's Information Criterion (AIC) [@akaike1974] and the Bayesian Schwarz's Criterion (BIC) [@schwarz1978estimating] as relative measures for comparing logistic regression models. The equations for AIC and BIC in logistic regression are the same as these in linear regression (@sec-aic-bic).
+Similar to linear regression, we can use the Akaike's Information Criterion (AIC) [@akaike1974] and the Bayesian Schwarz's Criterion (BIC) [@schwarz1978estimating] as relative measures for comparing logistic regression models. The equations for AIC and BIC in logistic regression are the same as those for linear regression (@sec-aic-bic).
 
 $$\begin{aligned}
 &\text{AIC} = -2 \log L + 2(p+1) \\[5pt]
@@ -823,7 +823,7 @@ sample_n(10)
 
 The argument `event_level = "second"` is needed to specify that the predicted probability is associated with the probability that $y_i = 1$ (rather than the probability $y_i = 0$). The `.threshold` column contains the classification thresholds.
 
-The ROC curve data can be plotted using the `autoplot()` function. The resulting graph is `ggplot` object, so additional **ggplot2** layers such as `labs` and `annotate` can be applied to the ROC curve.
+The ROC curve data can be plotted using the `autoplot()` function. The resulting graph is a `ggplot` object, so additional **ggplot2** layers such as `labs` and `annotate` can be applied to the ROC curve.
 
 ```{r}
 #| echo: true 
@@ -895,7 +895,7 @@ aidrive_cv_1 <- aidrive_workflow_1 |>
 aidrive_cv_1_metrics <- collect_metrics(aidrive_cv_1, summarize = TRUE) 
 ```
 
-We repeat the process of cross validation for Mode 2 that includes the predictors `age`, `tech_easy`, `income_fct`, `polviews_fct`, and `tech_harm`. The performance metrics from cross validation are stored in the object `aidrive_cv_2_metrics`.
+We repeat the process of cross validation for Model 2 that includes the predictors `age`, `tech_easy`, `income_fct`, `polviews_fct`, and `tech_harm`. The performance metrics from cross validation are stored in the object `aidrive_cv_2_metrics`.
 
 ```{r}
 #| echo: true
@@ -965,7 +965,7 @@ auc_test <- aidrive_test |>
 
 The AUC for the testing data is `r round(auc_test, 3)`. Given the analysis task of modeling individuals' opinions, this model performs reasonably well in classifying individuals who are comfortable with driverless cars versus those who are not.
 
-As a final step, we refit the model using all observations in the data. At this point, we are ready to use the model for interpretation, drawing inferential conclusions, and to put into production for prediction and classification.
+As a final step, we refit the model using all observations in the data. At this point, we are ready to use the model for interpretation, drawing inferential conclusions, and putting into production for prediction and classification.
 
 ```{r}
 #| echo: true
@@ -980,6 +980,6 @@ glm(aidrive_comfort ~ age + tech_easy +
 
 ## Summary
 
-In this chapter, we expanded on the introduction to logistic regression in @sec-ch-logistic, as we used the logistic regression model to compute predicted log odds, odds, and probabilities. We then used the predicted values to classify observations into $\hat{Y} = 0$ or $\hat{Y} = 1$ . We constructed confusion matrices to evaluate the model performance at individual thresholds, and evaluated classification results using statistics such as sensitivity and specificity, among others. We used the ROC curve to select a classification threshold and computed the area under the curve (AUC) to more holistically evaluate the model fit. We also computed AIC and BIC for model comparison. We applied the model building practices from @sec-ch-model-eval to compare two models using a cross validation workflow.
+In this chapter, we expanded on the introduction to logistic regression in @sec-ch-logistic, as we used the logistic regression model to compute predicted log odds, odds, and probabilities. We then used the predicted values to classify observations into $\hat{Y} = 0$ or $\hat{Y} = 1$. We constructed confusion matrices to evaluate the model performance at individual thresholds, and evaluated classification results using statistics such as sensitivity and specificity, among others. We used the ROC curve to select a classification threshold and computed the area under the curve (AUC) to more holistically evaluate the model fit. We also computed AIC and BIC for model comparison. We applied the model building practices from @sec-ch-model-eval to compare two models using a cross validation workflow.
 
-In the @sec-ch-special-topics, we conclude with some advanced modeling techniques and special topics for analysis in practice.
+In @sec-ch-special-topics, we conclude with some advanced modeling techniques and special topics for analysis in practice.
