@@ -472,6 +472,12 @@ The plots in @fig-ncaa-model-compare can help provide intuition on what to expec
 
 The plot of residuals versus predicted variables in @fig-ncaa-orig-resid shows a clear violation in the equal variance condition based on the fan-shaped pattern of the residuals when moving from left to right. Recall from @sec-conditions-not-satisfied that it is necessary to satisfy the equal variance condition when doing theory-based inference (the inference results produced by output), because it relies on a single estimate of $\hat{\sigma}_{\epsilon}$, the regression standard error (variability about the regression line). We can easily see in @fig-ncaa-orig-resid that a single value would not be representative of the vertical spread of the residuals for all predicted values. Thus, the inferential results in @tbl-ncaa-model-orig should be interpreted with caution.
 
+::: {.analysis_in_practice latex=""}
+The coefficients of a regression model may still be interpretable if the equal variance condition is not met (see @sec-slr-conditions-recap). Thus, if we aim to interpret the model coefficients without theory-based inference, then we can use the original model and not transform the response variable.
+
+It is good practice to report inferential results alongside interpretations, so we can conduct simulation-based inference ([@sec-mlr-sim-inf]) if we do not wish to transform the response variable.
+:::
+
 One solution to this is to use the simulation-based inference methods introduced in @sec-mlr-sim-inf, because the sampling distribution and null distribution for an estimated coefficient $\hat{\beta}_j$ are constructed relying only on the data, rather than any underlying assumptions about the distribution of $\hat{\beta}_j$. Another approach is to use a transformation on the response variable to reduce the impacts of the different vertical spreads in the response variable. Such transformations are called **variance-stabilizing transformations**.
 
 <!--# do i need a callout terminology box highlighting the definition of variance-stabilizing transformaiton?-->

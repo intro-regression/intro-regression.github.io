@@ -455,7 +455,7 @@ Similar to the normality condition, the equal variance condition is not required
 
 There are approaches for handling violations in the equal variance condition. These approaches typically involve performing a transformation on the response variable. We will discuss these further in @sec-ch-transformations.
 
-### Recap
+### Recap {#sec-slr-conditions-recap}
 
 @tbl-slr-conditions provides a summary of the model conditions and whether they must be satisfied to reliably conduct each modeling task.
 
