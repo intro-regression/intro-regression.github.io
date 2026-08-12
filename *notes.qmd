@@ -849,3 +849,7 @@ m <- lm(diff_temp ~ observed_precip + elevation + distance_to_coast + wind + avg
 - Lucy: <https://sta-112-s24.github.io/website/schedule.html>
 
 - Yue: <https://www2.stat.duke.edu/courses/Spring24/sta210.001/index.html>
+
+## Notes for publication 
+
+- In PDF - the answers to the Your Turn are in the box, not at the bottom of the page.

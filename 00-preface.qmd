@@ -44,10 +44,8 @@ The book also includes appendices covering the mathematics underlying linear and
 
 The content and structure of this book are based on undergraduate regression analysis courses that have been taught by the author at Duke University. Each course follows a 15-week semester.
 
-**Applied Regression Analysis:** Undergraduate regression analysis course focused on application. Pre-requisites are introductory statistics or introductory probability.
-
-- [Chapter @sec-ch-intro], [Chapter @sec-ch-computing], [Chapter @sec-ch-eda] (2 weeks)
-  - [Chapter @sec-ch-computing] primarily covered in a computing lab or through review assignments.
+- @Sec-ch-intro, @sec-ch-computing, @sec-ch-eda (2 weeks)
+  - @sec-ch-computing primarily covered in a computing lab or through review assignments.
 - [Chapter @sec-ch-slr], [Chapter @sec-ch-slr-inf], [Chapter @sec-ch-slr-conditions] (2 weeks)
 - [Chapter @sec-ch-mlr] (1 week)
 - [Chapter @sec-ch-mlr-inf] (2 weeks)

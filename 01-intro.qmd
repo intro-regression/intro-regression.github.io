@@ -377,7 +377,7 @@ There are a few ways to do this in R. A rigorous approach is using the **renv** 
 
 Regression analysis (and data science in general) requires a blend of art and science. Good regression analysis needs both rigorous theory-based methods and the judgment (the "artistry") of the data scientist as they make decisions throughout the analysis process. In the same way a chef relies on their knowledge of food to make decisions about how much seasoning to add to dish, a data scientist relies on their understanding of statistical methods to make decisions as they prepare, explore, model, and interpret data. <!--# would like to add the jazz quote here-->
 
-@tukey1962future argues that data analysis (or regression analysis in our case) is not just an application of statistical theory with the sole objective to "optimize" but rather requires a "heavy emphasis on judgement." He goes on further to say that to analyze data well, "it must be a matter of judgment, and 'theory' whether statistical or non-statistical, will have to guide, not command" \[pp. 10\]. This judgment is not arbitrary, but comes from three sources (summarized from @tukey1962future):
+@tukey1962future argues that data analysis (or regression analysis in our case) is not just an application of statistical theory with the sole objective to "optimize" but rather requires a "heavy emphasis on judgment." He goes on further to say that to analyze data well, "it must be a matter of judgment, and 'theory' whether statistical or non-statistical, will have to guide, not command" \[pp. 10\]. This judgment is not arbitrary, but comes from three sources (summarized from @tukey1962future):
 
 - judgment based on domain knowledge
 - judgment based on knowledge statistical methods

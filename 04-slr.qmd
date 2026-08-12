@@ -143,7 +143,7 @@ There is a positive, linear relationship between the critics scores and audience
 
 In @sec-slr-eda, we used visualizations and summary statistics to describe the relationship between two variables. The exploratory data analysis, however, does not tell us what the audience score is predicted to be for a given value of the critics score or how much the audience score is expected to change as the critics score changes. Therefore, we will fit a linear regression model to quantify the relationship between the two variables. Recall the general form of the linear regression model in @eq-parametric-model. More specifically, when we have one predictor variable, we will fit a model of the form
 
-$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-slr}
+$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2)$$ {#eq-slr}
 
 @eq-slr, called a **simple linear regression (SLR) model**, is the equation to model the relationship between one quantitative response variable and one predictor variable. For now we will focus on models with one quantitative predictor variable. In later chapters, we will introduce models with two or more predictors ([@sec-ch-mlr]), categorical predictors ([@sec-mlr-interpret-categorical]), and models with a categorical response variable ([@sec-ch-logistic]).
 
@@ -178,11 +178,11 @@ The function $f(X)$ that describes the relationship between the response and pre
 
 $$f(X) = \mu_{Y|X} = \beta_0 + \beta_1X$$ {#eq-slr-function}
 
-where $\mu_{Y|X}$ is the mean value of $Y$ at a particular value of $X$, and $\beta_0$ and $\beta_1$ are the model coefficients. The error terms $\epsilon$ from @eq-general-model-2 are normally distributed with a mean of 0 and variance $\sigma_{\epsilon}^2$, represented as $N(0, \sigma^2_{\epsilon})$ (more on this in @sec-slr-foundation). The specification of the simple linear regression model written in terms of individual observations $(x_i, y_i)$ is
+where $\mu_{Y|X}$ is the mean value of $Y$ at a particular value of $X$, and $\beta_0$ and $\beta_1$ are the model coefficients. The error terms $\epsilon$ from @eq-general-model-2 are normally distributed with a mean of 0 and variance $\sigma^2$, represented as $N(0, \sigma^2)$ (more on this in @sec-slr-foundation). The specification of the simple linear regression model written in terms of individual observations $(x_i, y_i)$ is
 
-$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i \hspace{7mm} \epsilon_i \sim N(0, \sigma_{\epsilon}^2)$$ {#eq-slr-complete}
+$$y_i = \beta_0 + \beta_1 x_i + \epsilon_i \hspace{7mm} \epsilon_i \sim N(0, \sigma^2)$$ {#eq-slr-complete}
 
-such that $y_i$ is the response for the $i^{th}$ observation, $x_i$ is the predictor for the $i^{th}$ observation, and $\epsilon_i$ is the error for the $i^{th}$ observation. @eq-slr-complete is the **statistical model**, also called the *data-generating model* or *population-level model*. It is the theoretical form of the model that describes exactly how to generate the values of the response $Y$ given values of the predictor in the population. The model coefficients are the intercept $\beta_0$ and the slope $\beta_1$. The $\sigma_{\epsilon}$ is called the standard error. In practice we don't know the exact values of $\beta_0$, $\beta_1$, and $\sigma_{\epsilon}^2$, so our goal is to use sample data to estimate these values. We will focus on the coefficients $\beta_0$ and $\beta_1$ in this chapter. We discuss estimating $\sigma^2_{\epsilon}$ in @sec-estimate-reg-std-err.
+such that $y_i$ is the response for the $i^{th}$ observation, $x_i$ is the predictor for the $i^{th}$ observation, and $\epsilon_i$ is the error for the $i^{th}$ observation. @eq-slr-complete is the **statistical model**, also called the *data-generating model* or *population-level model*. It is the theoretical form of the model that describes exactly how to generate the values of the response $Y$ given values of the predictor in the population. The model coefficients are the intercept $\beta_0$ and the slope $\beta_1$. The $\sigma_{\epsilon}$ is called the standard error. In practice we don't know the exact values of $\beta_0$, $\beta_1$, and $\sigma^2$, so our goal is to use sample data to estimate these values. We will focus on the coefficients $\beta_0$ and $\beta_1$ in this chapter. We discuss estimating $\sigma^2$ in @sec-estimate-reg-std-err.
 
 ::: {.yourturn latex=""}
 In simple linear regression, we use sample data to estimate a model to understand trends in the population.
@@ -198,9 +198,22 @@ Before doing any more calculations, we need to determine if the simple linear re
 
 We can ask the following questions to evaluate whether simple linear regression is appropriate:
 
+- Is the response variable quantitative?
 - Will a linear regression model be practically useful? Does quantifying and interpreting the relationship between the variables make sense in this scenario?
 - Is the shape of the relationship reasonably linear?
 - Do the observations in the data represent the population of interest, or are there biases in the data that could limit conclusions drawn from the analysis? <!--# Differentiate this from the first two bullet points. Make clear if the first two points are violated, we definitely shouldn't do SLR. If this one is violated, we can still do SLR but need to be mindful about the scope of conclusions.-->
+
+::: {.yourturn latex=""}
+For each of the following scenarios, explain why a linear regression model would not be appropriate.[^04-slr-5]
+
+1.  We wish to fit a model using the temperature to predict the number of bicycles rented from the local bike share. From the EDA, we have identified that the number of riders tends to decrease for very low and very high temperatures.
+
+2.  We wish to fit a model using age to predict whether or not an individual has had a doctor's appointment in the past 6 months.
+
+3.  We wish to understand the relationship between the size (measured in square feet) and price (measured in US dollars) for houses in the United States. To do so, we analyze data from Zillow on houses sold in Durham, NC in 2023.
+:::
+
+[^04-slr-5]: \(1\) From the EDA, we have determined that the relationship is not linear. (2) The response variable is categorical, not quantitative. (3) The data are collected from a single city and are not represented of the population of interest (houses in the United States).
 
 <!--# Add a your turn that is an example of scenario in which linear regression in not appropriate-->
 
@@ -210,9 +223,9 @@ From @sec-slr-intro, the goal of this analysis is understand the relationship be
 
 The form of the simple linear regression model for the movie scores data is
 
-$$\text{audience\_score} = \beta_0 + \beta_1~\text{critics\_score} + \epsilon, \hspace{5mm}\epsilon  \sim N(0, \sigma^2_{\epsilon})$$ {#eq-movies-stat-model}
+$$\text{audience\_score} = \beta_0 + \beta_1~\text{critics\_score} + \epsilon, \hspace{5mm}\epsilon  \sim N(0, \sigma^2)$$ {#eq-movies-stat-model}
 
-Now that we have the form of the model, let's discuss how to estimate and interpret the model coefficients, the slope $\beta_1$ and the intercept $\beta_0$. We will estimate $\sigma^2_{\epsilon}$ in @sec-ch-slr-inf.
+Now that we have the form of the model, let's discuss how to estimate and interpret the model coefficients, the slope $\beta_1$ and the intercept $\beta_0$. We will estimate $\sigma^2$ in @sec-ch-slr-inf.
 
 ## Estimating the model coefficients {#sec-slr-estimation}
 
@@ -270,10 +283,10 @@ The observed audience score is 86, so the residual is
 $$e_i = y_i - \hat{y}_i = 86 - 70.722 = 15.278$$
 
 ::: {.yourturn latex=""}
-Would you rather see a movie that has a positive or negative residual? Explain your response.[^04-slr-5]
+Would you rather see a movie that has a positive or negative residual? Explain your response.[^04-slr-6]
 :::
 
-[^04-slr-5]: **Example answer:** I would rather see a movie with a positive residual, because that means the audience actually rated the movie more favorably than what was expected based on the model.
+[^04-slr-6]: **Example answer:** I would rather see a movie with a positive residual, because that means the audience actually rated the movie more favorably than what was expected based on the model.
 
 ### Least squares regression {#sec-least-squares}
 
@@ -401,10 +414,10 @@ We always need to estimate the intercept in @eq-regression to get the line that 
 If the answer to either question is no, then it is not meaningful, and potentially misleading, to interpret the intercept.
 
 ::: {.yourturn latex=""}
-Is the interpretation of the intercept in @eq-movies-slr meaningful? Briefly explain.[^04-slr-6]
+Is the interpretation of the intercept in @eq-movies-slr meaningful? Briefly explain.[^04-slr-7]
 :::
 
-[^04-slr-6]: The interpretation of the intercept is meaningful, because it is plausible for a movie to have a critics score of 0 and there are observations with scores around 5, which is near 0 on the 0 - 100 point scale.
+[^04-slr-7]: The interpretation of the intercept is meaningful, because it is plausible for a movie to have a critics score of 0 and there are observations with scores around 5, which is near 0 on the 0 - 100 point scale.
 
 ::: {.analysis_in_practice latex=""}
 Avoid using causal language and making declarative statements (e.g., "The audience score for a movie with a critics score of 0 points [**will**]{.underline} be 32.316 points.") when interpreting the slope and intercept. Remember the slope and intercept are estimates describing what is **expected** in the relationship between the response and predictor to be based on the sample data and linear regression model. They do not tell us exactly what will happen in the data.
@@ -424,23 +437,23 @@ $$\begin{aligned}
 &= \textbf{77.988} \\
 \end{aligned}$$
 
-From the snapshot of the Barbie Rotten Tomatoes page (@fig-barbie), we see the actual audience score is 83[^04-slr-7]. Therefore, the model under predicted the audience score by about 5 points (83 - 77.988). Perhaps this isn't surprising given this film's massive box office success! <!--# do i need a citation for this statement?-->
+From the snapshot of the Barbie Rotten Tomatoes page (@fig-barbie), we see the actual audience score is 83[^04-slr-8]. Therefore, the model under predicted the audience score by about 5 points (83 - 77.988). Perhaps this isn't surprising given this film's massive box office success! <!--# do i need a citation for this statement?-->
 
-[^04-slr-7]: Source: https://www.rottentomatoes.com/m/barbie Accessed on August 29, 2023.
+[^04-slr-8]: Source: https://www.rottentomatoes.com/m/barbie Accessed on August 29, 2023.
 
 ![Source: https://www.rottentomatoes.com/m/barbie (accessed August 29, 2023)](images/04-barbie.png){#fig-barbie fig-align="center"}
 
 ::: {.yourturn latex=""}
-The movie *Asteroid City* was released in theaters on June 23, 2023. The critics score for this movie was 75[^04-slr-8].
+The movie *Asteroid City* was released in theaters on June 23, 2023. The critics score for this movie was 75[^04-slr-9].
 
 - What is the predicted audience score?
 
-- The actual audience score is 62. Did the model over or under predict? What is the residual? [^04-slr-9]
+- The actual audience score is 62. Did the model over or under predict? What is the residual? [^04-slr-10]
 :::
 
-[^04-slr-8]: Source: https://www.rottentomatoes.com/m/asteroid_city Accessed on August 29, 2023.
+[^04-slr-9]: Source: https://www.rottentomatoes.com/m/asteroid_city Accessed on August 29, 2023.
 
-[^04-slr-9]: The predicted audience score is 32.316 + 0.519 \* 75 = **71.241**. The model over predicted. The residual is 62 - 71.241 = **-9.241.**
+[^04-slr-10]: The predicted audience score is 32.316 + 0.519 \* 75 = **71.241**. The model over predicted. The residual is 62 - 71.241 = **-9.241.**
 
 <!--# can i remove this paragraph and just use the callout box about extraploation-->
 
@@ -463,10 +476,10 @@ $$RMSE = \sqrt{\frac{\sum_{i=1}^ne_i^2}{n}} = \sqrt{\frac{\sum_{i=1}^n(y_i - \ha
 This measure is especially useful if prediction is the primary modeling objective. The RMSE takes values from 0 to $\infty$ (infinity) and has the same units as the response variable.
 
 ::: {.yourturn latex=""}
-Do higher or lower values of RMSE indicate a better model fit?[^04-slr-10]
+Do higher or lower values of RMSE indicate a better model fit?[^04-slr-11]
 :::
 
-[^04-slr-10]: Lower values indicate a better fit, with 0 indicating the predictor variable perfectly predicts the response.
+[^04-slr-11]: Lower values indicate a better fit, with 0 indicating the predictor variable perfectly predicts the response.
 
 There is no universal threshold of RMSE to determine whether the model is a good fit. In fact, the RMSE is often most useful when comparing the performance of multiple models. Take the following into account when using RMSE to evaluate model fit.
 
@@ -479,10 +492,10 @@ rmse <- sqrt(sum(slr_model$residuals^2)/nrow(movie_scores))
 ```
 
 ::: {.yourturn latex=""}
-The RMSE for the movie scores model is `r round(rmse,3)`. The values of audience score in the data range from `r min(movie_scores$audience_score)` to `r max(movie_scores$audience_score)`. What is your evaluation of the model fit based on RMSE? Explain your response.[^04-slr-11]
+The RMSE for the movie scores model is `r round(rmse,3)`. The values of audience score in the data range from `r min(movie_scores$audience_score)` to `r max(movie_scores$audience_score)`. What is your evaluation of the model fit based on RMSE? Explain your response.[^04-slr-12]
 :::
 
-[^04-slr-11]: **Example answer:** An error of 12.452 is about a 17% error based on the range of the audience scores, `r min(movie_scores$audience_score)` to `r max(movie_scores$audience_score)`. This error could seem relatively large, depending on how the model will be used to inform decisions in practice.
+[^04-slr-12]: **Example answer:** An error of 12.452 is about a 17% error based on the range of the audience scores, `r min(movie_scores$audience_score)` to `r max(movie_scores$audience_score)`. This error could seem relatively large, depending on how the model will be used to inform decisions in practice.
 
 ### Analysis of variance and $R^2$ {#sec-slr-sum-sq}
 
@@ -534,10 +547,10 @@ The $R^2$ for the model in @eq-movies-slr is `r round(rsq, 3)`. It is interprete
 > *About `r round(rsq, 3) * 100`% of the variability in the audience score for movies on Rotten Tomatoes can be explained by the model (critics score).*
 
 ::: {.yourturn latex=""}
-Do higher or lower values of $R^2$ indicate a better model fit?[^04-slr-12]
+Do higher or lower values of $R^2$ indicate a better model fit?[^04-slr-13]
 :::
 
-[^04-slr-12]: Higher values of $R^2$ indicate a better model fit, as it means more of the variability in the response is being explained by the model.
+[^04-slr-13]: Higher values of $R^2$ indicate a better model fit, as it means more of the variability in the response is being explained by the model.
 
 Similar to RMSE, there is no universal threshold for what makes a "good" $R^2$ value. When using $R^2$ to determine if the model is a good fit, take into account what might be a reasonable to expect given the subject matter.
 
