@@ -275,9 +275,9 @@ where $p$ represents the number of predictor variables and $\epsilon$ is the err
 
 @eq-general-model-mlr is the general form of the model. As with simple linear regression, we know the form of $f(X_1,  X_2, \ldots, X_p)$ when we assume there is a linear relationship between the response and predictor variables. @eq-general-model-mlr can be more specifically written as a **multiple linear regression model** (MLR) of the form
 
-$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon, \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-mlr-stat-model-1}
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon, \hspace{8mm} \epsilon \sim N(0, \sigma^2)$$ {#eq-mlr-stat-model-1}
 
-where $\epsilon \sim N(0, \sigma^2_{\epsilon})$ indicates the error terms are normally distributed with a mean of 0 and variance $\sigma^2_{\epsilon}$. @eq-mlr-stat-model-1 is the population-level statistical model for multiple linear regression.
+where $\epsilon \sim N(0, \sigma^2)$ indicates the error terms are normally distributed with a mean of 0 and variance $\sigma^2$. @eq-mlr-stat-model-1 is the population-level statistical model for multiple linear regression.
 
 Recall from @sec-slr-specify, the function $f(X) = \mu_{Y|X}$ is the expected value (mean) of $Y$ given a value of the predictor $X$. Extending this to multiple linear regression, $f(\mathbf{X}) = f(X_1, X_2, \ldots, X_p)$ outputs the expected value of $Y$ for a combination of the predictors. Therefore,
 

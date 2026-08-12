@@ -164,7 +164,7 @@ From @fig-parks-bivariate-eda there appears to be a positive relationship betwee
 
 To better explore this relationship, we fit a simple linear regression model of the form
 
-$$\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-parks-stat-model}
+$$\text{playgrounds} = \beta_0 + \beta_1~\text{per\_capita\_expend} + \epsilon, \hspace{5mm} \epsilon \sim N(0, \sigma^2)$$ {#eq-parks-stat-model}
 
 The output of the fitted regression model is @tbl-parks-model.
 
@@ -243,7 +243,7 @@ While the process described above would be an approach for constructing the samp
 
 In @sec-slr-specify, we introduced the statistical model for simple linear regression
 
-$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-slr-model-ch5}
+$$Y = \beta_0 + \beta_1 X + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2)$$ {#eq-slr-model-ch5}
 
 such that $Y$ is the response variable, $X$ is the predictor variable, and $\epsilon$ is the error term. @eq-slr-model-ch5 can be rewritten in terms of the distribution of the response variable $Y$ given the predictor $X$. It is represented as $Y|X$ ( "$Y$ given $X$")
 
@@ -259,7 +259,7 @@ $$Y|X \sim N(\beta_0 + \beta_1X , \sigma^2_\epsilon)$$ {#eq-slr-dist}
 
 2.  The expected value (mean) of $Y|X$ is $\beta_0 + \beta_1 X$. There is a linear relationship between the response and predictor variable.
 
-3.  The variance $Y|X$ is $\sigma^2_{\epsilon}$. This variance is equal for all values of $X$ and thus does not depend on $X$.
+3.  The variance $Y|X$ is $\sigma^2$. This variance is equal for all values of $X$ and thus does not depend on $X$.
 
 4.  The error terms for each observation, $\epsilon$ in @eq-slr-model-ch5, are independent. This also means the values of the response variable, and observations more generally, are independent.
 
@@ -870,9 +870,9 @@ The regression standard error $\hat{\sigma}_\epsilon$ is in the numerator, indic
 
 As you will see in the following sections, we will use this estimate of the sampling variability in the estimated slope to draw conclusions about the true relationship between the response and predictor variables based on hypothesis testing and confidence intervals.
 
-### Estimating $\sigma_{\epsilon}$ {#sec-estimate-reg-std-err}
+### Estimating $\sigma$ {#sec-estimate-reg-std-err}
 
-As discussed in @sec-slr-specify, there are three parameters that need to be estimated for simple linear regression $\beta_0$, $\beta_1$, and $\sigma_{\epsilon}$. @sec-slr-estimation introduced least squares regression, a method for deriving $\hat{\beta}_0$ and $\hat{\beta}_1$, the estimates for intercept and slope, respectively. Now, we turn to the estimation of $\sigma_\epsilon$, also known as the **regression standard error*.***
+As discussed in @sec-slr-specify, there are three parameters that need to be estimated for simple linear regression $\beta_0$, $\beta_1$, and $\sigma$. @sec-slr-estimation introduced least squares regression, a method for deriving $\hat{\beta}_0$ and $\hat{\beta}_1$, the estimates for intercept and slope, respectively. Now, we turn to the estimation of $\sigma_\epsilon$, also known as the **regression standard error*.***
 
 <!--# maybe add a little aside here about standard deviation versus standard error-->
 
@@ -1101,7 +1101,7 @@ $$SE_{\hat{\mu}} = \hat{\sigma}_{\epsilon}\sqrt{\frac{1}{n} + \frac{(x^* - \bar{
 
 $$SE_{\hat{y}} = \hat{\sigma}_{\epsilon}\sqrt{1 + \frac{1}{n} + \frac{(x^* - \bar{x})}{\sum_{i=1}^n(x_i - \bar{x})^2}}$$ {#eq-slr-pred-indiv-se}
 
-where $x^*$ is the inputted value of the predictor, $\bar{x}$ is the mean value of the predictor across all observations and, $\sigma_{\epsilon}$ is the regression standard error. We plug one of these formulas in for $SE$ in @eq-slr-pred-int-general depending on the type of prediction we're doing.
+where $x^*$ is the inputted value of the predictor, $\bar{x}$ is the mean value of the predictor across all observations and, $\sigma$ is the regression standard error. We plug one of these formulas in for $SE$ in @eq-slr-pred-int-general depending on the type of prediction we're doing.
 
 The details of the equations are beyond the scope of this text, but let's take a moment to compare the two intervals. The equations look very similar with the exception of the additional 1 in @eq-slr-pred-indiv-se. This is accounts for the fact that when quantifying uncertainty in the prediction for an individual observation, we not only take into account the variability about the regression line but also the variability in the distribution of the response for a given value of the predictor. Thus predictions for an individual observation result in wider intervals than intervals for the mean response.
 

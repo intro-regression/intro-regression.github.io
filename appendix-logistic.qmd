@@ -91,6 +91,6 @@ $$\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, (\mathbf{X}^\mathsf{T}\mat
 
 where $\mathbf{V}$ is an $n \times n$ diagonal matrix, such that $V_{ii}$ is the estimated variance for the $i^{th}$ observation.[^appendix-logistic-1]
 
-[^appendix-logistic-1]: Recall that the variance of the Bernoulli distribution depends on $\pi$, so each observation has a different variance. This is in contrast to linear regression, where all observations have the same variance $\sigma^2_{\epsilon}$.
+[^appendix-logistic-1]: Recall that the variance of the Bernoulli distribution depends on $\pi$, so each observation has a different variance. This is in contrast to linear regression, where all observations have the same variance $\sigma^2$.
 
 The standard error used for hypothesis testing and confidence intervals for a single coefficient $\beta_j$ is computed as the $j^{th}$ diagonal element of $Var(\hat{\boldsymbol{\beta}})^{1/2} = (\mathbf{X}^\mathsf{T}\mathbf{V}\mathbf{X})^{-1/2}$. This is why the hypothesis tests and confidence intervals in @sec-logistic-inf-theory are only reliable for large $n$, because they depend on asymptotic approximations in @eq-dist-beta-logistic. We can use simulation-based methods if the data has a small sample size.

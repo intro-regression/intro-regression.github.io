@@ -482,7 +482,7 @@ Some commonly used variance-stabilizing transformations are the square-root tran
 
 Let's consider another transformation for the response variable that can help address the violations in the equal variance condition while also being easily interpreted by the reader. We can apply a natural log transformation on the response variable, $\log(y)$ (also written as $\ln(y)$), such that $\log(y)$ has the linear relationship with the predictor variables. @eq-log-y shows the statistical model when applying such transformation to the response variable.
 
-$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$ {#eq-log-y}
+$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2}+ \dots + \beta_px_{ip} + \epsilon_i \hspace{8mm} \epsilon_i \sim N(0, \sigma^2)$$ {#eq-log-y}
 
 ::: {.math_rules latex=""}
 **log = ln**
@@ -634,13 +634,13 @@ In the exploratory data analysis in @sec-ncaa-eda, we observed that the relation
 
 The general form of the linear regression model with a log-transformed predictor variable $x_j$ is shown in @eq-mlr-logx .
 
-$$y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$ {#eq-mlr-logx}
+$$y_i = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2)$$ {#eq-mlr-logx}
 
 @eq-ncaa-logx shows the form of the model for NCAA Division I basketball expenditure using log-transformed values of enrollment.
 
 $$\begin{aligned}
 \text{expenditure\_m}_i = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
-&+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
+&+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2)
 \end{aligned}$$ {#eq-ncaa-logx}
 
 At this point, we are using the original response variable, `expenditure_m`, so we can focus on understanding the log-transformed predictor variable. In the next section, we will look at the scenario in which both the response variable and one or more predictor variables is transformed. The output of the model with log-transformed enrollment is in @tbl-ncaa-model-logx.
@@ -717,13 +717,13 @@ Models with transformations on both the response variable and one or more quanti
 
 @eq-mlr-logx-logy is the general form of the model with a log-transformed response variable and a log-transformed predictor variable $x_j$ is shown in
 
-$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})$$ {#eq-mlr-logx-logy}
+$$\log(y_i) = \beta_0 + \beta_1x_{i1} + \dots + \beta_j\log(x_{ij}) + \dots + \beta_px_{ip} + \epsilon_i  \hspace{5mm} \epsilon_i \sim N(0, \sigma^2)$$ {#eq-mlr-logx-logy}
 
 @eq-ncaa-logx-logy shows the form of the model for NCAA Division I basketball expenditure, and the output of the estimated model is in @tbl-ncaa-model-logx-logy.
 
 $$\begin{aligned}
 \log(\text{expenditure\_m}_i) = \beta_0 &+ \beta_1 \log(\text{enrollment\_th}_i) + \beta_2\text{Northeast}_i + \beta_3\text{South}_i \\
-&+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2_{\epsilon})
+&+ \beta_4\text{West}_i + \beta_5\text{Public}_i + \epsilon_i \hspace{5mm} \epsilon_i \sim N(0, \sigma^2)
 \end{aligned}$$ {#eq-ncaa-logx-logy}
 
 ```{r}

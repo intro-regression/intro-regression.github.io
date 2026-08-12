@@ -905,7 +905,7 @@ $$\begin{aligned}
 y_{ij} = \beta_0 &+ \beta_1x_{i1} + \dots \beta_qx_{iq} \\
 &+ \beta_{q+1}x_{ij(q+1)} + \dots + \beta_px_{ijp} \\ 
 &+ u_i + \epsilon_{ij} \\
-&u_i \sim N(0, \sigma^2_u) \hspace{5mm} \epsilon_{ij} \sim (0,\sigma^2_{\epsilon})
+&u_i \sim N(0, \sigma^2_u) \hspace{5mm} \epsilon_{ij} \sim (0,\sigma^2)
 \end{aligned}$$
 
 where $\beta_0$ is the global intercept, $\beta_1, \ldots, \beta_q$ are the coefficients associated fixed effects at the second level of the data, $\beta_{q+1}, \dots, \beta_p$ are the coefficients associated with the fixed effects at the first level of the data, $u_i$ is the random effect on the intercept, and $\epsilon_{ij}$ is the error term. Let's look at the model for the lemurs analysis and break down these components further.
@@ -916,16 +916,16 @@ $$\begin{aligned}
 \text{weight}_{ij} = \beta_0 &+ \beta_1 ~ \text{taxonPCOQ}_{i} + \beta_2 ~ \text{taxonVRUB}_i \\
 & +\beta_3 ~ \text{sexM}_{i}  + \beta_4 ~ \text{litter\_size}_{i} + \beta_5 ~ \text{age}_{ij}\\
 & + u_i + \epsilon_{ij} \\
-&u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2_{\epsilon})
+&u_i \sim N(0, \sigma^2_{u}) \hspace{5mm} \epsilon_{ij} \sim N(0, \sigma^2)
 \end{aligned}$$ {#eq-lemurs-random-int}
 
 Let's break down the components of @eq-lemurs-random-int. The subscripts ($i$ or $ij$) indicate whether the variable is at the first or second level of the data. The variable `age` is the only predictor in the first level that changes for each observation, so the subscript indicates that we plug in the age for lemur $i$ at the $j^{th}$ observation. The other predictors are measured at the second level of the data, so the subscript $i$ indicates that we plug in the same value for lemur $i$ across all its observations. The term $\beta_0$ is the global intercept. It is the expected (mean) weight across all lemurs when all predictors are equal to 0.
 
-The error term $\epsilon_{ij}$ is like the error term previously introduced for linear models. It is the difference between the observed and expected value of the weight for the $j^{th}$ observation from lemur $i$. As in linear regression, these error terms follow a normal distribution with mean of 0 and variance of $\sigma^2_{\epsilon}$. This $\sigma^2_{\epsilon}$ is a measure of the variability in the weights (response variable) within an individual lemur (group).
+The error term $\epsilon_{ij}$ is like the error term previously introduced for linear models. It is the difference between the observed and expected value of the weight for the $j^{th}$ observation from lemur $i$. As in linear regression, these error terms follow a normal distribution with mean of 0 and variance of $\sigma^2$. This $\sigma^2$ is a measure of the variability in the weights (response variable) within an individual lemur (group).
 
 The term $u_{i}$ is the random effect that makes this the "random intercepts model". We don't estimate $u_i$ directly, but its distribution tells us about the variability in the average weights between lemurs. The $u_{i}$ are normally distributed with a mean of 0 and variance of $\sigma^2_{u}$. This $\sigma^2_{u}$ is the measure of between lemur variability. From this model, the intercept of an individual lemur $i$ is $\beta_0 + u_i$ where, $u_i$ is drawn from $N(0,\sigma^2_{u})$.
 
-The coefficients $\beta_0, \beta_1, \ldots, \beta_5$ and the variance components $\sigma_u$ and $\sigma_{\epsilon}$ are estimated using maximum likelihood estimation. The output for the lemurs random intercepts model is in @tbl-lemurs-model-random-int.
+The coefficients $\beta_0, \beta_1, \ldots, \beta_5$ and the variance components $\sigma_u$ and $\sigma$ are estimated using maximum likelihood estimation. The output for the lemurs random intercepts model is in @tbl-lemurs-model-random-int.
 
 ```{r}
 #| label: tbl-lemurs-model-random-int
@@ -1435,7 +1435,7 @@ In @fig-compare-distributions-matched, the distributions of these student charac
 
 Once we have the matched data set, it's time to evaluate the effect of the treatment. We do this by using a regression model with the treatment as a predictor.
 
-$$\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2_{\epsilon})$$ {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in @eq-treatment-model. The fitted model is in @tbl-model-treatment-effect.
+$$\text{GPA} = \beta_0 + \beta_1 ~\text{Treatment} + \epsilon \hspace{8mm} \epsilon \sim N(0, \sigma^2)$$ {#eq-treatment-model} For the Project ACE analysis, the response variable GPA is quantitative, so we use a linear regression model of the form in @eq-treatment-model. The fitted model is in @tbl-model-treatment-effect.
 
 ```{r}
 #| label: tbl-model-treatment-effect
