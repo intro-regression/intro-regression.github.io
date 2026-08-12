@@ -96,19 +96,19 @@ gss24_ai <- gss24_ai |>
 m <- glm(aidrive_comfort ~ sex + age + income_fct + tech_harm + tech_easy, data = gss24_ai, family = binomial)
 ```
 
-Artificial Intelligence (AI) has quickly become ubiquitous, with generative AI tools such as ChatGPT being widely adopted in the workplace, school, and throughout every day life. One area in particular where AI is continuing to grow is in self-driving cars. The notion of riding in car that drives around as an individual reads a book has increasingly become a reality, with some cities already having self-driving taxis on the road. Waymo, a company that deploys a fleet self-driving taxis (called "robotaxis"), describes its robotaxi as "the world's most experienced driver." and is operating in five United States cities with plans to expand to two more at the time of this writing. ([waymo.com](https://waymo.com)). Additionally, Amazon has launched a robotaxi service in Las Vegas called Zoox [@Liedtke2025Zoox].
+Artificial Intelligence (AI) has quickly become ubiquitous, with generative AI tools such as ChatGPT being widely adopted in the workplace, school, and throughout every day life. One area in particular where AI is continuing to grow is in self-driving cars. The notion of riding in car that drives around as an individual reads a book has increasingly become a reality, with some cities already having self-driving taxis on the road. Waymo, a company that deploys a fleet self-driving taxis (called "robotaxis"), describes its robotaxi as "the world's most experienced driver" and is operating in five United States cities with plans to expand to two more at the time of this writing ([waymo.com](https://waymo.com)). Additionally, Amazon has launched a robotaxi service in Las Vegas called Zoox [@Liedtke2025Zoox].
 
-Despite the growth of self-driving cars, there are still complex moral questions [e.g., @Maxmen2018SelfDrivingCarEthics; @Vemoori2024EthicalDilemmasForbes] and uncertainty about the general readiness and experience individuals have driving with this new technology. David Li, co-founder of Hesai, a remote-sensing technology company, said that the adoption of self-driving cars are not just a question about technology development, but "it is a social question, it is a regulatory question, it is a political question" [@White2025HesaiSensors]. Therefore, it is important to understand how people, some of who may already will one day purchase a self-driving car, view this technological phenomenon.
+Despite the growth of self-driving cars, there are still complex moral questions [e.g., @Maxmen2018SelfDrivingCarEthics; @Vemoori2024EthicalDilemmasForbes] and uncertainty about the general readiness and experience individuals have driving with this new technology. David Li, co-founder of Hesai, a remote-sensing technology company, said that the adoption of self-driving cars is not just a question about technology development, but "it is a social question, it is a regulatory question, it is a political question" [@White2025HesaiSensors]. Therefore, it is important to understand how people, some of who may already own or will one day purchase a self-driving car, view this technological phenomenon.
 
 ::: {.objective latex=""}
 The goal of the analysis in this chapter is to use data from the 2024 General Social Survey (GSS) to explore individual characteristics associated with one's comfort with self-driving cars.
 :::
 
-The GSS, administered by the National Science Foundation and is administered by National Opinion Research Center (NORC) at the University of Chicago, began in 1972 and is conducted about every two years to measure "trends in opinions, attitudes, and behaviors" among adults age 18 and older in the United States [@gss2024]. Households are randomly selected using multistage cluster sample based on data from the United States Census.
+The GSS, administered by the National Science Foundation and the National Opinion Research Center (NORC) at the University of Chicago, began in 1972 and is conducted about every two years to measure "trends in opinions, attitudes, and behaviors" among adults age 18 and older in the United States [@gss2024]. Households are randomly selected using a multistage cluster sample based on data from the United States Census.
 
-Respondents in the 2024 survey were part of the second year of an experiment studying survey administration and randomly split into two groups. The first group had the opportunity to complete the survey through an in-person interview (format traditionally used) and non-respondents were offered the online survey. The second group had the opportunity to take the online survey first, then non-respondents were offered the in-person interview. <!--# helpful to add response rate?-->
+Respondents in the 2024 survey were part of the second year of an experiment studying survey administration and were randomly split into two groups. The first group had the opportunity to complete the survey through an in-person interview (format traditionally used) and non-respondents were offered the online survey. The second group had the opportunity to take the online survey first, then non-respondents were offered the in-person interview. <!--# helpful to add response rate?-->
 
-The data are in `gss24-ai.csv`. The data were obtained through the **gssr** R package [@gssr]. Questions about opinions on special topics such as technology are not given to every respondent, so the data in this analysis includes responses from `r nrow(gss24_ai)` adults who were asked about comfort with self-driving cars and who provided their age and sex in the survey. We will focus on the variables below (out of the over 600 variables in the full General Social Survey). The variable definitions are based on survey prompts and variable definitions in the *General Social Survey Documentation and Public Use File Codebook* [@gss2024].
+The data are in `gss24-ai.csv`. The data were obtained through the **gssr** R package [@gssr]. Questions about opinions on special topics such as technology are not given to every respondent, so the data in this analysis includes responses from `r nrow(gss24_ai)` adults who were asked about their comfort with self-driving cars and who provided their age and sex in the survey. We will focus on the variables below (out of the over 600 variables in the full General Social Survey). The variable definitions are based on survey prompts and variable definitions in the *General Social Survey Documentation and Public Use File Codebook* [@gss2024].
 
 **For the remainder of the chapter, we will refer to self-driving cars as "driverless cars" to align with the language used in the 2024 GSS.**
 
@@ -219,7 +219,7 @@ gss24_ai |>
         digits = 1)
 ```
 
-@fig-aidrive-predictor-eda and @tbl-age-summary shows the univariate distributions of the predictor variables that will be used in this chapter. The exploratory data analysis for the other predictors is in @sec-ch-logistic-prediction <!--# reference specific section--> . The mean age in the data is about `r round(mean(gss24_ai$age), 1)` and the median is `r median(gss24_ai$age)` years old. The youngest respondents in the data set are `r min(gss24_ai$age)` and the oldest are `r max(gss24_ai$age)` years old. The standard deviation is about `r round(sd(gss24_ai$age), 3)` years, so the data spans the general age range for adults in the United States.
+@fig-aidrive-predictor-eda and @tbl-age-summary show the univariate distributions of the predictor variables that will be used in this chapter. The exploratory data analysis for the other predictors is in @sec-ch-logistic-prediction<!--# reference specific section--> . The mean age in the data is about `r round(mean(gss24_ai$age), 1)` and the median is `r median(gss24_ai$age)` years old. The youngest respondents in the data set are `r min(gss24_ai$age)` and the oldest are `r max(gss24_ai$age)` years old. The standard deviation is about `r round(sd(gss24_ai$age), 3)` years, so the data spans the general age range for adults in the United States.
 
 ```{r}
 #| echo: false
@@ -272,7 +272,7 @@ ggplot(data = gss24_ai, aes(x = tech_easy, fill = aidrive_comfort)) +
   scale_fill_manual(values = c("#1d457f", "#cc5c76"))
 ```
 
-@fig-aidrive-bivariate-eda shows the relationship between the response and each of the predictor variables. Here we use a segmented bar plot <!--# is there a ref to EDA section?--> to visualize the relationship between the categorical predictors, `sex` and `tech_easy` and the categorical response, `aidrive_comfort`. As we look at the segmented bar plot, we are evaluating distribution of the response variable is approximately equal for each category of the predictor ([@sec-bivar-eda-cat-cat]). Unequal proportions suggests some relationship between the response and predictor variable. In @fig-aidrive-bivariate-eda, a higher proportion of males have comfort with driverless cars compared to the proportion of females. This indicates a potential relationship between sex and comfort with driverless cars. @fig-aidrive-bivariate-eda shows overlap in the distribution of age among those who have comfort with driverless cars versus those who do not, but the distribution among those who have comfort with driverless cars tends to skew younger. As with linear regression, however, we will use statistical inference ([@sec-logistic-inf]) to determine if the data provide evidence that such relationships exist.
+@fig-aidrive-bivariate-eda shows the relationship between the response and each of the predictor variables. Here we use a segmented bar plot <!--# is there a ref to EDA section?--> to visualize the relationship between the categorical predictors, `sex` and `tech_easy`, and the categorical response, `aidrive_comfort`. As we look at the segmented bar plot, we are evaluating whether the distribution of the response variable is approximately equal for each category of the predictor ([@sec-bivar-eda-cat-cat]). Unequal proportions suggest some relationship between the response and predictor variable. In @fig-aidrive-bivariate-eda, a higher proportion of males have comfort with driverless cars compared to the proportion of females. This indicates a potential relationship between sex and comfort with driverless cars. @fig-aidrive-bivariate-eda shows overlap in the distribution of age among those who have comfort with driverless cars versus those who do not, but the distribution among those who have comfort with driverless cars tends to skew younger. As with linear regression, however, we will use statistical inference ([@sec-logistic-inf]) to determine if the data provide evidence that such relationships exist.
 
 ::: {.yourturn latex=""}
 Based on @fig-aidrive-bivariate-eda , does there appear to be a relationship between opinions about whether technology makes life easier and comfort with driverless cars? Explain.[^11-logistic-1]
@@ -318,7 +318,7 @@ ggplot(data = gss24_ai, aes(x = tech_easy, fill = aidrive_comfort)) +
 
 Using this as the criteria, the relationship between `tech_easy` and `aidrive_comfort` looks approximately equal for the categories of `sex`. Therefore, the data do not show evidence of an interaction between `tech_easy` and `sex`. We do note that in general, the proportion of males comfortable with driverless cars within each group of `tech_easy` is higher than the corresponding groups for females. This is expected, given what we observed in the bivariate EDA in @fig-aidrive-bivariate-eda.
 
-## Probability / odds/ odds ratio {#sec-prob-odds}
+## Probability/ odds/ odds ratio {#sec-prob-odds}
 
 ### Probability and odds
 
@@ -350,7 +350,7 @@ p <- response_tbl |> filter(aidrive_comfort == 1) |> pull(probability)
 odds <- response_tbl |> filter(aidrive_comfort == 1) |> pull(odds)
 ```
 
-@tbl-response-prob-odds shows the probabilities an odds for the response variable `aidrive_comfort`. In the data from `r nrow(gss24_ai)` respondents, the probability (chance) a randomly selected respondent is comfortable with driverless cars is `r round(p, 3)`. This may also be phrased as there is a `r round(p, 3) * 100` % chance a randomly selected respondent is comfortable with driverless cars. The odds a randomly selected respondent is comfortable with driverless cars are `r round(odds, 3)`. This means that a randomly selected respondent is `r round(odds, 3)` times more likely to be comfortable with driverless cars than not be.
+@tbl-response-prob-odds shows the probabilities and odds for the response variable `aidrive_comfort`. In the data from `r nrow(gss24_ai)` respondents, the probability (chance) a randomly selected respondent is comfortable with driverless cars is `r round(p, 3)`. This may also be phrased as there is a `r round(p, 3) * 100`% chance a randomly selected respondent is comfortable with driverless cars. The odds a randomly selected respondent is comfortable with driverless cars are `r round(odds, 3)`. This means that a randomly selected respondent is `r round(odds, 3)` times more likely to be comfortable with driverless cars than not be.
 
 ::: {.yourturn latex=""}
 Show how the following values are computed:
@@ -368,7 +368,7 @@ Show how the following values are computed:
 
 ### Odds ratio
 
-We are most interested in understanding the relationship between comfort with driverless cars and other factors about the respondents. @tbl-aidrive-two-way is a **two-way** table of the relationship between `aidrive_comfort` and `tech_easy`. Now we can not only answer questions regarding opinions about comfort with driverless cars overall but can also see how these opinions on comfort may differ based on respondent's opinion about whether technology makes life easier.
+We are most interested in understanding the relationship between comfort with driverless cars and other factors about the respondents. @tbl-aidrive-two-way is a **two-way** table of the relationship between `aidrive_comfort` and `tech_easy`. Now we can not only answer questions regarding opinions about comfort with driverless cars overall but can also see how these opinions on comfort may differ based on a respondent's opinion about whether technology makes life easier.
 
 <!--# do i move the your turn for probabilities and odds here?-->
 
@@ -412,7 +412,7 @@ Compute the probability and corresponding odds of being comfortable with driverl
 
 [^11-logistic-3]: $Pr(Y=1 | \text{tech\_easy = Agree}) = 706/ (495 + 706) = 0.588$ and $\text{odds}(Y=1 | \text{tech\_easy = Agree)} = 0.588/(1 - 0.588) = 706/495 = 1.43$
 
-From @tbl-aidrive-two-way, the odds a respondent who is neutral about technology making life easier is comfortable with driverless cars are 0.709, and the odds a respondent who agrees technology makes life easier are 1.43. We quantify how the odds for these two groups compare using an odds ratio. An **odds ratio** is computed as the odds for one group divided the odds for another, as shown in @eq-odds-ratio
+From @tbl-aidrive-two-way, the odds a respondent who is neutral about technology making life easier is comfortable with driverless cars are 0.709, and the odds a respondent who agrees technology makes life easier are 1.43. We quantify how the odds for these two groups compare using an odds ratio. An **odds ratio** is computed as the odds for one group divided by the odds for another, as shown in @eq-odds-ratio
 
 $$\text{odds ratio} = \frac{\text{odds}_{group 1}}{\text{odds}_{group 2}}$$ {#eq-odds-ratio}
 
@@ -423,10 +423,10 @@ $$\text{odds ratio} = \frac{\text{odds}_{\text{Agree}}}{\text{odds}_{\text{Neutr
 > This means that the odds a respondent who agrees technology makes life easier is comfortable with driverless cars are 2.02 times the odds a respondent who is neutral about technology is comfortable with driverless cars.
 
 ::: {.yourturn latex=""}
-> Compute the odds ratio of being comfortable with driverless cars for `tech_easy = Agree` versus `teach_easy = Disagree`. Interpret this value in the context of the data.[^11-logistic-4]
+> Compute the odds ratio of being comfortable with driverless cars for `tech_easy = Agree` versus `tech_easy = Disagree`. Interpret this value in the context of the data.[^11-logistic-4]
 :::
 
-[^11-logistic-4]: The odds ratio is $\frac{706/495}{21/52} = 3.53$ . This means that the odds a respondent who agrees technology makes life easier is comfortable with driverless cars are 3.53 times the odds a respondent who is disagrees that technology is making life easier is comfortable with driverless cars.
+[^11-logistic-4]: The odds ratio is $\frac{706/495}{21/52} = 3.53$. This means that the odds a respondent who agrees technology makes life easier is comfortable with driverless cars are 3.53 times the odds a respondent who is disagrees that technology is making life easier is comfortable with driverless cars.
 
 <!--# do i want to cover this?-->
 
@@ -442,7 +442,7 @@ $$\text{odds ratio} = \frac{\text{odds}_{\text{Agree}}}{\text{odds}_{\text{Neutr
 
 <!--# This needs to be reordered to be smoother between the why not linear and introducing logistic.-->
 
-The two-way table and odds ratios from the previous section helped us being to explore the relationship between comfort with driverless cars and opinion about whether technology makes life easier. Let's build on this by fitting a model that can (1) help us quantify the relationship between variables, (2) explore the relationship between the response and multiple predictors variables, and (3) be used to make predictors and draw rigorous conclusions. Before diving into the details of this model's we'll take a moment to understand why we are introducing a new model for the relationship between `aidrive_comfort` versus the predictors rather than using the linear regression model we've seen up to this point.
+The two-way table and odds ratios from the previous section helped us begin to explore the relationship between comfort with driverless cars and opinion about whether technology makes life easier. Let's build on this by fitting a model that can (1) help us quantify the relationship between variables, (2) explore the relationship between the response and multiple predictor variables, and (3) be used to make predictors and draw rigorous conclusions. Before diving into the details of this model, we'll take a moment to understand why we are introducing a new model for the relationship between `aidrive_comfort` versus the predictors rather than using the linear regression model we've seen up to this point.
 
 <!--# your turn? - Identify the response variable in each scenario and whether it is quantitative or categorical.-->
 
@@ -503,7 +503,7 @@ When there is a binary categorical response variable, we use a **logistic regres
 
 $$\log\Big(\frac{\pi}{1 - \pi}\Big) = \beta_0 + \beta_1x_1 + \dots + \beta_px_p$$ {#eq-logistic-model}
 
-where $\pi = Pr(Y = 1)$ and $\log\big(\frac{\pi}{1 - \pi}\big)$ is the **logit transformation**, also called the "log odds". The log odds can take any value $-\infty$ to $\infty$, so it does not have the boundary constraints of the probability and odds. The log odds output from @eq-logistic-model can be transformed back to the odds and probabilities, and we will the probabilities to assign each observation to a predicted class `aidrive_comfort = 0` or `aidrive_comfort = 1`. We'll discuss this more in @sec-ch-logistic-prediction.
+where $\pi = Pr(Y = 1)$ and $\log\big(\frac{\pi}{1 - \pi}\big)$ is the **logit transformation**, also called the "log odds". The log odds can take any value $-\infty$ to $\infty$, so it does not have the boundary constraints of the probability and odds. The log odds output from @eq-logistic-model can be transformed back to the odds and probabilities, and we will use the probabilities to assign each observation to a predicted class, `aidrive_comfort = 0` or `aidrive_comfort = 1`. We'll discuss this more in @sec-ch-logistic-prediction.
 
 ```{r}
 #| label: fig-try-logistic
@@ -567,7 +567,7 @@ where $\hat{\pi}$ is the predicted probability a respondent is comfortable with 
 What is the baseline level for `tech_easy`? [^11-logistic-5]
 :::
 
-[^11-logistic-5]: The baseline level is `Neutral` . It is the only level that is not in the model output.
+[^11-logistic-5]: The baseline level is `Neutral`. It is the only level that is not in the model output.
 
 The intercept, -0.344, is the estimated log odds for respondents in the baseline group, `Neutral`. Similar to interpretations in @sec-transform-logy, though we do calculations using the logit, we write interpretations in terms of the odds, so they are more clearly understood by the reader. To transform from logit to odds, we exponentiate both sides of the model equation. @eq-logistic-comfort-tech-exp shows the equation from @tbl-logistic-comfort-tech in terms of the odds of being comfortable with driverless cars.
 
@@ -591,7 +591,7 @@ Now let's look at the coefficient for `Agree`, 0.699. Putting together what know
 
 From @eq-logistic-comfort-tech-exp, the coefficient for `Agree` is $e^{0.699} \approx 2.012$. This means the following:
 
-> *The **predictedodds** a respondent who agrees technology makes life easier is comfortable with driverless cars 2.012 (* $e^{0.699}$*) **times** the predicted odds of a respondent who is neutral about whether technology makes life easier.*[^11-logistic-6]
+> *The **predicted odds** a respondent who agrees technology makes life easier is comfortable with driverless cars 2.012 (* $e^{0.699}$*) **times** the predicted odds of a respondent who is neutral about whether technology makes life easier.*[^11-logistic-6]
 
 [^11-logistic-6]: Recall from @sec-transform-logy that interpretations of a multiplicative change can be written in terms of a percent change. Thus, this interpretation may equivalently be written as *"The predicted odds a respondent who agrees technology makes life easier are `r (round(exp(0.699), 3) - 1) * 100`% greater than the predicted odds of a respondent who is neutral about whether technology makes life easier."*
 
@@ -616,7 +616,7 @@ tidy(comfort_tech_age_fit) |>
 
 Now that we have multiple predictors in @tbl-logistic-comfort-tech-age, the intercept is the predicted log odds of being comfortable with driverless cars for those who are neutral about technology making life easier and who are 0 years old. It would be impossible for a respondent to be 0 years old, so while the intercept is necessary to obtain the best fit model, its interpretation is not meaningful in practice. As with linear regression, we could use the centered values of `age` in the model if we wish to have an interpretable intercept.
 
-The coefficient for `Agree` in this model is 0.678. It is but not equal to the coefficient for `Agree` in the previous model, because now the coefficient is computed after adjusting for `age`. The interpretation is similar as before, taking into account the fact that age is also in the model.
+The coefficient for `Agree` in this model is 0.678. It is close but not equal to the coefficient for `Agree` in the previous model, because now the coefficient is computed after adjusting for `age`. The interpretation is similar as before, taking into account the fact that age is also in the model.
 
 > *The log odds a respondent who agrees technology makes life easier is comfortable with driverless cars are expected to be 0.678 higher than the log odds of a respondent who is neutral about whether technology makes life easier, holding age constant.*
 
@@ -649,7 +649,7 @@ Use the model from @tbl-logistic-comfort-tech-age. Assume `age` is held constant
 
 ### Quantitative predictors
 
-Similar to categorical predictors, we can use what we learned about interpreting quantitative predictors in linear regression models in @sec-mlr-interpret-quantitative as a starting point for interpretations for logistic regression. Let's look at the interpretation of the coefficient for `age` from the model in @tbl-logistic-comfort-tech-age. The coefficient is the expected change in the response when the predictor increases by one unit . Given this, the interpretation for `age` in terms of the log odds is the following:
+Similar to categorical predictors, we can use what we learned about interpreting quantitative predictors in linear regression models in @sec-mlr-interpret-quantitative as a starting point for interpretations for logistic regression. Let's look at the interpretation of the coefficient for `age` from the model in @tbl-logistic-comfort-tech-age. The coefficient is the expected change in the response when the predictor increases by one unit. Given this, the interpretation for `age` in terms of the log odds is the following:
 
 > *For each additional year increase in age, the log odds a respondent is comfortable with driverless cars are expected to decrease by 0.015, holding opinions about technology constant.*
 
@@ -728,7 +728,7 @@ We can use simulation-based inference to draw conclusions about the model coeffi
 
 #### Permutation tests {.unnumbered}
 
-Hypothesis tests is used to test a claim about a population parameter. In the case of logistic regression, we use hypothesis tests to evaluate whether there is evidence of a relationship between a given predictor and the log odds of the response variable. The hypotheses to test whether there is a relationship between predictor $X_j$ and the response, after adjusting for the other predictors are in @eq-logistic-hypotheses.
+Hypothesis tests are used to test a claim about a population parameter. In the case of logistic regression, we use hypothesis tests to evaluate whether there is evidence of a relationship between a given predictor and the log odds of the response variable. The hypotheses to test whether there is a relationship between predictor $X_j$ and the response, after adjusting for the other predictors are in @eq-logistic-hypotheses.
 
 $$\begin{aligned}
 &H_0: \beta_j = 0 - \text{There is no relationship between }X_j\text{ and the response}\\
@@ -737,7 +737,7 @@ $$\begin{aligned}
 
 The hypothesis test is conducted assuming the null hypothesis is true. When doing simulation-based inference, we use permutation sampling to generate the null distribution under this assumption. The process for permutation sampling is the same for logistic regression as with linear regression in @sec-slr-testing-sim. The values of the predictor of interest $X_j$ are permuted, such that the values are randomly assigned to each observation. There is no relationship between the permuted values of $X_j$ and the response variable. The logistic model is fit to each permuted sample, and the estimated coefficients $\hat{\beta}_j$ from the permuted samples make up the null distribution. The null distribution is used to compute the p-value and draw a conclusion about the hypotheses.
 
-We'll use a permutation test to evaluate whether there is evidence of a relationship between `age` and `aidrive_comfort` , after adjusting for `tech_easy`. <!--# be consistent with hypotheses in MLR inf chapter - do I include( adjusting fo rtech?)-->
+We'll use a permutation test to evaluate whether there is evidence of a relationship between `age` and `aidrive_comfort`, after adjusting for `tech_easy`. <!--# be consistent with hypotheses in MLR inf chapter - do I include( adjusting fo rtech?)-->
 
 $$\begin{aligned}
 H_0: \beta_{\text{age}} = 0 \hspace{2mm} \text{ vs } \hspace{2mm} \beta_{\text{age}} \neq 0
@@ -865,13 +865,13 @@ The interpretation in terms of the odds is the following:
 
 ### Theory-based inference {#sec-logistic-inf-theory}
 
-The general process for theory-based inference for a single coefficient in logistic regression is similar as linear regression. The primary difference is in the distribution of the estimated coefficient $\hat{\beta}_j$.
+The general process for theory-based inference for a single coefficient in logistic regression is similar as in linear regression. The primary difference is in the distribution of the estimated coefficient $\hat{\beta}_j$.
 
 When fitting a linear regression model, we have an formula for the estimated coefficients (see @sec-slr-estimation and @sec-mlr-estimate-coef). Thus we have an exact formula for the distribution of a given coefficient $\hat{\beta}_j$ that applies for any sample size. Recall that we account for the sample size in how we define degrees of freedom of the $t$ distribution for the coefficients (see @sec-mlr-inf-foundation).
 
-In logistic regression, the coefficients are estimated using maximum likelihood estimation (see @sec-logistic-interpret-coef), such that numerical optimization methods are used to find the combination of coefficients that maximize the likelihood function. There is no closed-form equation for the estimated coefficients as with linear regression. Because the estimated coefficients are approximated using optimization, the distribution of the coefficients are also approximated.
+In logistic regression, the coefficients are estimated using maximum likelihood estimation (see @sec-logistic-interpret-coef), such that numerical optimization methods are used to find the combination of coefficients that maximize the likelihood function. There is no closed-form equation for the estimated coefficients as there is with linear regression. Because the estimated coefficients are approximated using optimization, the distribution of the coefficients are also approximated.
 
-When the sample size is large <!--# figure out reference for what large is-->, the distribution of the individual estimated coefficient $\hat{\beta}_j$ is $N(\beta_j, SE_{\hat{\beta}_j})$, approximately normal with an expected value of $\beta_j$, the true value of the coefficient and standard error $SE_{\hat{\beta}_j}$. In practice, we will get the estimated standard error from the software output. Mathematical details about computing $SE_{\hat{\beta}_j}$ are described in @sec-logistic-inference-matrix.
+When the sample size is large<!--# figure out reference for what large is-->, the distribution of the individual estimated coefficient $\hat{\beta}_j$ is $N(\beta_j, SE_{\hat{\beta}_j})$, approximately normal with an expected value of $\beta_j$, the true value of the coefficient and standard error $SE_{\hat{\beta}_j}$. In practice, we will get the estimated standard error from the software output. Mathematical details about computing $SE_{\hat{\beta}_j}$ are described in @sec-logistic-inference-matrix.
 
 #### Hypothesis test {.unnumbered}
 
@@ -886,7 +886,7 @@ The hypotheses for a single coefficient are the same as in @eq-logistic-hypothes
 
 $$H_0: \beta_j = 0 \hspace{2mm} \text{ vs }\hspace{2mm} H_a: \beta_j \neq 0$$
 
-The test statistic, in @eq-logistic-test-stat, is called the Wald test statistic [@wald1943tests], <!--# make sure this is the correct reference-->because it is based on the approximation of the mean and standard error as $n$ is large.
+The test statistic, in @eq-logistic-test-stat, is called the Wald test statistic [@wald1943tests], <!--# make sure this is the correct reference-->and it is based on the approximation of the mean and standard error as $n$ is large.
 
 $$z = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}}$$ {#eq-logistic-test-stat}
 
@@ -912,7 +912,7 @@ The null hypothesis is that there is no relationship between age and comfort wit
 
 The test statistic[^11-logistic-9] is computed as
 
-[^11-logistic-9]: Note the difference the result here and the model output is because the model output is computed using exact values of $\hat{\beta}_j$ and $SE_{\hat{\beta}_j}$.
+[^11-logistic-9]: Note the difference between the result here and the model output is because the model output is computed using exact values of $\hat{\beta}_j$ and $SE_{\hat{\beta}_j}$.
 
 $$z = \frac{-0.015 - 0}{0.003} \approx - 5 $$
 
@@ -949,9 +949,9 @@ $$\begin{aligned}
 
 #### Connection between hypothesis test and confidence intervals {.unnumbered}
 
-The same connection between two-sided hypothesis tests and confidence intervals applies in the context of logistic regression as we saw in linear regression in @sec-slr-inf-relationship-ci-test . A two-sided hypothesis test with decision-making threshold of $\alpha$ directly corresponds to the $(1 - \alpha) \times 100 \%$ confidence interval. For example, a hypothesis test with decision-making threshold of $\alpha = 0.05$ directly corresponds to the 95% ($(1 - 0.05) \times 100$) confidence interval.
+The same connection between two-sided hypothesis tests and confidence intervals applies in the context of logistic regression as we saw in linear regression in @sec-slr-inf-relationship-ci-test. A two-sided hypothesis test with decision-making threshold of $\alpha$ directly corresponds to the $(1 - \alpha) \times 100 \%$ confidence interval. For example, a hypothesis test with decision-making threshold of $\alpha = 0.05$ directly corresponds to the 95% ($(1 - 0.05) \times 100$) confidence interval.
 
-This means we can use a confidence interval to evaluate a claim about a coefficient and get a range of values the population coefficient may take. The following are the relationship between the confidence interval and hypothesis test:
+This means we can use a confidence interval to evaluate a claim about a coefficient and get a range of values the population coefficient may take. The following is the relationship between the confidence interval and hypothesis test:
 
 - Confidence interval for $\beta_j$ : If 0 is in the interval, fail to reject the null hypothesis. If 0 is not in the interval, reject the null hypothesis.
 
@@ -961,7 +961,7 @@ This means we can use a confidence interval to evaluate a claim about a coeffici
 Use the output in @tbl-comfort-tech-age-2.
 
 - Show how the test statistic is computed for `tech_easyDisagree`. Interpret this value in the context of the data.
-- Do the data provide evidence that the odds are different among those who disagree technology makes life easier compared to those who are neutral (the baseline), after adjusting for age? Use $\alpha = 0.05$ Explain.
+- Using $\alpha = 0.05$, do the data provide evidence that the odds are different among those who disagree technology makes life easier compared to those who are neutral (the baseline), after adjusting for age? Explain.
 - Show how the 95% confidence interval for `tech_easyDisagree` is computed. Is it consistent with your conclusion in the previous question?[^11-logistic-11]
 :::
 
@@ -1007,7 +1007,7 @@ gss24_ai |>
 
 ```
 
-Computing the empirical logit across values of a quantitative predictor is similar as the process for categorical predictors. We divide the values of the quantitative predictor into bins and compute the empirical logit of the response for the observations within each bin. There are multiple ways to divide the quantitative predictor into bins. Some software creates the bins, such that there are an equal number of observations in each bin. Another option is to create bins by dividing by some incremental amount (e.g., dividing `age` into 5 or 10 year increments). Dividing the variable by the same incremental amount can be more easily interpreted; however, there may be large variation in the number of observations in each bin that needs to be taken into account when comparing the empirical logit across bins. The former method may be less interpretable, but we know the empirical logit is computed using the same observations for each bin.
+Computing the empirical logit across values of a quantitative predictor is similar to the process for categorical predictors. We divide the values of the quantitative predictor into bins and compute the empirical logit of the response for the observations within each bin. There are multiple ways to divide the quantitative predictor into bins. Some software creates the bins, such that there are an equal number of observations in each bin. Another option is to create bins by dividing by some incremental amount (e.g., dividing `age` into 5 or 10 year increments). Dividing the variable by the same incremental amount can be more easily interpreted; however, there may be large variation in the number of observations in each bin that needs to be taken into account when comparing the empirical logit across bins. The former method may be less interpretable, but we know the empirical logit is computed using the same observations for each bin.
 
 @tbl-emp-logit-age shows the number of observations $n$, probability, and empirical logit across bins of `age` using the two approaches for dividing `age` into bins. In Table (a) of @tbl-emp-logit-age, the bins have been created such that the observations are more evenly distributed across bins. Often, the number of observations will be equal or differ by a small amount. In this case, because `age` is a discrete variable, there are many observations with the exact same value of age. For example, there are `r gss24_ai |> filter(age == 39) |> nrow()` observations with the age of 39 years old. Because all observations with the same age are in the same bin, the number of observations in bins that include ages that occur frequently is higher than less common ages in the data, such as those over 70 years old. Note, however, that the number of observations in each bin are still more even than when the bins are created using equal age increments.
 
@@ -1048,7 +1048,7 @@ gss24_ai |>
 
 Now that we can compute the empirical logit, let's use it to check the linearity assumption. As with linear regression, we only check linearity for quantitative predictors. To check linearity, we will make a plot of the empirical logit of the response versus the bins of the quantitative predictor. We use the mean value within each bin of the predictor to represent the bin on the graph.
 
-@fig-emp-logit-age shows a plot of the empirical logit of being comfortable with driverless cars versus the mean value of age in each bin. We use the bins from Table (a) in @tbl-emp-logit-age, so that we know there is a similar number of observations represented by each point on the graph.
+@fig-emp-logit-age shows a plot of the empirical logit of being comfortable with driverless cars versus the mean value of age in each bin. We use the bins from Table (a) in @tbl-emp-logit-age so that we know there is a similar number of observations represented by each point on the graph.
 
 ```{r}
 #| label: fig-emp-logit-age
@@ -1128,7 +1128,7 @@ In @tbl-age-sq-compare, we look at the AIC and BIC for the model with and withou
 
 ### Independence
 
-The independence assumption for logistic regression is similar to the assumption for linear regression, that there are no dependencies between observations. As with linear regression, this assumption is important, because we conduct inference assuming we have $n$ pieces of independent information produced by the $n$ observations. If observations there is dependency between observations, then we are effectively working with less than $n$ pieces of independent information, as knowing something about one observation tells a lot about all the others that are correlated with it.
+The independence assumption for logistic regression is similar to the assumption for linear regression, that there are no dependencies between observations. As with linear regression, this assumption is important, because we conduct inference assuming we have $n$ pieces of independent information produced by the $n$ observations. If there is dependency between observations, then we are effectively working with less than $n$ pieces of independent information, as knowing something about one observation tells a lot about all the others that are correlated with it.
 
 We typically evaluate independence based on a description of the observations and the data collection process. If there are potential dependency issues based on the order in which the data were collected, spatial correlation, or other sub group dependencies, we can use visualizations to plot the odds or empirical logit of the response by time, space, or subgroup, respectively. We can also add predictors in the model to account for those potential dependencies.
 
@@ -1170,7 +1170,7 @@ tidy(comfort_tech_age_fit, conf.int = TRUE ,conf.level = 0.95) |>
   kable(digits = 3)
 ```
 
-By default, the tidy function will show the model output for the response in terms of the logit. The argument `exponentiate = TRUE` will produce the output for the model in terms of the odds with the exponentiated coefficients. The argument, `exponentiate` is set to `FALSE` by default.
+By default, the tidy function will show the model output for the response in terms of the logit. The argument `exponentiate = TRUE` will produce the output for the model in terms of the odds with the exponentiated coefficients. The argument `exponentiate` is set to `FALSE` by default.
 
 ```{r}
 #| echo: true
@@ -1182,7 +1182,7 @@ tidy(comfort_tech_age_fit, conf.int = TRUE ,conf.level = 0.95,
 
 ### Simulation-based inference
 
-The code for simulation-based inference for logistic regression is the same as the code for linear regression introduced in @sec-slr-R. Behind the scenes, the functions in the **infer** R package use the response variable to determine whether to fit a linear or logistic regression model.
+The code for simulation-based in logistic regression is the same as the code for linear regression introduced in @sec-slr-R. Behind the scenes, the functions in the **infer** R package use the response variable to determine whether to fit a linear or logistic regression model.
 
 Below is the code for the bootstrap confidence intervals and permutation test conducted in @sec-logistic-sim-inf. We refer the reader to @sec-mlr-sim-inf-R for more a more detailed explanation about the code.
 
@@ -1238,7 +1238,7 @@ The code to compute the empirical logit primarily utilizes data wrangling functi
 
 **Empirical logit for groups of a categorical variable**
 
-The code below produces the empirical logit for being comfortable with driverless cars for each level of `tech_easy`, opinion on whether technology makes life easier.
+The code below produces the empirical logit for being comfortable with driverless cars for each level of `tech_easy`, the opinion on whether technology makes life easier.
 
 ```{r}
 #| echo: true
@@ -1256,7 +1256,7 @@ gss24_ai |>  # <1>
 4.  Compute the probability that `aidrive_comfort == 0` and `aidrive_comfort == 1` .
 5.  Compute the empirical logit that `aidrive_comfort == 0` and the empirical logit that `aidrive_comfort == 1` .
 
-The code to compute the empirical logit based on a quantitative predictor is the similar, with the additional step of splitting the quantitative predictor into bins. There are many ways to do this in R; here we will show the functions used for the tables in @sec-logistic-conditions.
+The code to compute the empirical logit based on a quantitative predictor is similar, with the additional step of splitting the quantitative predictor into bins. There are many ways to do this in R; here we will show the functions used for the tables in @sec-logistic-conditions.
 
 The first is using the `cut()` function that is part of base R. This function transforms numeric variable types into factor variable types by dividing them into bins. The argument `breaks =` is used to either specify the number of bins or explicitly define the bins. If the number of bins is specified, `cut()` will divide the observations into bins of equal length, as shown in the code below.
 
@@ -1275,7 +1275,7 @@ gss24_ai |>
   mutate(empirical_logit = log(probability/(1 - probability))) 
 ```
 
-Another option for splitting the quantitative variable into bins is to do, such that each bin has an approximately equal number of observations. To do so, we can use the `cut2()` function from them **Hmisc** R package [@Hmisc]. The number of bins is specified in the `g =` argument, and the function will divide the observations into the number of specified bins, such that each bin has an approximately equal number of observations.
+Another option for splitting the quantitative variable into bins is to allocate the bins, such that each bin has an approximately equal number of observations. To do so, we can use the `cut2()` function from them **Hmisc** R package [@Hmisc]. The number of bins is specified in the `g =` argument, and the function will divide the observations into the number of specified bins, such that each bin has an approximately equal number of observations.
 
 ```{r}
 #| echo: true
@@ -1325,7 +1325,7 @@ emplogit_age |>
 
 ```
 
-The **Stat2Data** R package [@Stat2Data] has built-in functions for making empirical logit plot utilizing the base R plotting functions (instead of **ggplot2**).
+The **Stat2Data** R package [@Stat2Data] has built-in functions for making an empirical logit plot utilizing the base R plotting functions (instead of **ggplot2**).
 
 The `emplogitplot1()` function is used to create the empirical logit plot for the response versus a quantitative predictor variable. The argument `ngroups =` specifies the number of bins. The bins can be explicitly defined using the `breaks=` argument instead of `ngroups`.
 
@@ -1337,7 +1337,7 @@ The code for the empirical logit plot versus age using 10 bins is below.
 emplogitplot1(aidrive_comfort ~ age, data = gss24_ai, ngroups = 10)
 ```
 
-We can include the argument `out = TRUE` save the underlying data used to make the plot. Additionally, the argument `showplot = FALSE` will suppress the plot, if we are only interested in the underlying data.
+We can include the argument `out = TRUE` to save the underlying data used to make the plot. Additionally, the argument `showplot = FALSE` will suppress the plot, if we are only interested in the underlying data.
 
 ```{r}
 #| echo: true
