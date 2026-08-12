@@ -430,7 +430,7 @@ The AIC and BIC for a single model is generally not meaningful in practice, so t
 | Strong | 7 - 10 | 6 - 10 |
 | Very strong | $>$ 10 | $>$ 10 |
 
-: Guidelines for comparing two models, $M_1$ and $M_2$, using AIC and BIC
+: Guidelines for comparing two models, $M_1$ and $M_2$, using AIC and BIC {#tbl-aic-bic-guidelines}
 
 [^10-model-eval-3]: Based on [@kass1995bayes]
 

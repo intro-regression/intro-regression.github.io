@@ -1883,8 +1883,8 @@ Table&nbsp;5.12: Standard errors and 95% intervals for the predicted mean respon
 <section id="prediction-intervals" class="level3" data-number="5.10.4">
 <h3 data-number="5.10.4" class="anchored" data-anchor-id="prediction-intervals"><span class="header-section-number">5.10.4</span> Prediction intervals</h3>
 <p>The code for computing prediction intervals largely builds upon code we’ve seen in previous sections.</p>
-<section id="simulation-based-intervals-for-prediction" class="level4" data-number="5.10.4.1">
-<h4 data-number="5.10.4.1" class="anchored" data-anchor-id="simulation-based-intervals-for-prediction"><span class="header-section-number">5.10.4.1</span> Simulation-based intervals for prediction</h4>
+<section id="simulation-based-intervals-for-prediction" class="level4">
+<h4 class="anchored" data-anchor-id="simulation-based-intervals-for-prediction">Simulation-based intervals for prediction</h4>
 <p>The code for computing bootstrapped prediction intervals is below. We use the code from <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a> to generate the bootstrap samples and fit the model for each sample. Because the resulting output is in long format, we pivot the data to wide format using <code>pivot_wider()</code> in the <strong>tidyr</strong> package <span class="citation" data-cites="tidyr">(<a href="references.html#ref-tidyr" role="doc-biblioref">Wickham, Vaughan, and Girlich 2025</a>)</span> (part of <strong>tidyverse</strong>). This results in a data frame such that the bootstrapped intercepts and bootstrapped slopes are in separate columns.</p>
 <p>We then use <code>mutate()</code> from <strong>dplyr</strong> <span class="citation" data-cites="dplyr">(<a href="references.html#ref-dplyr" role="doc-biblioref">Wickham et al. 2023</a>)</span> to compute the predictions from each bootstrap sample. The bounds of the prediction interval are computed using <code>quantile()</code> as with the bounds of the bootstrap confidence intervals in <a href="#sec-slr-bootstrap-r" class="quarto-xref"><span>Section 5.10.1</span></a>.</p>
 <div class="cell">
@@ -1914,8 +1914,8 @@ Table&nbsp;5.12: Standard errors and 95% intervals for the predicted mean respon
 </div>
 </div>
 </section>
-<section id="theory-based-intervals" class="level4" data-number="5.10.4.2">
-<h4 data-number="5.10.4.2" class="anchored" data-anchor-id="theory-based-intervals"><span class="header-section-number">5.10.4.2</span> Theory-based intervals</h4>
+<section id="theory-based-intervals" class="level4">
+<h4 class="anchored" data-anchor-id="theory-based-intervals">Theory-based intervals</h4>
 <p>The <code>predict()</code> function introduced in <a href="04-slr.html#sec-slr-predict-R" class="quarto-xref"><span>Section 4.8.2</span></a> is used to compute the intervals for preditcted mean response or an individual observation. The argument <code>interval =</code> specifies the interval type, and the argument <code>level =</code> specifies the confidence level. The default level is 95%.</p>
 <p>Start by making a tibble of the value of the predictor that you wish to use to make predictions. Below is the code to specify that the predictor <code>per_capita_expend</code> is equal to 150.</p>
 <p>We can specify multiple values in the tibble to produce the predictions and respective intervals for multiple values of the predictor.</p>
