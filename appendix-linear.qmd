@@ -540,11 +540,11 @@ Given the design matrix, $\mathbf{X}$, we define the row in the design matrix fo
 
 The standard error $SE$ in @eq-pred-interval-appendix is defined based on whether we are quantifying uncertainty in the estimated mean response or prediction for an individual observation. The standard error for the estimated mean response is
 
-$$SE_{\hat{\mu}} =\sqrt{\hat{\sigma}^2_\epsilon(\mathbf{x}_0^\mathsf{T}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{x}_0)}$$ {#eq-mean-predict-se-matrix}
+$$SE_{\hat{\mu}} =\sqrt{\hat{\sigma}^2(\mathbf{x}_0^\mathsf{T}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{x}_0)}$$ {#eq-mean-predict-se-matrix}
 
 The standard error for the predicted value of an individual observation is
 
-$$SE_{\hat{y}} =\sqrt{\hat{\sigma}^2_\epsilon(1 +\mathbf{x}_0^\mathsf{T}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{x}_0)}$$ {#eq-indiv-predict-se-matrix}
+$$SE_{\hat{y}} =\sqrt{\hat{\sigma}^2(1 +\mathbf{x}_0^\mathsf{T}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{x}_0)}$$ {#eq-indiv-predict-se-matrix}
 
 \
 Similar to what we observed in the case of simple linear regression in @sec-slr-theory-predict, the formula for SE associated with the prediction for an individual observation (@eq-indiv-predict-se-matrix) has the additional $\sigma^2_{\epsilon}$ to account for the additional variability in the distribution of the response for given combination of predictors.
@@ -588,7 +588,7 @@ $$f(\mathbf{z}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol{\Sigma}|^{1/2}}\exp\Big\{-\f
 
 In @sec-assumptions-matrix, we showed that the vector of responses $\mathbf{y}$ can be written as $\mathbf{y}|\mathbf{X} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2_{\epsilon}\mathbf{I})$. Using this distribution to describe the relationship between the response and predictor variables, the likelihood function for the regression parameters $\boldsymbol{\beta}$ and $\sigma^2_{\epsilon}$ is
 
-$$L(\boldsymbol{\beta}, \sigma^2_{\epsilon} | \mathbf{X}, \mathbf{y}) = \frac{1}{(2\pi)^{n/2}\sigma^n_{\epsilon}}\exp\Big\{-\frac{1}{2\sigma^2_{\epsilon}}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\Big\}$$ {#eq-likelihood-matrix}
+$$L(\boldsymbol{\beta}, \sigma^2_{\epsilon} | \mathbf{X}, \mathbf{y}) = \frac{1}{(2\pi)^{n/2}\sigma^n}\exp\Big\{-\frac{1}{2\sigma^2}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\Big\}$$ {#eq-likelihood-matrix}
 
 where $n$ is the number of observations, the mean is $\mathbf{X}\boldsymbol{\beta}$ and the variance is $\sigma^2_{\epsilon}\mathbf{I}$.
 

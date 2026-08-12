@@ -279,9 +279,9 @@ $$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p + \epsilon, \hspace
 
 where $\epsilon \sim N(0, \sigma^2)$ indicates the error terms are normally distributed with a mean of 0 and variance $\sigma^2$. @eq-mlr-stat-model-1 is the population-level statistical model for multiple linear regression.
 
-Recall from @sec-slr-specify, the function $f(X) = \mu_{Y|X}$ is the expected value (mean) of $Y$ given a value of the predictor $X$. Extending this to multiple linear regression, $f(\mathbf{X}) = f(X_1, X_2, \ldots, X_p)$ outputs the expected value of $Y$ for a combination of the predictors. Therefore,
+Recall from @sec-slr-specify, the function $f(X) = E(Y|X)$ is the expected value (mean) of $Y$ given a value of the predictor $X$. Extending this to multiple linear regression, $f(\mathbf{X}) = f(X_1, X_2, \ldots, X_p)$ outputs the expected value of $Y$ for a combination of the predictors. Therefore,
 
-$$\mu_{Y|\mathbf{X}} = \mu_{Y|X_1, X_2, \ldots, X_p} = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p$$ {#eq-mlr-exp-y}
+$$E(Y|\mathbf{X}) = E(Y|X_1, X_2, \ldots, X_p) = \beta_0 + \beta_1X_1 + \beta_2X_2 + \dots + \beta_pX_p$$ {#eq-mlr-exp-y}
 
 Thus, when we fit a multiple linear regression model, the output from the fitted model will be the predicted expected value of the response variable for a given combination of values of the predictor variables.
 
@@ -301,7 +301,7 @@ The last question can be more challenging to answer for multiple linear regressi
 
 The predicted value $Y$ for the $i^{th}$ observation output from the estimated multiple linear regression is shown in @eq-mlr-estimated-model is
 
-$$\hat{y}_i = \hat{\mu}_{y_i|x_{i1},x_{i2}, \ldots, x_{ip}} = \hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2} + \dots + \hat{\beta}_px_{ip}$$ {#eq-mlr-estimated-model}
+$$\hat{y}_i = \hat{E}(y_i|x_{i1},x_{i2}, \ldots, x_{ip}) = \hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2} + \dots + \hat{\beta}_px_{ip}$$ {#eq-mlr-estimated-model}
 
 The error term for the $i^{th}$ observation, $\epsilon_i$, is estimated by calculating the residuals as before, $e_i = y_i - \hat{y}_i$, the difference between what is observed in the data and what is expected from @eq-mlr-estimated-model. As with simple linear regression in @sec-slr-estimation, the coefficients are estimated using least-squares, finding $\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p$ that minimize the sum of square residuals shown in @eq-mlr-min-sse
 

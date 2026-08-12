@@ -468,29 +468,17 @@ aidrive_comfort_aug |>
   autoplot() +
   labs(x = "1 - Specificity (False positive rate)", 
        y = "Sensitivity (True positive rate)") +
-  annotate("point", x = 0, y = 1, color = "darkgreen") +
-  annotate("point", x = 0, y = 1, color = "darkgreen", size = 3, shape = "circle open") +
   annotate(
-    "label", x = 0.02, y = 0.99, label = "Perfect classification", hjust = 0, color = "darkgreen", fontface = "bold", vjust = 1, fill = "white"
-  ) +
-  annotate("point", x = 1, y = 0, color = "#cc5c76") +
-  annotate("point", x = 1, y = 0, color = "#cc5c76", size = 3, shape = "circle open") +
-  annotate(
-    "label", x = 0.98, y = 0.01, label = "All observations classified incorrectly", hjust = 1, color = "#cc5c76", fontface = "bold", vjust = 0, fill = "white"
+    "segment", color = "steelblue", x = 0, y = 0, xend = 1, yend = 1, linewidth = 2, alpha = 0.6
   ) +
   annotate(
-    "segment", color = "steelblue", x = 0, y = 0, xend = 1, yend = 1, size = 2, alpha = 0.6
-  ) +
-  annotate(
-    "label", x = 0.58, y = 0.5, label = "True positive rate\n= false positive rate", hjust = 0, color = "steelblue", fontface = "bold", fill = "white"
+    "label", x = 0.58, y = 0.5, label = "True positive rate\n= False positive rate", hjust = 0, color = "steelblue", fontface = "bold", fill = "white"
   ) +
    annotate("point", x = 1 - 0.4754335 , y = 0.7503016, color = "red", size = 3, shape = "circle open") + 
   annotate("point", x = 1 - 0.4754335 , y = 0.7503016, color = "red")
 ```
 
-<!--# need to update this graph so that it is not a direct copy of Mine's, including the colors-->
-
-@fig-aidrive-comfort-roc-curve is the ROC curve for the model in @tbl-aidrive-comfort-fit. The $x$-axis on the ROC curve is $1 - \text{Specificity}$, the false positive rate, and the $y$-axis is $\text{Sensitivity}$, the true positive rate. Thus, the ROC curve is a visualization of the true positive rate versus the false positive rate at classification thresholds ranging from 0 to 1 (equivalent to the log odds ranging from $-\infty$ to $\infty$). The diagonal line represents a model fit in which the true positive rate and false positives are equal regardless of the threshold. This means the model is unable to distinguish the observations that actually have an observed response of $y_i = 1$ versus those that do not, so it is essentially the same as using a coin flip to classify observations (not a good model!). In contrast, ROC curves that hit closer to the top-left corner indicate a model that is good at distinguishing true positives and false positives.
+@fig-aidrive-comfort-roc-curve is the ROC curve for the model in @tbl-aidrive-comfort-fit. The $x$-axis on the ROC curve is $1 - \text{Specificity}$, the false positive rate, and the $y$-axis is $\text{Sensitivity}$, the true positive rate. Thus, the ROC curve is a visualization of the true positive rate versus the false positive rate at classification thresholds ranging from 0 to 1 (equivalent to the log odds ranging from $-\infty$ to $\infty$). The diagonal line represents a model fit in which the true positive rate and false positives are equal regardless of the threshold. This means the model is unable to distinguish the observations that actually have an observed response of $y_i = 1$ versus those that do not, so it is essentially the same as using a coin flip to classify observations (not a good model!). In contrast, ROC curves that are closer to the top-left corner indicate a model that is good at distinguishing true positives and false positives.
 
 ```{r}
 #| label: fig-roc-curve-examples

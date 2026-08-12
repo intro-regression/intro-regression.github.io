@@ -90,13 +90,13 @@ There are call out boxes throughout the book to help guide the reading experienc
 
 ## Computing
 
-Computing is an important and necessary aspect of conducting regression analysis in practice. Therefore, R output and code are included in each chapter. The code in the book primarily follows the tidyverse [@tidyverse] and tidymodels [@tidymodels] syntax; they are introduced in [Chapter @sec-ch-computing].
+Computing is an important and necessary aspect of conducting regression analysis in practice. Therefore, R output and code are included in each chapter. We use R because it is widely used and freely available, so readers can utilize the computing from this text beyond a classroom setting. The code we use primarily follows the tidyverse [@tidyverse] syntax, because its readability and consistent structure (among other features) make it more accessible for those new to coding [@cetinkaya2021educator]. The tidyverse is introduced in [Chapter @sec-ch-computing].
 
 Inspired by the structure of *An* *Introduction to Statistical Learning* [@james2021introduction], each chapter contains a section about the code used to apply the new concepts. This format is intended to help readers focus on conceptual understanding before diving into the code. Additionally, it is intended to make the text more accessible to readers not using R.
 
 ## Supplemental materials
 
-The companion website (URL TBD) contains homework assignments, computing labs, and other resources that accompany the text. These are based on a workflow using R and Quarto and have been used in undergraduate regression analysis courses at Duke University. Many of these assignments have also been adapted and used by instructors at other institutions.
+The companion website (<https://intro-regression.github.io/resources>) contains homework assignments, computing labs, and other resources that accompany the text. These are based on a workflow using R and Quarto and have been used in undergraduate regression analysis courses at Duke University. Many of these assignments have also been adapted and used by instructors at other institutions.
 
 ## About the author
 

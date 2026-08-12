@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://introregressio.netlify.app/index.html</loc>
-    <lastmod>2026-06-08T10:34:48.010Z</lastmod>
-  </url>
-  <url>
     <loc>https://introregressio.netlify.app/00-preface.html</loc>
-    <lastmod>2026-08-12T17:45:53.069Z</lastmod>
+    <lastmod>2026-08-12T19:15:20.251Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/01-intro.html</loc>
@@ -22,7 +18,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/04-slr.html</loc>
-    <lastmod>2026-08-12T18:05:29.183Z</lastmod>
+    <lastmod>2026-08-12T18:33:44.998Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/05-slr-inference.html</loc>
@@ -30,15 +26,15 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/06-slr-conditions.html</loc>
-    <lastmod>2026-08-12T18:05:16.525Z</lastmod>
+    <lastmod>2026-08-12T18:34:48.995Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/07-mlr.html</loc>
-    <lastmod>2026-08-12T18:06:07.906Z</lastmod>
+    <lastmod>2026-08-12T18:36:19.420Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/08-mlr-inference.html</loc>
-    <lastmod>2026-08-12T18:07:02.808Z</lastmod>
+    <lastmod>2026-08-12T18:44:37.884Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/09-mlr-transformations.html</loc>
@@ -54,7 +50,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/12-logistic-prediction.html</loc>
-    <lastmod>2026-08-12T18:08:37.434Z</lastmod>
+    <lastmod>2026-08-12T18:21:29.676Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/13-special-topics.html</loc>
@@ -62,7 +58,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/appendix-linear.html</loc>
-    <lastmod>2026-08-12T18:10:37.732Z</lastmod>
+    <lastmod>2026-08-12T18:38:42.808Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/appendix-logistic.html</loc>
