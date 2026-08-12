@@ -5,7 +5,7 @@
 source("_common.R")
 ```
 
-In @sec-ch-logistic, we introduced logistic regression models for binary response variables. Here we will show some of the mathematics underlying these models, making using of the matrix notation for regression introduced in @sec-appendix-linear.
+In @sec-ch-logistic, we introduced logistic regression models for binary response variables. Here we will show some of the mathematics underlying these models, making use of the matrix notation for regression introduced in @sec-appendix-linear.
 
 ## Matrix representation of logistic regression
 
@@ -79,7 +79,7 @@ $$\begin{aligned}
 &= \sum_{i=1}^ny_i\mathbf{x}_i^\mathsf{T} - \frac{e^{\mathbf{x}_i^\mathbf{T}\boldsymbol{\beta}} \mathbf{x}_i^\mathsf{T}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}
 \end{aligned}$$ {#eq-logistic-par-deriv}
 
-There is no closed-from solution for this, i.e., there is no neat formula for $\hat{\boldsymbol{\beta}}$ as we found in @sec-least-sq-matrix for linear regression. Therefore, numerical approximation methods such are used to find the maximum likelihood estimators $\hat{\boldsymbol{\beta}}$. One popular method is Newton-Raphson, a "root-finding algorithm which produces successively better approximations to the roots (or zeroes) of a real-valued function" [@wikipedia_newtons_method]. Numerical approximation methods such as Newton Raphson systematically search the space of of possible values of $\hat{\boldsymbol{\beta}}$ until it converges on the solution (the "root") to @eq-logistic-par-deriv.
+There is no closed-form solution for this, i.e., there is no neat formula for $\hat{\boldsymbol{\beta}}$ as we found in @sec-least-sq-matrix for linear regression. Therefore, numerical approximation methods are used to find the maximum likelihood estimators $\hat{\boldsymbol{\beta}}$. One popular method is Newton-Raphson, a "root-finding algorithm which produces successively better approximations to the roots (or zeroes) of a real-valued function" [@wikipedia_newtons_method]. Numerical approximation methods such as Newton Raphson systematically search the space of of possible values of $\hat{\boldsymbol{\beta}}$ until it converges on the solution (the "root") to @eq-logistic-par-deriv.
 
 ## Inference for logistic regression {#sec-logistic-inference-matrix}
 
@@ -93,4 +93,4 @@ where $\mathbf{V}$ is an $n \times n$ diagonal matrix, such that $V_{ii}$ is the
 
 [^appendix-logistic-1]: Recall that the variance of the Bernoulli distribution depends on $\pi$, so each observation has a different variance. This is in contrast to linear regression, where all observations have the same variance $\sigma^2_{\epsilon}$.
 
-The standard error used for hypothesis testing and confidence intervals for a single coefficient $\beta_j$ , is computed as the $j^{th}$ diagonal element of $Var(\hat{\boldsymbol{\beta}})^{1/2} = (\mathbf{X}^\mathsf{T}\mathbf{V}\mathbf{X})^{-1/2}$. This is why the hypothesis tests and confidence intervals in @sec-logistic-inf-theory are only reliable for large $n$, because they depend on asymptotic approximations in @eq-dist-beta-logistic. We can use simulation-based methods if the data has a small sample size.
+The standard error used for hypothesis testing and confidence intervals for a single coefficient $\beta_j$ is computed as the $j^{th}$ diagonal element of $Var(\hat{\boldsymbol{\beta}})^{1/2} = (\mathbf{X}^\mathsf{T}\mathbf{V}\mathbf{X})^{-1/2}$. This is why the hypothesis tests and confidence intervals in @sec-logistic-inf-theory are only reliable for large $n$, because they depend on asymptotic approximations in @eq-dist-beta-logistic. We can use simulation-based methods if the data has a small sample size.
