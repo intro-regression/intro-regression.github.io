@@ -291,7 +291,7 @@ $$\nabla_\mathbf{x} \hspace{1mm} \mathbf{x}^\mathsf{T}\mathbf{z} = \mathbf{z}$$
 
 **Property 2**
 
-Let $\mathbf{x}$ be a $k \times 1$ vector and $\mathbf{A}$ be a $k \times k$ matrix, such that $\mathbf{A}$ is not a function of $\mathbf{x}$ . The gradient of $\mathbf{x}^\mathsf{T}\mathbf{A}\mathbf{x}$ with respect to $\mathbf{x}$ is
+Let $\mathbf{x}$ be a $k \times 1$ vector and $\mathbf{A}$ be a $k \times k$ matrix, such that $\mathbf{A}$ is not a function of $\mathbf{x}$. The gradient of $\mathbf{x}^\mathsf{T}\mathbf{A}\mathbf{x}$ with respect to $\mathbf{x}$ is
 
 $$\nabla_\mathbf{x} \hspace{1mm} \mathbf{x}^\mathsf{T}\mathbf{A}\mathbf{x} = (\mathbf{A}\mathbf{x} + \mathbf{A}^\mathsf{T} \mathbf{x}) = (\mathbf{A} + \mathbf{A}^\mathsf{T})\mathbf{x}$$ If $\mathbf{A}$ is symmetric, then $(\mathbf{A} + \mathbf{A}^\mathsf{T})\mathbf{x} = 2\mathbf{A}\mathbf{x}$
 :::
@@ -416,11 +416,11 @@ $$\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}} = \mathbf{y} - \mathbf{Hy} = (\math
 
 ## Assumptions of linear regression {#sec-assumptions-matrix}
 
-In @sec-slr-foundation, we introduced four assumptions of linear regression. Given the matrix form of the linear regression on model in @eq-linear-matrix, $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$ such that $\boldsymbol{\epsilon} \sim N(\mathbf{0}, \sigma^2_{\epsilon}\mathbf{I})$ , these assumptions are the following:
+In @sec-slr-foundation, we introduced four assumptions of linear regression. Given the matrix form of the linear regression on model in @eq-linear-matrix, $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$ such that $\boldsymbol{\epsilon} \sim N(\mathbf{0}, \sigma^2_{\epsilon}\mathbf{I})$, these assumptions are the following:
 
 1.  The distribution of the response $\mathbf{y}$ given $\mathbf{X}$ is normal.
 2.  The expected value of $\mathbf{y}$ is $\mathbf{X}\boldsymbol{\beta}$. There is a linear relationship between the response and predictor variables.
-3.  The variance $\mathbf{y}$ given $\mathbf{X}$ is $\sigma^2_{\epsilon}\mathbf{I}$.
+3.  The variance of $\mathbf{y}$ given $\mathbf{X}$ is $\sigma^2_{\epsilon}\mathbf{I}$.
 4.  The error terms in $\boldsymbol{\epsilon}$ are independent. This also means the observations are independent of one another.
 
 From these assumptions, we write the distribution of $\mathbf{y}$ given the regression model in @eq-dist-y-matrix.
@@ -437,7 +437,7 @@ Suppose $\mathbf{z}$ is a (multivariate) normal random variable such that $\math
 $$\mathbf{A}\mathbf{z} + \mathbf{B} \sim N(\mathbf{A}\boldsymbol{\mu} + \mathbf{B}, \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^\mathsf{T})$$
 :::
 
-The distribution of the error terms $\boldsymbol{\epsilon}$ is normal, and the vector of responses $\mathbf{y}$ is linear combination of the error terms. More specifically, $\mathbf{y}$ is computed as the error terms, shifted by $\mathbf{X}\boldsymbol{\beta}$. Thus, from the math property above, we know that $\mathbf{y}$ is normally distributed.
+The distribution of the error terms $\boldsymbol{\epsilon}$ is normal, and the vector of responses $\mathbf{y}$ is a linear combination of the error terms. More specifically, $\mathbf{y}$ is computed as the error terms, shifted by $\mathbf{X}\boldsymbol{\beta}$. Thus, from the math property above, we know that $\mathbf{y}$ is normally distributed.
 
 ::: {.math_rules latex=""}
 **Expected value of a vector**
@@ -466,7 +466,7 @@ Let $\mathbf{z}$ be a $p \times 1$ vector of random variables. Then
 $$Var(\mathbf{z}) = E[(\mathbf{z} - E(\mathbf{z}))(\mathbf{z} - E(\mathbf{z}))^\mathsf{T}]$$
 :::
 
-Lastly, we show Assumption 3 that $Var(\mathbf{y}) = \sigma^2_{\epsilon}\mathbf{I}$ in linear regression. Similar to the expected value, we can get the variance from the mathematical property used to show Assumption 1. Here, we show Assumption 3 directly from the properties of variance. 
+Lastly, we show Assumption 3 that $Var(\mathbf{y}) = \sigma^2_{\epsilon}\mathbf{I}$ in linear regression. Similar to the expected value, we can get the variance from the mathematical property used to show Assumption 1. Here, we show Assumption 3 directly from the properties of variance.
 
 $$\begin{aligned}
 Var(\mathbf{y}) &= E[(\mathbf{y} - E(\mathbf{y}))(\mathbf{y} - E(\mathbf{y}))^\mathsf{T}] \\[10pt]
@@ -555,7 +555,7 @@ $$\mathbf{X} =
 The design matrix $\mathbf{X}$ has full column rank $\text{rank}(\mathbf{X}) = (p + 1)$ in linear regression. This means there are no linear dependencies among the columns, and thus no column is a perfect linear combination of the others. <!--# am I using linear dependency correct here?--> The equation for the least-squares estimator $\hat{\boldsymbol{\beta}}$ in @eq-ssr-deriv-3 includes the term $(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}$. If $\mathbf{X}$ is not full rank, then $\mathbf{X}^\mathsf{T}\mathbf{X}$ is not full rank, and is therefore singular (not invertible). Thus, if there are linear dependencies in $\mathbf{X}$, we are unable to compute an the least-squares estimator $\hat{\boldsymbol{\beta}}$.
 
 ::: {.math_rules latex=""}
-Let $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_p$ be a sequence of vectors. Then, $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_p$ are **linearly dependent***,* if there exists scalars $a_1, a_2, \ldots, a_p$ such that
+Let $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_p$ be a sequence of vectors. Then, $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_p$ are **linearly dependent** if there exists scalars $a_1, a_2, \ldots, a_p$ such that
 
 $$a_1\mathbf{x}_1 + a_2\mathbf{x}_2 + \dots + a_p\mathbf{x}_p = \mathbf{0}$$
 
@@ -584,13 +584,13 @@ $$L(\boldsymbol{\beta}, \sigma^2_{\epsilon} | \mathbf{X}, \mathbf{y}) = \frac{1}
 
 where $n$ is the number of observations, the mean is $\mathbf{X}\boldsymbol{\beta}$ and the variance is $\sigma^2_{\epsilon}\mathbf{I}$.
 
-The data $\mathbf{y}$ and $\mathbf{X}$ are fixed (we use the same sample data in the analysis!), so we can plug in values for $\boldsymbol{\beta}$ and $\sigma^2_{\epsilon}$ to determine the likelihood of obtaining those values for the parameters given the observed data. In @sec-least-sq-matrix, we used least-squares estimation (minimizing $SSR$ ) find the estimated coefficients $\hat{\boldsymbol{\beta}}$. Another approach to estimate $\boldsymbol{\beta}$ (and $\sigma^2_{\epsilon}$) is to find $\hat{\boldsymbol{\beta}}$ (and $\hat{\sigma}^2_{\epsilon}$) that maximizes the likelihood function in @eq-likelihood-matrix. This is called **maximum likelihood estimation**.
+The data $\mathbf{y}$ and $\mathbf{X}$ are fixed (we use the same sample data in the analysis!), so we can plug in values for $\boldsymbol{\beta}$ and $\sigma^2_{\epsilon}$ to determine the likelihood of obtaining those values for the parameters given the observed data. In @sec-least-sq-matrix, we used least-squares estimation (minimizing $SSR$) find the estimated coefficients $\hat{\boldsymbol{\beta}}$. Another approach to estimate $\boldsymbol{\beta}$ (and $\sigma^2_{\epsilon}$) is to find $\hat{\boldsymbol{\beta}}$ (and $\hat{\sigma}^2_{\epsilon}$) that maximizes the likelihood function in @eq-likelihood-matrix. This is called **maximum likelihood estimation**.
 
 To make the calculations more manageable, instead of maximizing the likelihood function, we will instead maximize its logarithm, i.e. the log-likelihood function. The values of the parameters that maximize the log-likelihood function are those that maximize the likelihood function. The log-likelihood function is
 
 $$\begin{aligned}\log L(\boldsymbol{\beta}, \sigma^2_\epsilon &| \mathbf{X}, \mathbf{y}) \\ & = -\frac{n}{2}\log(2\pi) - n \log(\sigma_{\epsilon}) - \frac{1}{2\sigma^2_{\epsilon}}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})\end{aligned}$$ {#eq-log-likelihood-matrix}
 
-Given a fixed value of $\sigma^2_{\epsilon}$, the log-likelihood in @eq-log-likelihood-matrix is maximized when $(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$ is minimized. This is equivalent to minimizing the $SSR$ in @eq-sum-sq-matrix. Thus, the least-squares estimator of $\boldsymbol{\beta}$ is also the maximum likelihood estimator ( $\hat{\beta} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y}$) when the error terms are defined as in @eq-linear-matrix.
+Given a fixed value of $\sigma^2_{\epsilon}$, the log-likelihood in @eq-log-likelihood-matrix is maximized when $(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\mathsf{T}(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$ is minimized. This is equivalent to minimizing the $SSR$ in @eq-sum-sq-matrix. Thus, the least-squares estimator of $\boldsymbol{\beta}$ is also the maximum likelihood estimator ($\hat{\beta} = (\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{X}^\mathsf{T}\mathbf{y}$) when the error terms are defined as in @eq-linear-matrix.
 
 We previously found $\hat{\boldsymbol{\beta}}$ using least-squares estimation and the geometry of regression in @sec-least-sq-matrix, so why does it matter that $\hat{\boldsymbol{\beta}}$ is also the maximum likelihood estimator? First, maximum likelihood estimation is used to find the coefficients for generalized linear models and many other statistical models that go beyond linear regression (we'll see how its used for logistic regression in @sec-appendix-logistic). In fact, @casella2024statistical stated maximum likelihood estimation is "by far, the most popular technique for deriving estimators." \[pp. 315\]. <!--# check page number in the 2nd edition--> Second, maximum likelihood estimators have nice statistical properties. These properties are beyond the scope of this text, but we refer interested readers to Chapter 7 of @casella2024statistical for an in-depth discussion of maximum likelihood estimators and their properties.
 
@@ -632,7 +632,7 @@ Next, we consider the models introduced in @sec-transform-logx that have a log t
 
 $$Y = \beta_0 + \beta_1X_1 + \dots + \beta_j\log(X_j) + \dots + \beta_pX_p + \epsilon$$ {#eq-model-logx}
 
-Now, we because the predictor $X_j$ has been transformed to the logarithmic scale, we write interpretations in terms of a multiplicative change in $X_j$. More specifically, given a constant $C$, $\log(CX_j) = \log(C) + \log(X_j)$. Let $Y|CX_j$ be the expected value of $Y$ when we plug in $CX_j$ and $Y|X_j$ be the expected value of $Y$ when we plug in $X_j$. Assuming all other predictors held constant, we have
+Now, because the predictor $X_j$ has been transformed to the logarithmic scale, we write interpretations in terms of a multiplicative change in $X_j$. More specifically, given a constant $C$, $\log(CX_j) = \log(C) + \log(X_j)$. Let $Y|CX_j$ be the expected value of $Y$ when we plug in $CX_j$ and $Y|X_j$ be the expected value of $Y$ when we plug in $X_j$. Assuming all other predictors held constant, we have
 
 $$\begin{aligned}
 Y|CX_j - Y|CX &= \beta_j\log(CX_j) - \beta_j\log(X_j) \\
