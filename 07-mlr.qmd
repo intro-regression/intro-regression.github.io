@@ -307,7 +307,7 @@ The error term for the $i^{th}$ observation, $\epsilon_i$, is estimated by calcu
 
 $$\sum_{i=1}^{n}e_i^2 = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 = \sum_{i=1}^n(y_i - [\beta_0 + \beta_1x_{i1} + \dots+ \beta_px_{ip}])^2$$ {#eq-mlr-min-sse}
 
-### (Optional) Matrix notation for multiple linear regression
+### Matrix notation for multiple linear regression
 
 <!--# is there a more obvious way to mark optional text?-->
 

@@ -382,7 +382,7 @@ window.Quarto = {
   <li>
 <a href="#sec-mlr-estimate-coef" id="toc-sec-mlr-estimate-coef" class="nav-link" data-scroll-target="#sec-mlr-estimate-coef"><span class="header-section-number">7.3</span> Estimating the coefficients</a>
   <ul class="collapse">
-<li><a href="#optional-matrix-notation-for-multiple-linear-regression" id="toc-optional-matrix-notation-for-multiple-linear-regression" class="nav-link" data-scroll-target="#optional-matrix-notation-for-multiple-linear-regression"><span class="header-section-number">7.3.1</span> (Optional) Matrix notation for multiple linear regression</a></li>
+<li><a href="#matrix-notation-for-multiple-linear-regression" id="toc-matrix-notation-for-multiple-linear-regression" class="nav-link" data-scroll-target="#matrix-notation-for-multiple-linear-regression"><span class="header-section-number">7.3.1</span> Matrix notation for multiple linear regression</a></li>
   </ul>
 </li>
   <li>
@@ -770,8 +770,8 @@ Y &amp;= \text{Model} + \text{Error} \\[5pt]
 <p><span id="eq-mlr-estimated-model"><span class="math display">\[\hat{y}_i = \hat{\mu}_{y_i|x_{i1},x_{i2}, \ldots, x_{ip}} = \hat{\beta}_0 + \hat{\beta}_1x_{i1} + \hat{\beta}_2x_{i2} + \dots + \hat{\beta}_px_{ip} \tag{7.5}\]</span></span></p>
 <p>The error term for the <span class="math inline">\(i^{th}\)</span> observation, <span class="math inline">\(\epsilon_i\)</span>, is estimated by calculating the residuals as before, <span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>, the difference between what is observed in the data and what is expected from <a href="#eq-mlr-estimated-model" class="quarto-xref">Equation&nbsp;<span>7.5</span></a>. As with simple linear regression in <a href="04-slr.html#sec-slr-estimation" class="quarto-xref"><span>Section 4.4</span></a>, the coefficients are estimated using least-squares, finding <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span> that minimize the sum of square residuals shown in <a href="#eq-mlr-min-sse" class="quarto-xref">Equation&nbsp;<span>7.6</span></a></p>
 <p><span id="eq-mlr-min-sse"><span class="math display">\[\sum_{i=1}^{n}e_i^2 = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 = \sum_{i=1}^n(y_i - [\beta_0 + \beta_1x_{i1} + \dots+ \beta_px_{ip}])^2 \tag{7.6}\]</span></span></p>
-<section id="optional-matrix-notation-for-multiple-linear-regression" class="level3" data-number="7.3.1"><h3 data-number="7.3.1" class="anchored" data-anchor-id="optional-matrix-notation-for-multiple-linear-regression">
-<span class="header-section-number">7.3.1</span> (Optional) Matrix notation for multiple linear regression</h3>
+<section id="matrix-notation-for-multiple-linear-regression" class="level3" data-number="7.3.1"><h3 data-number="7.3.1" class="anchored" data-anchor-id="matrix-notation-for-multiple-linear-regression">
+<span class="header-section-number">7.3.1</span> Matrix notation for multiple linear regression</h3>
 <!--# is there a more obvious way to mark optional text?-->
 <!--# should all of this just go in the appendix?-->
 <p>The calculus required to find the values that minimize <a href="#eq-mlr-min-sse" class="quarto-xref">Equation&nbsp;<span>7.6</span></a> can become quite cumbersome, <!--# word here to indicate it's a lot of work not necessarily hard-->particularly if there are a lot of predictor variables. We can instead think of <a href="#eq-mlr-stat-model-1" class="quarto-xref">Equation&nbsp;<span>7.3</span></a> and <a href="#eq-mlr-estimated-model" class="quarto-xref">Equation&nbsp;<span>7.5</span></a> in terms of matrices and utilize linear algebra and matrix calculus <!--# are these the correct terms or can i say matrix algebra and calculus?--> to compute the estimated coefficients. Suppose there are <span class="math inline">\(n\)</span> observations and <span class="math inline">\(p\)</span> predictors, then</p>

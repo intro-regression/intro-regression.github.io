@@ -518,6 +518,14 @@ $$\begin{aligned}
 
 From @eq-rewrite-beta-matrix, we see that $\hat{\boldsymbol{\beta}}$ is a linear combination of the error terms $\boldsymbol{\epsilon}$. Because $\boldsymbol{\epsilon}$ is normally distributed, the linear combination is also normally distributed (see @sec-assumptions-matrix). Thus, the distribution of the coefficients $\hat{\boldsymbol{\beta}}$ is normal.
 
+## Properties of $\hat{\boldsymbol{\beta}}$ 
+
+- Unbiased
+
+- Linear
+
+- "Best" - Gauss Markov Theorem
+
 ## Prediction intervals {#sec-predict-intervals-matrix}
 
 In @sec-mlr-theory-predict, we introduced intervals to quantify uncertainty in predictions from multiple linear regression models. The general form of the intervals, based on @eq-mlr-pred-int-general is
@@ -530,7 +538,7 @@ In this formula, $\hat{y}_0$ is the predicted value for the new observation, $t^
 
 Given the design matrix, $\mathbf{X}$, we define the row in the design matrix for the new observation $\mathbf{x}_0^\mathsf{T}$ as $\mathbf{x}_0^\mathsf{T} = [1, \mathbf{x}_0]$, where $\mathbf{x}_0$ are the values of the predictors for the new observation. Then $\hat{y}_0 = \mathbf{x}_0^\mathsf{T}\hat{\boldsymbol{\beta}}$ where, $\hat{\boldsymbol{\beta}}$ is the vector of estimated coefficients (see @sec-mlr-estimation-matrix).
 
-The standard error $SE$ in @eq-pred-intervals-appendix is defined based on whether we are quantifying uncertainty in the estimated mean response or prediction for an individual observation. The standard error for the estimated mean response is
+The standard error $SE$ in @eq-pred-interval-appendix is defined based on whether we are quantifying uncertainty in the estimated mean response or prediction for an individual observation. The standard error for the estimated mean response is
 
 $$SE_{\hat{\mu}} =\sqrt{\hat{\sigma}^2_\epsilon(\mathbf{x}_0^\mathsf{T}(\mathbf{X}^\mathsf{T}\mathbf{X})^{-1}\mathbf{x}_0)}$$ {#eq-mean-predict-se-matrix}
 
