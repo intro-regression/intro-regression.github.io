@@ -798,9 +798,14 @@ m <- lm(diff_temp ~ observed_precip + elevation + distance_to_coast + wind + avg
 - Provided feedback / reviewed
 
   - Elijah Meyer
-  - Lara from CRC press
+  - Lara from CRC pres
+  - Reviewers from CRC press
+  - Brittney Bailey
+  - Alex Fisher
 
-- Wes Cowley - developmental edit on Chapters 4 - 6
+- Wes Cowley - technical edit
+
+- Rees Storm - Developmental edit
 
 - Formatting things:
 

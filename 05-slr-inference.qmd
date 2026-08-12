@@ -12,7 +12,7 @@ execute:
 source("_common.R")
 ```
 
-## Learning goals {.unnumbered}
+## suLearning goals {.unnumbered}
 
 - Explain how statistical inference is used to draw conclusions about a population model coefficient
 - Construct confidence intervals using bootstrap simulation
@@ -385,7 +385,7 @@ Why are there `r nrow(parks)` observations in each bootstrap sample?[^05-slr-inf
     #| tbl-cap: "Summary statistics for bootstrap distribution of the slope `per_capita_expend`"
 
     spend_dist |>
-      summarise(Min = min(estimate), Q1 = quantile(estimate, 0.25), Median = median(estimate), Q3 = quantile(estimate, 0.25), Max = max(estimate), Mean = mean(estimate), Std.Dev. = sd(estimate)) |>
+      summarise(Min = min(estimate), Q1 = quantile(estimate, 0.25), Median = median(estimate), Q3 = quantile(estimate, 0.75), Max = max(estimate), Mean = mean(estimate), Std.Dev. = sd(estimate)) |>
       kable(digits = 3)
     ```
 
@@ -617,7 +617,7 @@ spend_null_dist |>
 #| tbl-cap: "Summary statistics of the simulated null distribution to test the slope of `per_capita_expend`"
 
 spend_null_dist |>
-  summarise(Min = min(estimate), Q1 = quantile(estimate, 0.25), Median = median(estimate), Q3 = quantile(estimate, 0.25), Max = max(estimate), Mean = mean(estimate), Std.Dev. = sd(estimate)) |>
+  summarise(Min = min(estimate), Q1 = quantile(estimate, 0.25), Median = median(estimate), Q3 = quantile(estimate, 0.75), Max = max(estimate), Mean = mean(estimate), Std.Dev. = sd(estimate)) |>
   kable(digits = 3)
 
 se_spend <- sd(spend_null_dist$estimate)
