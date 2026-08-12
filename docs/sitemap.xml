@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://introregressio.netlify.app/index.html</loc>
+    <lastmod>2026-06-08T10:34:48.010Z</lastmod>
+  </url>
+  <url>
     <loc>https://introregressio.netlify.app/00-preface.html</loc>
-    <lastmod>2026-08-12T19:15:20.251Z</lastmod>
+    <lastmod>2026-08-12T19:18:55.391Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/01-intro.html</loc>
@@ -26,7 +30,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/06-slr-conditions.html</loc>
-    <lastmod>2026-08-12T18:34:48.995Z</lastmod>
+    <lastmod>2026-08-12T19:22:51.548Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/07-mlr.html</loc>
@@ -62,7 +66,7 @@
   </url>
   <url>
     <loc>https://introregressio.netlify.app/appendix-logistic.html</loc>
-    <lastmod>2026-08-12T18:11:26.936Z</lastmod>
+    <lastmod>2026-08-12T19:44:24.131Z</lastmod>
   </url>
   <url>
     <loc>https://introregressio.netlify.app/datasets.html</loc>
@@ -71,5 +75,9 @@
   <url>
     <loc>https://introregressio.netlify.app/references.html</loc>
     <lastmod>2026-06-08T10:34:48.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://introregressio.netlify.app/Introduction-to-Regression-Analysis.pdf</loc>
+    <lastmod>2026-08-12T19:49:52.310Z</lastmod>
   </url>
 </urlset>

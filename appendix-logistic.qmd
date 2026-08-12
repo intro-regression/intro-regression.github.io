@@ -47,7 +47,7 @@ where $p = Pr(z = 1)$.
 $E(Z) = p$ and $Var(Z) = p(1-p)$.
 :::
 
-The response variable follows a Bernoulli distribution, such that $P(Y = y_i) = \pi_{i}^{y_i}(1 - \pi_i)^{1-\y_i}$. Let $\mathbf{x}_i^\mathsf{T}$ be the $i^{th}$ row of the design matrix $\mathbf{X}$. Then, using @eq-logistic-probability-matrix, we have
+The response variable follows a Bernoulli distribution, such that $P(Y = y_i) = \pi_{i}^{y_i}(1 - \pi_i)^{1-y_i}$. Let $\mathbf{x}_i^\mathsf{T}$ be the $i^{th}$ row of the design matrix $\mathbf{X}$. Then, using @eq-logistic-probability-matrix, we have
 
 $$P(Y=y_i) = \Big(\frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big)^{y_i}\Big(1 - \frac{e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}{1 + e^{\mathbf{x}_i^\mathsf{T}\boldsymbol{\beta}}}\Big)^{1 - y_i}$$ {#eq-logistic-proby-matrix} that the likelihood function is a measure of how likely we observe the data given particular values of the model parameters $\hat{\boldsymbol{\beta}}$.
 
