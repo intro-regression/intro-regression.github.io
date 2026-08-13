@@ -304,7 +304,7 @@ lemurs_sample_young |>
   )
 ```
 
-@fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. For simplicity, we will only focus on two variable pairs as we introduce the two permutation sampling strategies. We'll consider how the relationship between `age` and `weight` changes (or not) with different permutation strategies. The relationship between these two variables is in the scatterplot outlined by the solid blue line. As we observed in \[InsERT REF\], there is a strong, positive, linear relationship between these two variables.
+@fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. For simplicity, we will only focus on two variable pairs as we introduce the two permutation sampling strategies. We'll consider how the relationship between `age` and `weight` changes (or not) with different permutation strategies. The relationship between these two variables is in the scatterplot outlined by the solid blue line. As we observed in @sec-mlr-eda, there is a strong, positive relationship between these two variables.
 
 We'll also consider changes in the relationship between `age` and `taxon`. The relationship between these two variables is shown in the side-by-side boxplots outlined by the dashed pink line. The distribution of `age` largely overlaps between the three taxa; however, VRUB has a slightly higher median compared to ERUF and PCOQ.
 
@@ -350,7 +350,7 @@ lemur1 |>
 
 ![Relationship between variables in one permutation sample with weight imputed](images/08-lemur-scattermatrix-weight.png){#fig-lemurs-matrix-weight fig-align="center"}
 
-The relationship between variable pairs for a single permutation sample is shown in @fig-lemurs-matrix-weight. We can compare these relationships to those from the original data in @fig-lemurs-matrix to see how the data changed based on the permutation sample. As we expect under the null condition, there now appears to be no relationship between `age` and `weight` (scatterplot outlined by the solid blue line). Because we permuted the response variable, the relationship between predictors was unchanged, so we see the same relationship between `age` and `taxon` as we did in the original data (side-by-side boxplots outlined in dashed pink line).
+The relationship between variable pairs for a single permutation sample after permuting `weight` is shown in @fig-lemurs-matrix-weight. We can compare these relationships to those from the original data in @fig-lemurs-matrix to see how the data changed as a result of this permutation strategy. As we expect under the null condition, there now appears to be no relationship between `age` and `weight` (scatterplot outlined by the solid blue line). Because we permuted the response variable, the relationship between predictors was unchanged, so we see the same relationship between `age` and `taxon` as we did in the original data (side-by-side boxplots outlined in dashed pink line).
 
 ```{r}
 #| label: make-fig-lemurs-matrix-weight
@@ -433,7 +433,7 @@ We can report such p-values as "approximately 0" to make clear to the reader tha
 
 The second permutation strategy is to permute the values for the predictor of interest, `age` in this case. Similar to the previous strategy, this approach helps us achieve the null condition that there is no linear relationship between `age` and `weight`. Because we are only shuffling the values of `age`, it also preserves the relationship between `weight` and the other predictor variables. Therefore, we this strategy will help us construct a null distribution to test the relationship `weight` and `age` after adjusting for the other predictors in the model (exactly what we want to see!).
 
-The primary limitation to this approach is that by permuting `age`, the permutation samples will not account for any relationship between `age` and the other predictors. Recall from \[InSERT REF\] that we assume the predictors are independent. If there is truly no relationship between the predictors, then this is the prefered permutation strategy. In practice, however, there is often some correlation between the predictor variables. If the predictor of interest is strongly correlated with one or more other predictors, then there is *multicollinearity* and we should avoid this permutation strategy. We discuss multicollinearity in @sec-mlr-multicollinearity.
+The primary limitation to this approach is that by permuting `age`, the permutation samples will not account for any relationship between `age` and the other predictors. Recall from @sec-mlr-interpret-quantitative that we assume the predictors are independent. If there is truly no relationship between the predictors, then this is the prefered permutation strategy. In practice, however, there is often some correlation between the predictor variables. If the predictor of interest is strongly correlated with one or more other predictors, then there is *multicollinearity* and we should avoid this permutation strategy. We discuss multicollinearity in @sec-mlr-multicollinearity.
 
 For now, let's conduct the permutation test by permuting `age`.
 
@@ -477,6 +477,8 @@ lemur1 |>
 @tbl-mlr-inf-permute shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for `weight`, `sex`, `taxon`, and `litter_size` are the same for each permutation. The values of `age` are randomly shuffled, and there is no linear relationship (or any relationship) between `age` and any of the other variables in the permuted samples. In contrast to permuting the response variable (@tbl-mlr-inf-permute-weight), the relationship between weight and the other predictors, `sex`, `taxon`, and `litter_size` is preserved.
 
 ![Relationships between variables in one permutation sample with age imputed](images/08-lemur-scattermatrix-age.png){#fig-lemurs-matrix-age fig-align="center"}
+
+The relationship between variable pairs for a single permutation sample after permtuing `age` is shown in @fig-lemurs-matrix-age. We can compare these relationships to those from the original data in @fig-lemurs-matrix to see how the data changed as a result of this permutation strategy. As we expect under the null condition, there now appears to be no relationship between `age` and `weight` (scatterplot outlined by the solid blue line). Because we permuted `age`, the relationship between `age` and the other predictors changed. We now see no difference in the median age across taxon (see side-by-side boxplots outlined in dashed pink line), compared to a higher median age for VRUB lemurs in the original data.
 
 ```{r}
 #| label: make-fig-lemurs-matrix-age
@@ -560,7 +562,7 @@ The 95% bootstrap confidence interval for $\beta_{age}$ is `r round(age_boot_ci$
 
 [^08-mlr-inference-4]: It corresponds to a hypothesis test with $\alpha = 0.05$. Yes, the interval is consistent, because the null hypothesized value 0 is not in the interval.
 
-### Prediction intervals
+### Prediction intervals {#sec-mlr-bootstrap-pred-intervals}
 
 In @sec-slr-bootstrap-pred-intervals, we introduced a simulation-based approach for quantifying the uncertainty in predictions from a simple linear regression model. We use the same approach to quantify the uncertainty in predictions from multiple linear regression models. The primary difference is now we will quantify the uncertainty for the predicted value given a combination of values for the predictors in the model.
 
@@ -850,7 +852,7 @@ Use the intervals in @tbl-lemur-prediction-intervals.
 
     The interval that corresponds with the interval constructed by bootstrapping is the interval for the estimated mean response, `r round(mean_predict_fit[2], 3)` to `r round(mean_predict_fit[3], 3)`
 
-## Model conditions and diagnostics {#sec-mlr-conditions-diagnositics}
+## Model conditions and diagnostics {#sec-mlr-conditions-diagnostics}
 
 The simulation- and theory-based inference methods rely on a set of assumptions about the relationship between the response and predictor variables in the population ([@sec-mlr-inf-foundation]). We are unable to check whether these assumptions truly hold in the population, so we use the sample data to evaluate whether they hold in the data using model conditions. We also use model diagnostics to assess whether there are outliers in the data that are having an out-sized influence on the model results. These model conditions and diagnostics are the same as the ones for simple linear regression (@sec-ch-slr-conditions) with some additional considerations for the multiple predictor variables. Here we will show the conditions and diagnostics applied to the lemur model. See @sec-ch-slr-conditions for a detailed introduction to these topics.
 
