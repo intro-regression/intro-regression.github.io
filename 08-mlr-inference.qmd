@@ -36,6 +36,7 @@ library(tidyverse)
 library(tidymodels)
 library(knitr)
 library(rms)
+library(GGally)
 
 lemurs_sample_young <- read_csv("data/lemurs-sample-young.csv") |>
   mutate(litter_size = litter_size - 1)
@@ -286,7 +287,15 @@ $$H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0$$
 
 In @sec-hypothesis-test-overview, we explained how hypothesis tests are conducted assuming the null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of $\hat{\beta}_{age}$ under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the **null distribution**, and we construct it using permutation sampling.
 
-Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In this case, because we are conducting inference for a single predictor `age`, we will create new samples by shuffling the values of `age`, so that they are randomly paired with values of weight. We do [**not**]{.underline} shuffle the columns of the other predictors, because we are evaluating the relationship between `age` and `weight` after accounting for the relationships between `weight` and the predictors `sex`, `taxon`, and `litter_size`. By shuffling the columns of `age`, we are simulating the null condition of no linear relationship between `age` and `weight`.
+Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between `age` and `weight` but also the relationship between `age` and the other predictors `sex`, `taxon`, and `litter_size`. Therefore, we will discuss two different approaches to permutation sampling that build upon inference for simple linear regression in @sec-slr-testing-sim: permute the response variable and permute the predictor variable of interest. We will discuss the implications of each sampling strategy and provide resources to readers interested in more advanced methods.
+
+@fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. We'll refer to this as we introduce the two permutation strategies to show how each strategy changes the relationships in the data.
+
+\[INSERT FIGURE\]
+
+#### Permute the response variable {.unnumbered}
+
+In this case, because we are conducting inference for a single predictor `age`, we will create new samples by shuffling the values of `age`, so that they are randomly paired with values of weight. We do [**not**]{.underline} shuffle the columns of the other predictors, because we are evaluating the relationship between `age` and `weight` after accounting for the relationships between `weight` and the predictors `sex`, `taxon`, and `litter_size`. By shuffling the columns of `age`, we are simulating the null condition of no linear relationship between `age` and `weight`.
 
 ```{r}
 #| label: tbl-mlr-inf-permute
@@ -1046,6 +1055,8 @@ null_dist |>
   filter(term == "age") |> 
   get_p_value(obs_stat = age_coef, direction = "two-sided") 
 ```
+
+\[ADD SOMETHING HERE ABOUT PERMUTING RESPONSE VS PREDICTOR\]
 
 ### Theory-based inference in R
 
