@@ -951,9 +951,8 @@ Figure&nbsp;8.3: Null distribution for <span class="math inline">\(\beta_{age}\)
 </div>
 </section><section id="permute-single-predictor-variable" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="permute-single-predictor-variable">Permute single predictor variable</h4>
 <p>The second permutation strategy is to permute the values for the predictor of interest, <code>age</code> in this case. Similar to the previous strategy, this approach helps us achieve the null condition that there is no linear relationship between <code>age</code> and <code>weight</code>. Because we are only shuffling the values of <code>age</code>, it also preserves the relationship between <code>weight</code> and the other predictor variables. Therefore, we this strategy will help us construct a null distribution to test the relationship <code>weight</code> and <code>age</code> after adjusting for the other predictors in the model (exactly what we want to see!).</p>
-<p>The primary limitation to this approach is that by permuting <code>age</code>, the permutation samples will not account for any relationship between <code>age</code> and the other predictors. Recall from [InSERT REF] that we assume the predictors are independent. If there is truly no relationship between the predictors, then this is the prefered permutation strategy. <!--# start here--> W know in practic,e however,</p>
-<p>ihis can result in unreliable conclusions from the inference procedure if <code>age</code> (or more generally the variable being tested) has a strong relationship with one or more other predictors (more on this in <span class="quarto-unresolved-ref">?sec-multicollinearity</span>).</p>
-<p>In this case, because we are conducting inference for a single predictor <code>age</code>, we will create new samples by shuffling the values of <code>age</code>, so that they are randomly paired with values of weight. We do <u><strong>not</strong></u> shuffle the columns of the other predictors, because we are evaluating the relationship between <code>age</code> and <code>weight</code> after accounting for the relationships between <code>weight</code> and the predictors <code>sex</code>, <code>taxon</code>, and <code>litter_size</code>. By shuffling the columns of <code>age</code>, we are simulating the null condition of no linear relationship between <code>age</code> and <code>weight</code>.</p>
+<p>The primary limitation to this approach is that by permuting <code>age</code>, the permutation samples will not account for any relationship between <code>age</code> and the other predictors. Recall from [InSERT REF] that we assume the predictors are independent. If there is truly no relationship between the predictors, then this is the prefered permutation strategy. In practice, however, there is often some correlation between the predictor variables. If the predictor of interest is strongly correlated with one or more other predictors, then there is <em>multicollinearity</em> and we should avoid this permutation strategy. We discuss multicollinearity in <a href="#sec-mlr-multicollinearity" class="quarto-xref"><span>Section 8.5.3</span></a>.</p>
+<p>For now, let’s conduct the permutation test by permuting <code>age</code>.</p>
 <div class="cell">
 <div id="tbl-mlr-inf-permute" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mlr-inf-permute-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1026,15 +1025,8 @@ Table&nbsp;8.5: First five permutations for an individual lemur
 </div>
 </div>
 <!--# is this table confusing?-->
-<p><a href="#tbl-mlr-inf-permute" class="quarto-xref">Table&nbsp;<span>8.5</span></a> shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for <code>weight</code>, <code>sex</code>, <code>taxon</code>, and <code>litter_size</code> are the same for each permutation. The values of <code>age</code> are randomly shuffled, and there is no linear relationship (or any relationship) between age and weight in the permutation samples.</p>
-<p>Like bootstrapping, each permutation sample is the same size as the original data. In contrast to bootstrapping, permutation sampling is merely shuffling the values of a column of data rather than sampling complete observations with replacement. We will use 1000 permutation samples for this analysis. Like bootstrapping, for each permutation sample, we fit the linear regression model and use <span class="math inline">\(\hat{\beta}_{age}\)</span>, the estimated coefficient of age from each permutation sample to create the null distribution.</p>
-<div class="yourturn">
-<ul>
-<li>What is the approximate center of the null distribution of <code>age</code> created from the permutation samples?</li>
-<li>How does the standard deviation of the null distribution compare to the standard deviation of the bootstrap distribution?<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>
-</li>
-</ul>
-</div>
+<p><a href="#tbl-mlr-inf-permute" class="quarto-xref">Table&nbsp;<span>8.5</span></a> shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for <code>weight</code>, <code>sex</code>, <code>taxon</code>, and <code>litter_size</code> are the same for each permutation. The values of <code>age</code> are randomly shuffled, and there is no linear relationship (or any relationship) between <code>age</code> and any of the other variables in the permuted samples. In contrast to permuting the response variable (<a href="#tbl-mlr-inf-permute-weight" class="quarto-xref">Table&nbsp;<span>8.4</span></a>), the relationship between weight and the other predictors, <code>sex</code>, <code>taxon</code>, and <code>litter_size</code> is preserved.</p>
+<p>As before, we use the permutation samples to construct the null distribution.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-mlr-inf-permute-null-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1048,26 +1040,14 @@ Figure&nbsp;8.4: Null distribution for <code>age</code> from 1000 permutation sa
 </div>
 </div>
 <!--# make sure histogram colors are consistent with SLR Inf-->
-<p><a href="#fig-mlr-inf-permute-null-dist" class="quarto-xref">Figure&nbsp;<span>8.4</span></a> shows the null distribution with the value of <span class="math inline">\(\hat{\beta}_{age}\)</span> observed in the original data marked with the red dotted line. The null distribution is centered around 0, the hypothesized value. The coefficient estimated from the observed data is very far away from the center of the distribution, so the data appears to provide strong evidence against the null hypothesis.</p>
-<p>The evidence against the null hypothesis is not always so visually clear, so we compute a p-value to provide a measure for evaluating the evidence against the null hypothesis. Recall that the p-value is the probability of observing results at least as extreme as the results observed from the data, given the null hypothesis is true. In this instance, this means the probability of getting an estimated coefficient of 136.903 or more extreme in a sample of 252 lemurs, given the null hypothesis is true. Because the alternative hypothesis is <span class="math inline">\(\beta_{age} \neq 0\)</span>, “more extreme” is greater than 136.903 and less than -136.903 .</p>
-<p>Based on the simulation, the p-value is 0. This means in 1000 permutation samples drawn under the assumption the null hypothesis is true, we did not compute an estimated coefficient for <code>age</code> equal to 136.903 or more extreme. We compare this p-value to a decision-making threshold <span class="math inline">\(\alpha\)</span> (see <a href="05-slr-inference.html#sec-slr-inf-conclusion" class="quarto-xref"><span>Section 5.6.4</span></a>) to draw the conclusion. The p-value of 0 is less than <span class="math inline">\(\alpha\)</span> for any chosen threshold, so we <strong>reject the null hypothesis</strong>. The data provide strong evidence in favor of the alternative hypothesis that there is a linear relationship between age and weight after accounting for sex, taxon, and number of lemurs in the litter.</p>
-<div class="analysis_in_practice">
-<p>Though the p-value from the simulation-based hypothesis test is equal to 0, the true p-value is very close to but not exactly 0 (but it is still very small!). R will produce a warning like the one below to highlight this.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="images/07-infer-pval-warning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Infer warning about reporting p-value of 0."><img src="images/07-infer-pval-warning.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Warning from infer output that says &quot;Please be cautious in reporting a p-value of 0. This result is an approximation based on the number of reps chosen in the generate step. See get_p_value for more information.&quot;"></a></p>
-</figure>
-</div>
-<figcaption>Infer warning about reporting p-value of 0.</figcaption></figure>
-</div>
-<p>We can report such p-values as “approximately 0” to make clear to the reader that this is an approximation and not an exact result. We can also increase the number of iterations to get a closer approximation of the p-value or use theory-based methods from <a href="#sec-mlr-theory-inf" class="quarto-xref"><span>Section 8.4</span></a> to get the exact p-value.</p>
-</div>
-<p>Here we used permutation sampling to construct the null distribution for the hypothesis test to evaluate a claim about the relationship between age and weight for young lemurs. Because we conducted a two-sided hypothesis test, we can use the bootstrap confidence interval from <a href="#sec-mlr-bootstrap-ci" class="quarto-xref"><span>Section 8.3.1</span></a> to evaluate this claim as well. The <span class="math inline">\(C\%\)</span> confidence interval corresponds to a test with a decision-making threshold of <span class="math inline">\(\alpha = (1-\frac{C}{100})\)</span>. See <a href="05-slr-inference.html#sec-slr-inf-relationship-ci-test" class="quarto-xref"><span>Section 5.7</span></a> for more detail about the connection between hypothesis test and confidence intervals. <!--# the percent / dividing C by 100 needs to be smoothed out--></p>
+<p><a href="#fig-mlr-inf-permute-null-dist" class="quarto-xref">Figure&nbsp;<span>8.4</span></a> shows the null distribution with the value of <span class="math inline">\(\hat{\beta}_{age}\)</span> observed in the original data marked with the red dotted line. Similar to <a href="#fig-mlr-inf-permute-null-dist-weight" class="quarto-xref">Figure&nbsp;<span>8.3</span></a>, the null distribution is centered around 0. The coefficient estimated from the observed data is very far away from the center of the distribution, so the data appears to provide strong evidence against the null hypothesis. More specifically, the p-value is approximately 0. As before, we reject the null hypothesis and conclude there is evidence of a linear relationship between age and weight of young lemurs after adjusting for sex, taxon, and litter size.</p>
+<p>We used different strategies of permutation sampling to construct the null distribution for the hypothesis test to evaluate a claim about the relationship between age and weight for young lemurs. Because we conducted a two-sided hypothesis test, we can use the bootstrap confidence interval from <a href="#sec-mlr-bootstrap-ci" class="quarto-xref"><span>Section 8.3.1</span></a> to evaluate this claim as well. The <span class="math inline">\(C\%\)</span> confidence interval corresponds to a test with a decision-making threshold of <span class="math inline">\(\alpha = (1-\frac{C}{100})\)</span>.</p>
+<p>The bootstrap confidence interval is advantageous, because bootstrap sampling does not have the same limitations as permutation sampling in multiple linear regression, and the confidence interval also gives information about the size of the effect of <code>age</code>. See <a href="05-slr-inference.html#sec-slr-inf-relationship-ci-test" class="quarto-xref"><span>Section 5.7</span></a> for more detail about the connection between hypothesis test and confidence intervals. <!--# the percent / dividing C by 100 needs to be smoothed out--></p>
 <div class="yourturn">
 <p>The 95% bootstrap confidence interval for <span class="math inline">\(\beta_{age}\)</span> is 125.74 to 149.29.</p>
 <ul>
 <li>This interval corresponds to a hypothesis test with what <span class="math inline">\(\alpha\)</span>-level?</li>
-<li>Is this interval consistent with the conclusion that there is evidence of a linear relationship between age and weight, after accounting for sex, taxon, and number of lemurs in the litter? Explain. <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>
+<li>Is this interval consistent with the conclusion that there is evidence of a linear relationship between age and weight, after accounting for sex, taxon, and number of lemurs in the litter? Explain. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>
 </li>
 </ul>
 </div>
@@ -1166,7 +1146,7 @@ Table&nbsp;8.6: Estimated coefficienst and predictions in first five bootstrap s
 <div class="cell-output-display">
 <div id="fig-bootstrap-lemur-pred" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bootstrap-lemur-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-bootstrap-lemur-pred-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.5: Bootstrap distribution of predictions with bounds for the 95% interval"><img src="08-mlr-inference_files/figure-html/fig-bootstrap-lemur-pred-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-bootstrap-lemur-pred-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;8.5: Bootstrap distribution of predictions with bounds for the 95% interval"><img src="08-mlr-inference_files/figure-html/fig-bootstrap-lemur-pred-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bootstrap-lemur-pred-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.5: Bootstrap distribution of predictions with bounds for the 95% interval
@@ -1175,7 +1155,7 @@ Figure&nbsp;8.5: Bootstrap distribution of predictions with bounds for the 95% i
 </div>
 </div>
 <div class="yourturn">
-<p>The 95% confidence in <a href="#fig-bootstrap-lemur-pred" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> is 1859.728 to 2642.688. Interpret this interval in the context of the data.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>The 95% confidence in <a href="#fig-bootstrap-lemur-pred" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> is 1859.728 to 2642.688. Interpret this interval in the context of the data.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
 </div>
 </section></section><section id="sec-mlr-theory-inf" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="sec-mlr-theory-inf">
 <span class="header-section-number">8.4</span> Theory-based inference</h2>
@@ -1307,7 +1287,7 @@ Table&nbsp;8.7: Comparison of standard error for <code>age</code> in simple and 
 <p><span class="math display">\[T = \frac{\hat{\beta}_j - 0}{SE_{\hat{\beta}_j}} = \frac{136.903 - 0}{4.858} = 28.181\]</span></p>
 <p>This means that given the null hypothesis is true (<span class="math inline">\(\beta_{age} = 0\)</span>), the coefficient estimated from the model 136.903 is about 28.181 standard errors above the mean of the distribution.</p>
 <div class="yourturn">
-<p>The test statistic is 28.181. Do you think this provides evidence in support of or against the null hypothesis?<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>The test statistic is 28.181. Do you think this provides evidence in support of or against the null hypothesis?<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 </div>
 <p><strong>Step 3: Calculate a p-value.</strong></p>
 <p>Sometimes the test statistic has a magnitude that is so small or so large that we can easily use it to draw conclusions about the test. There are many times, however, it is unclear what the conclusion should be based on the test statistic alone, so we compute a p-value and compare it to the decision-making threshold <span class="math inline">\(\alpha\)</span> to make a conclusion.</p>
@@ -1336,12 +1316,12 @@ Table&nbsp;8.7: Comparison of standard error for <code>age</code> in simple and 
 = [128.882, 144.924]\]</span></p>
 <!--# figure out why these intervals are not super close-->
 <!--# change back to 3 digits-->
-<p>Thus, we are 95% confident that the interval 128.882 to 144.924 contains <span class="math inline">\(\beta_{age}\)</span>, the true slope for age.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> More specifically in terms of the question, this means we are 95% confident that after accounting for sex, taxon, and number of lemurs in the litter, the weight of young lemurs increases between 128.882 to 144.924 grams, on average, as the age increases by one month. Recall that the “confidence” referenced here is our confidence in the statistical methods. That if we were to repeat the process of collecting 252 observations, fitting the same model, and making a confidence interval for the coefficient of age, about 95% of those intervals will actually contain the population coefficient. We cannot say for certain, however, whether this individual interval does or does not contain the true population coefficient for age.</p>
+<p>Thus, we are 95% confident that the interval 128.882 to 144.924 contains <span class="math inline">\(\beta_{age}\)</span>, the true slope for age.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> More specifically in terms of the question, this means we are 95% confident that after accounting for sex, taxon, and number of lemurs in the litter, the weight of young lemurs increases between 128.882 to 144.924 grams, on average, as the age increases by one month. Recall that the “confidence” referenced here is our confidence in the statistical methods. That if we were to repeat the process of collecting 252 observations, fitting the same model, and making a confidence interval for the coefficient of age, about 95% of those intervals will actually contain the population coefficient. We cannot say for certain, however, whether this individual interval does or does not contain the true population coefficient for age.</p>
 <div class="yourturn">
 <p>Confidence intervals typically have confidence levels between 90% and 99%. Suppose you are considering three possible confidence levels: 90%, 95%, and 99%.</p>
 <ul>
 <li><p>Which confidence level will you choose to get the most accurate interval (interval most likely to contain the true parameter)?</p></li>
-<li><p>Which confidence level will you choose to get the most precise interval (interval with smallest margin of error)?<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p></li>
+<li><p>Which confidence level will you choose to get the most precise interval (interval with smallest margin of error)?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p></li>
 </ul>
 </div>
 </section><section id="sec-mlr-theory-predict" class="level3" data-number="8.4.4"><h3 data-number="8.4.4" class="anchored" data-anchor-id="sec-mlr-theory-predict">
@@ -1394,7 +1374,7 @@ Table&nbsp;8.8: Standard errors and 95% intervals for the predicted mean respons
 <p>Use the intervals in <a href="#tbl-lemur-prediction-intervals" class="quarto-xref">Table&nbsp;<span>8.8</span></a>.</p>
 <ul>
 <li><p>Jackson is a 10-month old, male lemur from the VRUB taxon, who was born in a litter of 4 lemurs. We are 95% confident his weight is between what range of values?</p></li>
-<li><p>Which interval corresponds to the interval constructed by bootstrapping in <span class="quarto-unresolved-ref">?sec-mlr-bootstrap-pred-intervals</span> ?<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p></li>
+<li><p>Which interval corresponds to the interval constructed by bootstrapping in <span class="quarto-unresolved-ref">?sec-mlr-bootstrap-pred-intervals</span> ?<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p></li>
 </ul>
 </div>
 </section></section><section id="sec-mlr-conditions-diagnositics" class="level2" data-number="8.5"><h2 data-number="8.5" class="anchored" data-anchor-id="sec-mlr-conditions-diagnositics">
@@ -1420,7 +1400,7 @@ Table&nbsp;8.8: Standard errors and 95% intervals for the predicted mean respons
 <div class="cell-output-display">
 <div id="fig-mlr-resid-plot" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-resid-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8.6: Residuals versus predicted for the lemurs model"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.6: Residuals versus predicted for the lemurs model"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-plot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-resid-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.6: Residuals versus predicted for the lemurs model
@@ -1494,7 +1474,7 @@ Figure&nbsp;8.7: Residuals versus each predictor in the lemurs model
 <div class="cell-output-display">
 <div id="fig-mlr-resid-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-resid-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;8.8: Distribution of residuals with normal density curve"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;8.8: Distribution of residuals with normal density curve"><img src="08-mlr-inference_files/figure-html/fig-mlr-resid-dist-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-resid-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.8: Distribution of residuals with normal density curve
@@ -1511,7 +1491,7 @@ Figure&nbsp;8.8: Distribution of residuals with normal density curve
 <div class="cell-output-display">
 <div id="fig-mlr-equal-var" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-equal-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;8.9: Residuals versus predicted with markers to check equal variance"><img src="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;8.9: Residuals versus predicted with markers to check equal variance"><img src="08-mlr-inference_files/figure-html/fig-mlr-equal-var-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-equal-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.9: Residuals versus predicted with markers to check equal variance
@@ -1530,7 +1510,7 @@ Figure&nbsp;8.9: Residuals versus predicted with markers to check equal variance
 <div class="cell-output-display">
 <div id="fig-mlr-cooks-d" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-cooks-d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;8.10: Cook’s distance for each observation in the lemur analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;8.10: Cook’s distance for each observation in the lemur analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-cooks-d-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-cooks-d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.10: Cook’s distance for each observation in the lemur analysis
@@ -1544,14 +1524,14 @@ Figure&nbsp;8.10: Cook’s distance for each observation in the lemur analysis
 </section><section id="leverage" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="leverage">Leverage</h4>
 <p>In simple linear regression, an observation’s leverage is a measure of how far its value of the predictor is from the mean value of the predictor in the data. That definition is expanded in multiple linear regression, where an observation’s leverage is how far its combination of predictors is from the average (typical) combination of predictors. Mathematical details for computing leverage in multiple linear regression are in <a href="appendix-linear.html#sec-hat-matrix" class="quarto-xref"><span>Section A.4</span></a>.</p>
 <div class="yourturn">
-<p>Suppose we decide to fit a model using <code>taxon</code>, <code>age</code>, <code>sex</code>, and <code>litter_size</code> to predict the body length of young lemurs (instead of the weight)? How does the leverage for each observation compare in this model to the leverage in the model we’ve examined using these variables to predict weight?<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<p>Suppose we decide to fit a model using <code>taxon</code>, <code>age</code>, <code>sex</code>, and <code>litter_size</code> to predict the body length of young lemurs (instead of the weight)? How does the leverage for each observation compare in this model to the leverage in the model we’ve examined using these variables to predict weight?<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
 </div>
-<p>An observation has <em>high leverage</em> if its combination of predictors is far away from the typical combination in the data. We use a threshold of <span class="math inline">\(\frac{2(p+1)}{n}\)</span>, where <span class="math inline">\(p+1\)</span> is the number of terms in the model and <span class="math inline">\(n\)</span> is the sample size, to determine whether an observation has high leverage.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a></p>
+<p>An observation has <em>high leverage</em> if its combination of predictors is far away from the typical combination in the data. We use a threshold of <span class="math inline">\(\frac{2(p+1)}{n}\)</span>, where <span class="math inline">\(p+1\)</span> is the number of terms in the model and <span class="math inline">\(n\)</span> is the sample size, to determine whether an observation has high leverage.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-mlr-leverage" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;8.11: Leverage for observations in the lemurs analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;8.11: Leverage for observations in the lemurs analysis"><img src="08-mlr-inference_files/figure-html/fig-mlr-leverage-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.11: Leverage for observations in the lemurs analysis
@@ -1566,7 +1546,7 @@ Figure&nbsp;8.11: Leverage for observations in the lemurs analysis
 <div class="cell-output-display">
 <div id="fig-mlr-std-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-std-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;8.12: Standardized residuals versus predicted values for the lemur model"><img src="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;8.12: Standardized residuals versus predicted values for the lemur model"><img src="08-mlr-inference_files/figure-html/fig-mlr-std-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-std-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.12: Standardized residuals versus predicted values for the lemur model
@@ -1579,7 +1559,7 @@ Figure&nbsp;8.12: Standardized residuals versus predicted values for the lemur m
 <p>Consider the outlier observation. The residual for this observation is 3380.42 and the standardized residual for this observation is 6.442.</p>
 <ul>
 <li>Explain what the value of the residual means in the context of the data.</li>
-<li>Explain what the value of the standardized residual means in the context of the data.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>
+<li>Explain what the value of the standardized residual means in the context of the data.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>
 </li>
 </ul>
 </div>
@@ -1831,26 +1811,18 @@ Harrell Jr, Frank E. 2025. <span>“Rms: Regression Modeling Strategies.”</spa
 <li id="fn1"><p>Question 1: This can be answered by a hypothesis test and confidence interval. Question 2: This question can be answered by a confidence interval.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>It is estimate of <span class="math inline">\(SE_{\hat{\beta}_{age}}\)</span>, the standard error of the coefficient of <code>age</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>We are 90% confident that the weight of PCOQ lemurs is 314.442 to 630.842 grams higher, on average, compared the weight of ERUF lemurs, holding age, sex, and litter size constant.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4">
-<ol type="1">
-<li>The center of the null distribution is approximately equal to 0, the hypothesized value. Because the null is created using a simulation-based procedure, it will not be exact but very close as the number of samples increases.</li>
-<li>The standard deviation of the null distribution is approximately equal to the standard deviation of the bootstrap distribution. They are both approximations of <span class="math inline">\(SE_{\hat{\beta}_{age}}\)</span>.<br>
-</li>
-</ol>
-<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a>
-</li>
-<li id="fn5"><p>It corresponds to a hypothesis test with <span class="math inline">\(\alpha = 0.05\)</span>. Yes, the interval is consistent, because the null hypothesized value 0 is not in the interval.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>We are 95% confident that the mean weight among 10-month-old male lemurs from the VRUB taxon who were born into litters with 4 lemurs is 1859.728 to 2642.688 grams.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>This is a large test statistic, so it appears to provide evidence against the null hypothesis. We will complete the last two steps of hypothesis testing to see the conclusion.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>Our calculations do not exactly match the confidence interval produced by software, because we have used rounded values of the estimated slope, critical value, and standard error.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>The confidence level 99% produces the most accurate interval. The confidence level 90% produces the most precise interval.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10">
+<li id="fn4"><p>It corresponds to a hypothesis test with <span class="math inline">\(\alpha = 0.05\)</span>. Yes, the interval is consistent, because the null hypothesized value 0 is not in the interval.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>We are 95% confident that the mean weight among 10-month-old male lemurs from the VRUB taxon who were born into litters with 4 lemurs is 1859.728 to 2642.688 grams.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>This is a large test statistic, so it appears to provide evidence against the null hypothesis. We will complete the last two steps of hypothesis testing to see the conclusion.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Our calculations do not exactly match the confidence interval produced by software, because we have used rounded values of the estimated slope, critical value, and standard error.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>The confidence level 99% produces the most accurate interval. The confidence level 90% produces the most precise interval.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9">
 <p>We use the prediction interval for an individual observation. We are 95% confident Jackson’s weight is between 1159.846 to 3366.794 grams.</p>
-<p>The interval that corresponds with the interval constructed by bootstrapping is the interval for the estimated mean response, 1922.987 to 2603.653<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p>
+<p>The interval that corresponds with the interval constructed by bootstrapping is the interval for the estimated mean response, 1922.987 to 2603.653<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p>
 </li>
-<li id="fn11"><p>The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn12"><p>Note: We may choose to use the higher threshold of <span class="math inline">\(\frac{3(p+1)}{n}\)</span>if the sample size is large.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn13"><p>The residual means that the observed weight for this lemur is 3380.42 grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is 6.442 standard errors above the mean of the distribution of residuals.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>The leverage of each observation will be the same for the two models. Leverage only depends on the predictor variables. It does not depend on the response variable.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Note: We may choose to use the higher threshold of <span class="math inline">\(\frac{3(p+1)}{n}\)</span>if the sample size is large.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>The residual means that the observed weight for this lemur is 3380.42 grams greater than the weight predicted by the model. The standardized residual means that the residual for this observation is 6.442 standard errors above the mean of the distribution of residuals.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
