@@ -291,8 +291,6 @@ In @sec-hypothesis-test-overview, we explained how hypothesis tests are conducte
 
 Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between `age` and `weight` but also the relationship between `age` and the other predictors `sex`, `taxon`, and `litter_size`. Therefore, we will discuss two different approaches to permutation sampling that build upon inference for simple linear regression in @sec-slr-testing-sim: permute the response variable and permute the predictor variable of interest. We will discuss the implications of each sampling strategy and provide resources to readers interested in more advanced methods.
 
-@fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. We'll refer to this as we introduce the two permutation strategies to show how each strategy changes the relationships in the data.
-
 ![Relationships between variables in original lemurs data](images/08-lemur-scattermatrix-original.png){#fig-lemurs-matrix fig-align="center"}
 
 ```{r}
@@ -305,6 +303,10 @@ lemurs_sample_young |>
           lower = list(combo = "box_no_facet", discrete = "crosstable")
   )
 ```
+
+@fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. For simplicity, we will only focus on two variable pairs as we introduce the two permutation sampling strategies. We'll consider how the relationship between `age` and `weight` changes (or not) with different permutation strategies. The relationship between these two variables is in the scatterplot outlined by the solid blue line. As we observed in \[InsERT REF\], there is a strong, positive, linear relationship between these two variables.
+
+We'll also consider changes in the relationship between `age` and `taxon`. The relationship between these two variables is shown in the side-by-side boxplots outlined by the dashed pink line. The distribution of `age` largely overlaps between the three taxa; however, VRUB has a slightly higher median compared to ERUF and PCOQ.
 
 #### Permute the response variable {.unnumbered}
 
