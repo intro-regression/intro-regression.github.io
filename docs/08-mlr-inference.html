@@ -846,17 +846,13 @@ Figure&nbsp;8.2: Bootstrap sampling distribution for <code>age</code> with 95% c
 <p>In <a href="05-slr-inference.html#sec-hypothesis-test-overview" class="quarto-xref"><span>Section 5.5</span></a>, we explained how hypothesis tests are conducted assuming the null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of <span class="math inline">\(\hat{\beta}_{age}\)</span> under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the <strong>null distribution</strong>, and we construct it using permutation sampling.</p>
 <p>Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., “new” samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between <code>age</code> and <code>weight</code> but also the relationship between <code>age</code> and the other predictors <code>sex</code>, <code>taxon</code>, and <code>litter_size</code>. Therefore, we will discuss two different approaches to permutation sampling that build upon inference for simple linear regression in <a href="05-slr-inference.html#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a>: permute the response variable and permute the predictor variable of interest. We will discuss the implications of each sampling strategy and provide resources to readers interested in more advanced methods.</p>
 <p><a href="#fig-lemurs-matrix" class="quarto-xref">Figure&nbsp;<span>8.3</span></a> is a scatterplot matrix that shows the relationship between each pair of variables in the <code>lemurs</code> data frame. We’ll refer to this as we introduce the two permutation strategies to show how each strategy changes the relationships in the data.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-lemurs-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-lemurs-matrix" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-lemurs-matrix-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;8.3: Relationships between variables in original lemurs data"><img src="08-mlr-inference_files/figure-html/fig-lemurs-matrix-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="images/08-lemur-scattermatrix-original.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;8.3: Relationships between variables in original lemurs data"><img src="images/08-lemur-scattermatrix-original.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8.3: Relationships between variables in original lemurs data
 </figcaption></figure>
-</div>
-</div>
 </div>
 <section id="permute-the-response-variable" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="permute-the-response-variable">Permute the response variable</h4>
 <p>Let’s start by using the sample permutation strategy we used in <a href="05-slr-inference.html#sec-slr-testing-sim" class="quarto-xref"><span>Section 5.6</span></a>, permuting the response variable. We create new samples by randomly shuffling the values of <code>weight</code> only without shuffling any of the other columns. By shuffling the values of <code>weight</code>, we create new samples generated under the null condition of no linear relationship between <code>weight</code> and <code>age</code>. Note, however, that with this permutation strategy, there is also no longer a relationship between <code>weight</code> and any of the other predictor variables. Therefore, we can use the permutation test to conclude whether there is evidence of a linear relationship between <code>age</code> and <code>weight</code>, not taking into account the relationship between <code>weight</code> and the other predictors.</p>
@@ -932,17 +928,13 @@ Table&nbsp;8.4: First five permutations for an individual lemur after permuting 
 </div>
 </div>
 <p><a href="#tbl-mlr-inf-permute-weight" class="quarto-xref">Table&nbsp;<span>8.4</span></a> shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for the predictors <code>age</code>, <code>sex</code>, <code>taxon</code>, and <code>litter_size</code> are the same for each permutation. The values of <code>weight</code> are randomly shuffled, and there is no linear relationship (or any relationship) between <code>weight</code> and any of the predictor variables in the permutation samples.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-lemurs-matrix-weight" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-lemurs-matrix-weight" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-matrix-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-lemurs-matrix-weight-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;8.4: Relationships between variables in one sample with weight permuted"><img src="08-mlr-inference_files/figure-html/fig-lemurs-matrix-weight-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="images/08-lemur-scattermatrix-weight.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;8.4: Relationship between variables in one permutation sample with weight imputed"><img src="images/08-lemur-scattermatrix-weight.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-matrix-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.4: Relationships between variables in one sample with weight permuted
+Figure&nbsp;8.4: Relationship between variables in one permutation sample with weight imputed
 </figcaption></figure>
-</div>
-</div>
 </div>
 <p>Like bootstrapping, each permutation sample is the same size as the original data. In contrast to bootstrapping, permutation sampling is merely shuffling the values of a column of data rather than sampling complete observations with replacement. We will use 1000 permutation samples for this analysis. Like bootstrapping, for each permutation sample, we fit the linear regression model and use <span class="math inline">\(\hat{\beta}_{age}\)</span>, the estimated coefficient of age from each permutation sample to generate the null distribution.</p>
 <div class="cell">
@@ -1049,17 +1041,13 @@ Table&nbsp;8.5: First five permutations for an individual lemur
 </div>
 <!--# is this table confusing?-->
 <p><a href="#tbl-mlr-inf-permute" class="quarto-xref">Table&nbsp;<span>8.5</span></a> shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for <code>weight</code>, <code>sex</code>, <code>taxon</code>, and <code>litter_size</code> are the same for each permutation. The values of <code>age</code> are randomly shuffled, and there is no linear relationship (or any relationship) between <code>age</code> and any of the other variables in the permuted samples. In contrast to permuting the response variable (<a href="#tbl-mlr-inf-permute-weight" class="quarto-xref">Table&nbsp;<span>8.4</span></a>), the relationship between weight and the other predictors, <code>sex</code>, <code>taxon</code>, and <code>litter_size</code> is preserved.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-lemurs-matrix-age" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-lemurs-matrix-age" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-matrix-age-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="08-mlr-inference_files/figure-html/fig-lemurs-matrix-age-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.6: Relationships between variables in one sample with age permuted"><img src="08-mlr-inference_files/figure-html/fig-lemurs-matrix-age-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="images/08-lemur-scattermatrix-age.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;8.6: Relationships between variables in one permutation sample with age imputed"><img src="images/08-lemur-scattermatrix-age.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-matrix-age-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.6: Relationships between variables in one sample with age permuted
+Figure&nbsp;8.6: Relationships between variables in one permutation sample with age imputed
 </figcaption></figure>
-</div>
-</div>
 </div>
 <p>As before, we use the permutation samples to construct the null distribution.</p>
 <div class="cell">

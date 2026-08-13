@@ -293,14 +293,16 @@ Permutation sampling is the process of shuffling one or more columns of data, to
 
 @fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. We'll refer to this as we introduce the two permutation strategies to show how each strategy changes the relationships in the data.
 
+![Relationships between variables in original lemurs data](images/08-lemur-scattermatrix-original.png){#fig-lemurs-matrix fig-align="center"}
+
 ```{r}
-#| label: fig-lemurs-matrix
-#| fig-cap: Relationships between variables in original lemurs data 
+#| label: make-lemurs-matrix
+#| eval: false
 
 lemurs_sample_young |>
   ggpairs(columns = 4:8, progress = FALSE, 
           upper = "blank", 
-          lower = list(combo = "box_no_facet", discrete = "facetbar")
+          lower = list(combo = "box_no_facet", discrete = "crosstable")
   )
 ```
 
@@ -344,9 +346,11 @@ lemur1 |>
 
 @tbl-mlr-inf-permute-weight shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for the predictors `age`, `sex`, `taxon`, and `litter_size` are the same for each permutation. The values of `weight` are randomly shuffled, and there is no linear relationship (or any relationship) between `weight` and any of the predictor variables in the permutation samples.
 
+![Relationship between variables in one permutation sample with weight imputed](images/08-lemur-scattermatrix-weight.png){#fig-lemurs-matrix-weight fig-align="center"}
+
 ```{r}
-#| label: fig-lemurs-matrix-weight
-#| fig-cap: Relationships between variables in one sample with weight permuted
+#| label: make-fig-lemurs-matrix-weight
+#| eval: false 
 
 permute_samp_weight |> 
   ungroup() |>
@@ -354,7 +358,7 @@ permute_samp_weight |>
   select(sex, taxon, litter_size, age, weight) |>
   ggpairs(progress = FALSE, 
           upper = "blank", 
-          lower = list(combo = "box_no_facet", discrete = "facetbar")
+          lower = list(combo = "box_no_facet", discrete = "crosstable")
   )
 ```
 
@@ -441,7 +445,7 @@ niter = 1000
 permute_samp <- lemurs_sample_young |> 
   specify(weight ~ age + sex + taxon + litter_size) |> 
   hypothesize(null = "independence") |>
-  generate(reps = niter, type = "permute", variables = age) 
+  generate(reps = niter, type = "permute", variables = c(age))
 
 permute_samp_lemur1 <- permute_samp |> 
   group_by(replicate) |> 
@@ -468,9 +472,11 @@ lemur1 |>
 
 @tbl-mlr-inf-permute shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for `weight`, `sex`, `taxon`, and `litter_size` are the same for each permutation. The values of `age` are randomly shuffled, and there is no linear relationship (or any relationship) between `age` and any of the other variables in the permuted samples. In contrast to permuting the response variable (@tbl-mlr-inf-permute-weight), the relationship between weight and the other predictors, `sex`, `taxon`, and `litter_size` is preserved.
 
+![Relationships between variables in one permutation sample with age imputed](images/08-lemur-scattermatrix-age.png){#fig-lemurs-matrix-age fig-align="center"}
+
 ```{r}
-#| label: fig-lemurs-matrix-age
-#| fig-cap: Relationships between variables in one sample with age permuted
+#| label: make-fig-lemurs-matrix-age
+#| eval: false
 
 permute_samp |> 
   ungroup() |>
@@ -478,7 +484,7 @@ permute_samp |>
   select(sex, taxon, litter_size, age, weight) |>
   ggpairs(progress = FALSE, 
           upper = "blank", 
-          lower = list(combo = "box_no_facet", discrete = "facetbar")
+          lower = list(combo = "box_no_facet", discrete = "crosstable")
   )
 ```
 
