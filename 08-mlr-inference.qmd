@@ -39,7 +39,9 @@ library(rms)
 library(GGally)
 
 lemurs_sample_young <- read_csv("data/lemurs-sample-young.csv") |>
-  mutate(litter_size = litter_size - 1)
+  mutate(litter_size = litter_size - 1,
+         sex = factor(sex), 
+         taxon = factor(taxon))
 ```
 
 In @sec-ch-mlr, we introduced the data set `lemurs-sample-young.csv` that includes the weight and other characteristics of young lemurs (24 months old or younger) living in the Duke Lemur Center. We will continue analyzing the data set here as we use statistical inference to draw conclusions about the relationships between various characteristics and weight. The analysis focuses on the variables below. See @sec-lemurs-intro for exploratory data analysis.
@@ -291,7 +293,16 @@ Permutation sampling is the process of shuffling one or more columns of data, to
 
 @fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. We'll refer to this as we introduce the two permutation strategies to show how each strategy changes the relationships in the data.
 
-\[INSERT FIGURE\]
+```{r}
+#| label: fig-lemurs-matrix
+#| fig-cap: Relationships between variables in original lemurs data 
+
+lemurs_sample_young |>
+  ggpairs(columns = 4:8, progress = FALSE, 
+          upper = "blank", 
+          lower = list(combo = "box_no_facet", discrete = "facetbar")
+  )
+```
 
 #### Permute the response variable {.unnumbered}
 
@@ -332,6 +343,20 @@ lemur1 |>
 ```
 
 @tbl-mlr-inf-permute-weight shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for the predictors `age`, `sex`, `taxon`, and `litter_size` are the same for each permutation. The values of `weight` are randomly shuffled, and there is no linear relationship (or any relationship) between `weight` and any of the predictor variables in the permutation samples.
+
+```{r}
+#| label: fig-lemurs-matrix-weight
+#| fig-cap: Relationships between variables in one sample with weight permuted
+
+permute_samp_weight |> 
+  ungroup() |>
+  filter(replicate == 10) |>
+  select(sex, taxon, litter_size, age, weight) |>
+  ggpairs(progress = FALSE, 
+          upper = "blank", 
+          lower = list(combo = "box_no_facet", discrete = "facetbar")
+  )
+```
 
 Like bootstrapping, each permutation sample is the same size as the original data. In contrast to bootstrapping, permutation sampling is merely shuffling the values of a column of data rather than sampling complete observations with replacement. We will use 1000 permutation samples for this analysis. Like bootstrapping, for each permutation sample, we fit the linear regression model and use $\hat{\beta}_{age}$, the estimated coefficient of age from each permutation sample to generate the null distribution.
 
@@ -443,6 +468,20 @@ lemur1 |>
 
 @tbl-mlr-inf-permute shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for `weight`, `sex`, `taxon`, and `litter_size` are the same for each permutation. The values of `age` are randomly shuffled, and there is no linear relationship (or any relationship) between `age` and any of the other variables in the permuted samples. In contrast to permuting the response variable (@tbl-mlr-inf-permute-weight), the relationship between weight and the other predictors, `sex`, `taxon`, and `litter_size` is preserved.
 
+```{r}
+#| label: fig-lemurs-matrix-age
+#| fig-cap: Relationships between variables in one sample with age permuted
+
+permute_samp |> 
+  ungroup() |>
+  filter(replicate == 10) |>
+  select(sex, taxon, litter_size, age, weight) |>
+  ggpairs(progress = FALSE, 
+          upper = "blank", 
+          lower = list(combo = "box_no_facet", discrete = "facetbar")
+  )
+```
+
 As before, we use the permutation samples to construct the null distribution.
 
 ```{r}
@@ -493,6 +532,10 @@ pval_age <- permute_samp |>
 ```
 
 @fig-mlr-inf-permute-null-dist shows the null distribution with the value of $\hat{\beta}_{age}$ observed in the original data marked with the red dotted line. Similar to @fig-mlr-inf-permute-null-dist-weight, the null distribution is centered around 0. The coefficient estimated from the observed data is very far away from the center of the distribution, so the data appears to provide strong evidence against the null hypothesis. More specifically, the p-value is approximately `r pval_age`. As before, we reject the null hypothesis and conclude there is evidence of a linear relationship between age and weight of young lemurs after adjusting for sex, taxon, and litter size.
+
+::: analysis_in_practice
+Something about limitations and here is where we can go to learn more.
+:::
 
 We used different strategies of permutation sampling to construct the null distribution for the hypothesis test to evaluate a claim about the relationship between age and weight for young lemurs. Because we conducted a two-sided hypothesis test, we can use the bootstrap confidence interval from @sec-mlr-bootstrap-ci to evaluate this claim as well. The $C\%$ confidence interval corresponds to a test with a decision-making threshold of $\alpha = (1-\frac{C}{100})$.
 
