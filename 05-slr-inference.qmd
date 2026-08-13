@@ -545,7 +545,7 @@ Recall that hypothesis tests are conducted assuming the null hypothesis $H_0$ is
 
 To assess the evidence, we will use a simulation-based method to approximate the sampling distribution of the estimated slope $\hat{\beta}_1$ under the assumption that $H_0: \beta_1 = 0$ is true. This distribution, called the **null distribution***,* allows us to understand the sample-to-sample variability under the scenario in which the true population slope equals 0. The variability in the simulated null distribution will be the same (or very similar since we are working with simulated data) as the variability in the bootstrap distribution, but the difference between the two distributions is the location of the center. The center for the bootstrap distribution in @sec-bootstrap-ci is close to the value of $\hat{\beta}_1$ estimated from the data. The center of the null distribution, however, is the null hypothesized value of 0. Therefore, to construct the null distribution for hypothesis testing, we will use a different simulation method, called *permutation sampling*.
 
-In **permutation sampling** the values of the predictor variable are randomly shuffled and paired with values of the response, thus generating a new sample of the same size as the original data. The process of randomly pairing the values of the response and the predictor variables simulates the null hypothesized condition that there is no linear relationship between the two variables.
+In **permutation sampling** the values of the response variable are randomly shuffled and paired with values of the predictor variable, thus generating a new sample of the same size as the original data. The process of randomly pairing the values of the response and the predictor variables simulates the null hypothesized condition that there is no linear relationship between the two variables.
 
 The steps for simulating the null distribution using permutation sampling are the following:
 
@@ -1224,7 +1224,7 @@ null_dist <- parks |> # <3>
 ```
 
 1.  Set a seed to make the results reproducible.
-2.  Define the number of bootstrap samples (iterations). Permutation sampling can be computing intensive when using large data sets and a large number of iterations. We recommend using a small number of iterations ( 10 - 100) when testing code, then increasing the iterations once the code is finalized.
+2.  Define the number of permutation samples (iterations). Permutation sampling can be computing intensive when using large data sets and a large number of iterations. We recommend using a small number of iterations ( 10 - 100) when testing code, then increasing the iterations once the code is finalized.
 3.  Specify the data set and save the null distribution in the object `null_dist`.
 4.  Specify the response and predictor variable.
 5.  Specify the null hypothesis of "independence", corresponding to no linear relationship between the response and predictor variables.
