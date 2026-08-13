@@ -350,6 +350,8 @@ lemur1 |>
 
 ![Relationship between variables in one permutation sample with weight imputed](images/08-lemur-scattermatrix-weight.png){#fig-lemurs-matrix-weight fig-align="center"}
 
+The relationship between variable pairs for a single permutation sample is shown in @fig-lemurs-matrix-weight. We can compare these relationships to those from the original data in @fig-lemurs-matrix to see how the data changed based on the permutation sample. As we expect under the null condition, there now appears to be no relationship between `age` and `weight` (scatterplot outlined by the solid blue line). Because we permuted the response variable, the relationship between predictors was unchanged, so we see the same relationship between `age` and `taxon` as we did in the original data (side-by-side boxplots outlined in dashed pink line).
+
 ```{r}
 #| label: make-fig-lemurs-matrix-weight
 #| eval: false 
