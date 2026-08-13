@@ -289,20 +289,13 @@ $$H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0$$
 
 In @sec-hypothesis-test-overview, we explained how hypothesis tests are conducted assuming the null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of $\hat{\beta}_{age}$ under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the **null distribution**, and we construct it using permutation sampling.
 
+<!--# need to rewrite this. We are only going to discuss permutation of the response variable (put Manly citations - 1997 book and the updated edition). Anderson and Legendre 1999 paper said that this method in most cases, this method showed the same Type 1 error rate and power as other methods in most cases. The power was destablized when there was an extreme outlier, so we will point the reader to alternative permutation sampling methods at the end of this section.-->
+
+<!--# add reference at the end for further reading. include the citations for the permuting the residuals. link to anderson and manly text for indepth discussion of these methods.-->
+
 Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between `age` and `weight` but also the relationship between `age` and the other predictors `sex`, `taxon`, and `litter_size`. Therefore, we will discuss two different approaches to permutation sampling that build upon inference for simple linear regression in @sec-slr-testing-sim: permute the response variable and permute the predictor variable of interest. We will discuss the implications of each sampling strategy and provide resources to readers interested in more advanced methods.
 
 ![Relationships between variables in original lemurs data](images/08-lemur-scattermatrix-original.png){#fig-lemurs-matrix fig-align="center"}
-
-```{r}
-#| label: make-lemurs-matrix
-#| eval: false
-
-lemurs_sample_young |>
-  ggpairs(columns = 4:8, progress = FALSE, 
-          upper = "blank", 
-          lower = list(combo = "box_no_facet", discrete = "crosstable")
-  )
-```
 
 @fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. For simplicity, we will only focus on two variable pairs as we introduce the two permutation sampling strategies. We'll consider how the relationship between `age` and `weight` changes (or not) with different permutation strategies. The relationship between these two variables is in the scatterplot outlined by the solid blue line. As we observed in @sec-mlr-eda, there is a strong, positive relationship between these two variables.
 
@@ -311,6 +304,8 @@ We'll also consider changes in the relationship between `age` and `taxon`. The r
 #### Permute the response variable {.unnumbered}
 
 Let's start by using the sample permutation strategy we used in @sec-slr-testing-sim, permuting the response variable. We create new samples by randomly shuffling the values of `weight` only without shuffling any of the other columns. By shuffling the values of `weight`, we create new samples generated under the null condition of no linear relationship between `weight` and `age`. Note, however, that with this permutation strategy, there is also no longer a relationship between `weight` and any of the other predictor variables. Therefore, we can use the permutation test to conclude whether there is evidence of a linear relationship between `age` and `weight`, not taking into account the relationship between `weight` and the other predictors.
+
+\[INSERT FIGURE OF AGE VS. WEIGHT - ORIGINAL + 9 RANDOMLY SELECTED PERMUTATION SAMPLES\]
 
 ```{r}
 #| label: tbl-mlr-inf-permute-weight
@@ -429,125 +424,15 @@ Though the p-value from the simulation-based hypothesis test is equal to 0, the 
 We can report such p-values as "approximately 0" to make clear to the reader that this is an approximation and not an exact result. We can also increase the number of iterations to get a closer approximation of the p-value or use theory-based methods from @sec-mlr-theory-inf to get the exact p-value.
 :::
 
-#### Permute single predictor variable  {.unnumbered}
+#### Further reading  {.unnumbered}
 
-The second permutation strategy is to permute the values for the predictor of interest, `age` in this case. Similar to the previous strategy, this approach helps us achieve the null condition that there is no linear relationship between `age` and `weight`. Because we are only shuffling the values of `age`, it also preserves the relationship between `weight` and the other predictor variables. Therefore, we this strategy will help us construct a null distribution to test the relationship `weight` and `age` after adjusting for the other predictors in the model (exactly what we want to see!).
+- manly books
 
-The primary limitation to this approach is that by permuting `age`, the permutation samples will not account for any relationship between `age` and the other predictors. Recall from @sec-mlr-interpret-quantitative that we assume the predictors are independent. If there is truly no relationship between the predictors, then this is the prefered permutation strategy. In practice, however, there is often some correlation between the predictor variables. If the predictor of interest is strongly correlated with one or more other predictors, then there is *multicollinearity* and we should avoid this permutation strategy. We discuss multicollinearity in @sec-mlr-multicollinearity.
+- anderson paper
 
-For now, let's conduct the permutation test by permuting `age`.
+- maybe jo hardin's paper on exchangeability
 
-```{r}
-#| label: tbl-mlr-inf-permute
-#| tbl-cap: First five permutations for an individual lemur
-#| echo: false
-
-set.seed(12345) 
-
-niter = 1000 
-
-permute_samp <- lemurs_sample_young |> 
-  specify(weight ~ age + sex + taxon + litter_size) |> 
-  hypothesize(null = "independence") |>
-  generate(reps = niter, type = "permute", variables = c(age))
-
-permute_samp_lemur1 <- permute_samp |> 
-  group_by(replicate) |> 
-  slice(1) |>
-  ungroup() |> 
-  slice(1:5)
-
-lemur1 <- lemurs_sample_young |> 
-  slice(1)  |> 
-  select(weight, age, sex, taxon, litter_size) |> 
-  bind_rows(permute_samp_lemur1 |> select(-replicate)) 
-
-lemur1 <- as.data.frame(lemur1)
-
-row.names(lemur1) <- c("Original Sample", "Permutation 1", "Permutation 2", "Permutation 3", "Permutation 4", "Permutation 5")
-
-
-lemur1 |> 
-  kable(digits = 3)
-
-```
-
-<!--# is this table confusing?-->
-
-@tbl-mlr-inf-permute shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for `weight`, `sex`, `taxon`, and `litter_size` are the same for each permutation. The values of `age` are randomly shuffled, and there is no linear relationship (or any relationship) between `age` and any of the other variables in the permuted samples. In contrast to permuting the response variable (@tbl-mlr-inf-permute-weight), the relationship between weight and the other predictors, `sex`, `taxon`, and `litter_size` is preserved.
-
-![Relationships between variables in one permutation sample with age imputed](images/08-lemur-scattermatrix-age.png){#fig-lemurs-matrix-age fig-align="center"}
-
-The relationship between variable pairs for a single permutation sample after permtuing `age` is shown in @fig-lemurs-matrix-age. We can compare these relationships to those from the original data in @fig-lemurs-matrix to see how the data changed as a result of this permutation strategy. As we expect under the null condition, there now appears to be no relationship between `age` and `weight` (scatterplot outlined by the solid blue line). Because we permuted `age`, the relationship between `age` and the other predictors changed. We now see no difference in the median age across taxon (see side-by-side boxplots outlined in dashed pink line), compared to a higher median age for VRUB lemurs in the original data.
-
-```{r}
-#| label: make-fig-lemurs-matrix-age
-#| eval: false
-
-permute_samp |> 
-  ungroup() |>
-  filter(replicate == 10) |>
-  select(sex, taxon, litter_size, age, weight) |>
-  ggpairs(progress = FALSE, 
-          upper = "blank", 
-          lower = list(combo = "box_no_facet", discrete = "crosstable")
-  )
-```
-
-As before, we use the permutation samples to construct the null distribution.
-
-```{r}
-#| label: fig-mlr-inf-permute-null-dist
-#| fig-cap: Null distribution for `age` from 1000 permutation samples
-#| echo: false
-
-age_coef <- lemurs_model |> tidy() |> filter(term == "age") |> pull(estimate)
-
-null_dist_data <- permute_samp |> 
-  fit()
-
-null_dist_mean <-  null_dist_data |> 
-  ungroup() |>
-  filter(term == "age") |> 
-  summarise(mean(estimate)) |>
-  pull()
-
-null_dist_sd <- null_dist_data |> 
-  ungroup() |>
-  filter(term == "age") |> 
-  summarise(sd(estimate)) |>
-  pull()
-
-
-null_dist_data |> 
-  ungroup() |>
-  filter(term == "age") |>
-  ggplot(aes(x = estimate)) + 
-  geom_histogram(fill = "darkcyan", color = "black") + 
-  geom_vline(xintercept = age_coef, color = "red", linetype = 2) +
-  labs(x = "Estimated coefficient", 
-       y = "Count") +
-  theme_bw()
-```
-
-<!--# make sure histogram colors are consistent with SLR Inf-->
-
-```{r}
-#| label: calc-permute-pval
-#|echo: false
-
-pval_age <- permute_samp |> 
-  fit() |> 
-  filter(term == "age") |>
-  get_p_value(obs_stat = age_coef, direction = "two-sided") |>
-  pull()
-```
-
-@fig-mlr-inf-permute-null-dist shows the null distribution with the value of $\hat{\beta}_{age}$ observed in the original data marked with the red dotted line. Similar to @fig-mlr-inf-permute-null-dist-weight, the null distribution is centered around 0. The coefficient estimated from the observed data is very far away from the center of the distribution, so the data appears to provide strong evidence against the null hypothesis. More specifically, the p-value is approximately `r pval_age`. As before, we reject the null hypothesis and conclude there is evidence of a linear relationship between age and weight of young lemurs after adjusting for sex, taxon, and litter size.
-
-::: analysis_in_practice
-Something about limitations and here is where we can go to learn more.
-:::
+#### Connection to bootstrap confidence intervals  {.unnumbered}
 
 We used different strategies of permutation sampling to construct the null distribution for the hypothesis test to evaluate a claim about the relationship between age and weight for young lemurs. Because we conducted a two-sided hypothesis test, we can use the bootstrap confidence interval from @sec-mlr-bootstrap-ci to evaluate this claim as well. The $C\%$ confidence interval corresponds to a test with a decision-making threshold of $\alpha = (1-\frac{C}{100})$.
 
@@ -1169,7 +1054,7 @@ get_confidence_interval(level = 0.95, type = "percentile")
 
 ```
 
-Next, the code to construct the null distribution and compute the p-value for the permutation test is below. Note that the argument `variables = age` is used in `generate()` to specify that `age` is the only column that is permuted (shuffled). The default for `generate()` is to permute all columns.
+Next, the code to perform permutation sampling and use the $\hat{\beta}_{age}$ from these permuted samples to construct the null distribution and compute the p-value. Note that in `generate()`, the default is permute the response variable.
 
 ```{r}
 #| label: mlr-permute-test-code
@@ -1190,7 +1075,7 @@ age_coef <- lemurs_model |>
 null_dist <- lemurs_sample_young |> 
   specify(weight ~ age + sex + taxon + litter_size) |> 
   hypothesize(null = "independence") |> 
-  generate(reps = niter, type = "permute", variables = age) |> 
+  generate(reps = niter, type = "permute") |> 
   fit() 
 
 # compute p-value
@@ -1198,8 +1083,6 @@ null_dist |>
   filter(term == "age") |> 
   get_p_value(obs_stat = age_coef, direction = "two-sided") 
 ```
-
-\[ADD SOMETHING HERE ABOUT PERMUTING RESPONSE VS PREDICTOR\]
 
 ### Theory-based inference in R
 
