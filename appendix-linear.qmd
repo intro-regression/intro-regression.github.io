@@ -518,13 +518,7 @@ $$\begin{aligned}
 
 From @eq-rewrite-beta-matrix, we see that $\hat{\boldsymbol{\beta}}$ is a linear combination of the error terms $\boldsymbol{\epsilon}$. Because $\boldsymbol{\epsilon}$ is normally distributed, the linear combination is also normally distributed (see @sec-assumptions-matrix). Thus, the distribution of the coefficients $\hat{\boldsymbol{\beta}}$ is normal.
 
-## Properties of $\hat{\boldsymbol{\beta}}$
-
-- Unbiased
-
-- Linear
-
-- "Best" - Gauss Markov Theorem
+<!--# add section on properties of estimators - unbiased, linear, gauss markov-->
 
 ## Prediction intervals {#sec-predict-intervals-matrix}
 

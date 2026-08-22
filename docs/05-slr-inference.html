@@ -413,7 +413,7 @@ window.Quarto = {
   <li><a href="#sec-slr-inf-permutation" id="toc-sec-slr-inf-permutation" class="nav-link" data-scroll-target="#sec-slr-inf-permutation"><span class="header-section-number">5.6.2</span> Simulate the null distribution</a></li>
   <li><a href="#sec-calc-pvalue" id="toc-sec-calc-pvalue" class="nav-link" data-scroll-target="#sec-calc-pvalue"><span class="header-section-number">5.6.3</span> Calculate p-value</a></li>
   <li><a href="#sec-slr-inf-conclusion" id="toc-sec-slr-inf-conclusion" class="nav-link" data-scroll-target="#sec-slr-inf-conclusion"><span class="header-section-number">5.6.4</span> Draw conclusion</a></li>
-  <li><a href="#type-i-and-type-ii-error" id="toc-type-i-and-type-ii-error" class="nav-link" data-scroll-target="#type-i-and-type-ii-error"><span class="header-section-number">5.6.5</span> Type I and Type II error</a></li>
+  <li><a href="#sec-inf-error" id="toc-sec-inf-error" class="nav-link" data-scroll-target="#sec-inf-error"><span class="header-section-number">5.6.5</span> Type I and Type II error</a></li>
   </ul></li>
   <li><a href="#sec-slr-inf-relationship-ci-test" id="toc-sec-slr-inf-relationship-ci-test" class="nav-link" data-scroll-target="#sec-slr-inf-relationship-ci-test"><span class="header-section-number">5.7</span> Relationship between confidence intervals and hypothesis tests</a></li>
   <li><a href="#sec-slr-bootstrap-pred-intervals" id="toc-sec-slr-bootstrap-pred-intervals" class="nav-link" data-scroll-target="#sec-slr-bootstrap-pred-intervals"><span class="header-section-number">5.8</span> Prediction intervals</a></li>
@@ -1350,8 +1350,8 @@ Figure&nbsp;5.6: Simulated null distribution with p-value represented by the sha
 <p><em>The p-value calculated in the previous section is 0.046. Therefore, we reject the null hypothesis</em> <span class="math inline">\(H_0\)</span><em>. The data provide sufficient evidence of a linear relationship between the amount a city spends per resident and the number of playgrounds per 10,000 residents.</em></p>
 </blockquote>
 </section>
-<section id="type-i-and-type-ii-error" class="level3" data-number="5.6.5">
-<h3 data-number="5.6.5" class="anchored" data-anchor-id="type-i-and-type-ii-error"><span class="header-section-number">5.6.5</span> Type I and Type II error</h3>
+<section id="sec-inf-error" class="level3" data-number="5.6.5">
+<h3 data-number="5.6.5" class="anchored" data-anchor-id="sec-inf-error"><span class="header-section-number">5.6.5</span> Type I and Type II error</h3>
 <p>Regardless of the conclusion that is drawn (reject or fail to reject the null hypothesis), we have not determined that the null or alternative hypothesis are definitive truth. We have just concluded that the evidence (the data) has provided more evidence in favor of one conclusion versus the other. As with any statistical procedure, there is the possibility of making an error, more specifically a Type I or Type II error. Because we don’t know the value of the population slope, we will not know for certain whether we have made an error; however, understanding the potential errors that can be made can help inform the decision-making threshold <span class="math inline">\(\alpha\)</span> and make a more informed assessment about the implication of these results in practice.</p>
 <p><a href="#tbl-errors" class="quarto-xref">Table&nbsp;<span>5.10</span></a> shows how Type I and Type II errors correspond to the (unknown) truth and the conclusion drawn from the hypothesis test.</p>
 <div class="cell">
