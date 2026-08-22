@@ -473,7 +473,7 @@ There are approaches for handling violations in the equal variance condition. Th
 | Equal variance  | Not needed            | Not needed                 | Important                                                                           |
 +-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
 
-: Summary of necessary conditions for various analysis tasks on the slope
+: Summary of necessary conditions for various analysis tasks on the slope {#tbl-slr-conditions}
 
 So far we have discussed the model conditions to assess whether the assumptions for simple linear regression reasonably hold true for our data. We have not, however, dealt with the presence of outliers in the data and the potential impact (or "influence") they may have on the regression model. In the next section, we discuss measures we can use to identify and assess the potential impact of such outlying observations.
 

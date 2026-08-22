@@ -1044,8 +1044,11 @@ Observed class
 The accuracy for this model will be (95 + 0) / (95 + 5) = 0.95. Based on this value, it appears the classification has performed very well, even though we did not accurately classify any of the observations in which the observed response is <span class="math inline">\(Y = 1\)</span>.</p>
 </div>
 <p>The accuracy and misclassification rate provide a nice initial indication of the how well the model classifies observations, but they do not give a complete picture. For example, suppose we want to know how many of the people who are actually comfortable with driverless cars are predicted to be comfortable based on the model predictions and threshold. Or suppose we want to know how many people who are actually not comfortable with driverless cars were incorrectly classified as being comfortable. To answer these and similar questions, let’s take a more detailed look at the confusion matrix.</p>
+<div id="tbl-confusion-matrix-detailed" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-detailed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.5: Detailed confusion matrix
+</figcaption><div aria-describedby="tbl-confusion-matrix-detailed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
-<caption>Detailed confusion matrix</caption>
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
@@ -1077,7 +1080,11 @@ The accuracy for this model will be (95 + 0) / (95 + 5) = 0.95. Based on this va
 </tr>
 </tbody>
 </table>
-<!--# check the notation used in this table, y_i and p_i--><p><span class="quarto-unresolved-ref">?tbl-confusion-matrix-detailed</span> shows in greater detail what is being quantified in each cell of the confusion matrix. We will use these values to compute more granular values about the classification. As in <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a>, the rows define the predicted classes and the columns define the observed classes. The values in the cell indicate the following:</p>
+</div>
+</figure>
+</div>
+<!--# check the notation used in this table, y_i and p_i-->
+<p><a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a> shows in greater detail what is being quantified in each cell of the confusion matrix. We will use these values to compute more granular values about the classification. As in <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a>, the rows define the predicted classes and the columns define the observed classes. The values in the cell indicate the following:</p>
 <ul>
 <li><p><strong>True negative (TN):</strong> The number of observations that are predicted to be not comfortable with driverless cars (<span class="math inline">\(\hat{y}_i = 0\)</span>) and have observed response of not comfortable (<span class="math inline">\(y_i = 0\)</span>) .</p></li>
 <li><p><strong>False negative (FN):</strong> The number of observations that are predicted to be not comfortable with driverless cars (<span class="math inline">\(\hat{y}_i = 0\)</span>) and have observed response of comfortable (<span class="math inline">\(y_i = 1\)</span>) .</p></li>
@@ -1087,7 +1094,7 @@ The accuracy for this model will be (95 + 0) / (95 + 5) = 0.95. Based on this va
 <p>Using these definitions, the general form of accuracy computed in <a href="#eq-logistic-accuracy" class="quarto-xref">Equation&nbsp;<span>12.2</span></a> is</p>
 <p><span id="eq-accuracy-general"><span class="math display">\[\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}} \tag{12.4}\]</span></span></p>
 <div class="yourturn">
-<p>Write the general equation for the misclassification computed in <a href="#eq-logistic-misclassification" class="quarto-xref">Equation&nbsp;<span>12.3</span></a> using the terms in <span class="quarto-unresolved-ref">?tbl-confusion-matrix-detailed</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Write the general equation for the misclassification computed in <a href="#eq-logistic-misclassification" class="quarto-xref">Equation&nbsp;<span>12.3</span></a> using the terms in <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </div>
 <p>Now let’s take a look at additional statistics that help us quantify how well the observations are classified. First, we’ll focus on the column containing those who have observed values <span class="math inline">\(y_i = 1\)</span>.</p>
 <p>The <strong>sensitivity</strong> (<strong>true positive rate</strong>) is the proportion of those with observed <span class="math inline">\(y_i = 1\)</span> that were correctly classified as <span class="math inline">\(\hat{y}_i = 1\)</span>. In machine learning contexts, this value is also called <strong>recall</strong> or <strong>probability of detection</strong>.</p>
@@ -1103,7 +1110,7 @@ The accuracy for this model will be (95 + 0) / (95 + 5) = 0.95. Based on this va
 <p>The false positive rate is equal to <span class="math inline">\(1 - \text{specificity}\)</span>. The denominators for the specificity and false positive rate are the total number of observations with observed response <span class="math inline">\(y_i = 0\)</span>. In terms of our analysis, this is the total number of people who responded they are not comfortable with driverless cars in the General Social Survey.</p>
 <p>The values shown thus far quantify how well observations are classified based on the observed response. Another question that is often of interest is among those with predicted class of <span class="math inline">\(\hat{y}_i = 1\)</span>, how many actually have observed values of <span class="math inline">\(y_i = 1\)</span>? This value is called the <strong>precision.</strong></p>
 <p><span id="eq-precision"><span class="math display">\[\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}} \tag{12.9}\]</span></span></p>
-<p>Now the denominator is the number of observations that have a predicted class <span class="math inline">\(\hat{y}_i = 1\)</span>, the second row in the <span class="quarto-unresolved-ref">?tbl-confusion-matrix-detailed</span>. In the context of our analysis, the precision is how many of the individuals who are predicted to be comfortable with driverless cars actually responded on the General Social Survey that they are comfortable with driverless cars. If we’re using the model to identify individuals for a targeted marketing campaign, the precision can be useful in quantifying whether the marketing will generally capture those who are actually comfortable with driverless cars or if a large proportion would be aimed at those who actually aren’t comfortable with driverless cars and likely won’t become robotaxi customers.</p>
+<p>Now the denominator is the number of observations that have a predicted class <span class="math inline">\(\hat{y}_i = 1\)</span>, the second row in the <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>. In the context of our analysis, the precision is how many of the individuals who are predicted to be comfortable with driverless cars actually responded on the General Social Survey that they are comfortable with driverless cars. If we’re using the model to identify individuals for a targeted marketing campaign, the precision can be useful in quantifying whether the marketing will generally capture those who are actually comfortable with driverless cars or if a large proportion would be aimed at those who actually aren’t comfortable with driverless cars and likely won’t become robotaxi customers.</p>
 <div class="yourturn">
 <p>Use <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> to compute the following:</p>
 <ul>
@@ -1112,11 +1119,11 @@ The accuracy for this model will be (95 + 0) / (95 + 5) = 0.95. Based on this va
 <li><p>Precision<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p></li>
 </ul>
 </div>
-<p>We have shown how we can derive a lot of useful information from the confusion matrix. As we use the confusion matrix to evaluate how well observations are classified; however, we need to keep in mind that the confusion matrix is determined based on the model predictions <u><strong>and</strong></u> the threshold for classification. For example, in <a href="#tbl-confusion-matrix-0.3" class="quarto-xref">Table&nbsp;<span>12.5</span></a>, we see a confusion matrix for the same model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> using the threshold of 0.3.</p>
+<p>We have shown how we can derive a lot of useful information from the confusion matrix. As we use the confusion matrix to evaluate how well observations are classified; however, we need to keep in mind that the confusion matrix is determined based on the model predictions <u><strong>and</strong></u> the threshold for classification. For example, in <a href="#tbl-confusion-matrix-0.3" class="quarto-xref">Table&nbsp;<span>12.6</span></a>, we see a confusion matrix for the same model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> using the threshold of 0.3.</p>
 <div class="cell">
 <div id="tbl-confusion-matrix-0.3" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-0.3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.5: Confusion matrix using model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and threshold of 0.3
+Table&nbsp;12.6: Confusion matrix using model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and threshold of 0.3
 </figcaption><div aria-describedby="tbl-confusion-matrix-0.3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1214,11 +1221,11 @@ Figure&nbsp;12.5: Example ROC curves for different model performs
 </div>
 <!--# think of better words than distinction?-->
 <p><a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.5</span></a> shows example ROC curves for different model fits. <a href="#fig-roc-curve-examples-1" class="quarto-xref">Figure&nbsp;<span>12.5 (a)</span></a> is the ROC curve for a model that does a poor job distinguishing between the true positives and false positives (close to the diagonal line) and <a href="#fig-roc-curve-examples-3" class="quarto-xref">Figure&nbsp;<span>12.5 (c)</span></a> is the ROC curve for a model that almost perfectly distinguishes between the true and false positives (close to the top-left corner). Generally, we expect to see ROC curves somewhere in the middle, similar to <a href="#fig-roc-curve-examples-2" class="quarto-xref">Figure&nbsp;<span>12.5 (b)</span></a>. Here, the model generally does a good job distinguishing between the true and false positives, but we will expect to get some false positives if we want a high true positive rate (sensitivity).</p>
-<p>Each point in the ROC curve is <span class="math inline">\((1 - \text{Specificity, } \text{Sensitivity})\)</span> at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> corresponds to <span class="math inline">\(1 - \text{Specificity} = 0.525\)</span> and <span class="math inline">\(\text{Sensitivity} = 0.75\)</span>. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.6</span></a>. Observations with predicted probability <span class="math inline">\(\hat{\pi}_i &gt; 0.4888088\)</span> are classified as being comfortable with driverless cars, and those with <span class="math inline">\(\hat{\pi}_i \leq 0.4888088\)</span> are classified as not being comfortable with driverless cars.</p>
+<p>Each point in the ROC curve is <span class="math inline">\((1 - \text{Specificity, } \text{Sensitivity})\)</span> at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> corresponds to <span class="math inline">\(1 - \text{Specificity} = 0.525\)</span> and <span class="math inline">\(\text{Sensitivity} = 0.75\)</span>. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a>. Observations with predicted probability <span class="math inline">\(\hat{\pi}_i &gt; 0.4888088\)</span> are classified as being comfortable with driverless cars, and those with <span class="math inline">\(\hat{\pi}_i \leq 0.4888088\)</span> are classified as not being comfortable with driverless cars.</p>
 <div class="cell" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
 <div id="tbl-aidrive-roc-confmat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.6
+Table&nbsp;12.7
 </figcaption><div aria-describedby="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment caption-top table table-sm table-striped small">
@@ -1260,7 +1267,7 @@ Observed class
 </div>
 <!--# would be nice to have the roc curve and confusion mat side-by-side-->
 <div class="yourturn">
-<p>Compute the sensitivity and specificity from <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.6</span></a>. You can confirm your result using the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> .<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>Compute the sensitivity and specificity from <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a>. You can confirm your result using the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> .<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 </div>
 <p>In the next section, we will talk more about using the ROC curve to evaluate the model fit beyond a visual assessment. For now, let’s discuss how to use the ROC curve to determine a probability threshold for classification. When we use a model for classification, we want a high true positive rate and a low false positive rate. Therefore, one of the most straightforward ways of using the ROC curve to identify a classification threshold is to choose the threshold that corresponds to the point on the curve that is closest to the top-left corner. <!--# This will be the point that has the best ratio of true positive rate to false positive rate. not sure if that is true--> <!--# does this relate to that F1 metric from machine learning?-->There are many ways to identify this point mathematically. For example, we can find the combination of <span class="math inline">\(\text{Sensitivity}\)</span> and <span class="math inline">\(1 - \text{Specificity}\)</span> that minimizes the following:</p>
 <p><span class="math display">\[\sqrt{(1 - \text{Specificity})^2 + (\text{Sensitivity} - 1)^2}\]</span></p>
@@ -1339,7 +1346,7 @@ Figure&nbsp;12.6: Examle ROC curves with corresponding AUC
 <div class="cell">
 <div id="tbl-aic-bic-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aic-bic-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.7: AIC and BIC for two candidate models
+Table&nbsp;12.8: AIC and BIC for two candidate models
 </figcaption><div aria-describedby="tbl-aic-bic-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1366,7 +1373,7 @@ Table&nbsp;12.7: AIC and BIC for two candidate models
 </figure>
 </div>
 </div>
-<p><a href="#tbl-aic-bic-compare" class="quarto-xref">Table&nbsp;<span>12.7</span></a> shows AIC and BIC for both models. Based on these measures, there is very strong evidence in favor of the model that includes the additional predictors <code>polviews</code> and <code>tech_harm</code>.</p>
+<p><a href="#tbl-aic-bic-compare" class="quarto-xref">Table&nbsp;<span>12.8</span></a> shows AIC and BIC for both models. Based on these measures, there is very strong evidence in favor of the model that includes the additional predictors <code>polviews</code> and <code>tech_harm</code>.</p>
 <!--# include log-loss, cross entropy? Is this too much machine learning?  -->
 <!--# Drop-in-deviance test - this should go in inference-->
 </section></section><section id="sec-logistic-prediction-R" class="level2" data-number="12.6"><h2 data-number="12.6" class="anchored" data-anchor-id="sec-logistic-prediction-R">

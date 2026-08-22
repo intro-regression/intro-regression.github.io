@@ -798,9 +798,12 @@ Figure&nbsp;6.7: Plot of the residuals versus predicted values. The vertical spr
 <p>There are approaches for handling violations in the equal variance condition. These approaches typically involve performing a transformation on the response variable. We will discuss these further in <a href="09-mlr-transformations.html" class="quarto-xref"><span>Chapter 9</span></a>.</p>
 </section><section id="sec-slr-conditions-recap" class="level3" data-number="6.3.5"><h3 data-number="6.3.5" class="anchored" data-anchor-id="sec-slr-conditions-recap">
 <span class="header-section-number">6.3.5</span> Recap</h3>
-<p><span class="quarto-unresolved-ref">?tbl-slr-conditions</span> provides a summary of the model conditions and whether they must be satisfied to reliably conduct each modeling task.</p>
+<p><a href="#tbl-slr-conditions" class="quarto-xref">Table&nbsp;<span>6.3</span></a> provides a summary of the model conditions and whether they must be satisfied to reliably conduct each modeling task.</p>
+<div id="tbl-slr-conditions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-slr-conditions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.3: Summary of necessary conditions for various analysis tasks on the slope
+</figcaption><div aria-describedby="tbl-slr-conditions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
-<caption>Summary of necessary conditions for various analysis tasks on the slope</caption>
 <colgroup>
 <col style="width: 11%">
 <col style="width: 15%">
@@ -843,6 +846,9 @@ Figure&nbsp;6.7: Plot of the residuals versus predicted values. The vertical spr
 </tr>
 </tbody>
 </table>
+</div>
+</figure>
+</div>
 <p>So far we have discussed the model conditions to assess whether the assumptions for simple linear regression reasonably hold true for our data. We have not, however, dealt with the presence of outliers in the data and the potential impact (or “influence”) they may have on the regression model. In the next section, we discuss measures we can use to identify and assess the potential impact of such outlying observations.</p>
 </section></section><section id="sec-model-diagnostics" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="sec-model-diagnostics">
 <span class="header-section-number">6.4</span> Model diagnostics</h2>
@@ -927,7 +933,7 @@ Figure&nbsp;6.9: Leverage for observations in the coffee ratings data
 <div class="cell">
 <div id="tbl-coffee-large-leverage" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coffee-large-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.3: Observations with the top five highest values for leverage
+Table&nbsp;6.4: Observations with the top five highest values for leverage
 </figcaption><div aria-describedby="tbl-coffee-large-leverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -996,12 +1002,12 @@ Figure&nbsp;6.10: Standardized residuals versus observation number for model of 
 </div>
 <!--# maybe use visualization to show why these have big std residuals-->
 <p><a href="#fig-coffee-stdresid" class="quarto-xref">Figure&nbsp;<span>6.10</span></a> shows 12 observations with large magnitude residuals based on the threshold <span class="math inline">\(\pm 3\)</span>. This includes observations that have positive residuals with large magnitude (indicating the model greatly underpredicted) and observations with negative residuals with large magnitude (indicating the model greatly overpredicted).</p>
-<p>These are the five observations with the largest magnitude residuals are shown in <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.4</span></a>.</p>
+<p>These are the five observations with the largest magnitude residuals are shown in <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.5</span></a>.</p>
 <!--# think of a way to visualize observations with large magnitude residuals-->
 <div class="cell">
 <div id="tbl-coffee-large-resid" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coffee-large-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.4: Observations with large magnitude residuals
+Table&nbsp;6.5: Observations with large magnitude residuals
 </figcaption><div aria-describedby="tbl-coffee-large-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1049,7 +1055,7 @@ Table&nbsp;6.4: Observations with large magnitude residuals
 </figure>
 </div>
 </div>
-<p>We see from <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.4</span></a> and <a href="#fig-coffee-large-resid" class="quarto-xref">Figure&nbsp;<span>6.11</span></a> that most of these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual which has a higher actual flavor rating than the model predicts based on its very low aroma rating.</p>
+<p>We see from <a href="#tbl-coffee-large-resid" class="quarto-xref">Table&nbsp;<span>6.5</span></a> and <a href="#fig-coffee-large-resid" class="quarto-xref">Figure&nbsp;<span>6.11</span></a> that most of these observations have flavor ratings that are lower than would be expected from the model based on their aroma ratings. The exception is the observation with the largest magnitude standardized residual which has a higher actual flavor rating than the model predicts based on its very low aroma rating.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-coffee-large-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1093,7 +1099,7 @@ Figure&nbsp;6.12: Cook’s distance versus observation number for coffee ratings
 <div class="cell">
 <div id="tbl-influential-impact" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-influential-impact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.5: Estimated model coefficients for the model with and without the influential observation
+Table&nbsp;6.6: Estimated model coefficients for the model with and without the influential observation
 </figcaption><div aria-describedby="tbl-influential-impact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1120,7 +1126,7 @@ Table&nbsp;6.5: Estimated model coefficients for the model with and without the 
 </figure>
 </div>
 </div>
-<p>In <a href="#tbl-influential-impact" class="quarto-xref">Table&nbsp;<span>6.5</span></a>, the estimates for the intercept and coefficient of <code>aroma</code> change based on whether the influential point is included or not included in the data. Therefore, it is now our task as the data scientist to determine how to best proceed given the influential point.</p>
+<p>In <a href="#tbl-influential-impact" class="quarto-xref">Table&nbsp;<span>6.6</span></a>, the estimates for the intercept and coefficient of <code>aroma</code> change based on whether the influential point is included or not included in the data. Therefore, it is now our task as the data scientist to determine how to best proceed given the influential point.</p>
 <section id="outlier-based-on-predictor" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="outlier-based-on-predictor">Outlier based on predictor</h4>
 <p>If an observation is an outlier based on the predictor variable, first consider if it is the result of a data entry error that can be fixed. If not, one option is to remove this observation from the analysis, particularly if the outlier is an influential point or a result of a data entry error. Doing so limits the scope of the conclusions that can be drawn from the analysis and the range of values for which the model can be used for prediction, because removing the outlying observation narrows the range of possible values for the predictor. When taking this approach, it is important to mention it when communicating results. Additionally, we need to be careful not to extrapolate if using the model for prediction. <!--# maybe clarify this a bit?--></p>
 <p>The influential point identified in <a href="#sec-cooks-distance" class="quarto-xref"><span>Section 6.4.4</span></a> is an outlier because it has a value of the predictor much lower than the rest of the data. Therefore, we could remove this observation and thus limit the scope of the analysis to coffee that has an aroma rating of 6 or higher. We can also keep this observation in the analysis and thus have some information about coffees with aroma ratings less than 6. Given there is a single observation with a rating less than 6, however, conclusions about coffees with low coffee ratings should be made with caution.</p>
@@ -1150,7 +1156,7 @@ Table&nbsp;6.5: Estimated model coefficients for the model with and without the 
 </ol>
 <!--# add something here dealing with the outlier we found--></section><section id="sec-conditions-in-r" class="level2" data-number="6.6"><h2 data-number="6.6" class="anchored" data-anchor-id="sec-conditions-in-r">
 <span class="header-section-number">6.6</span> Model conditions and diagnostics in R</h2>
-<p>The residuals, along with other observation-level statistics, can be obtained using <code>augment()</code> in the <strong>broom</strong> R package <span class="citation" data-cites="broom">(<a href="references.html#ref-broom" role="doc-biblioref">Robinson, Hayes, and Couch 2023</a>)</span>. This package is in the suite of packages that are included as part of <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(<a href="references.html#ref-tidymodels" role="doc-biblioref">Kuhn and Wickham 2020</a>)</span>. The output produced by this function is shown in <a href="#tbl-coffee-aug" class="quarto-xref">Table&nbsp;<span>6.6</span></a>.</p>
+<p>The residuals, along with other observation-level statistics, can be obtained using <code>augment()</code> in the <strong>broom</strong> R package <span class="citation" data-cites="broom">(<a href="references.html#ref-broom" role="doc-biblioref">Robinson, Hayes, and Couch 2023</a>)</span>. This package is in the suite of packages that are included as part of <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(<a href="references.html#ref-tidymodels" role="doc-biblioref">Kuhn and Wickham 2020</a>)</span>. The output produced by this function is shown in <a href="#tbl-coffee-aug" class="quarto-xref">Table&nbsp;<span>6.7</span></a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coffee_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">flavor</span> <span class="op">~</span> <span class="va">aroma</span>, data <span class="op">=</span> <span class="va">coffee_ratings</span><span class="op">)</span></span>
 <span></span>
@@ -1159,7 +1165,7 @@ Table&nbsp;6.5: Estimated model coefficients for the model with and without the 
 <div class="cell">
 <div id="tbl-coffee-aug" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coffee-aug-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6.6: First ten rows of output produced by the <code>augment</code> function
+Table&nbsp;6.7: First ten rows of output produced by the <code>augment</code> function
 </figcaption><div aria-describedby="tbl-coffee-aug-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">

@@ -370,7 +370,7 @@ The accuracy and misclassification rate provide a nice initial indication of the
 | **Classified** **not comfortable**$(\hat{y}_i = 0)$ | True negative (TN) | False negative (FN) |
 | **Classified comfortable**$(\hat{y}_i = 1)$ | False positive (FP) | True positive (TP) |
 
-: Detailed confusion matrix
+: Detailed confusion matrix {#tbl-confusion-matrix-detailed}
 
 <!--# check the notation used in this table, y_i and p_i-->
 
