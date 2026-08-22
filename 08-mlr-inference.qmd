@@ -289,29 +289,15 @@ $$H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0$$
 
 In @sec-hypothesis-test-overview, we explained how hypothesis tests are conducted assuming the null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of $\hat{\beta}_{age}$ under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the **null distribution**, and we construct it using permutation sampling.
 
-<!--# need to rewrite this. We are only going to discuss permutation of the response variable (put Manly citations - 1997 book and the updated edition). Anderson and Legendre 1999 paper said that this method in most cases, this method showed the same Type 1 error rate and power as other methods in most cases. The power was destablized when there was an extreme outlier, so we will point the reader to alternative permutation sampling methods at the end of this section.-->
-
 <!--# add reference at the end for further reading. include the citations for the permuting the residuals. link to anderson and manly text for indepth discussion of these methods.-->
 
-Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between `age` and `weight` but also the relationship between `age` and the other predictors `sex`, `taxon`, and `litter_size`. Therefore, we will discuss two different approaches to permutation sampling that build upon inference for simple linear regression in @sec-slr-testing-sim: permute the response variable and permute the predictor variable of interest. We will discuss the implications of each sampling strategy and provide resources to readers interested in more advanced methods.
+Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between `age` and `weight` but also the relationship between `age` and the other predictors `sex`, `taxon`, and `litter_size`. Here, we will use the same permutation sampling appraoch we used for simple linear regression in @sec-slr-testing-sim: permute the response variable and permute the predictor variable of interest. We'll discuss the implications of this strategy and provide additional resources for readers interested in learning about more permutation strategies.
 
-![Relationships between variables in original lemurs data](images/08-lemur-scattermatrix-original.png){#fig-lemurs-matrix fig-align="center"}
-
-@fig-lemurs-matrix is a scatterplot matrix that shows the relationship between each pair of variables in the `lemurs` data frame. For simplicity, we will only focus on two variable pairs as we introduce the two permutation sampling strategies. We'll consider how the relationship between `age` and `weight` changes (or not) with different permutation strategies. The relationship between these two variables is in the scatterplot outlined by the solid blue line. As we observed in @sec-mlr-eda, there is a strong, positive relationship between these two variables.
-
-We'll also consider changes in the relationship between `age` and `taxon`. The relationship between these two variables is shown in the side-by-side boxplots outlined by the dashed pink line. The distribution of `age` largely overlaps between the three taxa; however, VRUB has a slightly higher median compared to ERUF and PCOQ.
-
-#### Permute the response variable {.unnumbered}
-
-Let's start by using the sample permutation strategy we used in @sec-slr-testing-sim, permuting the response variable. We create new samples by randomly shuffling the values of `weight` only without shuffling any of the other columns. By shuffling the values of `weight`, we create new samples generated under the null condition of no linear relationship between `weight` and `age`. Note, however, that with this permutation strategy, there is also no longer a relationship between `weight` and any of the other predictor variables. Therefore, we can use the permutation test to conclude whether there is evidence of a linear relationship between `age` and `weight`, not taking into account the relationship between `weight` and the other predictors.
-
-\[INSERT FIGURE OF AGE VS. WEIGHT - ORIGINAL + 9 RANDOMLY SELECTED PERMUTATION SAMPLES\]
+<!--# need to rewrite this. We are only going to discuss permutation of the response variable (put Manly citations - 1997 book and the updated edition). Anderson and Legendre 1999 paper said that this method in most cases, this method showed the same Type 1 error rate and power as other methods in most cases. The power was destablized when there was an extreme outlier, so we will point the reader to alternative permutation sampling methods at the end of this section.-->
 
 ```{r}
-#| label: tbl-mlr-inf-permute-weight
-#| tbl-cap: "First five permutations for an individual lemur after permuting `weight`"
-#| echo: false
-
+#| label: fig-mlr-permute-weight
+#| fig-cap: "Relationship betwteen `age` and `weight` in original data and 8 randomly selected permutation samples"
 set.seed(12345) 
 
 niter = 1000 
@@ -320,6 +306,37 @@ permute_samp_weight <- lemurs_sample_young |>
   specify(weight ~ age + sex + taxon + litter_size) |> 
   hypothesize(null = "independence") |>
   generate(reps = niter, type = "permute")
+
+samp_replicates <- sample(1:1000, size = 8, replace = FALSE)
+
+
+permute_samp_graph <- permute_samp_weight |> 
+  filter(replicate %in% samp_replicates) |>
+  select(age, weight, replicate) |>
+  mutate(replicate = as.character(replicate))
+
+lemurs_samp_orig <- lemurs_sample_young |>
+  select(age, weight) |>
+  mutate(replicate = "Original") 
+
+lemurs_graph_data <- bind_rows(permute_samp_graph, lemurs_samp_orig) |>
+  mutate(replicate = factor(replicate, levels = c("Original", samp_replicates)))
+
+ggplot(data = lemurs_graph_data, aes(x = age, y= weight)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~ replicate) +
+  theme_bw()
+```
+
+
+We produce the new permutation samples by shuffling the values of the response variable `weight` without shuffling any of the other columns. By shuffling the values of `weight`, we create new samples generated under the null condition of no linear relationship between `weight` and `age` (see @fig-mlr-permute-weight). This is our goal; however, there is also no longer a relationship between `weight` and any of the other predictor variables. Therefore, we can use the permutation test to conclude whether there is evidence of a linear relationship between `age` and `weight`, not taking into account the relationship between `weight` and the other predictors.
+
+\[INSERT FIGURE OF AGE VS. WEIGHT - ORIGINAL + 9 RANDOMLY SELECTED PERMUTATION SAMPLES\]
+
+```{r}
+#| label: tbl-mlr-inf-permute-weight
+#| tbl-cap: "First five permutations for an individual lemur after permuting `weight`"
+#| echo: false
 
 permute_samp_lemur1 <- permute_samp_weight |> 
   group_by(replicate) |> 
@@ -419,12 +436,12 @@ Based on the simulation, the p-value is `r pval`. This means in 1000 permutation
 ::: {.analysis_in_practice latex=""}
 Though the p-value from the simulation-based hypothesis test is equal to 0, the true p-value is very close to but not exactly 0 (but it is still very small!). R will produce a warning like the one below to highlight this.
 
-![Infer warning about reporting p-value of 0.](images/08-infer-pval-warning.png){alt="Infer warning about reporting p-value of 0." fig-alt="Warning from infer output that says \"Please be cautious in reporting a p-value of 0. This result is an approximation based on the number of reps chosen in the generate step. See get_p_value for more information.\"" fig-align="center"}
+![Infer warning about reporting p-value of 0.](images/08-infer-pval-warning.png){fig-alt="Warning from infer output that says \"Please be cautious in reporting a p-value of 0. This result is an approximation based on the number of reps chosen in the generate step. See get_p_value for more information.\"" fig-align="center"}
 
 We can report such p-values as "approximately 0" to make clear to the reader that this is an approximation and not an exact result. We can also increase the number of iterations to get a closer approximation of the p-value or use theory-based methods from @sec-mlr-theory-inf to get the exact p-value.
 :::
 
-#### Further reading  {.unnumbered}
+#### Further reading {.unnumbered}
 
 - manly books
 
@@ -432,7 +449,7 @@ We can report such p-values as "approximately 0" to make clear to the reader tha
 
 - maybe jo hardin's paper on exchangeability
 
-#### Connection to bootstrap confidence intervals  {.unnumbered}
+#### Connection to bootstrap confidence intervals {.unnumbered}
 
 We used different strategies of permutation sampling to construct the null distribution for the hypothesis test to evaluate a claim about the relationship between age and weight for young lemurs. Because we conducted a two-sided hypothesis test, we can use the bootstrap confidence interval from @sec-mlr-bootstrap-ci to evaluate this claim as well. The $C\%$ confidence interval corresponds to a test with a decision-making threshold of $\alpha = (1-\frac{C}{100})$.
 
