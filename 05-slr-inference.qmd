@@ -712,7 +712,7 @@ Back to the parks analysis. We will use the common threshold of $\alpha = 0.05$.
 
 > *The p-value calculated in the previous section is `r round(pvalue,3)`. Therefore, we reject the null hypothesis* $H_0$*. The data provide sufficient evidence of a linear relationship between the amount a city spends per resident and the number of playgrounds per 10,000 residents.*
 
-### Type I and Type II error
+### Type I and Type II error {#sec-inf-error}
 
 Regardless of the conclusion that is drawn (reject or fail to reject the null hypothesis), we have not determined that the null or alternative hypothesis are definitive truth. We have just concluded that the evidence (the data) has provided more evidence in favor of one conclusion versus the other. As with any statistical procedure, there is the possibility of making an error, more specifically a Type I or Type II error. Because we don't know the value of the population slope, we will not know for certain whether we have made an error; however, understanding the potential errors that can be made can help inform the decision-making threshold $\alpha$ and make a more informed assessment about the implication of these results in practice.
 

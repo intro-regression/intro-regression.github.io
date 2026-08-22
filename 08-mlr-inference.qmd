@@ -289,9 +289,7 @@ $$H_0: \beta_{age} = 0 \text{ vs. }H_a: \beta_{age} \neq 0$$
 
 In @sec-hypothesis-test-overview, we explained how hypothesis tests are conducted assuming the null hypothesis is true, and the aim is to evaluate the strength of the evidence against the null hypothesis. Therefore, we need to obtain the sampling distribution of $\hat{\beta}_{age}$ under the assumption that there is no linear relationship between age and weight, after accounting for the other predictors in the model. This sampling distribution is the **null distribution**, and we construct it using permutation sampling.
 
-<!--# add reference at the end for further reading. include the citations for the permuting the residuals. link to anderson and manly text for indepth discussion of these methods.-->
-
-Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between `age` and `weight` but also the relationship between `age` and the other predictors `sex`, `taxon`, and `litter_size`. Here, we will use the same permutation sampling appraoch we used for simple linear regression in @sec-slr-testing-sim: permute the response variable and permute the predictor variable of interest. We'll discuss the implications of this strategy and provide additional resources for readers interested in learning about more permutation strategies.
+Permutation sampling is the process of shuffling one or more columns of data, to get many new combinations of the data, i.e., "new" samples. In simple linear regression, we only had to consider the relationship between the response and predictor variable as we permuted the data. In multiple linear regression, however, because there are multiple predictor variables, we need to consider both the relationship between the response variable and predictor of interest but also the relationship between the predictor variables. In this analysis, this means we need to consider both the relationship between `age` and `weight` but also the relationship between `age` and the other predictors `sex`, `taxon`, and `litter_size`. Here, we will use the same permutation sampling appraoch we used for simple linear regression in @sec-slr-testing-sim: permute the response variable and permute the predictor variable of interest [@manly1991randomization; @manly2018randomization]. We'll discuss the implications of this strategy and provide additional resources for readers interested in learning about more permutation strategies.
 
 ```{r}
 #| label: fig-mlr-permute-weight
@@ -351,7 +349,7 @@ lemur1 |>
   kable(digits = 3)
 ```
 
-Though we have acheived the goal of creating samples such that the relationship between `age` and `weight` achieve the null conduction, by permuting `weight`, there is also no longer a relationship between `weight` and the other predictor variables. We see this in @tbl-mlr-inf-permute-weight that shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for the predictors `age`, `sex`, `taxon`, and `litter_size` are the same for each permutation. Thus, we have preserved any relationship between `age` and the other predictors. The values of `weight` are randomly shuffled, and there is no linear relationship (or any relationship) between `weight` and any of the predictor variables in the permutation samples.
+Though we have achieved the goal of creating samples such that the relationship between `age` and `weight` achieve the null conduction, by permuting `weight`, there is also no longer a relationship between `weight` and the other predictor variables. We see this in @tbl-mlr-inf-permute-weight that shows the values from the original data and values from the first five permutations for an individual lemur. In the table, we see the values for the predictors `age`, `sex`, `taxon`, and `litter_size` are the same for each permutation. Thus, we have preserved any relationship between `age` and the other predictors. The values of `weight` are randomly shuffled, and there is no linear relationship (or any relationship) between `weight` and any of the predictor variables in the permutation samples.
 
 Like bootstrapping, each permutation sample is the same size as the original data. In contrast to bootstrapping, permutation sampling is merely shuffling the values of a column of data rather than sampling complete observations with replacement. We will use 1000 permutation samples for this analysis. Like bootstrapping, for each permutation sample, we fit the linear regression model and use $\hat{\beta}_{age}$, the estimated coefficient of age from each permutation sample to generate the null distribution.
 
@@ -406,10 +404,6 @@ pval <- permute_samp_weight |>
 
 Based on the simulation, the p-value is `r pval`. This means in 1000 permutation samples drawn under the assumption the null hypothesis is true, we did not compute an estimated coefficient for `age` equal to `r round(age_coef, 3)` or more extreme. We compare this p-value to a decision-making threshold $\alpha$ (see @sec-slr-inf-conclusion) to draw the conclusion. The p-value of `r pval` is less than $\alpha$ for any chosen threshold, so we **reject the null hypothesis**. The data provide strong evidence in favor of the alternative hypothesis that there is a linear relationship between age and weight.
 
-Recall that the question of interest was whether there is evidence of a linear relationship between age and weight after accounting for the other predictors. Because the permutation strategy also impacted the relationship between the response variable, weight, and the other predictors, the results from our test, doesn't answer this question exactly. However, studies have shown that in practice, the results from this permutation strategy can still be used to answer our question of interest. \[ANDERSON AND LEG\] found that this permutation strategy has the same Type I error rate and power (see \[SEC REF\]) as permutation methods that preserve the relationships between the response and other predictor variables in most cases. The power of this approach was reduced when the data had extreme outliers, so we point readers to the references in the next section for details on alternative permutation methods. <!--# need to rewrite this. We are only going to discuss permutation of the response variable (put Manly citations - 1997 book and the updated edition). Anderson and Legendre 1999 paper said that this method in most cases, this method showed the same Type 1 error rate and power as other methods in most cases. The power was destablized when there was an extreme outlier, so we will point the reader to alternative permutation sampling methods at the end of this section.-->
-
-Keep in mind, however, that due to the permutation strategy we used, this is [**not**]{.underline} the relationship between these two variables after taking into account the other predictors.
-
 ::: {.analysis_in_practice latex=""}
 Though the p-value from the simulation-based hypothesis test is equal to 0, the true p-value is very close to but not exactly 0 (but it is still very small!). R will produce a warning like the one below to highlight this.
 
@@ -418,13 +412,7 @@ Though the p-value from the simulation-based hypothesis test is equal to 0, the 
 We can report such p-values as "approximately 0" to make clear to the reader that this is an approximation and not an exact result. We can also increase the number of iterations to get a closer approximation of the p-value or use theory-based methods from @sec-mlr-theory-inf to get the exact p-value.
 :::
 
-#### Further reading {.unnumbered}
-
-- manly books
-
-- anderson paper
-
-- maybe jo hardin's paper on exchangeability
+Recall that the question of interest was whether there is evidence of a linear relationship between age and weight after accounting for the other predictors. Because the permutation strategy also impacted the relationship between the response variable, weight, and the other predictors, the results from our test, doesn't answer this question exactly. However, studies have shown that in practice, the results from this permutation strategy can still be used to answer our question of interest. @anderson1999empirical found that this permutation strategy has the same Type I error rate and power (see @sec-inf-error) as permutation methods that preserve the relationships between the response and other predictor variables in most cases. The power of this approach was reduced when the data had extreme outliers, so we point readers to the references in the next section for details on alternative permutation methods.
 
 #### Connection to bootstrap confidence intervals {.unnumbered}
 
@@ -440,6 +428,10 @@ The 95% bootstrap confidence interval for $\beta_{age}$ is `r round(age_boot_ci$
 :::
 
 [^08-mlr-inference-4]: It corresponds to a hypothesis test with $\alpha = 0.05$. Yes, the interval is consistent, because the null hypothesized value 0 is not in the interval.
+
+#### Further reading on permutation tests {.unnumbered}
+
+There have been many approaches proposed to conduct simulation-based inference for multiple linear regression models. Some, like the method presented in this text, permute the original data, while others permute the residuals produced from a model on the original data. For readers interested in an in-depth introduction to these methods, we recommend @manly2018randomization. We also recommend @anderson1999empirical and @hardin2024exchangeability for readers interested in comparing the statistical properties of these various permutation test approaches.
 
 ### Prediction intervals {#sec-mlr-bootstrap-pred-intervals}
 
