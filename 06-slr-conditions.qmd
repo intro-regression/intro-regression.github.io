@@ -80,11 +80,11 @@ coffee_ratings <- read_csv("data/coffee-ratings.csv")
 
 ```{r}
 #| label: fig-coffee-eda
-#| fig-cap: Univariate and bivariate exploratory data analysis for coffee data 
+#| fig-cap: Univariate and bivariate exploratory data analysis for flavor and aroma grades
 #| fig-subcap: 
-#|  - "Distribution of `flavor`"
-#|  - "Distribution of `aroma`"
-#|  - "`flavor` versus `aroma`"
+#|  - "Distribution of the flavor grade"
+#|  - "Distribution of the aroma grade"
+#|  - "Relationship between the flavor and aroma grades"
 #| layout: [[1,1],[1]]
 
 r <- round(cor(coffee_ratings$aroma, coffee_ratings$flavor), 3)
@@ -120,7 +120,7 @@ ggplot(data = coffee_ratings, aes(x = aroma, y = flavor)) +
 
 ```{r}
 #| label: tbl-coffee-eda
-#| tbl-cap: "Summary statistics for `aroma` and `flavor`"
+#| tbl-cap: "Summary statistics for aroma and flavor grades"
 coffee_ratings |>
   skim(aroma, flavor) |>
   select(skim_variable, numeric.mean, numeric.sd, numeric.p0, 
@@ -135,7 +135,7 @@ From the exploratory data analysis in @fig-coffee-eda, we see preliminary indica
 
 ```{r}
 #| label: tbl-coffee-model
-#| tbl-cap: "Linear regression model of the `aroma` versus `flavor` with 95% confidence intervals"
+#| tbl-cap: "Linear regression model using the aroma grade to understand variability in the flavor grade. Table includes 95% confidence intervals for the coefficients"
 #| echo: false
 
 coffee_model <- lm(flavor ~ aroma, data = coffee_ratings)
@@ -210,7 +210,7 @@ To check linearity, we make a scatterplot of the residuals versus the predicted 
 
 ```{r}
 #| label: fig-coffee-linearity
-#| fig-cap: "Residuals versus predicted values from the model of `flavor` and `aroma`"
+#| fig-cap: "Residuals versus predicted values from the model in @tbl-coffee-model"
 #| echo: false
 
 ggplot(data = coffee_model_aug, aes(x = .fitted, y = .resid)) +
@@ -235,7 +235,7 @@ When we fit a linear regression model, we are using the predictor to explain som
 
 ```{r}
 #| label: fig-linearity-not-met
-#| fig-cap: Example of violation in the linearity condition. The residuals are not randomly scattered around 0. Based on the plot, we can generally guess with some certainty whether the residual will be positive or negative for a given predicted value or range of predicted values. 
+#| fig-cap: Example of violation in the linearity condition, in which the residuals are not randomly scattered around 0. From the plot, we can generally guess with some certainty whether the residual will be positive or negative for a given predicted value or range of predicted values. 
 #| echo: false
 
 set.seed(0321) # march 21, the day i made this plot :)
@@ -278,7 +278,7 @@ In the coffee ratings data, we consider if there is a potential cluster effect b
 
 ```{r}
 #| label: fig-indep-subgroup
-#| fig-cap: "Distribution of residuals for five countries with most observations in the data"
+#| fig-cap: "Distribution of residuals for the five countries with most observations in the data"
 
 # add country of origin to augmented data
 coffee_model_aug <- coffee_model_aug |>
@@ -312,7 +312,7 @@ The next condition is **normality**, that the residuals are normally distributed
 
 ```{r}
 #| label: fig-coffee-normality
-#| fig-cap: "The distribution of the residuals for the model of `flavor` and `aroma` with normal density curve"
+#| fig-cap: "Distribution of the residuals for the model in @tbl-coffee-model with normal density curve"
 #| echo: false
 
 mean_resid <- mean(coffee_model_aug$.resid)
@@ -347,7 +347,7 @@ To check this condition, we will go back to the plot of the residuals versus pre
 
 ```{r}
 #| label: fig-equal-var-not-met
-#| fig-cap: Example of residuals from simulated data that violate the equal variance condition. The vertical spread of the residuals increases as the predicted value increases.
+#| fig-cap: Example violation of the equal variance condition. The vertical spread of the residuals increases as the predicted value increases.
 #| echo: false
 
 set.seed(0321) # march 21, the day i made this plot :)
@@ -370,7 +370,7 @@ augment(model) |>
 
 ```{r}
 #| label: fig-coffee-equal-var
-#| fig-cap: Plot of the residuals versus predicted values. The vertical spread is approximately equal for the majority of predicted values, as shown by the residuals generally falling between the two dotted lines when moving along the $x$-axis.
+#| fig-cap: Plot of the residuals versus predicted values for the model in @tbl-coffee-model. The vertical spread is approximately equal for the majority of predicted values, as shown by the residuals generally falling between the two dotted lines when moving along the $x$-axis.
 #| echo: false
 ggplot(data = coffee_model_aug, aes(x = .fitted, y = .resid)) +
   geom_point() +
@@ -473,7 +473,7 @@ There are approaches for handling violations in the equal variance condition. Th
 | Equal variance  | Not needed            | Not needed                 | Important                                                                           |
 +-----------------+-----------------------+----------------------------+-------------------------------------------------------------------------------------+
 
-: Summary of necessary conditions for various analysis tasks on the slope {#tbl-slr-conditions}
+: Conditions necessary based on the analysis task
 
 So far we have discussed the model conditions to assess whether the assumptions for simple linear regression reasonably hold true for our data. We have not, however, dealt with the presence of outliers in the data and the potential impact (or "influence") they may have on the regression model. In the next section, we discuss measures we can use to identify and assess the potential impact of such outlying observations.
 
@@ -566,7 +566,7 @@ n_large_leverage <- coffee_model_aug |> filter(.hat > leverage_threshold) |> nro
 
 ```{r}
 #| label: fig-coffee-leverage
-#| fig-cap: "Leverage for observations in the coffee ratings data"
+#| fig-cap: "Leverage for observations in the coffee data"
 
 leverage_threshold <- 2 * (1 + 1) / nrow(coffee_ratings)
 
@@ -575,8 +575,7 @@ ggplot(data = coffee_model_aug, aes(x = obs_num, y = .hat)) +
   geom_hline(yintercept = leverage_threshold, color = "red") + 
   theme_bw() + 
   labs(x = "Observation number", 
-       y = "Leverage", 
-       title = "Leverage for observations in coffee data")
+       y = "Leverage")
 ```
 
 ::: {.yourturn latex=""}
@@ -589,7 +588,7 @@ Let's take a look at the observations with the highest values of leverage to get
 
 ```{r}
 #| label: tbl-coffee-large-leverage
-#| tbl-cap: Observations with the top five highest values for leverage
+#| tbl-cap: Five observations with the highest leverage values
 #| echo: false
 
 coffee_model_aug |> 
@@ -625,7 +624,7 @@ If there are a lot of observations, it may not be practical to closely examine t
 
 ```{r}
 #| label: fig-coffee-stdresid
-#| fig-cap: Standardized residuals versus observation number for model of `flavor` and `aroma` 
+#| fig-cap: Standardized residuals versus observation number for model in @tbl-coffee-model
 
 coffee_model_aug <- coffee_model_aug |>
   mutate(large_std_resid = factor(if_else(abs(.std.resid) > 3, 1, 0)))
@@ -643,8 +642,7 @@ ggplot(data = coffee_model_aug, aes(x = obs_num, y = .std.resid, color = large_s
   theme_bw() + 
   theme(legend.position = "none") +
   labs(x = "Observation number", 
-       y = "Standardized residual", 
-       title = "Standardized residuals for observations in coffee data")
+       y = "Standardized residual")
 ```
 
 ```{r}
@@ -665,7 +663,7 @@ These are the five observations with the largest magnitude residuals are shown i
 
 ```{r}
 #| label: tbl-coffee-large-resid
-#| tbl-cap: Observations with large magnitude residuals
+#| tbl-cap: Five observations with largest magnitude residuals
 #| echo: false
 
 coffee_large_resid |>
@@ -681,7 +679,7 @@ We see from @tbl-coffee-large-resid and @fig-coffee-large-resid that most of the
 ```{r}
 #| echo: false
 #| label: fig-coffee-large-resid
-#| fig-cap: Flavor grade versus aroma grade. Points marked with a red triangle are the observations with large standardized residuals with magnitude > 3.
+#| fig-cap: Scatterplot of flavor grade versus aroma grade. Points marked with a red triangle are the observations with large standardized residuals with magnitude greater than 3.
 
 coffee_model_aug |>
   mutate(large_std_resid = if_else(abs(.std.resid) > 3, "1", "0")) |>
@@ -718,7 +716,7 @@ As with leverage and standardized residuals, there are thresholds we use to dete
 
 ```{r}
 #| label: fig-coffee-cooksd
-#| fig-cap: Cook's distance versus observation number for coffee ratings data
+#| fig-cap: Cook's distance for observations in the coffee data
 
 ggplot(data = coffee_model_aug, aes(x = obs_num, y = .cooksd)) + 
   geom_point() + 
@@ -730,8 +728,7 @@ ggplot(data = coffee_model_aug, aes(x = obs_num, y = .cooksd)) +
   #) +
   theme_bw() + 
   labs(x = "Observation number", 
-       y = "Cook's distance", 
-       title = "Cook's distance for observations in coffee data")
+       y = "Cook's distance")
 ```
 
 ```{r}
@@ -823,7 +820,7 @@ coffee_model_aug <- augment(coffee_model)
 
 ```{r}
 #| label: tbl-coffee-aug
-#| tbl-cap: First ten rows of output produced by the `augment` function
+#| tbl-cap: First ten rows of output produced by `augment()`
 #| echo: false
 
 coffee_model_aug |>
@@ -843,6 +840,8 @@ The plots used to check the model conditions and diagnostics are produced using 
 
 ```{r}
 #| layout-ncol: 2
+#| echo: true
+
 plot(coffee_model)
 ```
 
