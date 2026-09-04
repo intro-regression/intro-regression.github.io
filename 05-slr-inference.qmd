@@ -12,7 +12,7 @@ execute:
 source("_common.R")
 ```
 
-## suLearning goals {.unnumbered}
+## Learning goals {.unnumbered}
 
 - Explain how statistical inference is used to draw conclusions about a population model coefficient
 - Construct confidence intervals using bootstrap simulation
@@ -95,10 +95,10 @@ mean_spend <- mean(parks$per_capita_expend)
 
 ```{r}
 #| label: fig-parks-univariate-eda
-#| fig-cap: "Univariate exploratory data analysis of `playgrounds` and `per_capita_expend`"
+#| fig-cap: "Univariate distributions for the number of playgrounds per 10,000 residents a city's per capita spending"
 #| fig-subcap: 
 #|   - "Playgrounds per 10,000 residents"
-#|   - "Per capita expenditure in USD" 
+#|   - "Per capita spending in USD" 
 #| layout-ncol: 2
 
 
@@ -120,7 +120,7 @@ ggplot(data = parks, aes(x = per_capita_expend)) +
 
 ```{r}
 #| label: tbl-parks-univariate-eda
-#| tbl-cap: "Summary statistics of `playgrounds` and `per_capita_spend`"
+#| tbl-cap: "Summary statistics for number of playgrounds per 10,000 residents a city's per capita spending"
 #| echo: false
 
 parks |>
@@ -144,7 +144,7 @@ corr_spend_playground <- cor(parks$per_capita_expend, parks$playgrounds) |> roun
 
 ```{r}
 #| label: fig-parks-bivariate-eda
-#| fig-cap: "Bivariate exploratory data analysis of `playgrounds` versus `per_capita_spend`" 
+#| fig-cap: "Bivariate exploratory data analysis of the relationship between the number of playgrounds per 10,000 residents a city's per capita spending" 
 ggplot(data = parks, aes(x = per_capita_expend, y = playgrounds)) + 
   geom_point(color = "darkgray") + 
   geom_smooth(method = "lm", se = FALSE, color = "steelblue") + 
@@ -170,7 +170,7 @@ The output of the fitted regression model is @tbl-parks-model.
 
 ```{r}
 #| label: tbl-parks-model
-#| tbl-cap: "Linear regression model `per_capita_expend` and `playgrounds`"
+#| tbl-cap: "Linear regression model using a city's per capita spending to explain variability in the number of playgrounds per 10,000 residents"
 
 parks_model <- lm(playgrounds ~ per_capita_expend, data = parks)
 
@@ -319,7 +319,7 @@ Using these four steps, let's construct the 95% confidence interval for the popu
 ```{r}
 #| label: tbl-parks-boot-samples
 #| echo: false
-#| tbl-cap: "First 10 rows of the first bootstrap sample. The replicate column identifies the bootstrap sample."
+#| tbl-cap: "First 10 rows from a single bootstrap sample. The replicate column identifies the bootstrap sample."
 
 set.seed(12345)
 
@@ -346,7 +346,7 @@ Why are there `r nrow(parks)` observations in each bootstrap sample?[^05-slr-inf
     ```{r}
     #| label: tbl-parks-boot-slopes
     #| echo: false
-    #| tbl-cap: "Estimated slope and intercept for the first three bootstrap samples."
+    #| tbl-cap: "Estimated slope and intercept computed for three bootstrap samples"
 
 
     set.seed(12345)
@@ -366,7 +366,7 @@ Why are there `r nrow(parks)` observations in each bootstrap sample?[^05-slr-inf
 
     ```{r}
     #| label: fig-parks-boot-dist
-    #| fig-cap: "Bootstrap distribution of the slope of `per_capita_expend"
+    #| fig-cap: "Bootstrap distribution of the slope for per capita spending constructed from 1,000 bootstrap samples"
     spend_dist <- boot_dist |>
       filter(term == "per_capita_expend")|>
       ungroup()
@@ -375,14 +375,13 @@ Why are there `r nrow(parks)` observations in each bootstrap sample?[^05-slr-inf
       ggplot(aes(x = estimate)) + 
       geom_histogram(color = "white", fill = "darkcyan") +
       labs(x = "Estimated slope", 
-           title = "", 
-           subtitle = paste0("from ",niter, " bootstrap samples")) +
+           title = "") +
       theme_bw()
     ```
 
     ```{r}
     #| label: tbl-parks-boot-dist
-    #| tbl-cap: "Summary statistics for bootstrap distribution of the slope `per_capita_expend`"
+    #| tbl-cap: "Summary statistics for the bootstrap distribution of the slope for per capita spending"
 
     spend_dist |>
       summarise(Min = min(estimate), Q1 = quantile(estimate, 0.25), Median = median(estimate), Q3 = quantile(estimate, 0.75), Max = max(estimate), Mean = mean(estimate), Std.Dev. = sd(estimate)) |>
@@ -399,7 +398,7 @@ How many values of $\hat{\beta}_1$ make up the bootstrap sampling distribution s
 
 ```{r}
 #| label: fig-parks-boot-ci
-#| fig-cap: "95% bootstrap confidence interval for the slope of `per_capita_spend`"
+#| fig-cap: "95% bootstrap confidence interval for the slope of per capita spending"
 lb <- quantile(spend_dist$estimate, 0.025)
 ub <- quantile(spend_dist$estimate, 0.975)
 
@@ -419,7 +418,7 @@ boot_dist |>
 
 ```{r}
 #| label: tbl-parks-boot-ci
-#| tbl-cap: "95% confidence interval for the slope"
+#| tbl-cap: "95% confidence interval for the slope of per capita spending"
 spend_dist |>
   summarise(`Lower bound (2.5th percentile)` = quantile(estimate, 0.025), 
             `Upper bound (97.5th percentile)` = quantile(estimate, 0.975)) |>
@@ -559,7 +558,7 @@ Let's simulate the null distribution to test the hypotheses in @eq-slr-hypothese
 
 ```{r}
 #| label: tbl-slr-permute-samp
-#| tbl-cap: "First 10 rows of the first permutation sample. The replicate column identifies the permutation sample."
+#| tbl-cap: "First 10 rows of a permutation sample. The replicate column identifies the permutation sample."
 set.seed(12345)
 niter = 1000
 
@@ -577,7 +576,7 @@ parks |>
 
 ```{r}
 #| label: tbl-slr-permute-data
-#| tbl-cap: Estimated slopes from first 10 permutation samples.
+#| tbl-cap: Estimated slopes computed from 10 permutation samples.
 
 set.seed(12345)
 niter = 1000
@@ -601,7 +600,7 @@ spend_null_dist |>
 
     ```{r}
     #| label: fig-null-dist-spend
-    #| fig-cap: "Simulated null distribution to test the slope of `per_capita_expend`"
+    #| fig-cap: "Simulated null distribution to test the slope of per capita spending"
 
     spend_null_dist |>
       ggplot(aes(x = estimate)) + 
@@ -614,7 +613,7 @@ spend_null_dist |>
 
 ```{r}
 #| label: tbl-null-dist-spend
-#| tbl-cap: "Summary statistics of the simulated null distribution to test the slope of `per_capita_expend`"
+#| tbl-cap: "Summary statistics for the simulated null distribution to test the slope of per capita spending"
 
 spend_null_dist |>
   summarise(Min = min(estimate), Q1 = quantile(estimate, 0.25), Median = median(estimate), Q3 = quantile(estimate, 0.75), Max = max(estimate), Mean = mean(estimate), Std.Dev. = sd(estimate)) |>
@@ -671,7 +670,7 @@ The p-value for this hypothesis test is `r round(pvalue, 3)` and is shown by the
 
 ```{r}
 #| label: fig-slr-inf-pvalue
-#| fig-cap: "Simulated null distribution with p-value represented by the shaded area. The shaded area are values less than -0.003 and greater than 0.003."
+#| fig-cap: "Simulated null distribution with p-value represented by the shaded area. The shaded area includes values -0.003 or less and values 0.003 or greater."
 
 spend_null_dist |>
   mutate(reject_region = factor(if_else(estimate >= 0.00330 | estimate <= -0.00330, 1, 0))) |>
@@ -796,7 +795,7 @@ To illustrate this, let's use the bootstrap samples from @sec-construct-bootstra
 
 ```{r}
 #| label: tbl-bootstrap-pred-150
-#| tbl-cap: "Estimated slope, intercept, and prediction for `spend = 150` from first five bootstrap samples"
+#| tbl-cap: "Estimated slope, intercept, and predicted number of playgrounds when per capita spending is 150 USD, computed from five bootstrap samples"
 
 set.seed(12345)
 
@@ -821,7 +820,7 @@ Recall from @sec-construct-bootstrap-ci, we generated 1000 bootstrap samples. Th
 
 ```{r}
 #| label: fig-bootstrap-pred-150
-#| fig-cap: "Bootstrap distribution of predictions when `spend = 150` with bounds for the 95% interval"
+#| fig-cap: "Bootstrap distribution and bounds for the 95% confidence interval for the predicted number of playgrounds when per capita spending is equal to 150 USD"
 
 boot_pred_lb <- quantile(boot_prediction$prediction, 0.025)
 boot_pred_ub <- quantile(boot_prediction$prediction, 0.975)
@@ -935,7 +934,7 @@ Though the sampling distribution of $\hat{\beta}_1$ is normal by the Central Lim
 
 ```{r}
 #| label: fig-normal-t-curves
-#| fig-cap: Standard normal vs. t distributions
+#| fig-cap: Standard normal versus t distributions
 
 colors <- c("N(0,1)" = "black", 
             "t, df = 2" = "red", 
@@ -997,7 +996,7 @@ Given there are $n$ = `r n` observations, the test statistic follows a $t$ distr
 
 ```{r}
 #| label: fig-compute-pvalue
-#| fig-cap: "Compute the p-value using t-distribution with 95 df"
+#| fig-cap: "Shaded area used to compute the p-value from a t-distribution with 95 degrees of freedom"
 
 # Parameters
 df_val <- df  # degrees of freedom for the t-distribution
@@ -1116,7 +1115,7 @@ Let's take a look at the intervals around predictions given `per_capita_expend =
 
 ```{r}
 #| label: tbl-prediction-intervals
-#| tbl-cap: "Standard errors and 95% intervals for the predicted mean response and individual response when `per_capita_expend = 150`" 
+#| tbl-cap: "Standard errors and 95% intervals for the estimated mean number of playgrounds per 10,000 and predicted number of playgrounds per 10,000 residents for an individual city  when per capita spending is 150 USD"
 
 new_city_expend <- tibble(per_capita_expend = 150)
 

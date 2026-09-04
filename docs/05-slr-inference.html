@@ -388,7 +388,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sulearning-goals" id="toc-sulearning-goals" class="nav-link active" data-scroll-target="#sulearning-goals">suLearning goals</a></li>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
   <li><a href="#sec-slr-inf-data" id="toc-sec-slr-inf-data" class="nav-link" data-scroll-target="#sec-slr-inf-data"><span class="header-section-number">5.1</span> Introduction: Access to playgrounds</a>
   <ul class="collapse">
   <li><a href="#sec-parks-eda-model" id="toc-sec-parks-eda-model" class="nav-link" data-scroll-target="#sec-parks-eda-model"><span class="header-section-number">5.1.1</span> Exploratory data analysis</a></li>
@@ -458,8 +458,8 @@ window.Quarto = {
 </header>
 
 
-<section id="sulearning-goals" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="sulearning-goals">suLearning goals</h2>
+<section id="learning-goals" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="learning-goals">Learning goals</h2>
 <ul>
 <li>Explain how statistical inference is used to draw conclusions about a population model coefficient</li>
 <li>Construct confidence intervals using bootstrap simulation</li>
@@ -516,10 +516,10 @@ window.Quarto = {
 <div id="fig-parks-univariate-eda-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-parks-univariate-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-parks-univariate-eda-2.png" class="lightbox" data-gallery="fig-parks-univariate-eda" title="Figure&nbsp;5.1&nbsp;(b): Per capita expenditure in USD"><img src="05-slr-inference_files/figure-html/fig-parks-univariate-eda-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-parks-univariate-eda"></a>
+<a href="05-slr-inference_files/figure-html/fig-parks-univariate-eda-2.png" class="lightbox" data-gallery="fig-parks-univariate-eda" title="Figure&nbsp;5.1&nbsp;(b): Per capita spending in USD"><img src="05-slr-inference_files/figure-html/fig-parks-univariate-eda-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-parks-univariate-eda"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-parks-univariate-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) Per capita expenditure in USD
+(b) Per capita spending in USD
 </figcaption>
 </figure>
 </div>
@@ -527,7 +527,7 @@ window.Quarto = {
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parks-univariate-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.1: Univariate exploratory data analysis of <code>playgrounds</code> and <code>per_capita_expend</code>
+Figure&nbsp;5.1: Univariate distributions for the number of playgrounds per 10,000 residents a city’s per capita spending
 </figcaption>
 </figure>
 </div>
@@ -535,7 +535,7 @@ Figure&nbsp;5.1: Univariate exploratory data analysis of <code>playgrounds</code
 <div id="tbl-parks-univariate-eda" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parks-univariate-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.1: Summary statistics of <code>playgrounds</code> and <code>per_capita_spend</code>
+Table&nbsp;5.1: Summary statistics for number of playgrounds per 10,000 residents a city’s per capita spending
 </figcaption>
 <div aria-describedby="tbl-parks-univariate-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -601,10 +601,10 @@ Table&nbsp;5.1: Summary statistics of <code>playgrounds</code> and <code>per_cap
 <div id="fig-parks-bivariate-eda" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-parks-bivariate-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-parks-bivariate-eda-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;5.2: Bivariate exploratory data analysis of playgrounds versus per_capita_spend"><img src="05-slr-inference_files/figure-html/fig-parks-bivariate-eda-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-parks-bivariate-eda-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;5.2: Bivariate exploratory data analysis of the relationship between the number of playgrounds per 10,000 residents a city’s per capita spending"><img src="05-slr-inference_files/figure-html/fig-parks-bivariate-eda-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parks-bivariate-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.2: Bivariate exploratory data analysis of <code>playgrounds</code> versus <code>per_capita_spend</code>
+Figure&nbsp;5.2: Bivariate exploratory data analysis of the relationship between the number of playgrounds per 10,000 residents a city’s per capita spending
 </figcaption>
 </figure>
 </div>
@@ -620,7 +620,7 @@ Figure&nbsp;5.2: Bivariate exploratory data analysis of <code>playgrounds</code>
 <div id="tbl-parks-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parks-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.2: Linear regression model <code>per_capita_expend</code> and <code>playgrounds</code>
+Table&nbsp;5.2: Linear regression model using a city’s per capita spending to explain variability in the number of playgrounds per 10,000 residents
 </figcaption>
 <div aria-describedby="tbl-parks-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -749,7 +749,7 @@ Table&nbsp;5.2: Linear regression model <code>per_capita_expend</code> and <code
 <div id="tbl-parks-boot-samples" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parks-boot-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.3: First 10 rows of the first bootstrap sample. The replicate column identifies the bootstrap sample.
+Table&nbsp;5.3: First 10 rows from a single bootstrap sample. The replicate column identifies the bootstrap sample.
 </figcaption>
 <div aria-describedby="tbl-parks-boot-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -828,7 +828,7 @@ Table&nbsp;5.3: First 10 rows of the first bootstrap sample. The replicate colum
 <div id="tbl-parks-boot-slopes" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parks-boot-slopes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.4: Estimated slope and intercept for the first three bootstrap samples.
+Table&nbsp;5.4: Estimated slope and intercept computed for three bootstrap samples
 </figcaption>
 <div aria-describedby="tbl-parks-boot-slopes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -884,10 +884,10 @@ Table&nbsp;5.4: Estimated slope and intercept for the first three bootstrap samp
 <div id="fig-parks-boot-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-parks-boot-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-parks-boot-dist-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;5.3: Bootstrap distribution of the slope of `per_capita_expend"><img src="05-slr-inference_files/figure-html/fig-parks-boot-dist-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-parks-boot-dist-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;5.3: Bootstrap distribution of the slope for per capita spending constructed from 1,000 bootstrap samples"><img src="05-slr-inference_files/figure-html/fig-parks-boot-dist-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parks-boot-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.3: Bootstrap distribution of the slope of `per_capita_expend
+Figure&nbsp;5.3: Bootstrap distribution of the slope for per capita spending constructed from 1,000 bootstrap samples
 </figcaption>
 </figure>
 </div>
@@ -897,7 +897,7 @@ Figure&nbsp;5.3: Bootstrap distribution of the slope of `per_capita_expend
 <div id="tbl-parks-boot-dist" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parks-boot-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.5: Summary statistics for bootstrap distribution of the slope <code>per_capita_expend</code>
+Table&nbsp;5.5: Summary statistics for the bootstrap distribution of the slope for per capita spending
 </figcaption>
 <div aria-describedby="tbl-parks-boot-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -942,10 +942,10 @@ Table&nbsp;5.5: Summary statistics for bootstrap distribution of the slope <code
 <div id="fig-parks-boot-ci" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-parks-boot-ci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-parks-boot-ci-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5.4: 95% bootstrap confidence interval for the slope of per_capita_spend"><img src="05-slr-inference_files/figure-html/fig-parks-boot-ci-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-parks-boot-ci-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5.4: 95% bootstrap confidence interval for the slope of per capita spending"><img src="05-slr-inference_files/figure-html/fig-parks-boot-ci-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parks-boot-ci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.4: 95% bootstrap confidence interval for the slope of <code>per_capita_spend</code>
+Figure&nbsp;5.4: 95% bootstrap confidence interval for the slope of per capita spending
 </figcaption>
 </figure>
 </div>
@@ -955,7 +955,7 @@ Figure&nbsp;5.4: 95% bootstrap confidence interval for the slope of <code>per_ca
 <div id="tbl-parks-boot-ci" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-parks-boot-ci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.6: 95% confidence interval for the slope
+Table&nbsp;5.6: 95% confidence interval for the slope of per capita spending
 </figcaption>
 <div aria-describedby="tbl-parks-boot-ci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1090,7 +1090,7 @@ Table&nbsp;5.6: 95% confidence interval for the slope
 <div id="tbl-slr-permute-samp" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-slr-permute-samp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.7: First 10 rows of the first permutation sample. The replicate column identifies the permutation sample.
+Table&nbsp;5.7: First 10 rows of a permutation sample. The replicate column identifies the permutation sample.
 </figcaption>
 <div aria-describedby="tbl-slr-permute-samp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1167,7 +1167,7 @@ Table&nbsp;5.7: First 10 rows of the first permutation sample. The replicate col
 <div id="tbl-slr-permute-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-slr-permute-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.8: Estimated slopes from first 10 permutation samples.
+Table&nbsp;5.8: Estimated slopes computed from 10 permutation samples.
 </figcaption>
 <div aria-describedby="tbl-slr-permute-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1244,10 +1244,10 @@ Table&nbsp;5.8: Estimated slopes from first 10 permutation samples.
 <div id="fig-null-dist-spend" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-null-dist-spend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-null-dist-spend-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;5.5: Simulated null distribution to test the slope of per_capita_expend"><img src="05-slr-inference_files/figure-html/fig-null-dist-spend-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-null-dist-spend-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;5.5: Simulated null distribution to test the slope of per capita spending"><img src="05-slr-inference_files/figure-html/fig-null-dist-spend-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-null-dist-spend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.5: Simulated null distribution to test the slope of <code>per_capita_expend</code>
+Figure&nbsp;5.5: Simulated null distribution to test the slope of per capita spending
 </figcaption>
 </figure>
 </div>
@@ -1258,7 +1258,7 @@ Figure&nbsp;5.5: Simulated null distribution to test the slope of <code>per_capi
 <div id="tbl-null-dist-spend" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-null-dist-spend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.9: Summary statistics of the simulated null distribution to test the slope of <code>per_capita_expend</code>
+Table&nbsp;5.9: Summary statistics for the simulated null distribution to test the slope of per capita spending
 </figcaption>
 <div aria-describedby="tbl-null-dist-spend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1318,10 +1318,10 @@ Table&nbsp;5.9: Summary statistics of the simulated null distribution to test th
 <div id="fig-slr-inf-pvalue" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-slr-inf-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-slr-inf-pvalue-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;5.6: Simulated null distribution with p-value represented by the shaded area. The shaded area are values less than -0.003 and greater than 0.003."><img src="05-slr-inference_files/figure-html/fig-slr-inf-pvalue-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-slr-inf-pvalue-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;5.6: Simulated null distribution with p-value represented by the shaded area. The shaded area includes values -0.003 or less and values 0.003 or greater."><img src="05-slr-inference_files/figure-html/fig-slr-inf-pvalue-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-slr-inf-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.6: Simulated null distribution with p-value represented by the shaded area. The shaded area are values less than -0.003 and greater than 0.003.
+Figure&nbsp;5.6: Simulated null distribution with p-value represented by the shaded area. The shaded area includes values -0.003 or less and values 0.003 or greater.
 </figcaption>
 </figure>
 </div>
@@ -1440,7 +1440,7 @@ Truth
 <div id="tbl-bootstrap-pred-150" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.11: Estimated slope, intercept, and prediction for <code>spend = 150</code> from first five bootstrap samples
+Table&nbsp;5.11: Estimated slope, intercept, and predicted number of playgrounds when per capita spending is 150 USD, computed from five bootstrap samples
 </figcaption>
 <div aria-describedby="tbl-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1497,10 +1497,10 @@ Table&nbsp;5.11: Estimated slope, intercept, and prediction for <code>spend = 15
 <div id="fig-bootstrap-pred-150" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-bootstrap-pred-150-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5.7: Bootstrap distribution of predictions when spend = 150 with bounds for the 95% interval"><img src="05-slr-inference_files/figure-html/fig-bootstrap-pred-150-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-bootstrap-pred-150-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;5.7: Bootstrap distribution and bounds for the 95% confidence interval for the predicted number of playgrounds when per capita spending is equal to 150 USD"><img src="05-slr-inference_files/figure-html/fig-bootstrap-pred-150-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bootstrap-pred-150-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.7: Bootstrap distribution of predictions when <code>spend = 150</code> with bounds for the 95% interval
+Figure&nbsp;5.7: Bootstrap distribution and bounds for the 95% confidence interval for the predicted number of playgrounds when per capita spending is equal to 150 USD
 </figcaption>
 </figure>
 </div>
@@ -1574,10 +1574,10 @@ H_a: \beta_1 \neq 0 \\
 <div id="fig-normal-t-curves" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-normal-t-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions"><img src="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;5.8: Standard normal versus t distributions"><img src="05-slr-inference_files/figure-html/fig-normal-t-curves-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-normal-t-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
+Figure&nbsp;5.8: Standard normal versus t distributions
 </figcaption>
 </figure>
 </div>
@@ -1604,10 +1604,10 @@ Figure&nbsp;5.8: Standard normal vs.&nbsp;t distributions
 <div id="fig-compute-pvalue" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-compute-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="05-slr-inference_files/figure-html/fig-compute-pvalue-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;5.9: Compute the p-value using t-distribution with 95 df"><img src="05-slr-inference_files/figure-html/fig-compute-pvalue-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="05-slr-inference_files/figure-html/fig-compute-pvalue-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;5.9: Shaded area used to compute the p-value from a t-distribution with 95 degrees of freedom"><img src="05-slr-inference_files/figure-html/fig-compute-pvalue-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-compute-pvalue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5.9: Compute the p-value using t-distribution with 95 df
+Figure&nbsp;5.9: Shaded area used to compute the p-value from a t-distribution with 95 degrees of freedom
 </figcaption>
 </figure>
 </div>
@@ -1664,7 +1664,7 @@ Figure&nbsp;5.9: Compute the p-value using t-distribution with 95 df
 <div id="tbl-prediction-intervals" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.12: Standard errors and 95% intervals for the predicted mean response and individual response when <code>per_capita_expend = 150</code>
+Table&nbsp;5.12: Standard errors and 95% intervals for the estimated mean number of playgrounds per 10,000 and predicted number of playgrounds per 10,000 residents for an individual city when per capita spending is 150 USD
 </figcaption>
 <div aria-describedby="tbl-prediction-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
