@@ -108,7 +108,7 @@ The data are in `recipes.csv`. We will use the following variables: <!--# remove
 
 - `name`: Recipe title
 
-- `country`: The country / region the cuisine is from (`Brazilian`, `Filipino`, `French`, `Italian`, `Other`). This is a simplified version of the `country` variable in the `cuisines` data frame.
+- `country`: Cuisine's country / region of origin (`Brazilian`, `Filipino`, `French`, `Italian`, `Other`). This is a simplified version of the `country` variable in the `cuisines` data frame.
 
 - `author`: User who posted the recipe
 
@@ -179,7 +179,7 @@ Statistical software typically has functionality to view a summary of the data. 
 
 ```{r}
 #| label: tbl-glimpse-recipe
-#| tbl-cap: " Glimpse of `recipes` data\""
+#| tbl-cap: "Glimpse of recipes data frame"
 
 glimpse(recipes)
 ```
@@ -235,7 +235,7 @@ recipes <- recipes |>
 
 ```{r}
 #| label: tbl-glimpse-recipes-2
-#| tbl-cap: "Glimpse of `recipes` data with correct formats for `chef_john` and `month`"
+#| tbl-cap: "Glimpse of data with correct formats for Chef John and month variables"
 
 glimpse(recipes)
 ```
@@ -258,7 +258,7 @@ A **bar chart** <!--# do we want to call this bar plot or bar graph?--> is a com
 
 ```{r}
 #| label: fig-univar-month
-#| fig-cap: "Bar chart for the distribution of `month`"
+#| fig-cap: "Barc chart for the distribution of the month recipes were posted"
 ggplot(data = recipes, aes(x = month)) + 
   geom_bar() + 
   labs(x = "Month") + 
@@ -271,7 +271,7 @@ The bar chart in @fig-univar-month displays the frequencies, but perhaps we are 
 
 ```{r}
 #| label: fig-univar-eda-month-prop
-#| fig-cap: "Visualizations of the distribution of `month` using proportions"
+#| fig-cap: "Visualizations of the distribution of month using proportions"
 #| fig-subcap: 
 #|   - "Bar chart"
 #|   - "Pie chart"
@@ -326,7 +326,7 @@ In addition to visualizations, we can make a frequency table, a table of the num
 
 ```{r}
 #| label: tbl-univar-eda-month
-#| tbl-cap: "Frequency table for `month`"
+#| tbl-cap: "Frequency table for month"
 
 recipes_prop |> 
   kable(digits = 3)
@@ -340,7 +340,7 @@ Let's use the visualizations and summaries introduced in this section to describ
 
 ```{r}
 #| label: fig-univar-season 
-#| fig-cap: "Visualizations of the distribution of `season`"
+#| fig-cap: "Visualizations of the distribution of season recipes were posted"
 #| fig-subcap: 
 #|   - "Bar chart"
 #|   - "Pie chart"
@@ -382,7 +382,7 @@ ggplot(data = season_prop, aes(fill = season, values = n)) +
 
 ```{r}
 #| label: tbl-univar-eda-season
-#| tbl-cap: "Frequency table of `season`"
+#| tbl-cap: "Frequency table of season"
 #| echo: false
 
 # frequency table
@@ -409,7 +409,7 @@ A **histogram** is commonly used to visualize the distribution of a quantitative
 
 ```{r}
 #| label: fig-univar-eda-rating
-#| fig-cap: "Histogram of `avg_rating`"
+#| fig-cap: "Histogram for the distribution of average ratings of recipes"
 
 ggplot(data = recipes, aes(x = avg_rating)) + 
   geom_histogram(fill = "steelblue", color = 'black', binwidth = 0.1) +
@@ -471,7 +471,7 @@ These visualizations are most useful for describing the shape of a distribution 
 
 ```{r}
 #| label: fig-univar-eda-rating-alt
-#| fig-cap: "Density plot and boxplot of `avg_rating`"
+#| fig-cap: "Density plot and boxplot of average ratings"
 #| fig-subcap:
 #|   - "Density plot"
 #|   - "Boxplot"
@@ -635,7 +635,7 @@ In addition to visualizations, we compute summary statistics to more precisely d
 
 ```{r}
 #| label: tbl-univar-eda-rating
-#| tbl-cap: "Summary statistics for `avg_rating`"
+#| tbl-cap: "Summary statistics for average rating"
 
 recipes |> 
   skim(avg_rating) |>
@@ -707,7 +707,7 @@ Let's use the visualizations and summary statistics introduced in the previous s
 
 ```{r}
 #| label: fig-univar-eda-cook-time
-#| fig-cap: "Distribution of `cook_time`"
+#| fig-cap: "Distribution of recipe cooking time (in minutes)"
 
 ggplot(data = recipes, aes(x = cook_time)) + 
   geom_histogram(fill = "steelblue", color = 'black') +
@@ -716,7 +716,7 @@ ggplot(data = recipes, aes(x = cook_time)) +
 
 ```{r}
 #| label: tbl-univar-eda-cook-time
-#| tbl-cap: "Summary statistics for `cook_time`"
+#| tbl-cap: "Summary statistics for cooking time"
 
 recipes |> 
   skim(cook_time) |>
@@ -736,7 +736,7 @@ About 95% of the observations have cook times of 150 minutes or less, so we crea
 
 ```{r}
 #| label: fig-univar-eda-cook-time-zoom
-#| fig-cap: "Original versus truncated distribution of `cook_time`" 
+#| fig-cap: "Original versus truncated distribution of cooking time" 
 #| fig-subcap: 
 #|   - "All observations"
 #|   - "Cook time 150 minutes or less"
@@ -770,7 +770,7 @@ A **scatterplot** is a plot for two quantitative variables, such that one variab
 
 ```{r}
 #| label: fig-bivar-eda-protein-calories
-#| fig-cap: "Scatterplot of the relationship between `calories` and `protein`"
+#| fig-cap: "Scatterplot of the relationship between number of calories and grams of protein"
 
 ggplot(data = recipes, aes(x = calories, y = protein)) + 
   geom_point(alpha = 0.5) + 
@@ -1055,14 +1055,14 @@ Is the amount of time it takes to prepare a dish associated with users' opinions
 
 ```{r}
 #| label: fig-bivar-eda-prep-rating
-#| fig-cap: "Relationship between `prep_time` and `avg_rating`"
+#| fig-cap: "Relationship between preparation time and average rating" 
 
 recipes |> 
  # filter(prep_time < 45) |>
   ggplot(aes(x = prep_time, y = cook_time)) + 
   geom_jitter(alpha = 0.5) + 
   theme_bw() + 
-  labs(x = "Prep time in minutes", 
+  labs(x = "Preparation time in minutes", 
        y = "Average rating")
 ```
 
@@ -1070,7 +1070,7 @@ In @fig-bivar-eda-prep-rating, we see there are a few recipes with very long pre
 
 ```{r}
 #| label: fig-bivar-eda-prep-rating-45min
-#| fig-cap: "Relationship between `prep_time` and `avg_rating` for recipes with `prep_time <= 45`"
+#| fig-cap: "Relationship between prepration time and average rating for recipes with preparation time 45 minutes or less"
 
 recipes |> 
   filter(prep_time <= 45) |>
@@ -1113,7 +1113,7 @@ John Mitzewich, more commonly known as Chef John, is an American chef who posts 
 
 ```{r}
 #| label: fig-bivar-eda-chef-rating
-#| fig-cap: "Relationship between `chef_john` and `avg_rating`" 
+#| fig-cap: "Relationship between whether recipe was posted by Chef John and average rating"
 #| fig-subcap: 
 #|   - Boxplot
 #|   - Ridgeline plot
@@ -1161,7 +1161,7 @@ One thing that is not clear from the visualizations is the number of observation
 
 ```{r}
 #| label: tbl-bivar-eda-chef-rating
-#| tbl-cap: "Summary statistics for `avg_rating` by levels of `chef_john`"
+#| tbl-cap: "Summary statistics for averae rating based on whether recipe was posted by Chef John"
 skim_results <- recipes |> 
   group_by(chef_john) |>
   skim(avg_rating) |>
@@ -1181,7 +1181,7 @@ How do users rate recipes from different countries? @fig-bivar-eda-country-ratin
 
 ```{r}
 #| label: fig-bivar-eda-country-rating
-#| fig-cap: "Relationship between `country` and `avg_rating`"
+#| fig-cap: "Relationship between cuisine's country/region of origin and average rating"
 
 ggplot(data = recipes, aes(x = country, y = avg_rating, fill = country)) + 
   geom_violin(color = "black", 
@@ -1214,7 +1214,7 @@ In @sec-intro-recipes we introduced Chef John, the most prolific poster on allre
 
 ```{r}
 #| label: fig-bivar-eda-chef-season 
-#| fig-cap: "Visualizations of the relationship between `chef_john` and `season`"
+#| fig-cap: "Visualizations of the relationship between whether a recipe was posted by Chef John and the season"
 #| fig-subcap: 
 #|   - "Grouped bar chart"
 #|   - "Segmented bar plot"
@@ -1272,7 +1272,7 @@ Is there a relationship between the country a recipe is from and the time of yea
 
 ```{r}
 #| label: fig-bivar-eda-country-season
-#| fig-cap: "Segmented bar chart of `country` versus `season`" 
+#| fig-cap: "Segmented bar chart of cuisine's country/region of origin and season"
 
 ggplot(data = recipes, aes(x = country, fill = season)) +
   geom_bar(position = "fill", color = "black") +
@@ -1298,7 +1298,7 @@ In @sec-bivar-eda-quant-cat, we looked at the relationship between the average r
 
 ```{r}
 #| label: fig-multivar-eda
-#| fig-cap: "Multivariate EDA of `avg_rating` versus `chef_john` faceted by `season`" 
+#| fig-cap: "Multivariate EDA of the relationship between average rating and whether a recipe was posted by Chef John, faceted by season"  
 
 recipes |>
 ggplot(aes(x = chef_john, y = avg_rating, fill = chef_john)) +
@@ -1327,7 +1327,7 @@ The `skim()` function in the **skimr** R package [@skimr] provides a summary of 
 
 ```{r}
 #| label: tbl-skim-recipes 
-#| tbl-cap: "`skim()` output for `recipes`"
+#| tbl-cap: "`skim()` output for recipes data frame"
 #| echo: true
 #| eval: false
 
@@ -1341,7 +1341,7 @@ If we are only interested in the summary for particular variables, we specify th
 
 ```{r}
 #| label: tbl-skim-recipes-subset
-#| tbl-cap: "`skim()` output for `avg_rating` and `season`"
+#| tbl-cap: "`skim()` output for average rating and season"
 #| echo: true
 
 recipes |>

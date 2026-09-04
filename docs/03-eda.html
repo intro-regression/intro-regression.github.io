@@ -439,7 +439,7 @@ window.Quarto = {
 <p>The data are in <code>recipes.csv</code>. We will use the following variables: <!--# remove all the variables I don't end up using--></p>
 <ul>
 <li><p><code>name</code>: Recipe title</p></li>
-<li><p><code>country</code>: The country / region the cuisine is from (<code>Brazilian</code>, <code>Filipino</code>, <code>French</code>, <code>Italian</code>, <code>Other</code>). This is a simplified version of the <code>country</code> variable in the <code>cuisines</code> data frame.</p></li>
+<li><p><code>country</code>: Cuisine’s country / region of origin (<code>Brazilian</code>, <code>Filipino</code>, <code>French</code>, <code>Italian</code>, <code>Other</code>). This is a simplified version of the <code>country</code> variable in the <code>cuisines</code> data frame.</p></li>
 <li><p><code>author</code>: User who posted the recipe</p></li>
 <li><p><code>chef_john</code>: Indicator of whether the recipe was posted by American Chef John Mitzewich (known as Chef John), derived from the variable <code>author</code>. (<code>1</code>: Posted by Chef John, <code>0</code>: Not posted by Chef John)</p></li>
 <li><p><code>month</code>: Month in which the recipe posted, derived from the variable <code>date_published</code> in the <code>cuisines</code> data frame. (<code>1</code>: January, <code>2</code>: February, <code>3</code>: March, . . ., <code>12</code>: December).</p></li>
@@ -497,8 +497,12 @@ Figure&nbsp;3.1: Exploratory data analysis workflow
 </section><section id="sec-initial-check" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="sec-initial-check">
 <span class="header-section-number">3.3</span> Initial data cleaning</h2>
 <p>After loading the data into software, the first step of the EDA workflow (<a href="#fig-eda-workflow" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>) is an initial check to get an overall view of the data and some initial data cleaning. The purpose of this check is to see whether the data loaded into the software as expected, identify what the rows and columns represent, and understand the variable types and their formats. This step is important, because it allows us to begin data cleaning and make necessary changes to the data and variable formats before moving too far into the analysis.</p>
-<p>Statistical software typically has functionality to view a summary of the data. For example, the <code>glimpse()</code> function in the <strong>tidyverse</strong> R package <span class="citation" data-cites="tidyverse-2">(<a href="references.html#ref-tidyverse-2" role="doc-biblioref">Wickham et al. 2019</a>)</span> provides a summary (or “glimpse”) of the data, like the one shown in <span class="quarto-unresolved-ref">?tbl-glimpse-recipe</span>. We can often view data in its original format (e.g., <code>.xlsx</code> or <code>.csv</code>) before loading it into the software; however, we still need to check the data after loading it into the software in case of information loss or other problems.</p>
-<p>::: {#tbl-glimpse-recipe .cell tbl-cap=’ Glimpse of <code>recipes</code> data”’} ::: {.cell-output .cell-output-stdout}</p>
+<p>Statistical software typically has functionality to view a summary of the data. For example, the <code>glimpse()</code> function in the <strong>tidyverse</strong> R package <span class="citation" data-cites="tidyverse-2">(<a href="references.html#ref-tidyverse-2" role="doc-biblioref">Wickham et al. 2019</a>)</span> provides a summary (or “glimpse”) of the data, like the one shown in <a href="#tbl-glimpse-recipe" class="quarto-xref">Table&nbsp;<span>3.1</span></a>. We can often view data in its original format (e.g., <code>.xlsx</code> or <code>.csv</code>) before loading it into the software; however, we still need to check the data after loading it into the software in case of information loss or other problems.</p>
+<div id="tbl-glimpse-recipe" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-glimpse-recipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.1: Glimpse of recipes data frame
+</figcaption><div aria-describedby="tbl-glimpse-recipe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-stdout">
 <pre><code>Rows: 2,218
 Columns: 22
 $ name           &lt;chr&gt; "Saganaki (Flaming Greek Cheese)", "Coney Island Knishe…
@@ -523,8 +527,11 @@ $ month          &lt;dbl&gt; 2, 11, 7, 1, 2, 8, 12, 6, 1, 6, 8, 9, 12, 9, 12, 7,
 $ days_on_site   &lt;dbl&gt; 541, 248, 1114, 182, 164, 1085, 598, 1869, 192, 60, 106…
 $ chef_john      &lt;dbl&gt; 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0…
 $ season         &lt;chr&gt; "Winter", "Fall", "Summer", "Winter", "Winter", "Summer…</code></pre>
-<p>::: :::</p>
-<p><span class="quarto-unresolved-ref">?tbl-glimpse-recipe</span> shows a summary of the <code>recipes</code> data. The rows contain the observations (also known as <em>cases</em>) in the data and the columns contain the variables that describe each observation. There are 2218 rows (observations) and 22 columns (variables) in the data. Each row represents a recipe posted on Allrecipes and each column is a feature or characteristic of the recipe. At this point, we can ask ourselves if these are the expected number of rows and columns based on the original data source. If not, we need to figure out the discrepancy in the number of rows and/or columns and address it before moving forward.</p>
+</div>
+</div>
+</figure>
+</div>
+<p><a href="#tbl-glimpse-recipe" class="quarto-xref">Table&nbsp;<span>3.1</span></a> shows a summary of the <code>recipes</code> data. The rows contain the observations (also known as <em>cases</em>) in the data and the columns contain the variables that describe each observation. There are 2218 rows (observations) and 22 columns (variables) in the data. Each row represents a recipe posted on Allrecipes and each column is a feature or characteristic of the recipe. At this point, we can ask ourselves if these are the expected number of rows and columns based on the original data source. If not, we need to figure out the discrepancy in the number of rows and/or columns and address it before moving forward.</p>
 <p>Once we understand the structure of the data, we look at the individual variables more closely. At this point, the primary focus is on the variable type, but we may also notice if there are any missing values (typically coded as <code>NA</code>) and anything else notable about the variable that we want to explore further.</p>
 <p>There are three types of variables: quantitative variables, categorical variables, and identifier variables. We typically assign the variable type based on the description and how the observations appear in the data. For example, we typically think of a variable such as <em>age</em>, an individual’s age in years, as quantitative. This is the case if the values are numeric values such as <code>18, 24, 35,...</code>. However, <em>age</em> is a categorical variable if is defined as age ranges, such as <code>18-25, 26-30, 31-35,...</code>. It is important to know the variable type, because that informs how the variable is handled in the regression analysis.</p>
 <div class="yourturn">
@@ -539,11 +546,11 @@ $ season         &lt;chr&gt; "Winter", "Fall", "Summer", "Winter", "Winter", "Su
 <!--# I might not need this? The variable season  is also a categorical stored as a character data type. By default, the software will arrange values of this variable in alphabetical order in graphs and analysis output. The seasons do have a specific calendar order that the software is unaware of currently. We can convert this variable to a factor data type and tell the software the calendar order.-->
 <!--# this variables type vs column type is feeling a bit convoluted-->
 <!--# Make a table for this mapping between variable type and column-->
-<p>One of the most common mismatches between the variable’s type and how it is stored occurs when categorical variables are stored in the software under numeric formats. From <span class="quarto-unresolved-ref">?tbl-glimpse-recipe</span>, we see this has occurred with the variables <code>month</code> and <code>chef_john</code>. This often happens when the categories are represented by numbers (e.g., “1” instead of “January”). Though we know they are categorical from <a href="#sec-intro-recipes" class="quarto-xref"><span>Section 3.1</span></a>, they are currently stored as <em>double</em> column types by the software. This means the software thinks we can do calculations, such as finding the average or standard deviation; however, these types of operations would not make sense in the context of <code>month</code>, for example. This mismatch can become particularly troublesome in the regression models. As we’ll see in <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>, quantitative and categorical variables are handled differently in regression models.</p>
-<p>We address these mismatches before moving forward with the EDA by changing the type in which such variables are stored. Once we have made changes to the data, we examine the summary of the data again to check the changes we’ve made and address any remaining issues. In <a href="#tbl-glimpse-recipes-2" class="quarto-xref">Table&nbsp;<span>3.1</span></a>, we see that <code>chef_john</code> and <code>month</code> are now correctly stored as factors, a format suitable for categorical variables. We are now ready to move on to the next step and explore the distributions of individual variables. <!--# [Add reference here to R for data science? Telling stories with data? Modern data science for more detail on data cleaning / prep?] --> <!--# may not need this detail? We specifically make month a factor variable type, because the months have a natural ordering.--></p>
+<p>One of the most common mismatches between the variable’s type and how it is stored occurs when categorical variables are stored in the software under numeric formats. From <a href="#tbl-glimpse-recipe" class="quarto-xref">Table&nbsp;<span>3.1</span></a>, we see this has occurred with the variables <code>month</code> and <code>chef_john</code>. This often happens when the categories are represented by numbers (e.g., “1” instead of “January”). Though we know they are categorical from <a href="#sec-intro-recipes" class="quarto-xref"><span>Section 3.1</span></a>, they are currently stored as <em>double</em> column types by the software. This means the software thinks we can do calculations, such as finding the average or standard deviation; however, these types of operations would not make sense in the context of <code>month</code>, for example. This mismatch can become particularly troublesome in the regression models. As we’ll see in <a href="07-mlr.html" class="quarto-xref"><span>Chapter 7</span></a>, quantitative and categorical variables are handled differently in regression models.</p>
+<p>We address these mismatches before moving forward with the EDA by changing the type in which such variables are stored. Once we have made changes to the data, we examine the summary of the data again to check the changes we’ve made and address any remaining issues. In <a href="#tbl-glimpse-recipes-2" class="quarto-xref">Table&nbsp;<span>3.2</span></a>, we see that <code>chef_john</code> and <code>month</code> are now correctly stored as factors, a format suitable for categorical variables. We are now ready to move on to the next step and explore the distributions of individual variables. <!--# [Add reference here to R for data science? Telling stories with data? Modern data science for more detail on data cleaning / prep?] --> <!--# may not need this detail? We specifically make month a factor variable type, because the months have a natural ordering.--></p>
 <div id="tbl-glimpse-recipes-2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-glimpse-recipes-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.1: Glimpse of <code>recipes</code> data with correct formats for <code>chef_john</code> and <code>month</code>
+Table&nbsp;3.2: Glimpse of data with correct formats for Chef John and month variables
 </figcaption><div aria-describedby="tbl-glimpse-recipes-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 2,218
@@ -588,10 +595,10 @@ $ season         &lt;fct&gt; Winter, Fall, Summer, Winter, Winter, Summer, Winte
 <div class="cell-output-display">
 <div id="fig-univar-month" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-univar-month-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-univar-month-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;3.2: Bar chart for the distribution of month"><img src="03-eda_files/figure-html/fig-univar-month-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-univar-month-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;3.2: Barc chart for the distribution of the month recipes were posted"><img src="03-eda_files/figure-html/fig-univar-month-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-univar-month-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.2: Bar chart for the distribution of <code>month</code>
+Figure&nbsp;3.2: Barc chart for the distribution of the month recipes were posted
 </figcaption></figure>
 </div>
 </div>
@@ -636,7 +643,7 @@ Figure&nbsp;3.2: Bar chart for the distribution of <code>month</code>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-univar-eda-month-prop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.3: Visualizations of the distribution of <code>month</code> using proportions
+Figure&nbsp;3.3: Visualizations of the distribution of month using proportions
 </figcaption></figure>
 </div>
 <p>In <a href="#fig-univar-eda-month-prop-2" class="quarto-xref">Figure&nbsp;<span>3.3 (b)</span></a>, the distribution of <code>month</code> is visualized using a <strong>pie chart</strong>. In a pie chart, each slice represents the proportion of observations at a given level. As we observed from the bar chart, the slice for Month 11 (November) is the largest, indicating the largest proportion of recipes in the data were published that month.</p>
@@ -647,7 +654,7 @@ Figure&nbsp;3.3: Visualizations of the distribution of <code>month</code> using 
 <div class="cell">
 <div id="tbl-univar-eda-month" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-univar-eda-month-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.2: Frequency table for <code>month</code>
+Table&nbsp;3.3: Frequency table for month
 </figcaption><div aria-describedby="tbl-univar-eda-month-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -724,7 +731,7 @@ Table&nbsp;3.2: Frequency table for <code>month</code>
 </figure>
 </div>
 </div>
-<p>From <a href="#tbl-univar-eda-month" class="quarto-xref">Table&nbsp;<span>3.2</span></a>, we not only see that Month 11 (November) is the most popular month for posting recipes, but we see more specifically that about 17.8% of the recipes in the data were posted that month. We can also more easily identify the least common month to post recipes, Month 10 (October). Only about 3.7% of the recipes in the data were posted that month.</p>
+<p>From <a href="#tbl-univar-eda-month" class="quarto-xref">Table&nbsp;<span>3.3</span></a>, we not only see that Month 11 (November) is the most popular month for posting recipes, but we see more specifically that about 17.8% of the recipes in the data were posted that month. We can also more easily identify the least common month to post recipes, Month 10 (October). Only about 3.7% of the recipes in the data were posted that month.</p>
 </section><section id="example-distribution-of-season" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="example-distribution-of-season">Example: Distribution of <code>season</code>
 </h4>
 <p>Let’s use the visualizations and summaries introduced in this section to describe the distribution of the season in which a recipe was posted.</p>
@@ -766,13 +773,13 @@ Table&nbsp;3.2: Frequency table for <code>month</code>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-univar-season-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.4: Visualizations of the distribution of <code>season</code>
+Figure&nbsp;3.4: Visualizations of the distribution of season recipes were posted
 </figcaption></figure>
 </div>
 <div class="cell">
 <div id="tbl-univar-eda-season" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-univar-eda-season-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.3: Frequency table of <code>season</code>
+Table&nbsp;3.4: Frequency table of season
 </figcaption><div aria-describedby="tbl-univar-eda-season-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -810,7 +817,7 @@ Table&nbsp;3.3: Frequency table of <code>season</code>
 </div>
 </div>
 <div class="yourturn">
-<p>Use <a href="#fig-univar-season" class="quarto-xref">Figure&nbsp;<span>3.4</span></a> and <a href="#tbl-univar-eda-season" class="quarto-xref">Table&nbsp;<span>3.3</span></a> to describe the distribution of <code>season</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Use <a href="#fig-univar-season" class="quarto-xref">Figure&nbsp;<span>3.4</span></a> and <a href="#tbl-univar-eda-season" class="quarto-xref">Table&nbsp;<span>3.4</span></a> to describe the distribution of <code>season</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </div>
 <p>Both <code>month</code> and <code>season</code> provide information about when individuals post recipes to the site, so we wouldn’t necessarily need both variables in later stages of the analysis. An advantage to <code>season</code> is that it has fewer levels, so visualizations are easier to interpret, particularly the pie chart and waffle chart, compared to <code>month</code> (<a href="#fig-univar-eda-month-prop" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>). It will also be easier to interpret as we look at relationships between variables. An advantage to <code>month</code> is that we get the more specific detail, such as the large number of recipes posted in November. In practice, we could refer back to the analysis objective to determine which variable to use in later steps.</p>
 </section></section><section id="sec-univar-eda-quant" class="level3" data-number="3.4.2"><h3 data-number="3.4.2" class="anchored" data-anchor-id="sec-univar-eda-quant">
@@ -822,10 +829,10 @@ Table&nbsp;3.3: Frequency table of <code>season</code>
 <div class="cell-output-display">
 <div id="fig-univar-eda-rating" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-univar-eda-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-univar-eda-rating-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;3.5: Histogram of avg_rating"><img src="03-eda_files/figure-html/fig-univar-eda-rating-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-univar-eda-rating-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;3.5: Histogram for the distribution of average ratings of recipes"><img src="03-eda_files/figure-html/fig-univar-eda-rating-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-univar-eda-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.5: Histogram of <code>avg_rating</code>
+Figure&nbsp;3.5: Histogram for the distribution of average ratings of recipes
 </figcaption></figure>
 </div>
 </div>
@@ -904,7 +911,7 @@ Figure&nbsp;3.6: Example histogram bin widths
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-univar-eda-rating-alt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.7: Density plot and boxplot of <code>avg_rating</code>
+Figure&nbsp;3.7: Density plot and boxplot of average ratings
 </figcaption></figure>
 </div>
 </section><section id="describe-the-distribution-shape" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="describe-the-distribution-shape">Describe the distribution: Shape</h4>
@@ -1001,11 +1008,11 @@ Figure&nbsp;3.9: Examples of distribution modality
 <p>Use <a href="#fig-univar-eda-rating" class="quarto-xref">Figure&nbsp;<span>3.5</span></a> and <a href="#fig-univar-eda-rating-alt" class="quarto-xref">Figure&nbsp;<span>3.7</span></a> to describe the shape of the distribution of <code>avg_rating</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 </div>
 </section><section id="summarize-the-distribution-1" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="summarize-the-distribution-1">Summarize the distribution</h4>
-<p>In addition to visualizations, we compute summary statistics to more precisely describe aspects of the distribution. The summary statistics for <code>avg_rating</code> are in <a href="#tbl-univar-eda-rating" class="quarto-xref">Table&nbsp;<span>3.4</span></a>.</p>
+<p>In addition to visualizations, we compute summary statistics to more precisely describe aspects of the distribution. The summary statistics for <code>avg_rating</code> are in <a href="#tbl-univar-eda-rating" class="quarto-xref">Table&nbsp;<span>3.5</span></a>.</p>
 <div class="cell">
 <div id="tbl-univar-eda-rating" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-univar-eda-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.4: Summary statistics for <code>avg_rating</code>
+Table&nbsp;3.5: Summary statistics for average rating
 </figcaption><div aria-describedby="tbl-univar-eda-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1042,7 +1049,7 @@ Table&nbsp;3.4: Summary statistics for <code>avg_rating</code>
 <div class="analysis_in_practice">
 <p>We prefer the mean over the median to describe the center of the distribution when the criteria mentioned above are met. This is because the mean is computed using all the observations in the data set. In contrast, the median is determined based on the one or two observations in the middle to the distribution. In general, we prefer statistics that use all the data if they will be representative of the distribution and not skewed by a few extreme observations.</p>
 </div>
-<p>From <a href="#tbl-univar-eda-rating" class="quarto-xref">Table&nbsp;<span>3.4</span></a>, the mean value of <code>avg_rating</code> in the data is about 4.509 and the median is 4.6. The distribution of <code>avg_rating</code> is left-skewed and has outliers (see <a href="#fig-univar-eda-rating" class="quarto-xref">Figure&nbsp;<span>3.5</span></a>), so the median is the more representative measure of the center of the distribution.</p>
+<p>From <a href="#tbl-univar-eda-rating" class="quarto-xref">Table&nbsp;<span>3.5</span></a>, the mean value of <code>avg_rating</code> in the data is about 4.509 and the median is 4.6. The distribution of <code>avg_rating</code> is left-skewed and has outliers (see <a href="#fig-univar-eda-rating" class="quarto-xref">Figure&nbsp;<span>3.5</span></a>), so the median is the more representative measure of the center of the distribution.</p>
 </section><section id="describe-the-distribution-spread" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="describe-the-distribution-spread">Describe the distribution: Spread</h4>
 <p>The standard deviation, interquartile range (IQR), and range are measures used to describe the <strong>spread</strong> of a distribution. If shape of the distribution is approximately symmetric with no (or few) outliers, the <strong>standard deviation</strong>, a measure of the average distance between each observation and the mean, is the preferred measure of the spread. Because the mean is used to to compute the standard deviation, it is impacted by skewness and outliers. When the distribution is skewed or there are outliers, the <strong>interquartile range (IQR)</strong> is the more representative measure of spread. The IQR is the difference between the <span class="math inline">\(75^{th}\)</span> and <span class="math inline">\(25^{th}\)</span> percentiles, <span class="math inline">\(Q_3 - Q_1\)</span>.</p>
 <p>The <strong>range</strong> <span class="math inline">\((\text{max} - \text{min})\)</span> should be used with caution and not reported as the only measure of spread. Because it only takes into account the minimum and maximum values, it only describes the spread of the extreme ends of the distribution, which is not typically the spread of the majority of the data. Additionally, it is impacted by skewness and outliers, and thus can make the spread of a distribution appear larger than what is true for the vast majority of the data.</p>
@@ -1053,7 +1060,7 @@ Table&nbsp;3.4: Summary statistics for <code>avg_rating</code>
 <li><p>the median and IQR if skewness or outliers are present</p></li>
 </ul>
 </div>
-<p>From <a href="#tbl-univar-eda-rating" class="quarto-xref">Table&nbsp;<span>3.4</span></a>, the standard deviation of <code>avg_rating</code> is 0.401, so the average rating for each recipe is about 0.401 points from the mean rating of 4.509, on average. The IQR is 0.5. This means the spread of the middle 50% of the distribution, <span class="math inline">\(Q_3 - Q_1\)</span> is about 0.5 points. Lastly, the range, the distance between the minimum and maximum values, is 4.</p>
+<p>From <a href="#tbl-univar-eda-rating" class="quarto-xref">Table&nbsp;<span>3.5</span></a>, the standard deviation of <code>avg_rating</code> is 0.401, so the average rating for each recipe is about 0.401 points from the mean rating of 4.509, on average. The IQR is 0.5. This means the spread of the middle 50% of the distribution, <span class="math inline">\(Q_3 - Q_1\)</span> is about 0.5 points. Lastly, the range, the distance between the minimum and maximum values, is 4.</p>
 <p>Because the distribution of <code>avg_rating</code> is skewed with outliers, the IQR 0.5 is the most representative measure of spread.</p>
 <!--# does it make sense to put something about missing values here?-->
 </section><section id="describe-the-distribution-outliers" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="describe-the-distribution-outliers">Describe the distribution: Outliers</h4>
@@ -1078,10 +1085,10 @@ Table&nbsp;3.4: Summary statistics for <code>avg_rating</code>
 <div class="cell-output-display">
 <div id="fig-univar-eda-cook-time" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-univar-eda-cook-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-univar-eda-cook-time-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" title="Figure&nbsp;3.10: Distribution of cook_time"><img src="03-eda_files/figure-html/fig-univar-eda-cook-time-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-univar-eda-cook-time-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" title="Figure&nbsp;3.10: Distribution of recipe cooking time (in minutes)"><img src="03-eda_files/figure-html/fig-univar-eda-cook-time-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-univar-eda-cook-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.10: Distribution of <code>cook_time</code>
+Figure&nbsp;3.10: Distribution of recipe cooking time (in minutes)
 </figcaption></figure>
 </div>
 </div>
@@ -1089,7 +1096,7 @@ Figure&nbsp;3.10: Distribution of <code>cook_time</code>
 <div class="cell">
 <div id="tbl-univar-eda-cook-time" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-univar-eda-cook-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.5: Summary statistics for <code>cook_time</code>
+Table&nbsp;3.6: Summary statistics for cooking time
 </figcaption><div aria-describedby="tbl-univar-eda-cook-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1120,7 +1127,7 @@ Table&nbsp;3.5: Summary statistics for <code>cook_time</code>
 </div>
 </div>
 <div class="yourturn">
-<p>Use the visualizations in <a href="#fig-univar-eda-cook-time" class="quarto-xref">Figure&nbsp;<span>3.10</span></a> and summary statistics in <a href="#tbl-univar-eda-cook-time" class="quarto-xref">Table&nbsp;<span>3.5</span></a> to describe the distribution of <code>cook_time</code>. Include the shape, center, spread, and potential outliers in the description.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Use the visualizations in <a href="#fig-univar-eda-cook-time" class="quarto-xref">Figure&nbsp;<span>3.10</span></a> and summary statistics in <a href="#tbl-univar-eda-cook-time" class="quarto-xref">Table&nbsp;<span>3.6</span></a> to describe the distribution of <code>cook_time</code>. Include the shape, center, spread, and potential outliers in the description.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </div>
 <p>When a distribution has extreme outliers, such as the distribution of <code>cook_time</code>, the outliers can compress the majority of the observations on the graph, making it difficult to get a detailed view of the majority of the distribution. In this case, we can also make a visualization without the outliers to get a better view.</p>
 <p>About 95% of the observations have cook times of 150 minutes or less, so we create a new histogram that only includes those observations.</p>
@@ -1150,7 +1157,7 @@ Table&nbsp;3.5: Summary statistics for <code>cook_time</code>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-univar-eda-cook-time-zoom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.11: Original versus truncated distribution of <code>cook_time</code>
+Figure&nbsp;3.11: Original versus truncated distribution of cooking time
 </figcaption></figure>
 </div>
 <p>In <a href="#fig-univar-eda-cook-time-zoom" class="quarto-xref">Figure&nbsp;<span>3.11</span></a>, we compare a visualization of the full distribution with a truncated distribution that only includes recipes with cook time 150 minutes or less. For example, in <a href="#fig-univar-eda-cook-time-zoom-2" class="quarto-xref">Figure&nbsp;<span>3.11 (b)</span></a>, we get a lot of detail about the distribution of recipes with cook time 50 minutes or less. In contrast, all these recipes are contained in the first three bars of the histogram in <a href="#fig-univar-eda-cook-time-zoom-1" class="quarto-xref">Figure&nbsp;<span>3.11 (a)</span></a>.</p>
@@ -1166,10 +1173,10 @@ Figure&nbsp;3.11: Original versus truncated distribution of <code>cook_time</cod
 <div class="cell-output-display">
 <div id="fig-bivar-eda-protein-calories" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bivar-eda-protein-calories-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-bivar-eda-protein-calories-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="Figure&nbsp;3.12: Scatterplot of the relationship between calories and protein"><img src="03-eda_files/figure-html/fig-bivar-eda-protein-calories-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-bivar-eda-protein-calories-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="Figure&nbsp;3.12: Scatterplot of the relationship between number of calories and grams of protein"><img src="03-eda_files/figure-html/fig-bivar-eda-protein-calories-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bivar-eda-protein-calories-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.12: Scatterplot of the relationship between <code>calories</code> and <code>protein</code>
+Figure&nbsp;3.12: Scatterplot of the relationship between number of calories and grams of protein
 </figcaption></figure>
 </div>
 </div>
@@ -1369,10 +1376,10 @@ Figure&nbsp;3.16: Example relationships with low correlation
 <div class="cell-output-display">
 <div id="fig-bivar-eda-prep-rating" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bivar-eda-prep-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-bivar-eda-prep-rating-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-37" title="Figure&nbsp;3.17: Relationship between prep_time and avg_rating"><img src="03-eda_files/figure-html/fig-bivar-eda-prep-rating-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-bivar-eda-prep-rating-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-37" title="Figure&nbsp;3.17: Relationship between preparation time and average rating"><img src="03-eda_files/figure-html/fig-bivar-eda-prep-rating-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bivar-eda-prep-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.17: Relationship between <code>prep_time</code> and <code>avg_rating</code>
+Figure&nbsp;3.17: Relationship between preparation time and average rating
 </figcaption></figure>
 </div>
 </div>
@@ -1382,10 +1389,10 @@ Figure&nbsp;3.17: Relationship between <code>prep_time</code> and <code>avg_rati
 <div class="cell-output-display">
 <div id="fig-bivar-eda-prep-rating-45min" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bivar-eda-prep-rating-45min-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-bivar-eda-prep-rating-45min-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-38" title="Figure&nbsp;3.18: Relationship between prep_time and avg_rating for recipes with prep_time <= 45"><img src="03-eda_files/figure-html/fig-bivar-eda-prep-rating-45min-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-bivar-eda-prep-rating-45min-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-38" title="Figure&nbsp;3.18: Relationship between prepration time and average rating for recipes with preparation time 45 minutes or less"><img src="03-eda_files/figure-html/fig-bivar-eda-prep-rating-45min-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bivar-eda-prep-rating-45min-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.18: Relationship between <code>prep_time</code> and <code>avg_rating</code> for recipes with <code>prep_time &lt;= 45</code>
+Figure&nbsp;3.18: Relationship between prepration time and average rating for recipes with preparation time 45 minutes or less
 </figcaption></figure>
 </div>
 </div>
@@ -1437,17 +1444,17 @@ Figure&nbsp;3.18: Relationship between <code>prep_time</code> and <code>avg_rati
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bivar-eda-chef-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.19: Relationship between <code>chef_john</code> and <code>avg_rating</code>
+Figure&nbsp;3.19: Relationship between whether recipe was posted by Chef John and average rating
 </figcaption></figure>
 </div>
 <p>The <strong>side-by-side boxplot</strong> in <a href="#fig-bivar-eda-chef-rating-1" class="quarto-xref">Figure&nbsp;<span>3.19 (a)</span></a> shows a boxplot of the distribution of <code>avg_rating</code> for each level of <code>chef_john</code>. When evaluating whether there appears to be a relationship between the two variables, we want to see if the boxplots are relatively similar for the recipes posted by Chef John (<code>chef_john = 1</code>) and those posted by all other authors (<code>chef_john = 0</code>). In this plot, the median for Chef John’s recipes is slightly higher than the median for all other posters, though there is overlap in the middle 50% of both distributions, as shown by the overlapping boxes. There is less variability in the average ratings among Chef John’s recipes compared to the variability in the average ratings for all others. We also note that there are more extreme low outliers in the distribution of recipes posted by all other authors.</p>
 <p>The <strong>ridgeline plot</strong> in <a href="#fig-bivar-eda-chef-rating-2" class="quarto-xref">Figure&nbsp;<span>3.19 (b)</span></a> shows the density plot of the distribution of <code>avg_rating</code> for each level of <code>chef_john</code>. These plots are useful for comparing the center and shape of the distribution at each level. They also show how the spreads of the distributions compare. As with the side-by-side boxplots, we see there is more spread (variability) in the average ratings for recipes posted by others compared to those posted by Chef John. The number of outliers is less apparent, however, compared to the side-by-side boxplot.</p>
 <p>Lastly, the <strong>violin plot</strong> in <a href="#fig-bivar-eda-chef-rating-3" class="quarto-xref">Figure&nbsp;<span>3.19 (c)</span></a> is like a combination of the boxplot and ridgeline plot. The plots show the density of <code>avg_rating</code> for each level of <code>chef_john</code> with the median marked by a horizontal line. This makes it easier to compare the center of the distributions. We can also easily compare the spreads of the distributions. As with the ridgeline plots, it is less clear which observations are outliers.</p>
-<p>One thing that is not clear from the visualizations is the number of observations in each subgroup. Knowing the number of observations in each subgroup provides useful context to better understand the differences in the distributions. Therefore, in addition to visualizations, we compute the number of observations and other summary statistics introduced in <a href="#sec-univar-eda-quant" class="quarto-xref"><span>Section 3.4.2</span></a> to describe the distribution of the quantitative variable at each level of the categorical variable. The summary statistics for <code>avg_rating</code> for each level of <code>chef_john</code> is shown in <a href="#tbl-bivar-eda-chef-rating" class="quarto-xref">Table&nbsp;<span>3.6</span></a>.</p>
+<p>One thing that is not clear from the visualizations is the number of observations in each subgroup. Knowing the number of observations in each subgroup provides useful context to better understand the differences in the distributions. Therefore, in addition to visualizations, we compute the number of observations and other summary statistics introduced in <a href="#sec-univar-eda-quant" class="quarto-xref"><span>Section 3.4.2</span></a> to describe the distribution of the quantitative variable at each level of the categorical variable. The summary statistics for <code>avg_rating</code> for each level of <code>chef_john</code> is shown in <a href="#tbl-bivar-eda-chef-rating" class="quarto-xref">Table&nbsp;<span>3.7</span></a>.</p>
 <div class="cell">
 <div id="tbl-bivar-eda-chef-rating" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-bivar-eda-chef-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.6: Summary statistics for <code>avg_rating</code> by levels of <code>chef_john</code>
+Table&nbsp;3.7: Summary statistics for averae rating based on whether recipe was posted by Chef John
 </figcaption><div aria-describedby="tbl-bivar-eda-chef-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1515,10 +1522,10 @@ Table&nbsp;3.6: Summary statistics for <code>avg_rating</code> by levels of <cod
 <div class="cell-output-display">
 <div id="fig-bivar-eda-country-rating" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bivar-eda-country-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-bivar-eda-country-rating-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-42" title="Figure&nbsp;3.20: Relationship between country and avg_rating"><img src="03-eda_files/figure-html/fig-bivar-eda-country-rating-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-bivar-eda-country-rating-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-42" title="Figure&nbsp;3.20: Relationship between cuisine’s country/region of origin and average rating"><img src="03-eda_files/figure-html/fig-bivar-eda-country-rating-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bivar-eda-country-rating-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.20: Relationship between <code>country</code> and <code>avg_rating</code>
+Figure&nbsp;3.20: Relationship between cuisine’s country/region of origin and average rating
 </figcaption></figure>
 </div>
 </div>
@@ -1569,7 +1576,7 @@ Figure&nbsp;3.20: Relationship between <code>country</code> and <code>avg_rating
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bivar-eda-chef-season-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.21: Visualizations of the relationship between <code>chef_john</code> and <code>season</code>
+Figure&nbsp;3.21: Visualizations of the relationship between whether a recipe was posted by Chef John and the season
 </figcaption></figure>
 </div>
 <!--# maybe put barplot by itself then mosaic and stacked barplot on a row-->
@@ -1586,10 +1593,10 @@ Figure&nbsp;3.21: Visualizations of the relationship between <code>chef_john</co
 <div class="cell-output-display">
 <div id="fig-bivar-eda-country-season" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-bivar-eda-country-season-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-bivar-eda-country-season-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-46" title="Figure&nbsp;3.22: Segmented bar chart of country versus season"><img src="03-eda_files/figure-html/fig-bivar-eda-country-season-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-bivar-eda-country-season-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-46" title="Figure&nbsp;3.22: Segmented bar chart of cuisine’s country/region of origin and season"><img src="03-eda_files/figure-html/fig-bivar-eda-country-season-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bivar-eda-country-season-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.22: Segmented bar chart of <code>country</code> versus <code>season</code>
+Figure&nbsp;3.22: Segmented bar chart of cuisine’s country/region of origin and season
 </figcaption></figure>
 </div>
 </div>
@@ -1605,10 +1612,10 @@ Figure&nbsp;3.22: Segmented bar chart of <code>country</code> versus <code>seaso
 <div class="cell-output-display">
 <div id="fig-multivar-eda" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-multivar-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="03-eda_files/figure-html/fig-multivar-eda-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-47" title="Figure&nbsp;3.23: Multivariate EDA of avg_rating versus chef_john faceted by season"><img src="03-eda_files/figure-html/fig-multivar-eda-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="03-eda_files/figure-html/fig-multivar-eda-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-47" title="Figure&nbsp;3.23: Multivariate EDA of the relationship between average rating and whether a recipe was posted by Chef John, faceted by season"><img src="03-eda_files/figure-html/fig-multivar-eda-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-multivar-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.23: Multivariate EDA of <code>avg_rating</code> versus <code>chef_john</code> faceted by <code>season</code>
+Figure&nbsp;3.23: Multivariate EDA of the relationship between average rating and whether a recipe was posted by Chef John, faceted by season
 </figcaption></figure>
 </div>
 </div>
@@ -1624,7 +1631,7 @@ Figure&nbsp;3.23: Multivariate EDA of <code>avg_rating</code> versus <code>chef_
 <p>The <code>skim()</code> function in the <strong>skimr</strong> R package <span class="citation" data-cites="skimr">(<a href="references.html#ref-skimr" role="doc-biblioref">Waring et al. 2022</a>)</span> provides a summary of all the columns in a data frame or tibble. This function is particularly useful for initially checking the data (<a href="#sec-initial-check" class="quarto-xref"><span>Section 3.3</span></a>) and univariate data analysis (<a href="#sec-univar-eda" class="quarto-xref"><span>Section 3.4</span></a>). The code below produces a summary for each column in <code>recipes</code>. Different types of summary output are produced based on the column’s data type.</p>
 <div id="tbl-skim-recipes" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-skim-recipes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.7: <code>skim()</code> output for <code>recipes</code>
+Table&nbsp;3.8: <code>skim()</code> output for recipes data frame
 </figcaption><div aria-describedby="tbl-skim-recipes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">recipes</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">skim</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1637,7 +1644,7 @@ Table&nbsp;3.7: <code>skim()</code> output for <code>recipes</code>
 <span>  <span class="fu">skim</span><span class="op">(</span><span class="va">avg_rating</span>, <span class="va">season</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="tbl-skim-recipes-subset" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-skim-recipes-subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3.8: <code>skim()</code> output for <code>avg_rating</code> and <code>season</code>
+Table&nbsp;3.9: <code>skim()</code> output for average rating and season
 </figcaption><div aria-describedby="tbl-skim-recipes-subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
