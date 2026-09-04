@@ -167,8 +167,6 @@ We would read this aloud in English as the following:
 >
 > *and then add another bread slice.*
 
-<!--# does layer make sense here?-->
-
 A series of functions joined by pipes, like the sandwich example above, is called a **pipeline**. We will see pipelines throughout the next section as we introduce data manipulation with **dplyr.**
 
 ## Data manipulation with dplyr
@@ -239,8 +237,6 @@ The largest bill length in the data set is `r max(penguins$bill_length_mm, na.rm
 
 ::: {.analysis_in_practice latex=""}
 These examples illustrate a feature of **tidyverse** pipelines. **Pipeline** always start with a tibble (`penguins` in these examples) and produce a tibble by default. We can extract a vector of values using `pull()` at the end of pipeline.
-
-<br>
 
 For example, the code below extracts a vector of bill lengths sorted in ascending order.[^02-review-r-4]
 
@@ -442,7 +438,7 @@ The first part of the code establishes the base layer by specifying the tibble t
 
 ```{r}
 #| label: fig-ggplot-base
-#| fig-cap: Base layer for a ggplot2 visualization
+#| fig-cap: Base layer for a ggplot
 ggplot(data = penguins)
 ```
 
@@ -452,7 +448,7 @@ Let's map the aesthetics such `bill_length_mm` is on the x-axis and `flipper_len
 
 ```{r}
 #| label: fig-ggplot-variables
-#| fig-cap: Define variables for a ggplot2 visualization
+#| fig-cap: Variables on each axis defined
 ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm))
 ```
 
@@ -460,7 +456,7 @@ Now that we have the foundation, the next layer of the code defines the type of 
 
 ```{r}
 #| label: fig-ggplot-geom
-#| fig-cap: "Specify `geom` (plot type) for ggplot2 visualization"
+#| fig-cap: "Plot type (`geom`) specified"
 
 ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm)) + 
   geom_point()
@@ -474,7 +470,7 @@ The first plots are a histogram and a density plot. Both are used to visualize t
 
 ```{r}
 #| label: fig-histogram-density
-#| fig-cap: Geoms for single quantitative variable
+#| fig-cap: "Example geoms for a single quantitative variable"
 #| fig-subcap: 
 #|   - "Histogram"
 #|   - "Density plot"
@@ -504,13 +500,13 @@ Side-by-side boxplots are used to visualize the relationship between a quantitat
 
 ```{r}
 #| label: fig-boxplot
-#| fig-cap: Boxplot for quantitative and categorical variables
+#| fig-cap: Side-by-side boxplot to visualize relationship between a quantitative and categorical variable
 
 ggplot(data = penguins, aes(x = species, y = bill_length_mm)) + 
   geom_boxplot()
 ```
 
-These are a few of the many `geom`s available in **ggplot2**. A full list is available at [https://ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/index.html).
+These are a few of the many geoms available in **ggplot2**. A full list is available at [https://ggplot2.tidyverse.org](#0).
 
 ### Customizing plots {#sec-customize-plots}
 
@@ -524,7 +520,7 @@ The `labs()` function is used to create a new layer on the visualization with up
 
 ```{r}
 #| label: fig-ggplot-labels
-#| fig-cap: Scatterplot with axis labels and title
+#| fig-cap: Scatterplot with a title and axis labels
 
 
 ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm)) + 
@@ -544,7 +540,7 @@ We often apply the same aesthetic across an entire plot to make it more visually
 
 ```{r}
 #| label: fig-ggplot-color-points
-#| fig-cap: Color points on scatterplot 
+#| fig-cap: Scatterplot with colored points
 
 ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm)) + 
   geom_point(color = "steelblue") +
@@ -559,7 +555,7 @@ The aesthetics are defined inside `aes()` to map them to a particular variable (
 
 ```{r}
 #| label: fig-ggplot-color-by-species
-#| fig-cap: "Scatterplot with points colored by `species`"
+#| fig-cap: "Scatterplot with color by `species`"
 
 ggplot(data = penguins, aes(x = bill_length_mm, y = flipper_length_mm, 
                             color = species)) + 
@@ -682,7 +678,7 @@ The argument `values = pnw_palette("Bay", 3)` indicates that the colors are mapp
 
 ```{r}
 #| label: fig-color-palette
-#| fig-cap: Scatterplot with color palette from PNWColors 
+#| fig-cap: "Scatterplot using Bay color palette from  **PNWColors** package" 
 
 library(PNWColors)
 
@@ -702,7 +698,7 @@ We may also wish to create a color palette. For example, here we apply the palet
 
 ```{r}
 #| label: fig-custom-color-palette
-#| fig-cap: Scatterplot with user-defined color palette
+#| fig-cap: Scatterplot using user-defined color palette
 
 my_color_palette <- c("#F87666", "#58B09C", "#7272AB")
 
@@ -739,9 +735,11 @@ The **code chunk** is where we put all code that is executed when the document i
 The **narrative** is written in the white space of the document. The visual editor in RStudio and Positron makes formatting the narrative (e.g, making text bold or adding lists) similar to formatting in word processors such as Google Docs, Apple Pages, or Microsoft Word. The visual editor also makes it easy to add images and tables within the narrative.
 
 ::: {#fig-quarto-render layout-ncol="2"}
-![Rendering in RStudio](images/02-quarto-render-rstudio.jpg){#fig-quarto-render-1}
+![RStudio](images/02-quarto-render-rstudio.jpg){#fig-quarto-render-1}
 
-![Rendering in Positron](images/02-quarto-render-positron.jpg){#fig-quarto-render-2}
+![Positron](images/02-quarto-render-positron.jpg){#fig-quarto-render-2 width="2310"}
+
+Rendering Quarto document in RStudio and Positron
 :::
 
 Throughout the analysis workflow, we regularly render the Quarto document to see the updated results and narrative. Documents are rendered by clicking the "Render" button in RStudio ([@fig-quarto-render-1]) and the "Preview" button in Positron ([@fig-quarto-render-2]). We also see the resulting PDFs in the Viewer pane of each IDE. When a document is rendered, all code and narrative are executed sequentially from beginning to end. Therefore, all necessary code must be in the Quarto document to render properly; code in the console is not executed when a document is rendered.
