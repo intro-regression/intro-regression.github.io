@@ -77,19 +77,21 @@ The univariate distributions of `critics_score` and `audience_score` are visuali
 
 ```{r}
 #| label: fig-movies-univariate
-#| fig-cap: "Univariate distributions of `critics_score` and `audience_score`"
+#| fig-cap: "Univariate distribution for the percentage of critics and the percentage of audience members who gave favorable reviews of the movie" 
 #| fig-subcap: 
 #|   - Critics score
-#|   - Adience score
+#|   - Audience score
 #| echo: false
 
 ggplot(data = movie_scores, aes(x = critics_score)) + 
-  geom_histogram(binwidth = 10, fill = "steelblue", color = "black" ) + 
-  labs(y = "Count")
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "black" ) + 
+  labs(y = "Count", 
+       x = "Critics score")
 
 ggplot(data = movie_scores, aes(x = audience_score)) + 
-  geom_histogram(binwidth = 10, fill = "steelblue", color = "black") + 
-  labs( y = "Count")
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "black") + 
+  labs( y = "Count", 
+        x = "Audience score")
 ```
 
 ```{r}
@@ -121,7 +123,7 @@ Now let's look at the relationship between `critics_score` and `audience_score`.
 ```{r}
 #| label: fig-movies-bivariate
 #| echo: false
-#| fig-cap: "Scatterplot of `critics_score` and `audience_score`"
+#| fig-cap: "Scatterplot of the relationship between the percentage of critics and percentage of audience members who gave a favorable review for a movie"
 
 movie_cor <- round(cor(movie_scores$critics_score, movie_scores$audience_score), 2)
 
@@ -295,7 +297,7 @@ There are many possible regression lines (infinitely many, in fact) that we coul
 ```{r}
 #| label: fig-many-lines
 #| echo: false
-#| fig-cap: "Potential regression lines for the relationship between `critics_score` and `audience_score`"
+#| fig-cap: "Possible regression lines for the relationship between the critics score and audience score"
 
 ggplot(data = movie_scores, mapping = aes(x = critics_score, y = audience_score)) +
   geom_point(alpha = 0.4) + 
@@ -312,7 +314,7 @@ The residuals, represented by the vertical dotted lines in @fig-scatterplot-resi
 ```{r}
 #| label: fig-scatterplot-resid
 #| echo: false
-#| fig-cap: "Regression line of the relationship between `critics_score` and `audience_score` with residuals"
+#| fig-cap: "Regression line of the relationship between critics score and audience score with corresponding residuals"
 
 m <- lm(audience_score ~ critics_score, data = movie_scores)
 ggplot(data = movie_scores, mapping = aes(x = critics_score, y = audience_score)) + 
@@ -437,11 +439,11 @@ $$\begin{aligned}
 &= \textbf{77.988} \\
 \end{aligned}$$
 
-From the snapshot of the Barbie Rotten Tomatoes page (@fig-barbie), we see the actual audience score is 83[^04-slr-8]. Therefore, the model under predicted the audience score by about 5 points (83 - 77.988). Perhaps this isn't surprising given this film's massive box office success! <!--# do i need a citation for this statement?-->
+From the snapshot of the *Barbie* Rotten Tomatoes page (@fig-barbie), we see the actual audience score is 83[^04-slr-8]. Therefore, the model under predicted the audience score by about 5 points (83 - 77.988). Perhaps this isn't surprising given this film's massive box office success! <!--# do i need a citation for this statement?-->
 
 [^04-slr-8]: Source: https://www.rottentomatoes.com/m/barbie Accessed on August 29, 2023.
 
-![Source: https://www.rottentomatoes.com/m/barbie (accessed August 29, 2023)](images/04-barbie.png){#fig-barbie fig-align="center"}
+![Ratings for *Barbie* on Rotten Tomatoes, as of August 29, 2023. (https://www.rottentomatoes.com/m/barbie)](images/04-barbie.png){#fig-barbie fig-align="center"}
 
 ::: {.yourturn latex=""}
 The movie *Asteroid City* was released in theaters on June 23, 2023. The critics score for this movie was 75[^04-slr-9].
