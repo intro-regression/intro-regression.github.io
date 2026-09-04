@@ -128,7 +128,7 @@ See @zarulli2021health for a full codebook.
 
 ```{r}
 #| label: fig-life-exp-eda
-#| fig-cap: Distributions of variables life expectancy analysis
+#| fig-cap: Distributions of life expectancy and income inquality in data from @zarulli2021health
 #| fig-subcap: 
 #|  - "Life expectancy"
 #|  - "Income inequality"
@@ -149,7 +149,7 @@ ggplot(data = life_exp, aes(x = income_inequality)) +
 
 ```{r}
 #| label: tbl-life-exp-eda
-#| tbl-cap: Summary statistics of life expectancy and income inequality"
+#| tbl-cap: Summary statistics for life expectancy and income inequality"
 
 
 life_exp |>
@@ -200,7 +200,7 @@ $$\widehat{\text{life\_exp}} = 81.096 -0.562 \times \text{income\_inequality} + 
 
 ```{r}
 #| label: fig-life-exp-estimated
-#| fig-cap: Visual representation of the estimated regression model 
+#| fig-cap: Visualization of model using income inequality and education to explain variability in life expectancy 
 
 ggplot(data = life_exp, aes(x = income_inequality, y = life_exp, color = education)) + 
   geom_point() + 
