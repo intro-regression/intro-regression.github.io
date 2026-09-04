@@ -179,7 +179,7 @@ Statistical software typically has functionality to view a summary of the data. 
 
 ```{r}
 #| label: tbl-glimpse-recipe
-#| tbl-cap: "Summary of `recipes` data"
+#| tbl-cap: " Glimpse of `recipes` data\""
 
 glimpse(recipes)
 ```
@@ -235,7 +235,7 @@ recipes <- recipes |>
 
 ```{r}
 #| label: tbl-glimpse-recipes-2
-#| tbl-cap: "Summary of `recipes` data with correct formats for `chef_john` and `month`"
+#| tbl-cap: "Glimpse of `recipes` data with correct formats for `chef_john` and `month`"
 
 glimpse(recipes)
 ```
@@ -271,7 +271,7 @@ The bar chart in @fig-univar-month displays the frequencies, but perhaps we are 
 
 ```{r}
 #| label: fig-univar-eda-month-prop
-#| fig-cap: "Visualizations of distribution of `month` with proportions"
+#| fig-cap: "Visualizations of the distribution of `month` using proportions"
 #| fig-subcap: 
 #|   - "Bar chart"
 #|   - "Pie chart"
@@ -340,7 +340,7 @@ Let's use the visualizations and summaries introduced in this section to describ
 
 ```{r}
 #| label: fig-univar-season 
-#| fig-cap: "Distribution of `season`"
+#| fig-cap: "Visualizations of the distribution of `season`"
 #| fig-subcap: 
 #|   - "Bar chart"
 #|   - "Pie chart"
@@ -425,7 +425,7 @@ The width of the bins on a histogram can make it easier or harder to see the fea
 
 ```{r}
 #| label: fig-histogram-binwidth
-#| fig-cap: "Different histogram bin widths"
+#| fig-cap: "Example histogram bin widths"
 #| fig-subcap: 
 #|   - Default
 #|   - Small
@@ -492,7 +492,7 @@ The description of **shape** includes the skewness and number of modes.
 
 ```{r}
 #| label: fig-shape-skew
-#| fig-cap: Skewness of distribution
+#| fig-cap: Examples of distribution skewness
 #| fig-subcap: 
 #|   - "Left-skewed"
 #|   - "Right-skewed"
@@ -538,7 +538,7 @@ The skewness is described as left-skewed, right-skewed, or symmetric. @fig-shape
 
 ```{r}
 #| label: fig-shape-mode
-#| fig-cap: Modality of distribution
+#| fig-cap: Examples of distribution modality
 #| fig-subcap: 
 #|   - "Unimodal"
 #|   - "Bimodal"
@@ -736,7 +736,7 @@ About 95% of the observations have cook times of 150 minutes or less, so we crea
 
 ```{r}
 #| label: fig-univar-eda-cook-time-zoom
-#| fig-cap: "Original versus zoomed-in distribution of `cook_time`" 
+#| fig-cap: "Original versus truncated distribution of `cook_time`" 
 #| fig-subcap: 
 #|   - "All observations"
 #|   - "Cook time 150 minutes or less"
@@ -754,7 +754,7 @@ recipes |>
   theme_bw()
 ```
 
-In @fig-univar-eda-cook-time-zoom, we compare a visualization of the full distribution with one that only includes recipes with cook time 150 minutes or less. For example, in @fig-univar-eda-cook-time-zoom-2, we get a lot of detail about the distribution of recipes with cook time 50 minutes or less. In contrast, all these recipes are contained in the first three bars of the histogram in @fig-univar-eda-cook-time-zoom-1.
+In @fig-univar-eda-cook-time-zoom, we compare a visualization of the full distribution with a truncated distribution that only includes recipes with cook time 150 minutes or less. For example, in @fig-univar-eda-cook-time-zoom-2, we get a lot of detail about the distribution of recipes with cook time 50 minutes or less. In contrast, all these recipes are contained in the first three bars of the histogram in @fig-univar-eda-cook-time-zoom-1.
 
 ## Relationship between two variables {#sec-bivar-eda}
 
@@ -770,7 +770,7 @@ A **scatterplot** is a plot for two quantitative variables, such that one variab
 
 ```{r}
 #| label: fig-bivar-eda-protein-calories
-#| fig-cap: "Relationship between `calories` and `protein`"
+#| fig-cap: "Scatterplot of the relationship between `calories` and `protein`"
 
 ggplot(data = recipes, aes(x = calories, y = protein)) + 
   geom_point(alpha = 0.5) + 
@@ -790,7 +790,7 @@ In bivariate EDA, the **shape** is a description of the overall trend of the poi
 
 ```{r}
 #| label: fig-bivariate-shape
-#| fig-cap: Shapes of bivariate relationships
+#| fig-cap: Example shapes of bivariate relationships
 #| fig-subcap: 
 #|   - "Linear"
 #|   - "Quadratic"
@@ -851,7 +851,7 @@ If the shape of the relationship is **monotonic**, always increasing or always d
 
 ```{r}
 #| label: fig-bivariate-direction 
-#| fig-cap: Direction of bivariate relationships
+#| fig-cap: Example directions of bivariate relationships
 #| fig-subcap: 
 #|   - "Positive"
 #|   - "Negative"
@@ -904,7 +904,7 @@ The **strength** of the relationship between two variables is a measure of how c
 
 ```{r}
 #| label: fig-bivariate-strength
-#| fig-cap: Strength of bivariate relationships
+#| fig-cap: Example strengths of bivariate relationships
 #| fig-subcap: 
 #|   - "Strong"
 #|   - "Moderate"
@@ -1007,7 +1007,7 @@ It is important to use visualizations alongside summary statistics to provide ad
 
 ```{r}
 #| label: fig-low-corr-examples
-#| fig-cap: Relationships with low correlation 
+#| fig-cap: Example relationships with low correlation 
 #| fig-subcap: 
 #| - "|r| = 0.12"
 #| - "|r| = -0.12"
@@ -1161,7 +1161,7 @@ One thing that is not clear from the visualizations is the number of observation
 
 ```{r}
 #| label: tbl-bivar-eda-chef-rating
-#| tbl-cap: "Summary statistics of `avg_rating` for each level of `chef_john`"
+#| tbl-cap: "Summary statistics for `avg_rating` by levels of `chef_john`"
 skim_results <- recipes |> 
   group_by(chef_john) |>
   skim(avg_rating) |>
@@ -1214,7 +1214,7 @@ In @sec-intro-recipes we introduced Chef John, the most prolific poster on allre
 
 ```{r}
 #| label: fig-bivar-eda-chef-season 
-#| fig-cap: "Relationship between `chef_john` and `season`"
+#| fig-cap: "Visualizations of the relationship between `chef_john` and `season`"
 #| fig-subcap: 
 #|   - "Grouped bar chart"
 #|   - "Segmented bar plot"
