@@ -481,19 +481,10 @@ window.Quarto = {
 <figcaption>Propithecus coquereli (PCOQ)</figcaption></figure>
 </div>
 </div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="images/06-vrub-lemur.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Varecia rubra (VRUB)"><img src="images/06-vrub-lemur.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
-</figure>
-</div>
-<figcaption>Varecia rubra (VRUB)</figcaption></figure>
-</div>
-</div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.1: Types of lemurs represented in the data set. Images from <span class="citation" data-cites="duke2025meetlemurs">Duke Lemur Center (<a href="references.html#ref-duke2025meetlemurs" role="doc-biblioref">n.d.</a>)</span>.
+Figure&nbsp;7.1: Three lemur taxa represented in the data. Images from <span class="citation" data-cites="duke2025meetlemurs">Duke Lemur Center (<a href="references.html#ref-duke2025meetlemurs" role="doc-biblioref">n.d.</a>)</span>.
 </figcaption></figure>
 </div>
 <!--# check that I can actually use these images from Duke Lemur Website: https://lemur.duke.edu/discover/meet-the-lemurs/ -->
@@ -504,9 +495,12 @@ Figure&nbsp;7.1: Types of lemurs represented in the data set. Images from <span 
 <li>
 <code>taxon</code> : Code made as a combination of the lemur’s genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxon:
 <ul>
-<li><p><code>ERUF</code>: Eulemur rufus, commonly known as Red-fronted brown lemur</p></li>
-<li><p><code>PCOQ</code>: Propithecus coquereli, commonly known as Coquerel’s sifaka</p></li>
-<li><p><code>VRUB</code>: Varecia rubra, commonly known as Red ruffed lemur</p></li>
+<li>
+<code>ERUF</code>: Eulemur rufus, commonly known as Red-fronted brown lemur</li>
+<li>
+<code>PCOQ</code>: Propithecus coquereli, commonly known as Coquerel’s sifaka</li>
+<li>
+<code>VRUB</code>: Varecia rubra, commonly known as Red ruffed lemur</li>
 </ul>
 </li>
 <li>
@@ -527,10 +521,10 @@ Figure&nbsp;7.1: Types of lemurs represented in the data set. Images from <span 
 <div class="cell-output-display">
 <div id="fig-mlr-response" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-mlr-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-response-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;7.2: Univariate distribution of weight of young lemurs"><img src="07-mlr_files/figure-html/fig-mlr-response-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-response-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;7.2: Univariate distribution of the weight of young lemurs"><img src="07-mlr_files/figure-html/fig-mlr-response-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.2: Univariate distribution of <code>weight</code> of young lemurs
+Figure&nbsp;7.2: Univariate distribution of the weight of young lemurs
 </figcaption></figure>
 </div>
 </div>
@@ -538,7 +532,7 @@ Figure&nbsp;7.2: Univariate distribution of <code>weight</code> of young lemurs
 <div class="cell">
 <div id="tbl-mlr-response" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mlr-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.1: Summary statistics for <code>weight</code>
+Table&nbsp;7.1: Summary statistics for the weight of young lemurs
 </figcaption><div aria-describedby="tbl-mlr-response-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -577,20 +571,20 @@ Table&nbsp;7.1: Summary statistics for <code>weight</code>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-pred-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-pred-var-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-pred-var-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-pred-var-1.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(a): age"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-pred-var-1.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(a): Age (in months)"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-pred-var-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>age</code>
+(a) Age (in months)
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-pred-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-pred-var-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-pred-var-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-pred-var-2.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(b): taxon"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-pred-var-2.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(b): Taxon"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-pred-var-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>taxon</code>
+(b) Taxon
 </figcaption></figure>
 </div>
 </div>
@@ -599,33 +593,33 @@ Table&nbsp;7.1: Summary statistics for <code>weight</code>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-pred-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-pred-var-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-pred-var-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-pred-var-3.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(c): sex"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-pred-var-3.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(c): Sex"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-pred-var-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) <code>sex</code>
+(c) Sex
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-pred-var" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-pred-var-4" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-pred-var-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-pred-var-4.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(d): litter_size"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-pred-var-4.png" class="lightbox" data-gallery="fig-mlr-pred-var" title="Figure&nbsp;7.3&nbsp;(d): Litter size"><img src="07-mlr_files/figure-html/fig-mlr-pred-var-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-pred-var"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-pred-var-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(d) <code>litter_size</code>
+(d) Litter size
 </figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mlr-pred-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.3: Univariate distributions of predictor variables
+Figure&nbsp;7.3: Univariate distributions fo the predictor variables
 </figcaption></figure>
 </div>
 <div class="cell">
 <div id="tbl-mlr-pred-var" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mlr-pred-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.2: Summary statistics of quantitative predictors
+Table&nbsp;7.2: Summary statistics for the quantitative predictor variables
 </figcaption><div aria-describedby="tbl-mlr-pred-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -682,20 +676,20 @@ The distribution of <code>taxon</code> in <a href="#fig-mlr-pred-var-2" class="q
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-bivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-bivariate-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-bivariate-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-bivariate-1.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(a): weight vs.&nbsp;age"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-bivariate-1.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(a): weight versus age"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-bivariate-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>weight</code> vs.&nbsp;<code>age</code>
+(a) weight versus age
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-bivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-bivariate-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-bivariate-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-bivariate-2.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(b): weight vs.&nbsp;taxon"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-bivariate-2.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(b): weight versus taxon"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-bivariate-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>weight</code> vs.&nbsp;<code>taxon</code>
+(b) weight versus taxon
 </figcaption></figure>
 </div>
 </div>
@@ -704,20 +698,20 @@ The distribution of <code>taxon</code> in <a href="#fig-mlr-pred-var-2" class="q
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-bivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-bivariate-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-bivariate-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-bivariate-3.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(c): weight vs.&nbsp;sex"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-bivariate-3.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(c): weight versus sex"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-bivariate-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) <code>weight</code> vs.&nbsp;<code>sex</code>
+(c) weight versus sex
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-mlr-bivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-mlr-bivariate-4" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-mlr-bivariate-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-mlr-bivariate-4.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(d): weight vs.&nbsp;litter_size"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
+<a href="07-mlr_files/figure-html/fig-mlr-bivariate-4.png" class="lightbox" data-gallery="fig-mlr-bivariate" title="Figure&nbsp;7.4&nbsp;(d): weight versus litter size"><img src="07-mlr_files/figure-html/fig-mlr-bivariate-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-mlr-bivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-mlr-bivariate-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(d) <code>weight</code> vs.&nbsp;<code>litter_size</code>
+(d) weight versus litter size
 </figcaption></figure>
 </div>
 </div>
@@ -804,7 +798,7 @@ One way to practice using the matrix representation of the model is to compare t
 <div class="cell">
 <div id="tbl-lemurs-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.3: Output of the model using various characteristics to explain variability in weight of young lemurs
+Table&nbsp;7.3: Multiple linear regression model age, sex, taxon, and litter size to explain variability in the weight of young lemurs
 </figcaption><div aria-describedby="tbl-lemurs-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -871,7 +865,7 @@ Table&nbsp;7.3: Output of the model using various characteristics to explain var
 <div class="cell">
 <div id="tbl-lemurs-age-model-slr" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-age-model-slr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.4: Simple linear regression model of <code>weight</code> versus <code>age</code>
+Table&nbsp;7.4: Simple linear regression model using age to explain variability in the weight of young lemurs
 </figcaption><div aria-describedby="tbl-lemurs-age-model-slr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -930,7 +924,7 @@ We write the interpretation of the coefficients in a multiple linear regression 
 <div class="cell">
 <div id="tbl-lemurs-model-age-years" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-age-years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.5: Model predicting lemurs weight with <code>age</code> recorded in years.
+Table&nbsp;7.5: Model using age recorded in years
 </figcaption><div aria-describedby="tbl-lemurs-model-age-years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1075,7 +1069,7 @@ Table&nbsp;7.6: Indicator variables for taxon
 <div class="cell-output-display">
 <div id="fig-lemur-intercepts" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemur-intercepts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-lemur-intercepts-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;7.5: Different intercepts for each taxon. Purple dotted line = ERUF, Pink dashed line = PCOQ, Yellow sold line = VRUF"><img src="07-mlr_files/figure-html/fig-lemur-intercepts-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="07-mlr_files/figure-html/fig-lemur-intercepts-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;7.5: Different intercepts for each taxon. Purple dotted line = ERUF, Pink dashed line = PCOQ, Yellow sold line = VRUF"><img src="07-mlr_files/figure-html/fig-lemur-intercepts-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemur-intercepts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7.5: Different intercepts for each taxon. Purple dotted line = ERUF, Pink dashed line = PCOQ, Yellow sold line = VRUF
@@ -1151,33 +1145,33 @@ Figure&nbsp;7.5: Different intercepts for each taxon. Purple dotted line = ERUF,
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-centering" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-centering-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-centering-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-centering-1.png" class="lightbox" data-gallery="fig-centering" title="Figure&nbsp;7.6&nbsp;(a): Distribution of litter_size"><img src="07-mlr_files/figure-html/fig-centering-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering"></a>
+<a href="07-mlr_files/figure-html/fig-centering-1.png" class="lightbox" data-gallery="fig-centering" title="Figure&nbsp;7.6&nbsp;(a): Distribution of litter size"><img src="07-mlr_files/figure-html/fig-centering-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-centering-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) Distribution of <code>litter_size</code>
+(a) Distribution of litter size
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-centering" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-centering-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-centering-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-centering-2.png" class="lightbox" data-gallery="fig-centering" title="Figure&nbsp;7.6&nbsp;(b): Distribution of litter_size_siblings"><img src="07-mlr_files/figure-html/fig-centering-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering"></a>
+<a href="07-mlr_files/figure-html/fig-centering-2.png" class="lightbox" data-gallery="fig-centering" title="Figure&nbsp;7.6&nbsp;(b): Distribution of the number of siblings"><img src="07-mlr_files/figure-html/fig-centering-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-centering-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) Distribution of <code>litter_size_siblings</code>
+(b) Distribution of the number of siblings
 </figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-centering-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.6: Original versus centered values of <code>litter_size</code>
+Figure&nbsp;7.6: Original versus centered values of litter size
 </figcaption></figure>
 </div>
 <div class="cell">
 <div id="tbl-centering" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-centering-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.7: Distributions of <code>litter_size</code> vs <code>litter_size_siblings</code>
+Table&nbsp;7.7: Summary statistics for litter size and number of siblings
 </figcaption><div aria-describedby="tbl-centering-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1228,20 +1222,20 @@ Table&nbsp;7.7: Distributions of <code>litter_size</code> vs <code>litter_size_s
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-centering-bivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-centering-bivariate-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-centering-bivariate-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-centering-bivariate-1.png" class="lightbox" data-gallery="fig-centering-bivariate" title="Figure&nbsp;7.7&nbsp;(a): weight versus litter_size"><img src="07-mlr_files/figure-html/fig-centering-bivariate-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering-bivariate"></a>
+<a href="07-mlr_files/figure-html/fig-centering-bivariate-1.png" class="lightbox" data-gallery="fig-centering-bivariate" title="Figure&nbsp;7.7&nbsp;(a): weight versus litter size"><img src="07-mlr_files/figure-html/fig-centering-bivariate-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering-bivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-centering-bivariate-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>weight</code> versus <code>litter_size</code>
+(a) weight versus litter size
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-centering-bivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-centering-bivariate-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-centering-bivariate-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-centering-bivariate-2.png" class="lightbox" data-gallery="fig-centering-bivariate" title="Figure&nbsp;7.7&nbsp;(b): weight versus litter_size_siblings"><img src="07-mlr_files/figure-html/fig-centering-bivariate-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering-bivariate"></a>
+<a href="07-mlr_files/figure-html/fig-centering-bivariate-2.png" class="lightbox" data-gallery="fig-centering-bivariate" title="Figure&nbsp;7.7&nbsp;(b): weight versus number of siblings"><img src="07-mlr_files/figure-html/fig-centering-bivariate-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-centering-bivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-centering-bivariate-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>weight</code> versus <code>litter_size_siblings</code>
+(b) weight versus number of siblings
 </figcaption></figure>
 </div>
 </div>
@@ -1257,7 +1251,7 @@ Figure&nbsp;7.7: Weight versus original and centered values of litter size
 <div class="cell">
 <div id="tbl-age-cent-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-age-cent-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.8: Distributions of <code>age</code> and <code>age_cent</code>
+Table&nbsp;7.8: Summary statistics for age and mean-centered age
 </figcaption><div aria-describedby="tbl-age-cent-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1307,7 +1301,7 @@ Table&nbsp;7.8: Distributions of <code>age</code> and <code>age_cent</code>
 <div class="cell">
 <div id="tbl-lemurs-model-centered" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-centered-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.9: Model for lemurs data with centered quantitative predictors
+Table&nbsp;7.9: Model of weight using centered quantitative predictors
 </figcaption><div aria-describedby="tbl-lemurs-model-centered-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1373,7 +1367,7 @@ Table&nbsp;7.9: Model for lemurs data with centered quantitative predictors
 <div class="cell">
 <div id="tbl-lemurs-model-compare" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.10: Model coefficients for original model and model with centered quantitative predictors
+Table&nbsp;7.10: Model coefficients for original model (<a href="#tbl-lemurs-model" class="quarto-xref">Table&nbsp;<span>7.3</span></a>) and model with centered quantitative predictors (<a href="#tbl-lemurs-model-centered" class="quarto-xref">Table&nbsp;<span>7.9</span></a>)
 </figcaption><div aria-describedby="tbl-lemurs-model-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1513,7 +1507,7 @@ Table&nbsp;7.11: Model with standardized coefficients for quantitative predictor
 <div class="cell">
 <div id="tbl-lemurs-model-compare-pt2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-model-compare-pt2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.12: Model coefficients for original model, model with centered quantitiatve predictors, and model with standardized quantitative predictors
+Table&nbsp;7.12: Model coefficients for original model (<a href="#tbl-lemurs-model" class="quarto-xref">Table&nbsp;<span>7.3</span></a>), model with centered quantitiatve predictors (<a href="#tbl-lemurs-model-centered" class="quarto-xref">Table&nbsp;<span>7.9</span></a>), and model with standardized quantitative predictors (<a href="#tbl-lemurs-model-std" class="quarto-xref">Table&nbsp;<span>7.11</span></a>)
 </figcaption><div aria-describedby="tbl-lemurs-model-compare-pt2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1597,10 +1591,10 @@ Table&nbsp;7.12: Model coefficients for original model, model with centered quan
 <div class="cell-output-display">
 <div id="fig-lemurs-age-taxon-int" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-age-taxon-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-lemurs-age-taxon-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="Figure&nbsp;7.8: Multivariate EDA to explore potential interaction effect between age and taxon"><img src="07-mlr_files/figure-html/fig-lemurs-age-taxon-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="07-mlr_files/figure-html/fig-lemurs-age-taxon-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;7.8: Multivariate EDA to explore potential interaction effect between age and taxon"><img src="07-mlr_files/figure-html/fig-lemurs-age-taxon-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-age-taxon-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.8: Multivariate EDA to explore potential interaction effect between <code>age</code> and <code>taxon</code>
+Figure&nbsp;7.8: Multivariate EDA to explore potential interaction effect between age and taxon
 </figcaption></figure>
 </div>
 </div>
@@ -1612,7 +1606,7 @@ Figure&nbsp;7.8: Multivariate EDA to explore potential interaction effect betwee
 <div class="cell">
 <div id="tbl-lemurs-age-taxon-int-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-age-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.13: Output for regression model including interaction between age and taxon
+Table&nbsp;7.13: Model that includes interaction between age and taxon
 </figcaption><div aria-describedby="tbl-lemurs-age-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1712,10 +1706,10 @@ Table&nbsp;7.13: Output for regression model including interaction between age a
 <div class="cell-output-display">
 <div id="fig-lemurs-taxon-sex-int" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-taxon-sex-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-lemurs-taxon-sex-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19" title="Figure&nbsp;7.9: weight versus sex by taxon"><img src="07-mlr_files/figure-html/fig-lemurs-taxon-sex-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="07-mlr_files/figure-html/fig-lemurs-taxon-sex-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="Figure&nbsp;7.9: Relationship between weight and sex, faceted by taxon"><img src="07-mlr_files/figure-html/fig-lemurs-taxon-sex-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-taxon-sex-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.9: <code>weight</code> versus <code>sex</code> by <code>taxon</code>
+Figure&nbsp;7.9: Relationship between weight and sex, faceted by taxon
 </figcaption></figure>
 </div>
 </div>
@@ -1725,7 +1719,7 @@ Figure&nbsp;7.9: <code>weight</code> versus <code>sex</code> by <code>taxon</cod
 <div class="cell">
 <div id="tbl-lemurs-sex-taxon-int-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-sex-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.14: Output for regression model including interaction between <code>sex</code> and <code>taxon</code>
+Table&nbsp;7.14: Model including interaction between sex and taxon
 </figcaption><div aria-describedby="tbl-lemurs-sex-taxon-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1825,10 +1819,10 @@ Table&nbsp;7.14: Output for regression model including interaction between <code
 <div class="cell-output-display">
 <div id="fig-lemurs-age-litter-int" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-lemurs-age-litter-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="07-mlr_files/figure-html/fig-lemurs-age-litter-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20" title="Figure&nbsp;7.10: weight versus litter_size by age"><img src="07-mlr_files/figure-html/fig-lemurs-age-litter-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="07-mlr_files/figure-html/fig-lemurs-age-litter-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19" title="Figure&nbsp;7.10: Relationship between weight versus litter size by age"><img src="07-mlr_files/figure-html/fig-lemurs-age-litter-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lemurs-age-litter-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7.10: <code>weight</code> versus <code>litter_size</code> by <code>age</code>
+Figure&nbsp;7.10: Relationship between weight versus litter size by age
 </figcaption></figure>
 </div>
 </div>
@@ -1838,7 +1832,7 @@ Figure&nbsp;7.10: <code>weight</code> versus <code>litter_size</code> by <code>a
 <div class="cell">
 <div id="tbl-lemurs-age-litter-int-model" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lemurs-age-litter-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7.15: Output for regression model including interaction between <code>age</code> and <code>litter_size</code>
+Table&nbsp;7.15: Model including interaction between age and litter size
 </figcaption><div aria-describedby="tbl-lemurs-age-litter-int-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">

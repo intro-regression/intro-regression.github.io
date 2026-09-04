@@ -91,9 +91,7 @@ About 95% of lemur species are at risk of extinction, so it is important for res
 
 ![Propithecus coquereli (PCOQ)](images/06-pcoq-lemur.jpg){fig-align="center"}
 
-![Varecia rubra (VRUB)](images/06-vrub-lemur.png){fig-align="center"}
-
-Types of lemurs represented in the data set. Images from @duke2025meetlemurs.
+Three lemur taxa represented in the data. Images from @duke2025meetlemurs.
 :::
 
 <!--# check that I can actually use these images from Duke Lemur Website: https://lemur.duke.edu/discover/meet-the-lemurs/ -->
@@ -103,9 +101,7 @@ The data are in `lemurs-sample-young.csv`. This analysis in this chapter focuses
 - `weight`: Weight of the lemur (in grams)
 - `taxon` : Code made as a combination of the lemur's genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxon:
   - `ERUF`: Eulemur rufus, commonly known as Red-fronted brown lemur
-
   - `PCOQ`: Propithecus coquereli, commonly known as Coquerel's sifaka
-
   - `VRUB`: Varecia rubra, commonly known as Red ruffed lemur
 - `sex` : Sex of the lemur (`M`: Male, `F`: Female)
 - `age`: Age of the lemur when weight was recorded (in months)
@@ -124,7 +120,7 @@ The distribution and summary statistics for the response variable `weight` are s
 ```{r}
 #| echo: false
 #| label: fig-mlr-response
-#| fig-cap: "Univariate distribution of `weight` of young lemurs"
+#| fig-cap: "Univariate distribution of the weight of young lemurs"
 
 ggplot(data = lemurs, aes(x = weight)) + 
   geom_histogram(color = "black", fill = "steelblue") + 
@@ -135,7 +131,7 @@ ggplot(data = lemurs, aes(x = weight)) +
 
 ```{r}
 #| label: tbl-mlr-response
-#| tbl-cap: "Summary statistics for `weight`"
+#| tbl-cap: "Summary statistics for the weight of young lemurs"
 #| echo: false
 
 
@@ -153,39 +149,39 @@ Now let's look at the distributions of the predictors in this analysis. The visu
 ```{r}
 #| echo: false
 #| label: fig-mlr-pred-var
-#| fig-cap: "Univariate distributions of predictor variables"
+#| fig-cap: "Univariate distributions fo the predictor variables"
 #| fig-subcap: 
-#|  - "`age`"
-#|  - "`taxon`"
-#|  - "`sex`" 
-#|  - "`litter_size`"
+#|  - "Age (in months)"
+#|  - "Taxon"
+#|  - "Sex" 
+#|  - "Litter size"
 #| layout-ncol: 2
 
 ggplot(data = lemurs, aes(x = age)) + 
   geom_histogram(fill = "steelblue", color = "black") + 
-  labs(x = "Age at weight (in months)", 
+  labs(x = "", 
        y = "")
 
 ggplot(data = lemurs, aes(x = taxon))+ 
   geom_bar(fill = "steelblue", color = "black") +
-  labs(x = "Taxon", 
+  labs(x = "", 
        y = "Count") 
 
 ggplot(data = lemurs, aes(x = sex)) +
   geom_bar(fill = "steelblue", color = "black") + 
-  labs(x = "Sex", 
+  labs(x = "", 
        y = "")
 
 ggplot(data = lemurs, aes(x = litter_size)) + 
   geom_histogram(fill = "steelblue", color = "black") + 
-  labs(x = "Litter size", 
+  labs(x = "", 
        y = "Count")
 ```
 
 ```{r}
 #| echo: false
 #| label: tbl-mlr-pred-var
-#| tbl-cap: "Summary statistics of quantitative predictors"
+#| tbl-cap: "Summary statistics for the quantitative predictor variables"
 
 lemurs |>
   skim(litter_size, age) |>
@@ -213,15 +209,15 @@ Now, we conduct bivariate exploratory data analysis, shown in @fig-mlr-bivariate
 #| label: fig-mlr-bivariate
 #| fig-cap: Bivariate exploratory data analysis
 #| fig-subcap:
-#|  - "`weight` vs. `age`"
-#|  - "`weight` vs. `taxon`"
-#|  - "`weight` vs. `sex`" 
-#|  - "`weight` vs. `litter_size`"
+#|  - "weight versus age"
+#|  - "weight versus taxon"
+#|  - "weight versus sex" 
+#|  - "weight versus litter size"
 #| layout-ncol: 2
 
 ggplot(data = lemurs, aes(x = age, y = weight)) + 
   geom_point() +
-  labs(x = "Age at weight (in months)", 
+  labs(x = "Age (in months)", 
        y = "Weight in grams")
 
 ggplot(data = lemurs, aes(x = taxon, y = weight))+ 
@@ -362,7 +358,7 @@ The fitted model for explaining variability in the weight of young lemurs is in 
 
 ```{r}
 #| label: tbl-lemurs-model
-#| tbl-cap: Output of the model using various characteristics to explain variability in weight of young lemurs
+#| tbl-cap: Multiple linear regression model age, sex, taxon, and litter size to explain variability in the weight of young lemurs
 #| echo: false
 
 lemurs_model <- lm(weight ~ age + sex + 
@@ -386,7 +382,7 @@ The interpretation for coefficients of quantitative predictors is similar to the
 
 ```{r}
 #| label: tbl-lemurs-age-model-slr
-#| tbl-cap: "Simple linear regression model of `weight` versus `age`" 
+#| tbl-cap: "Simple linear regression model using age to explain variability in the weight of young lemurs" 
 #| echo: false
 
 lm(weight ~ age, data = lemurs) |> 
@@ -440,7 +436,7 @@ For example, let's refit the model in @tbl-lemurs-model using `age` recorded in 
 
 ```{r}
 #| label: tbl-lemurs-model-age-years
-#| tbl-cap: "Model predicting lemurs weight with `age` recorded in years." 
+#| tbl-cap: "Model using age recorded in years" 
 lemurs <- lemurs |>
   mutate(age_in_years = age / 12)
 
@@ -641,10 +637,10 @@ Because this centered variable has its own meaningful interpretation, we will re
 
 ```{r}
 #| label: fig-centering
-#| fig-cap: "Original versus centered values of `litter_size`"
+#| fig-cap: "Original versus centered values of litter size"
 #| fig-subcap: 
-#|  - "Distribution of `litter_size`"
-#|  - "Distribution of `litter_size_siblings`"
+#|  - "Distribution of litter size"
+#|  - "Distribution of the number of siblings"
 #| layout-ncol: 2
 #| echo: false
 
@@ -664,7 +660,7 @@ ggplot(data = lemurs, aes(x = litter_size_siblings)) +
 
 ```{r}
 #| label: tbl-centering
-#| tbl-cap: "Distributions of `litter_size` vs `litter_size_siblings`"
+#| tbl-cap: "Summary statistics for litter size and number of siblings"
 #| echo: false
 
 
@@ -687,8 +683,8 @@ From @fig-centering and @tbl-centering, we see that the only statistics that hav
 #| label: fig-centering-bivariate
 #| fig-cap: "Weight versus original and centered values of litter size"
 #| fig-subcap: 
-#| - "`weight` versus `litter_size`"
-#| - "`weight` versus `litter_size_siblings`"
+#| - "weight versus litter size"
+#| - "weight versus number of siblings"
 #| echo: false
 #| layout-ncol: 2
 
@@ -723,7 +719,7 @@ $$\text{age\_cent} = \text{age} - \text{mean(age)}$$
 
 ```{r}
 #| label: tbl-age-cent-summary
-#| tbl-cap: "Distributions of `age` and `age_cent`"
+#| tbl-cap: "Summary statistics for age and mean-centered age"
 
 
 lemurs <- lemurs |>
@@ -750,7 +746,7 @@ The output for the model with `age_cent` and `litter_size_siblings`, the centere
 
 ```{r}
 #| label: tbl-lemurs-model-centered
-#| tbl-cap: Model for lemurs data with centered quantitative predictors
+#| tbl-cap: Model of weight using centered quantitative predictors
 
 
 lemurs_model_cent <- lm(weight ~ age_cent + sex + taxon +
@@ -769,7 +765,7 @@ A comparison of the model coefficients from the original model and the model wit
 
 ```{r}
 #| label: tbl-lemurs-model-compare
-#| tbl-cap: Model coefficients for original model and model with centered quantitative predictors
+#| tbl-cap: Model coefficients for original model (@tbl-lemurs-model) and model with centered quantitative predictors (@tbl-lemurs-model-centered)
 #| echo: false
 
 tidy(lemurs_model) |>
@@ -846,7 +842,7 @@ Now let's compare the model with standardized quantitative predictors to the ori
 
 ```{r}
 #| label: tbl-lemurs-model-compare-pt2
-#| tbl-cap: Model coefficients for original model,  model with centered quantitiatve predictors, and model with standardized quantitative predictors
+#| tbl-cap: Model coefficients for original model (@tbl-lemurs-model),  model with centered quantitiatve predictors (@tbl-lemurs-model-centered), and model with standardized quantitative predictors (@tbl-lemurs-model-std)
 #| echo: false
 
 tidy(lemurs_model) |>
@@ -915,7 +911,7 @@ Do different types of lemurs grow at different rates? We can explore this questi
 
 ```{r}
 #| label: fig-lemurs-age-taxon-int
-#| fig-cap: "Multivariate EDA to explore potential interaction effect between `age` and `taxon`" 
+#| fig-cap: "Multivariate EDA to explore potential interaction effect between age and taxon" 
 #| echo: false
 
 
@@ -941,7 +937,7 @@ Lemurs from which taxon appear to grow at the fastest rate?[^07-mlr-9]
 
 ```{r}
 #| label: tbl-lemurs-age-taxon-int-model
-#| tbl-cap: Output for regression model including interaction between age and taxon 
+#| tbl-cap: Model that includes interaction between age and taxon 
 #| echo: false
 
 lemurs_age_taxon_int <- lm(weight ~ age + sex + taxon + 
@@ -1009,7 +1005,7 @@ Another type of interaction effect is between two categorical predictors. Let's 
 
 ```{r}
 #| label: fig-lemurs-taxon-sex-int
-#| fig-cap: "`weight` versus `sex` by `taxon`"
+#| fig-cap: "Relationship between weight and sex, faceted by taxon"
 #| echo: false
 
 ggplot(data = lemurs, aes(x = sex, y = weight, fill = taxon)) +
@@ -1034,7 +1030,7 @@ lemurs_sex_taxon_int <- lm(weight ~ age + sex + taxon +
 
 ```{r}
 #| label: tbl-lemurs-sex-taxon-int-model
-#| tbl-cap: Output for regression model including interaction between `sex` and `taxon`
+#| tbl-cap: Model including interaction between sex and taxon
 #| echo: false
 
 tidy(lemurs_sex_taxon_int) |>
@@ -1085,7 +1081,7 @@ Visualizations for the potential interaction effect between two quantitative pre
 
 ```{r}
 #| label: fig-lemurs-age-litter-int
-#| fig-cap: "`weight` versus `litter_size` by `age`"
+#| fig-cap: "Relationship between weight versus litter size by age"
 #| echo: false
 
 lemurs |> 
@@ -1109,7 +1105,7 @@ In @fig-lemurs-age-litter-int, the relationship between litter size and weight a
 
 ```{r}
 #| label: tbl-lemurs-age-litter-int-model
-#| tbl-cap: Output for regression model including interaction between `age` and `litter_size`
+#| tbl-cap: Model including interaction between age and litter size
 #| echo: false
 
 lemurs_age_litter_int <- lm(weight ~ age + sex + taxon + 
