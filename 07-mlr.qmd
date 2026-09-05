@@ -48,7 +48,7 @@ library(knitr)
 library(plotly)
 library(skimr)
 
-lemurs <- read_csv("data/lemurs-sample-young.csv") 
+lemurs <- read_csv("data/lemurs-sample-lt24mo.csv") 
 
 # formatting on plots
 ggplot2::theme_set(ggplot2::theme_bw())
@@ -57,7 +57,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ```{r}
 #| eval: false
 #| echo: false
-#| label: make-lemurs-sample-young-dataset
+#| label: make-lemurs-sample-lt24mo-dataset
 
 # code to make lemurs young data set for the MLR chapter 
 
@@ -67,7 +67,7 @@ lemurs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tid
 
 set.seed(51325)
 
-lemurs_sample_young <- lemurs |>
+lemurs-sample-lt24mo <- lemurs |>
   filter(taxon %in% c("PCOQ", "ERUF",  "VRUB"), sex != "ND", age_at_wt_mo >= 0.5, 
          age_at_wt_mo <= 24, !is.na(litter_size)) |> #only 1 obs in final sample with sex = ND
   group_by(dlc_id) |>
@@ -77,7 +77,7 @@ lemurs_sample_young <- lemurs |>
          weight = weight_g) |>
   select(dlc_id, name, dob, sex, taxon, litter_size, age, weight)
 
-lemurs_sample_young |> write_csv("data/lemurs-sample-young.csv")
+lemurs-sample-lt24mo |> write_csv("data/lemurs-sample-lt24mo.csv")
 ```
 
 ## Introduction: Lemurs {#sec-lemurs-intro}
@@ -91,12 +91,14 @@ About 95% of lemur species are at risk of extinction, so it is important for res
 
 ![Propithecus coquereli (PCOQ)](images/06-pcoq-lemur.jpg){fig-align="center"}
 
+![Varecia rubra (VRUB)](images/06-vrub-lemur.png){fig-align="center"}
+
 Three lemur taxa represented in the data. Images from @duke2025meetlemurs.
 :::
 
 <!--# check that I can actually use these images from Duke Lemur Website: https://lemur.duke.edu/discover/meet-the-lemurs/ -->
 
-The data are in `lemurs-sample-young.csv`. This analysis in this chapter focuses on the following variables:
+The data are in `lemurs-sample-lt24mo.csv`. This analysis in this chapter focuses on the following variables:
 
 - `weight`: Weight of the lemur (in grams)
 - `taxon` : Code made as a combination of the lemur's genus and species. Note that the genus is a broader categorization that includes lemurs from multiple species. <!--# is this note helpful or confusing?--> This analysis focuses on the following taxon:

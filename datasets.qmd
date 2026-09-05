@@ -18,7 +18,7 @@ The data sets used in this book are listed below in alphabetical order.
 
   - This data set is analyzed in @sec-random-intercepts.
 
-- [lemurs-sample-young.csv](data/lemurs-sample-young.csv): Weight, age, and other characteristics for 252 lemurs age 24 months or younger living at the Duke Lemur Center at the time the data were collected. The data were originally analyzed in @zehrlife and featured as part of the TidyTuesday data visualization challenge in August 2021. There is one observation for each lemur.
+- [lemurs-sample-lt24mo.csv](data/lemurs-sample-lt24mo.csv): Weight, age, and other characteristics for 252 lemurs age 24 months or younger living at the Duke Lemur Center at the time the data were collected. The data were originally analyzed in @zehrlife and featured as part of the TidyTuesday data visualization challenge in August 2021. There is one observation for each lemur.
 
   - This data set is analyzed in @sec-ch-mlr and @sec-ch-mlr-inf.
 
