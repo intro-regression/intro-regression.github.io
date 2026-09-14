@@ -420,7 +420,7 @@ window.Quarto = {
 <!--# [INSERT SOME HOOK ABOUT MARCH MADNESS AND NCAA BASKETBALL].-->
 <p>The analysis in this chapter focuses on the amount of money colleges and universities spend in total on men’s and women’s basketball programs in a single year. The data come from the Equity in Athletics Data Analysis (EADA) tool from the Office of Postsecondary Education in the United States Department of Education (<a href="https://ope.ed.gov/athletics/#/">ope.ed.gov/athletics</a>). Every college and university in the United States that offers both student financial aid and intercollegiate programs (this includes nearly all colleges and universities) are required by law to submit information about its spending and revenue on athletic programs annually <span class="citation" data-cites="ope_equity_athletics_database">(<a href="references.html#ref-ope_equity_athletics_database" role="doc-biblioref">U.S. Department of Education, Office of Postsecondary Education 2025</a>)</span>.</p>
 <p>The EADA is a very rich data set with over 300 hundred variables about basketball and all other collegiate sports for all 2-year and 4-year institutions that meet the federal reporting requirements.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> This analysis will focus on data from schools in the National Collegiate Athletics Association (NCAA) Division I. According to the NCAA, Division I institutions are those that “have to sponsor at least seven sports for men and seven for women (or six for men and eight for women) with two team sports for each gender. Each playing season has to be represented by each gender as well. There are contest and participant minimums for each sport, as well as scheduling criteria” <span class="citation" data-cites="ncaa_divisional_differences_2013">(<a href="references.html#ref-ncaa_divisional_differences_2013" role="doc-biblioref">NCAA 2013</a>)</span>. We will refer to these institutions as “NCAA Division I colleges” or just “colleges” throughout the remainder of the chapter.</p>
-<p>The dataset <code>ncaa-basketball-DI-2023-2024.csv</code> contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.</p>
+<p>The data set <code>ncaa-basketball-DI-2023-2024.csv</code> contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.</p>
 <ul>
 <li>
 <code>expenditure_m</code>: Total expenditure on basketball programs (in millions of US dollars)</li>
@@ -440,10 +440,10 @@ window.Quarto = {
 <div class="cell-output-display">
 <div id="fig-ncaa-response-eda" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-response-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-response-eda-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;9.1: Distribution of the response variable expenditure_m"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-response-eda-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-response-eda-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;9.1: Distribution of the response variable, expenditure in millions"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-response-eda-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-response-eda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.1: Distribution of the response variable <code>expenditure_m</code>
+Figure&nbsp;9.1: Distribution of the response variable, expenditure in millions
 </figcaption></figure>
 </div>
 </div>
@@ -454,10 +454,10 @@ Figure&nbsp;9.1: Distribution of the response variable <code>expenditure_m</code
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-pred-eda" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-pred-eda-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-pred-eda-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-1.png" class="lightbox" data-gallery="fig-ncaa-pred-eda" title="Figure&nbsp;9.2&nbsp;(a): enrollment_th"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-pred-eda"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-1.png" class="lightbox" data-gallery="fig-ncaa-pred-eda" title="Figure&nbsp;9.2&nbsp;(a): enrollment (in thousands)"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-pred-eda"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-pred-eda-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>enrollment_th</code>
+(a) enrollment (in thousands)
 </figcaption></figure>
 </div>
 </div>
@@ -467,7 +467,7 @@ Figure&nbsp;9.1: Distribution of the response variable <code>expenditure_m</code
 <a href="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-2.png" class="lightbox" data-gallery="fig-ncaa-pred-eda" title="Figure&nbsp;9.2&nbsp;(b): region"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-pred-eda"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-pred-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>region</code>
+(b) region
 </figcaption></figure>
 </div>
 </div>
@@ -479,7 +479,7 @@ Figure&nbsp;9.1: Distribution of the response variable <code>expenditure_m</code
 <a href="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-3.png" class="lightbox" data-gallery="fig-ncaa-pred-eda" title="Figure&nbsp;9.2&nbsp;(c): type"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-pred-eda-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-pred-eda"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-pred-eda-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) <code>type</code>
+(c) type
 </figcaption></figure>
 </div>
 </div>
@@ -492,7 +492,7 @@ Figure&nbsp;9.2: Distributions of predictor variables
 <div class="cell">
 <div id="tbl-ncaa-univariate-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-univariate-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.1: Summary statistics for <code>enrollment_th</code> and <code>expenditure_m</code>
+Table&nbsp;9.1: Summary statistics for enrollment and expenditure
 </figcaption><div aria-describedby="tbl-ncaa-univariate-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -545,20 +545,20 @@ Table&nbsp;9.1: Summary statistics for <code>enrollment_th</code> and <code>expe
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-bivariate-eda" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-bivariate-eda-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-bivariate-eda-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-1.png" class="lightbox" data-gallery="fig-ncaa-bivariate-eda" title="Figure&nbsp;9.3&nbsp;(a): expenditure_m versus enrollment_th"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-bivariate-eda"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-1.png" class="lightbox" data-gallery="fig-ncaa-bivariate-eda" title="Figure&nbsp;9.3&nbsp;(a): expenditure versus enrollment"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-bivariate-eda"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-bivariate-eda-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>expenditure_m</code> versus <code>enrollment_th</code>
+(a) expenditure versus enrollment
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-bivariate-eda" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-bivariate-eda-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-bivariate-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-2.png" class="lightbox" data-gallery="fig-ncaa-bivariate-eda" title="Figure&nbsp;9.3&nbsp;(b): expenditure_m versus region"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-bivariate-eda"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-2.png" class="lightbox" data-gallery="fig-ncaa-bivariate-eda" title="Figure&nbsp;9.3&nbsp;(b): expenditure versus region"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-bivariate-eda"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-bivariate-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>expenditure_m</code> versus <code>region</code>
+(b) expenditure versus region
 </figcaption></figure>
 </div>
 </div>
@@ -567,10 +567,10 @@ Table&nbsp;9.1: Summary statistics for <code>enrollment_th</code> and <code>expe
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-bivariate-eda" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-bivariate-eda-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-bivariate-eda-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-3.png" class="lightbox" data-gallery="fig-ncaa-bivariate-eda" title="Figure&nbsp;9.3&nbsp;(c): expenditure_m versus type"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-bivariate-eda"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-3.png" class="lightbox" data-gallery="fig-ncaa-bivariate-eda" title="Figure&nbsp;9.3&nbsp;(c): expenditure versus type"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-bivariate-eda-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-bivariate-eda"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-bivariate-eda-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) <code>expenditure_m</code> versus <code>type</code>
+(c) expenditure versus type
 </figcaption></figure>
 </div>
 </div>
@@ -588,20 +588,20 @@ Figure&nbsp;9.3: Bivariate exploratory data analysis
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-eda-multivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-eda-multivariate-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-eda-multivariate-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-1.png" class="lightbox" data-gallery="fig-ncaa-eda-multivariate" title="Figure&nbsp;9.4&nbsp;(a): expenditure_m versus enrollment_th by type"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-eda-multivariate"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-1.png" class="lightbox" data-gallery="fig-ncaa-eda-multivariate" title="Figure&nbsp;9.4&nbsp;(a): expenditure versus enrollment by type"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-eda-multivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-eda-multivariate-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>expenditure_m</code> versus <code>enrollment_th</code> by <code>type</code>
+(a) expenditure versus enrollment by type
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-eda-multivariate" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-eda-multivariate-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-eda-multivariate-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-2.png" class="lightbox" data-gallery="fig-ncaa-eda-multivariate" title="Figure&nbsp;9.4&nbsp;(b): expenditure_m versus enrollment_th by region"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-eda-multivariate"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-2.png" class="lightbox" data-gallery="fig-ncaa-eda-multivariate" title="Figure&nbsp;9.4&nbsp;(b): expenditure versus enrollment by region"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-eda-multivariate-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-eda-multivariate"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-eda-multivariate-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>expenditure_m</code> versus <code>enrollment_th</code> by <code>region</code>
+(b) expenditure versus enrollment by region
 </figcaption></figure>
 </div>
 </div>
@@ -620,7 +620,7 @@ Figure&nbsp;9.4: Exploration of potential interaction terms
 <div class="cell">
 <div id="tbl-ncaa-model-orig" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-model-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.2: Model for NCAA basketball expenditure with 95% confidence intervals
+Table&nbsp;9.2: Model of NCAA basketball expenditure with 95% confidence intervals for the coefficients
 </figcaption><div aria-describedby="tbl-ncaa-model-orig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -739,7 +739,7 @@ Table&nbsp;9.2: Model for NCAA basketball expenditure with 95% confidence interv
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-orig-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.5: Residual plots from original NCAA basketball expenditure model
+Figure&nbsp;9.5: Residual plots from the original NCAA basketball expenditure model in <a href="#tbl-ncaa-model-orig" class="quarto-xref">Table&nbsp;<span>9.2</span></a>
 </figcaption></figure>
 </div>
 <p>There is a “fan” shape in <a href="#fig-ncaa-orig-resid" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>, so the equal variance condition is not met. Because the equal variance condition is not met, the results of theory-based inference output in <a href="#tbl-ncaa-model-orig" class="quarto-xref">Table&nbsp;<span>9.2</span></a> cannot reliably be used to draw conclusions about the relationships between the response and predictor variables. For example, the inferential results suggest the interaction between enrollment and institution type is not useful in this model, despite what we observed in <a href="#fig-ncaa-eda-multivariate" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>. Before making a final conclusion about the interaction term and any other term in the model, let’s first address the issue with the equal variance condition.</p>
@@ -766,20 +766,20 @@ Figure&nbsp;9.5: Residual plots from original NCAA basketball expenditure model
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-model-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-model-compare-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-model-compare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-1.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(a): Original"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-1.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(a): y versus x"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-model-compare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) Original
+(a) y versus x
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-model-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-model-compare-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-model-compare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-2.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(b): log(y)"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-2.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(b): log(y) versus x"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-model-compare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) log(y)
+(b) log(y) versus x
 </figcaption></figure>
 </div>
 </div>
@@ -788,27 +788,27 @@ Figure&nbsp;9.5: Residual plots from original NCAA basketball expenditure model
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-model-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-model-compare-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-model-compare-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-3.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(c): log(x)"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-3.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(c): y versus log(x)"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-model-compare-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) log(x)
+(c) y versus log(x)
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-model-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-model-compare-4" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-model-compare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-4.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(d): log(x) and log(y)"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-4.png" class="lightbox" data-gallery="fig-ncaa-model-compare" title="Figure&nbsp;9.6&nbsp;(d): log(x) versus log(y)"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-model-compare-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-model-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-model-compare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(d) log(x) and log(y)
+(d) log(x) versus log(y)
 </figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-model-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.6: Relationship between <code>expenditure_m</code> and <code>enrollment_th</code> for four candidate models
+Figure&nbsp;9.6: Relationship between expenditure and enrollment in four candidate models
 </figcaption></figure>
 </div>
 <div class="yourturn">
@@ -841,20 +841,20 @@ Figure&nbsp;9.6: Relationship between <code>expenditure_m</code> and <code>enrol
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-expend-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-expend-compare-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-expend-compare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-1.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(a): Distribution of expenditure_m"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-1.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(a): Distribution of expenditur"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-expend-compare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) Distribution of <code>expenditure_m</code>
+(a) Distribution of expenditur
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-expend-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-expend-compare-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-expend-compare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-2.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(b): Distribution of log-transformed expenditure_m"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-2.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(b): Distribution of log(expenditure)"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-expend-compare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) Distribution of log-transformed <code>expenditure_m</code>
+(b) Distribution of log(expenditure)
 </figcaption></figure>
 </div>
 </div>
@@ -863,34 +863,34 @@ Figure&nbsp;9.6: Relationship between <code>expenditure_m</code> and <code>enrol
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-expend-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-expend-compare-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-expend-compare-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-3.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(c): expenditure_m versus enrollmenth_th"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-3.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(c): expenditure versus enrollment"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-expend-compare-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) <code>expenditure_m</code> versus <code>enrollmenth_th</code>
+(c) expenditure versus enrollment
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-expend-compare" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-expend-compare-4" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-expend-compare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-4.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(d): Log-transformed expenditure_m versus enrollment_th"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-expend-compare-4.png" class="lightbox" data-gallery="fig-expend-compare" title="Figure&nbsp;9.7&nbsp;(d): log(expenditure) versus enrollment"><img src="09-mlr-transformations_files/figure-html/fig-expend-compare-4.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-expend-compare"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-expend-compare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(d) Log-transformed <code>expenditure_m</code> versus <code>enrollment_th</code>
+(d) log(expenditure) versus enrollment
 </figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-expend-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.7: Univariate and bivariate EDA for original and log-transformed <code>expenditure_m</code>
+Figure&nbsp;9.7: Univariate and bivariate EDA for original and log-transformed expenditure
 </figcaption></figure>
 </div>
 <p>Now we fit the main effects model using <code>log(expenditure_m)</code>, the log-transformed expenditure, as the response variable. The output for the new model is in <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a> and the equation is in <a href="#eq-ncaa-model-logy" class="quarto-xref">Equation&nbsp;<span>9.2</span></a>.</p>
 <div class="cell">
 <div id="tbl-ncaa-model-logy" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-model-logy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.3: Model with log-transformed expenditure as the response variable
+Table&nbsp;9.3: Model with log(expenditure) as the response variable
 </figcaption><div aria-describedby="tbl-ncaa-model-logy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -996,17 +996,17 @@ Table&nbsp;9.3: Model with log-transformed expenditure as the response variable
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ncaa-logy-resid" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-ncaa-logy-resid-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-ncaa-logy-resid-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logy-resid-2.png" class="lightbox" data-gallery="fig-ncaa-logy-resid" title="Figure&nbsp;9.8&nbsp;(b): Model with log-transformed expenditure_m"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logy-resid-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-logy-resid"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logy-resid-2.png" class="lightbox" data-gallery="fig-ncaa-logy-resid" title="Figure&nbsp;9.8&nbsp;(b): Model with log(expenditure)"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logy-resid-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-ncaa-logy-resid"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ncaa-logy-resid-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) Model with log-transformed <code>expenditure_m</code>
+(b) Model with log(expenditure)
 </figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-logy-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.8: Residuals versus predicted values for original model and model with log-transformed <code>expenditure_m</code>
+Figure&nbsp;9.8: Residuals versus predicted values for original model in <span class="quarto-unresolved-ref">?tbl-ncaa-model-orign</span> and model with log(expenditure) in <a href="#tbl-ncaa-model-logy" class="quarto-xref">Table&nbsp;<span>9.3</span></a>
 </figcaption></figure>
 </div>
 <p>Comparing the plots in <a href="#fig-ncaa-logy-resid" class="quarto-xref">Figure&nbsp;<span>9.8</span></a>, the first observation is that the <span class="math inline">\(y\)</span>-axis differs on the plots. This is the because the residuals are on the same scale and use the same units as the response variable. The residuals in <a href="#fig-ncaa-logy-resid-1" class="quarto-xref">Figure&nbsp;<span>9.8 (a)</span></a> are in terms of the original variable <code>expenditure_m</code>, and the residuals in <a href="#fig-ncaa-logy-resid-2" class="quarto-xref">Figure&nbsp;<span>9.8 (b)</span></a> are in terms of <code>log(expenditure_m)</code>. The same is true for the predicted values on the <span class="math inline">\(x\)</span>-axis. The second observation is that the vertical spread of the residuals is much more equal in <a href="#fig-ncaa-logy-resid-2" class="quarto-xref">Figure&nbsp;<span>9.8 (b)</span></a> with the log-transformed response variable. Given this, it appears applying a log transformation on the response variable has addressed some of the problems with the equal variance condition.</p>
@@ -1064,7 +1064,7 @@ Figure&nbsp;9.8: Residuals versus predicted values for original model and model 
 <div class="cell">
 <div id="tbl-ncaa-model-logx" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-model-logx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.4: Output of the model with log-transformed <code>enrollment_th</code>
+Table&nbsp;9.4: Model with log(enrollment)
 </figcaption><div aria-describedby="tbl-ncaa-model-logx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1155,10 +1155,10 @@ Table&nbsp;9.4: Output of the model with log-transformed <code>enrollment_th</co
 <div class="cell-output-display">
 <div id="fig-ncaa-logx-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-logx-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logx-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22" title="Figure&nbsp;9.9: Residuals vs.&nbsp;fitted values for plot with log-transformed enrollment_th"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logx-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logx-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22" title="Figure&nbsp;9.9: Residuals vs.&nbsp;fitted values for model with log(enrollment) in Table&nbsp;tbl-ncaa-model-logx"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logx-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-logx-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.9: Residuals vs.&nbsp;fitted values for plot with log-transformed <code>enrollment_th</code>
+Figure&nbsp;9.9: Residuals vs.&nbsp;fitted values for model with log(enrollment) in <a href="#tbl-ncaa-model-logx" class="quarto-xref">Table&nbsp;<span>9.4</span></a>
 </figcaption></figure>
 </div>
 </div>
@@ -1177,7 +1177,7 @@ Figure&nbsp;9.9: Residuals vs.&nbsp;fitted values for plot with log-transformed 
 <div class="cell">
 <div id="tbl-ncaa-model-logx-logy" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-model-logx-logy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.5: Output of the model with log-transformed expenditure and log-transformed enrollment
+Table&nbsp;9.5: Model with log(expenditure) and log(enrollment)
 </figcaption><div aria-describedby="tbl-ncaa-model-logx-logy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1270,10 +1270,10 @@ Table&nbsp;9.5: Output of the model with log-transformed expenditure and log-tra
 <div class="cell-output-display">
 <div id="fig-ncaa-logx-logy-resid" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-logx-logy-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23" title="Figure&nbsp;9.10: Residuals vs.&nbsp;fitted values for plot with log-transformed enrollment and expenditure"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-resid-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23" title="Figure&nbsp;9.10: Residuals versus predicted values for model with log(enrollment) and log(expenditure) in Table&nbsp;tbl-ncaa-model-logx-logy"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-resid-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-logx-logy-resid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.10: Residuals vs.&nbsp;fitted values for plot with log-transformed enrollment and expenditure
+Figure&nbsp;9.10: Residuals versus predicted values for model with log(enrollment) and log(expenditure) in <a href="#tbl-ncaa-model-logx-logy" class="quarto-xref">Table&nbsp;<span>9.5</span></a>
 </figcaption></figure>
 </div>
 </div>
@@ -1284,7 +1284,7 @@ Figure&nbsp;9.10: Residuals vs.&nbsp;fitted values for plot with log-transformed
 <div class="cell">
 <div id="tbl-ncaa-compare-models" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-compare-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.6: R-Squared values for models presented in this chapter
+Table&nbsp;9.6: <span class="math inline">\(R^2\)</span> values for the four candidate models
 </figcaption><div aria-describedby="tbl-ncaa-compare-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -1314,10 +1314,10 @@ Table&nbsp;9.6: R-Squared values for models presented in this chapter
 <div class="cell-output-display">
 <div id="fig-ncaa-logx-logy-int" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-ncaa-logx-logy-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="Figure&nbsp;9.11: Expenditure versus enrollment by institution type"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
+<a href="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-int-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="Figure&nbsp;9.11: log(expenditure) versus log(enrollment) by institution type"><img src="09-mlr-transformations_files/figure-html/fig-ncaa-logx-logy-int-1.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ncaa-logx-logy-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.11: Expenditure versus enrollment by institution type
+Figure&nbsp;9.11: log(expenditure) versus log(enrollment) by institution type
 </figcaption></figure>
 </div>
 </div>
@@ -1326,7 +1326,7 @@ Figure&nbsp;9.11: Expenditure versus enrollment by institution type
 <div class="cell">
 <div id="tbl-ncaa-model-logx-logy-int" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ncaa-model-logx-logy-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9.7: Model including interaction term with 95% confidence intervals
+Table&nbsp;9.7: Model including interaction effect between log(enrollment) and institution type with 95% confidence intervals for the coefficients
 </figcaption><div aria-describedby="tbl-ncaa-model-logx-logy-int-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">

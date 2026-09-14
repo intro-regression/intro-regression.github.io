@@ -38,7 +38,7 @@ The EADA is a very rich data set with over 300 hundred variables about basketbal
 
 [^09-mlr-transformations-1]: Interested readers are encouraged to visit the EADA for further data exploration!
 
-The dataset `ncaa-basketball-DI-2023-2024.csv` contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.
+The data set `ncaa-basketball-DI-2023-2024.csv` contains data from the 2023 - 2024 academic year. We will use the following variables that have been derived from variables in the EADA.
 
 - `expenditure_m`: Total expenditure on basketball programs (in millions of US dollars)
 - `enrollment_th`: Total student enrollment (in thousands)
@@ -143,7 +143,7 @@ ncaa_basketball <- read_csv("data/ncaa-basketball-DI-2023-2024.csv")
 
 ```{r}
 #| label: fig-ncaa-response-eda
-#| fig-cap: Distribution of the response variable `expenditure_m`
+#| fig-cap: Distribution of the response variable, expenditure in millions
 
 ncaa_expend_orig <- ggplot(data = ncaa_basketball, aes(x = expenditure_m)) + 
   geom_histogram(fill = "steelblue", color = "black") + 
@@ -159,9 +159,9 @@ ncaa_expend_orig
 #| layout-ncol: 2
 #| fig-cap: Distributions of predictor variables
 #| fig-subcap: 
-#|   - "`enrollment_th`"
-#|   - "`region`"
-#|   - "`type`"
+#|   - "enrollment (in thousands)"
+#|   - "region"
+#|   - "type"
 
 ggplot(data = ncaa_basketball, aes(x = enrollment_th)) + 
   geom_histogram(fill = "steelblue", color = "black") + 
@@ -185,7 +185,7 @@ ggplot(data = ncaa_basketball, aes(x = type)) +
 
 ```{r}
 #| label: tbl-ncaa-univariate-summary
-#| tbl-cap: "Summary statistics for `enrollment_th` and `expenditure_m`"
+#| tbl-cap: "Summary statistics for enrollment and expenditure" 
 
 ncaa_basketball |>
   skim(expenditure_m, enrollment_th) |>
@@ -205,9 +205,9 @@ Almost half of the `r nrow(ncaa_basketball)` colleges in the data are located in
 #| layout-ncol: 2
 #| fig-cap: Bivariate exploratory data analysis
 #| fig-subcap: 
-#|   - "`expenditure_m` versus `enrollment_th`"
-#|   - "`expenditure_m` versus `region`"
-#|   - "`expenditure_m` versus `type`"
+#|   - "expenditure versus enrollment"
+#|   - "expenditure versus region"
+#|   - "expenditure versus type"
 
 ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m)) + 
   geom_point() + 
@@ -331,12 +331,13 @@ The plot also shows two other interesting features of the relationship. The firs
 #| label: fig-ncaa-eda-multivariate
 #| fig-cap: "Exploration of potential interaction terms"
 #| fig-subcap: 
-#|    - "`expenditure_m` versus `enrollment_th` by `type`"
-#|    - "`expenditure_m` versus `enrollment_th` by `region`"
+#|    - "expenditure versus enrollment by type"
+#|    - "expenditure versus enrollment by region"
 #| layout-ncol: 2
 
 ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m, color = type)) +
   geom_point(alpha = 0.7) + 
+  geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Enrollment (in thousands)",
        y = "Expenditure (in millions)", 
        color = "Type") +
@@ -344,6 +345,7 @@ ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m, color =
 
 ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m, color = region)) +
   geom_point(alpha = 0.7) + 
+  geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Enrollment (in thousands)",
        y = "Expenditure (in millions)", 
        color = "Region") +
@@ -362,7 +364,7 @@ We include the interaction between `type` and `enrollment_th` in the first model
 
 ```{r}
 #| label: tbl-ncaa-model-orig
-#| tbl-cap: Model for NCAA basketball expenditure with 95% confidence intervals
+#| tbl-cap: Model of NCAA basketball expenditure with 95% confidence intervals for the coefficients
 
 ncaa_model_orig <- lm(expenditure_m ~ enrollment_th + region + type + enrollment_th * type, data = ncaa_basketball)
 tidy(ncaa_model_orig, conf.int = TRUE) |>
@@ -371,7 +373,7 @@ tidy(ncaa_model_orig, conf.int = TRUE) |>
 
 ```{r}
 #| label: fig-ncaa-orig-resid
-#| fig-cap: Residual plots from original NCAA basketball expenditure model
+#| fig-cap: Residual plots from the original NCAA basketball expenditure model in @tbl-ncaa-model-orig
 #| fig-subcap: 
 #|   - Residuals versus predicted 
 #|   - Distribution of residuals
@@ -425,13 +427,13 @@ D.  Log-transformation on the response and quantitative predictor variables, $\l
 
 ```{r}
 #| label: fig-ncaa-model-compare
-#| fig-cap: "Relationship between `expenditure_m` and `enrollment_th` for four candidate models"
+#| fig-cap: "Relationship between expenditure and enrollment in four candidate models"
 #| layout-ncol: 2
 #| fig-subcap: 
-#|   - Original 
-#|   - log(y)
-#|   - log(x)
-#|   - log(x) and log(y)
+#|   - y versus x
+#|   - log(y) versus x
+#|   - y versus log(x)
+#|   - log(x) versus log(y)
 
 ggplot(data = ncaa_basketball, aes(x = enrollment_th, y = expenditure_m)) + 
   geom_point() + 
@@ -502,12 +504,12 @@ Let's begin by looking at the distribution of `log(expenditure_m)`, its relation
 
 ```{r}
 #| label: fig-expend-compare
-#| fig-cap: "Univariate and bivariate EDA for original and log-transformed `expenditure_m`"
+#| fig-cap: "Univariate and bivariate EDA for original and log-transformed expenditure"
 #| fig-subcap: 
-#| - "Distribution of `expenditure_m`"
-#| - "Distribution of log-transformed `expenditure_m`"
-#| - "`expenditure_m` versus `enrollmenth_th`"
-#| - "Log-transformed `expenditure_m` versus `enrollment_th`"
+#| - "Distribution of expenditur"
+#| - "Distribution of log(expenditure)"
+#| - "expenditure versus enrollment"
+#| - "log(expenditure) versus enrollment"
 #| layout-ncol: 2
 
 
@@ -540,7 +542,7 @@ Now we fit the main effects model using `log(expenditure_m)`, the log-transforme
 
 ```{r}
 #| label: tbl-ncaa-model-logy
-#| tbl-cap: Model with log-transformed expenditure as the response variable 
+#| tbl-cap: Model with log(expenditure) as the response variable 
 #| echo: false
 
 ncaa_model_logy <- lm(log(expenditure_m) ~ enrollment_th + region + type, data = ncaa_basketball)
@@ -559,10 +561,10 @@ Before using the model, we analyze the residuals versus predicted values to eval
 
 ```{r}
 #| label: fig-ncaa-logy-resid 
-#| fig-cap: "Residuals versus predicted values for original model and model with log-transformed `expenditure_m`"
+#| fig-cap: "Residuals versus predicted values for original model in @tbl-ncaa-model-orign and model with log(expenditure) in @tbl-ncaa-model-logy"
 #| fig-subcap: 
 #| - Original model 
-#| - "Model with log-transformed `expenditure_m`"
+#| - "Model with log(expenditure)"
 #| layout-ncol: 2
 #| echo: false
 
@@ -653,7 +655,7 @@ At this point, we are using the original response variable, `expenditure_m`, so 
 
 ```{r}
 #| label: tbl-ncaa-model-logx
-#| tbl-cap: "Output of the model with log-transformed `enrollment_th`"
+#| tbl-cap: "Model with log(enrollment)"
 #| eval: true
 
 ncaa_model_logx <- lm(expenditure_m ~ log(enrollment_th) + region + type, data = ncaa_basketball)
@@ -703,7 +705,7 @@ Write the interpretation of the expected change in expenditure on basketball pro
 
 ```{r}
 #| label: fig-ncaa-logx-resid
-#| fig-cap: "Residuals vs. fitted values for plot with log-transformed `enrollment_th`"
+#| fig-cap: "Residuals vs. fitted values for model with log(enrollment) in @tbl-ncaa-model-logx"
 
 ncaa_model_logx_aug <- augment(ncaa_model_logx)
 
@@ -734,7 +736,7 @@ $$\begin{aligned}
 
 ```{r}
 #| label: tbl-ncaa-model-logx-logy
-#| tbl-cap: Output of the model with log-transformed expenditure and log-transformed enrollment
+#| tbl-cap: Model with log(expenditure) and log(enrollment)
 
 ncaa_model_logx_logy <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type, data = ncaa_basketball)
 
@@ -785,7 +787,7 @@ The plot of residuals versus predicted for the model in @tbl-ncaa-model-logx-log
 
 ```{r}
 #| label: fig-ncaa-logx-logy-resid
-#| fig-cap: Residuals vs. fitted values for plot with log-transformed enrollment and expenditure
+#| fig-cap: Residuals versus predicted values for model with log(enrollment) and log(expenditure) in @tbl-ncaa-model-logx-logy
 
 ncaa_model_logx_logy_aug <- augment(ncaa_model_logx_logy)
 
@@ -803,7 +805,7 @@ So far we have looked at four potential models using `enrollment_th`, `type` and
 
 ```{r}
 #| label: tbl-ncaa-compare-models
-#| tbl-cap: "R-Squared values for models presented in this chapter"
+#| tbl-cap: "$R^2$ values for the four candidate models"
 
 orig_rsq <- glance(ncaa_model_orig)$r.squared
 logy_rsq <- glance(ncaa_model_logy)$r.squared
@@ -824,7 +826,7 @@ Now that we have selected the main effects, let's reconsider the interaction bet
 
 ```{r}
 #| label: fig-ncaa-logx-logy-int
-#| fig-cap: Expenditure versus enrollment by institution type
+#| fig-cap: log(expenditure) versus log(enrollment) by institution type
 #| 
 ggplot(data = ncaa_basketball, aes(x = log(enrollment_th), y = log(expenditure_m), color = type)) + 
   geom_point() + 
@@ -839,7 +841,7 @@ The plot shows that there may be an interaction effect, because the slope of the
 
 ```{r}
 #| label: tbl-ncaa-model-logx-logy-int
-#| tbl-cap: Model including interaction term with 95% confidence intervals
+#| tbl-cap: Model including interaction effect between log(enrollment) and institution type with 95% confidence intervals for the coefficients
 
 ncaa_model_logx_logy_int <- lm(log(expenditure_m) ~ log(enrollment_th) + region + type + log(enrollment_th) * type, data = ncaa_basketball)
 
