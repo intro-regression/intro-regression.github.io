@@ -113,16 +113,16 @@ The goal of this analysis is to explain variability in `valence` using other mus
 #| label: fig-spotify-univariate-eda
 #| fig-cap: Univariate exploratory data analysis for Spotify data
 #| fig-subcap: 
-#|   - "`valence`"
-#|   - "`playlist_genre`"
-#|   - "`danceability`"
-#|   - "`energy`"
-#|   - "`loudness`"
-#|   - "`mode`"
-#|   - "`acousticness`"
-#|   - "`liveness`"
-#|   - "`tempo`"
-#|   - "`duration_min`"
+#|   - "valence"
+#|   - "playlist_genre"
+#|   - "danceability"
+#|   - "energy"
+#|   - "loudness"
+#|   - "mode"
+#|   - "acousticness"
+#|   - "liveness"
+#|   - "tempo"
+#|   - "duration_min"
 #| layout-nrow: 4
 
 # Maybe remove the x-axis labels. 
@@ -196,18 +196,18 @@ Given the number of potential predictors, we'll leave observations about the dis
 
 ```{r}
 #| label: fig-spotify-bivariate-eda
-#| fig-cap: "Bivariate exploratory data analysis for Spotify data. In each plot, the predictor is on the x-axis and the response, `valence` is on the y-axis."
+#| fig-cap: "Bivariate exploratory data analysis for Spotify data"
 #| fig-subcap: 
-#|   - "`valence` vs. `playlist_genre`"
-#|   - "`valence` vs. `danceability`"
-#|   - "`valence` vs. `energy`"
-#|   - "`valence` vs. `loudness`"
-#|   - "`valence` vs. `mode`"
-#|   - "`valence` vs. `acousticness`"
-#|   - "`valence` vs. `instrumentalness`"
-#|   - "`valence` vs. `liveness`"
-#|   - "`valence` vs. `tempo`"
-#|   - "`valence` vs. `duration`"
+#|   - "valence versus playlist_genre"
+#|   - "valence versus danceability"
+#|   - "valence versus. energy"
+#|   - "valence versus loudness"
+#|   - "valence versus mode"
+#|   - "valence versus acousticness"
+#|   - "valence versus instrumentalness"
+#|   - "valence versus  liveness"
+#|   - "valence versus tempo"
+#|   - "valence versus duration"
 #| layout-nrow: 4
 
 # Maybe remove the x-axis labels. 
@@ -215,7 +215,7 @@ Given the number of potential predictors, we'll leave observations about the dis
 ggplot(data = spotify, aes(x = playlist_genre, y = valence)) + 
   geom_boxplot(fill = "steelblue", color = "black") + 
   labs(x = "",
-       y = "") +
+       y = "Valence") +
   theme_bw()
 
 ggplot(data = spotify, aes(x = danceability, y = valence)) +
@@ -233,7 +233,7 @@ ggplot(data = spotify, aes(x = energy, y = valence)) +
 ggplot(data = spotify, aes(x = loudness, y = valence)) +
   geom_point(alpha = 0.5) + 
   labs(x = "",
-       y = "") +
+       y = "Valence") +
   theme_bw()
 
 ggplot(data = spotify, aes(x = mode, y = valence)) + 
@@ -251,7 +251,7 @@ ggplot(data = spotify, aes(x = acousticness, y = valence)) +
 ggplot(data = spotify, aes(x = instrumentalness, y = valence)) +
   geom_point(alpha = 0.5) + 
   labs(x = "",
-       y = "") +
+       y = "Valence") +
   theme_bw()
 
 ggplot(data = spotify, aes(x = liveness, y = valence)) +
@@ -269,7 +269,7 @@ ggplot(data = spotify, aes(x = tempo, y = valence)) +
 ggplot(data = spotify, aes(x = duration_min, y = valence)) +
   geom_point(alpha = 0.5) + 
   labs(x = "",
-       y = "") +
+       y = "Valence") +
   theme_bw()
 ```
 
@@ -331,7 +331,7 @@ Let's look at an example of two candidate models to explain a song's valence. Th
 
 ```{r}
 #| label: tbl-rsq-adjrsq-compare
-#| tbl-cap: "Comparing $R^2$ and Adjusted $R^2$ for two models for `valence`"
+#| tbl-cap: "$R^2$ and Adjusted $R^2$ for two candidate models"
 #| echo: false
 #| 
 
@@ -388,7 +388,7 @@ We use RMSE to compare two models. In general, do we select the model with the h
 
 ```{r}
 #| label: tbl-rmse-compare
-#| tbl-cap: RMSE for two candidate models of valence
+#| tbl-cap: RMSE for two candidate models 
 
 model1_aug <- augment(model1)
 model2_aug <- augment(model2)
@@ -430,7 +430,7 @@ The AIC and BIC for a single model is generally not meaningful in practice, so t
 | Strong | 7 - 10 | 6 - 10 |
 | Very strong | $>$ 10 | $>$ 10 |
 
-: Guidelines for comparing two models, $M_1$ and $M_2$, using AIC and BIC {#tbl-aic-bic-guidelines}
+: Guidelines for comparing two models, $M_1$ and $M_2$, using AIC and BIC
 
 [^10-model-eval-3]: Based on [@kass1995bayes]
 
@@ -440,7 +440,7 @@ Below are the values of AIC and BIC from the candidate models introduced in @sec
 
 ```{r}
 #| label: tbl-aic-bic-compare
-#| tbl-cap: Comparing models using AIC and BIC
+#| tbl-cap: AIC and BIC for two candidate models 
 #| echo: false
 
 model1_stats <- glance(model1) |>
@@ -501,7 +501,7 @@ Let's look at an example of forward selection using AIC to compare the models. I
 
 ```{r}
 #| label: tbl-forward-step1
-#| tbl-cap: "Output from first step of forward selection. The model `valence ~ 1` is the intercept-only model."
+#| tbl-cap: "First step of forward selection (`valence ~ 1` is the intercept-only model)"
 
 genre_model <- lm(valence ~ playlist_genre, data = spotify) |> glance()|> select(AIC)
 danceability_model <- lm(valence ~ danceability, data = spotify) |> glance()|> select(AIC)
@@ -532,7 +532,7 @@ Based on AIC, a model with `danceability` is the best model out of the current c
 
 ```{r}
 #| label: tbl-forward-step2
-#| tbl-cap: Output from second step of forward selection 
+#| tbl-cap: "Second step of forward selection (`valence ~ 1` is the intercept-only model)"
 
 genre_model <- lm(valence ~ danceability + playlist_genre, data = spotify) |> glance() |> select(AIC)
 danceability_model <- lm(valence ~ danceability, data = spotify) |> glance()|> select(AIC)
@@ -562,7 +562,7 @@ Based on @tbl-forward-step2, we choose the model that includes `danceability` an
 
 ```{r}
 #| label: tbl-forward-final
-#| tbl-cap: Model selected by forward selection using AIC as criteria
+#| tbl-cap: Model selected by forward selection using AIC as selection criteria
 
 null_model <- lm(valence ~ 1, data = spotify)
 full_model <- lm(valence ~ playlist_genre + danceability + energy + loudness + mode + acousticness + liveness + tempo + duration_min, data = spotify)
@@ -591,7 +591,7 @@ Let's look at an example of backward selection using AIC. In the first step, we 
 
 ```{r}
 #| label: tbl-backward-step1 
-#| tbl-cap: "Output from first step of backward selection (`-var` indicates which variable is removed)"
+#| tbl-cap: "First step of backward selection (`-var` indicates which variable is removed)"
 
 full_model <- lm(valence ~ playlist_genre + danceability + energy + loudness + mode +  acousticness + liveness + tempo + duration_min , 
                          data = spotify) |> glance() |> select(AIC)
@@ -633,7 +633,7 @@ After the first step, we remove the predictor `mode` from the model. Thus, in th
 
 ```{r}
 #| label: tbl-backward-step2 
-#| tbl-cap: "Output from second step of backward selection (`-var` indicates which variable is removed)"
+#| tbl-cap: "Second step of backward selection (`-var` indicates which variable is removed)"
 
 
 genre_model <- lm(valence ~ danceability + energy + loudness + acousticness + liveness + tempo + duration_min , 
@@ -673,7 +673,7 @@ In the next step, we compute the AIC for the current model with only `mode` remo
 
 ```{r}
 #| label: tbl-backward-final
-#| tbl-cap: Model selected using backward selection with AIC as selection criteria
+#| tbl-cap: Model selected by backward selection using AIC as selection criteria
 #| echo: false
 
 full_model <- lm(valence ~ playlist_genre  + danceability + energy + loudness + mode +  acousticness + liveness + tempo + duration_min , 
@@ -720,11 +720,11 @@ There are multiple ways to split the data into training and testing sets as show
 
 ```{r}
 #| label: fig-train-test
-#| fig-cap: Splitting data into training and testing sets
+#| fig-cap: Illustration of strategies for splitting data into training and testing sets (Light blue = Training set, Dark blue = Testing set)
 #| fig-subcap: 
 #|   - Simple random sample
 #|   - Stratified random sample
-#|   - Time ordered
+#|   - Time-ordered
 #| layout-ncol: 2
 
 include_graphics(c("images/10-train-test-random.png", "images/10-train-test-stratified.png","images/10-train-test-time.png"))
@@ -770,7 +770,7 @@ spotify_test  <-  testing(spotify_split)
 
 ```{r}
 #| label: fig-train-test-eda
-#| fig-cap: Distribution of `valence` in full sample data, training set, and testing set 
+#| fig-cap: Distribution of valence in full sample data, training set, and testing set 
 #| fig-subcap: 
 #|   - Full sample data
 #|   - Training set
@@ -806,7 +806,7 @@ For now we put the testing set aside and use the training set to build a model. 
 
 ```{r}
 #| label: tbl-spotify-model-train
-#| tbl-cap: Model selected by forward selection with AIC as selection criteria using the training set
+#| tbl-cap: Model selected by forward selection using AIC as the selection criteria on the training set
 #| echo: false
 
 full_model <- lm(valence ~  playlist_genre + danceability + energy + loudness + mode +  acousticness + liveness + tempo + duration_min , 
@@ -891,7 +891,7 @@ Now that we have selected the final model, we use the model to compute RMSE, $R^
 
 ```{r}
 #| label: tbl-spotify-test-train-compare
-#| tbl-cap: Model performance statistics for the testing and training sets
+#| tbl-cap: Performance on training and testing sets for model in  @tbl-spotify-model-train 
 #| echo: false
 
 spotify_test_pred <- predict(forward_selection_train, newdata = spotify_test)
@@ -939,7 +939,7 @@ We could collect more data to make additional testing sets, however, that is oft
 
 Because the goal is to generate multiple testing sets, we will resample in such a way that a different subset of the data is used to build the model and a different subset is used to evaluate the model's performance on new data in each iteration. *We only use the training set for resampling*, so we can still reserve the testing set to evaluate the final model. <!--# what is a good way to emphasize this--> For each iteration of resampling from the training set, the subset of the training set used to build the model is called the **analysis set**, and the subset of the training set used to evaluate the model is the **assessment set.** We use these terms from @kuhn2022tidy to distinguish them from the training and testing sets. @fig-resampling shows the resampling process for $k$ iterations.
 
-![Illustration of resampling for *k* iterations. Solid blue = Analysis set, Striped green = Assessment set](images/10-resampling.png){#fig-resampling fig-align="center"}
+![Illustration of resampling for *k* iterations (Solid blue = Analysis set, Striped green = Assessment set)](images/10-resampling.png){#fig-resampling fig-align="center"}
 
 ### Cross validation
 
@@ -947,7 +947,7 @@ Because the goal is to generate multiple testing sets, we will resample in such 
 
 <!--# need to update the figure - see notes on how-->
 
-![Illustration of 5-fold cross validation. Solid blue = Analysis set, Striped green = Assessment set](images/10-cross-validation.png){#fig-cross-validation fig-align="center"}
+![Illustration of 5-fold cross validation (Solid blue = Analysis set, Striped green = Assessment set)](images/10-cross-validation.png){#fig-cross-validation fig-align="center"}
 
 Because cross validation is only conducted on the training set, a measure of how the model performs on new data (the assessment set at each iteration) can be used to compare potential models and throughout the model building process. As before, the testing set is reserved for providing a final evaluation of the performance of the final model.
 
@@ -1032,7 +1032,7 @@ For the first iteration of cross validation on the Spotify training set, how man
 
 ```{r}
 #| label: fig-spotify-folds
-#| fig-cap: Distribution of `valence` for 5 folds
+#| fig-cap: Distribution of valence for 5 folds
 #| fig-subcap: 
 #|   - Fold 1
 #|   - Fold 2
@@ -1097,7 +1097,7 @@ Next, we fit the full model using the analysis set in each of the five iteration
 
 ```{r}
 #| label: tbl-spotify-cv-models
-#| tbl-cap: Model coefficients from 5-fold cross validation 
+#| tbl-cap: Model coefficients produced from 5-fold cross validation 
 
 #get the analysis set for each fold
 fold1_analysis <- folds$splits[[1]] |> analysis()
@@ -1126,7 +1126,7 @@ fold1_model |> select(term, estimate) |>
 
 ```{r}
 #| label: tbl-spotify-cv-stats
-#| tbl-cap: Model performance statistics on the assessment sets in 5-fold cross validation 
+#| tbl-cap: Model performance on the assessment sets in 5-fold cross validation 
 #| echo: false
 
 spotify_full_cv_stats |> 
