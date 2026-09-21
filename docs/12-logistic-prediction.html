@@ -440,7 +440,7 @@ window.Quarto = {
 -   `pROC` [@pROC]
 --></section><section id="introduction-predicting-comfort-with-driverless-cars" class="level2" data-number="12.1"><h2 data-number="12.1" class="anchored" data-anchor-id="introduction-predicting-comfort-with-driverless-cars">
 <span class="header-section-number">12.1</span> Introduction: Predicting comfort with driverless cars</h2>
-<p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced data from the 2024 General Social Survey in which adults in the United States were asked their opinons on a variety of issues, including their comfort with driverless cars. In the previous chapter, we fit a logistic regression model and used the model to describe the characteristics associated with the odds an adult is comfortable with driverless cars. We continue with the analysis in this chapter, with a focus on using the model for prediction. We will also evaluate the model performance and show an example workflow for comparing two logistic regression models.</p>
+<p>In <a href="11-logistic.html" class="quarto-xref"><span>Chapter 11</span></a>, we introduced data from the 2024 General Social Survey in which adults in the United States were asked their pinons on a variety of issues, including their comfort with driverless cars. In the previous chapter, we fit a logistic regression model and used the model to describe the characteristics associated with the odds an adult is comfortable with driverless cars. We continue with the analysis in this chapter, with a focus on using the model for prediction. We will also evaluate the model performance and show an example workflow for comparing two logistic regression models.</p>
 <p>We use the variables below in this chapter. The variable definitions are based on survey prompts and variable definitions in the <em>General Social Survey Documentation and Public Use File Codebook</em> <span class="citation" data-cites="gss2024">(<a href="references.html#ref-gss2024" role="doc-biblioref">Davern et al. 2025</a>)</span>.</p>
 <ul>
 <li>
@@ -479,7 +479,7 @@ window.Quarto = {
 <a href="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-1.png" class="lightbox" data-gallery="fig-aidrive-eda-2" title="Figure&nbsp;12.1&nbsp;(a): income"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-eda-2"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-eda-2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>income</code>
+(a) income
 </figcaption></figure>
 </div>
 </div>
@@ -489,7 +489,7 @@ window.Quarto = {
 <a href="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-2.png" class="lightbox" data-gallery="fig-aidrive-eda-2" title="Figure&nbsp;12.1&nbsp;(b): polviews"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-eda-2"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-eda-2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>polviews</code>
+(b) polviews
 </figcaption></figure>
 </div>
 </div>
@@ -501,14 +501,14 @@ window.Quarto = {
 <a href="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-3.png" class="lightbox" data-gallery="fig-aidrive-eda-2" title="Figure&nbsp;12.1&nbsp;(c): tech_harm"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-eda-2-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-eda-2"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-eda-2-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) <code>tech_harm</code>
+(c) tech_harm
 </figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aidrive-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.1: Univariate exploratory data analysis
+Figure&nbsp;12.1: Univariate exploratory data analysis for new predictors
 </figcaption></figure>
 </div>
 <p><a href="#fig-aidrive-eda-2" class="quarto-xref">Figure&nbsp;<span>12.1</span></a> shows the distributions of the predictors that are new in this chapter. From the distribution of <code>income</code> in <a href="#fig-aidrive-eda-2-1" class="quarto-xref">Figure&nbsp;<span>12.1 (a)</span></a>, we see that the most common response for income is between $50-110K. There is a sizable proportion of the respondents who did not report an income. Studies have shown that failure to report income in surveys is not random <span class="citation" data-cites="jabkowski2024not">(e.g., <a href="references.html#ref-jabkowski2024not" role="doc-biblioref">Jabkowski and Piekut 2024</a>)</span>, so it will be worth noting if the <code>Not Reported</code> indicator has a statistically significant relationship with the response variable as we continue the analysis.</p>
@@ -521,20 +521,20 @@ Figure&nbsp;12.1: Univariate exploratory data analysis
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-bivariate-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-aidrive-bivariate-eda-2-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-bivariate-eda-2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-1.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(a): aidrive_comfort vs.&nbsp;income"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-1.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(a): aidrive_comfort versus income"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-1.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-bivariate-eda-2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) <code>aidrive_comfort</code> vs.&nbsp;<code>income</code>
+(a) aidrive_comfort versus income
 </figcaption></figure>
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-bivariate-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-aidrive-bivariate-eda-2-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-bivariate-eda-2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-2.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(b): aidrive_comfort vs.&nbsp;polviews"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-2.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(b): aidrive_comfort versus polviews"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-2.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-bivariate-eda-2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) <code>aidrive_comfort</code> vs.&nbsp;<code>polviews</code>
+(b) aidrive_comfort versus polviews
 </figcaption></figure>
 </div>
 </div>
@@ -543,17 +543,17 @@ Figure&nbsp;12.1: Univariate exploratory data analysis
 <div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-aidrive-bivariate-eda-2" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div id="fig-aidrive-bivariate-eda-2-3" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure"><div aria-describedby="fig-aidrive-bivariate-eda-2-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-3.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(c): aidrive_comfort vs.&nbsp;tech_harm"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
+<a href="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-3.png" class="lightbox" data-gallery="fig-aidrive-bivariate-eda-2" title="Figure&nbsp;12.2&nbsp;(c): aidrive_comfort versus tech_harm"><img src="12-logistic-prediction_files/figure-html/fig-aidrive-bivariate-eda-2-3.png" class="img-fluid figure-img" style="width:100.0%" data-ref-parent="fig-aidrive-bivariate-eda-2"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-aidrive-bivariate-eda-2-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) <code>aidrive_comfort</code> vs.&nbsp;<code>tech_harm</code>
+(c) aidrive_comfort versus tech_harm
 </figcaption></figure>
 </div>
 </div>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aidrive-bivariate-eda-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.2: Bivariate exploratory data analysis. Blue: <code>adrive_comfort = 0</code>, Red: <code>aidrive_comfort = 1</code>
+Figure&nbsp;12.2: Bivariate exploratory data analysis. Blue: adrive_comfort = 0, Red: aidrive_comfort = 1
 </figcaption></figure>
 </div>
 <p>The visualizations in <a href="#fig-aidrive-bivariate-eda-2" class="quarto-xref">Figure&nbsp;<span>12.2</span></a> show the relationships between the response variable and each new predictor variable. <a href="#fig-aidrive-bivariate-eda-2-1" class="quarto-xref">Figure&nbsp;<span>12.2 (a)</span></a> shows the relationship between <code>income</code> and <code>aidrive_comfort</code>. The graph shows that a higher proportion of respondents in the higher income categories are comfortable with driverless cars compared to respondents in lower income categories or who did not report income. This suggests an individual’s income may be useful in understanding the chance they are comfortable with driverless cars.</p>
@@ -565,7 +565,7 @@ Figure&nbsp;12.2: Bivariate exploratory data analysis. Blue: <code>adrive_comfor
 <div class="cell">
 <div id="tbl-aidrive-comfort-fit" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aidrive-comfort-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.1: Model of <code>aidrive_comfort</code> versus <code>age</code>, <code>tech_easy</code>, and <code>income</code> with 95% confidence intervals
+Table&nbsp;12.1: Model of aidrive_comfort versus age, tech_easy, and income with 95% confidence intervals
 </figcaption><div aria-describedby="tbl-aidrive-comfort-fit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -688,7 +688,7 @@ Table&nbsp;12.1: Model of <code>aidrive_comfort</code> versus <code>age</code>, 
 <div class="cell">
 <div id="tbl-aidrive-comfort-predict" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aidrive-comfort-predict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.2: Predictions from model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> for 10 respondents
+Table&nbsp;12.2: Predictions for 10 respondents computed from in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a>
 </figcaption><div aria-describedby="tbl-aidrive-comfort-predict-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -833,8 +833,8 @@ Table&nbsp;12.2: Predictions from model in <a href="#tbl-aidrive-comfort-fit" cl
 <p>Lastly, we use the odds from <a href="#tbl-aidrive-comfort-predict" class="quarto-xref">Table&nbsp;<span>12.2</span></a> to compute the predicted probability<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
 <p><span class="math display">\[\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.692}{1 + 3.692} = 0.787\]</span></p>
 <div class="math_rules">
-<p>The relationship between the predicted log odds and the predicted probability is more concisely represented by the <strong>sigmoid function</strong> (<span class="quarto-unresolved-ref">?eq-sigmoid</span>). The sigmoid function, denoted <span class="math inline">\(\sigma(z)\)</span>, is the inverse of the logit function, i.e., the log odds.</p>
-<p><span class="math display">\[\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}\]</span></p>
+<p>The relationship between the predicted log odds and the predicted probability is more concisely represented by the <strong>sigmoid function</strong> (<a href="#eq-sigmoid" class="quarto-xref">Equation&nbsp;<span>12.2</span></a>). The sigmoid function, denoted <span class="math inline">\(\sigma(z)\)</span>, is the inverse of the logit function, i.e., the log odds.</p>
+<p><span id="eq-sigmoid"><span class="math display">\[\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}} \tag{12.2}\]</span></span></p>
 <p>It produces the “S” curve often seen for the predicted probabilities from a logistic regression model. <a href="#fig-sigmoid" class="quarto-xref">Figure&nbsp;<span>12.3</span></a> is an illustration of the sigmoid function.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -863,7 +863,7 @@ Figure&nbsp;12.3: Illustration of the sigmoid function based on simulated data
 <div class="cell">
 <div id="tbl-aidrive-comfort-pred-class" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aidrive-comfort-pred-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.3: Predicted class based on model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and threshold of 0.5 for 10 respondents
+Table&nbsp;12.3: Predicted class for 10 respondents based on model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and threshold of 0.5
 </figcaption><div aria-describedby="tbl-aidrive-comfort-pred-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
@@ -995,10 +995,10 @@ Observed class
 <li>There are 601 observations with the predicted class of 1 and observed class of 1.</li>
 </ul>
 <p>We compute various statistics from the confusion matrix to evaluate how well the observations are classified. The first statistics we can calculate are the accuracy and misclassification rate. The <strong>accuracy</strong> is the proportion <!--# or percentage?--> of observations that are correctly classified (the observed and predicted classes are the same). The accuracy based on <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> is</p>
-<p><span id="eq-logistic-accuracy"><span class="math display">\[\text{accuracy} = \frac{349 + 601}{349 + 228 + 343 + 601} = 0.625  \tag{12.2}\]</span></span></p>
+<p><span id="eq-logistic-accuracy"><span class="math display">\[\text{accuracy} = \frac{349 + 601}{349 + 228 + 343 + 601} = 0.625  \tag{12.3}\]</span></span></p>
 <p>Using the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and the threshold of 0.5, 62.5% of the observations are correctly classified.</p>
 <p>The <strong>misclassification rate</strong> is the proportion of observations that are not correctly classified (the observed and predicted classes differ). The misclassification rate based on <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> is</p>
-<p><span id="eq-logistic-misclassification"><span class="math display">\[\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375 \tag{12.3}\]</span></span></p>
+<p><span id="eq-logistic-misclassification"><span class="math display">\[\text{misclassification} = \frac{228 + 343}{349 + 228 + 343 + 601} = 0.375 \tag{12.4}\]</span></span></p>
 <p>Using the model in <a href="#tbl-aidrive-comfort-fit" class="quarto-xref">Table&nbsp;<span>12.1</span></a> and the threshold of 0.5, 37.5% of the observations are incorrectly classified. Note that the misclassification rate is equal to <span class="math inline">\(1 - \text{accuracy}\)</span>, and vice versa.</p>
 <div class="analysis_in_practice">
 <p>When the distribution of the response variable is largely imbalanced, the accuracy can be a misleading measure of how well the observations are classified. For example, suppose there are 100 observations, such that 5% of the observations have an observed response <span class="math inline">\(Y = 1\)</span>, and 95% of the observations have an observed response of <span class="math inline">\(Y = 0\)</span>. We may observe an imbalanced distribution like this when building a model to detect the presence of a rare disease, for example.</p>
@@ -1046,7 +1046,7 @@ The accuracy for this model will be (95 + 0) / (95 + 5) = 0.95. Based on this va
 <p>The accuracy and misclassification rate provide a nice initial indication of the how well the model classifies observations, but they do not give a complete picture. For example, suppose we want to know how many of the people who are actually comfortable with driverless cars are predicted to be comfortable based on the model predictions and threshold. Or suppose we want to know how many people who are actually not comfortable with driverless cars were incorrectly classified as being comfortable. To answer these and similar questions, let’s take a more detailed look at the confusion matrix.</p>
 <div id="tbl-confusion-matrix-detailed" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-confusion-matrix-detailed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.5: Detailed confusion matrix
+Table&nbsp;12.5: Detailed confusion matrix, Observed class (columns), Predicted class (rows)
 </figcaption><div aria-describedby="tbl-confusion-matrix-detailed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <colgroup>
@@ -1091,25 +1091,25 @@ Table&nbsp;12.5: Detailed confusion matrix
 <li><p><strong>False positive (FP):</strong> The number of observations that are predicted to be comfortable with driverless cars (<span class="math inline">\(\hat{y}_i = 1\)</span>) and have observed response of not comfortable (<span class="math inline">\(y_i = 0\)</span>) .</p></li>
 <li><p><strong>True positive (TP):</strong> The number of observations that are predicted to be comfortable with driverless cars (<span class="math inline">\(\hat{y}_i = 1\)</span>) and have observed response of comfortable (<span class="math inline">\(y_i = 1\)</span>) .</p></li>
 </ul>
-<p>Using these definitions, the general form of accuracy computed in <a href="#eq-logistic-accuracy" class="quarto-xref">Equation&nbsp;<span>12.2</span></a> is</p>
-<p><span id="eq-accuracy-general"><span class="math display">\[\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}} \tag{12.4}\]</span></span></p>
+<p>Using these definitions, the general form of accuracy computed in <a href="#eq-logistic-accuracy" class="quarto-xref">Equation&nbsp;<span>12.3</span></a> is</p>
+<p><span id="eq-accuracy-general"><span class="math display">\[\text{accuracy} = \frac{\text{True negative} + \text{True positive}}{\text{True negative} + \text{False negative} + \text{False positive} + \text{True positive}} \tag{12.5}\]</span></span></p>
 <div class="yourturn">
-<p>Write the general equation for the misclassification computed in <a href="#eq-logistic-misclassification" class="quarto-xref">Equation&nbsp;<span>12.3</span></a> using the terms in <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Write the general equation for the misclassification computed in <a href="#eq-logistic-misclassification" class="quarto-xref">Equation&nbsp;<span>12.4</span></a> using the terms in <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 </div>
 <p>Now let’s take a look at additional statistics that help us quantify how well the observations are classified. First, we’ll focus on the column containing those who have observed values <span class="math inline">\(y_i = 1\)</span>.</p>
 <p>The <strong>sensitivity</strong> (<strong>true positive rate</strong>) is the proportion of those with observed <span class="math inline">\(y_i = 1\)</span> that were correctly classified as <span class="math inline">\(\hat{y}_i = 1\)</span>. In machine learning contexts, this value is also called <strong>recall</strong> or <strong>probability of detection</strong>.</p>
-<p><span id="eq-sensitivity"><span class="math display">\[\text{Sensitivity} = \frac{\text{True positive}}{\text{False negative} + \text{True positive}} \tag{12.5}\]</span></span></p>
+<p><span id="eq-sensitivity"><span class="math display">\[\text{Sensitivity} = \frac{\text{True positive}}{\text{False negative} + \text{True positive}} \tag{12.6}\]</span></span></p>
 <p>The <strong>false negative rate</strong> is the proportion of those with observed <span class="math inline">\(y_i = 1\)</span> that were incorrectly classified as <span class="math inline">\(\hat{y}_i = 0\)</span>.</p>
-<p><span id="eq-false-negative"><span class="math display">\[\text{False negative rate} = \frac{\text{False negative}}{\text{False negative} + \text{True positive}} \tag{12.6}\]</span></span></p>
+<p><span id="eq-false-negative"><span class="math display">\[\text{False negative rate} = \frac{\text{False negative}}{\text{False negative} + \text{True positive}} \tag{12.7}\]</span></span></p>
 <p>The false negative rate is equal to <span class="math inline">\(1 - \text{Sensitivity}\)</span> and vice versa. The denominators for the false negative rate and the sensitivity are the total number of observations with observed response <span class="math inline">\(y_i = 1\)</span>. In terms of our analysis, this is the total number of people who responded they are comfortable with driverless cars in the General Social Survey.</p>
 <p>Next, we look at the column of containing those who have observed values of <span class="math inline">\(y_i =0\)</span>.</p>
 <p>The <strong>specificity</strong> (<strong>true negative rate</strong>) is the proportion of those with observed <span class="math inline">\(y_i = 0\)</span> who were correctly classified as <span class="math inline">\(\hat{y}_i = 0\)</span>.</p>
-<p><span id="eq-specificity"><span class="math display">\[\text{Specificity} = \frac{\text{True negative}}{\text{True negative} + \text{False positive}} \tag{12.7}\]</span></span></p>
+<p><span id="eq-specificity"><span class="math display">\[\text{Specificity} = \frac{\text{True negative}}{\text{True negative} + \text{False positive}} \tag{12.8}\]</span></span></p>
 <p>The <strong>false positive rate</strong> is the proportion of those with observed <span class="math inline">\(y_i = 0\)</span> who were incorrectly classified as <span class="math inline">\(\hat{y}_i = 1\)</span>. In machine learning contexts, this value is also called the <strong>probability of false alarm.</strong></p>
-<p><span id="eq-false-positive"><span class="math display">\[\text{False positive rate} = \frac{\text{False positive}}{\text{True negative} + \text{False positive}} \tag{12.8}\]</span></span></p>
+<p><span id="eq-false-positive"><span class="math display">\[\text{False positive rate} = \frac{\text{False positive}}{\text{True negative} + \text{False positive}} \tag{12.9}\]</span></span></p>
 <p>The false positive rate is equal to <span class="math inline">\(1 - \text{specificity}\)</span>. The denominators for the specificity and false positive rate are the total number of observations with observed response <span class="math inline">\(y_i = 0\)</span>. In terms of our analysis, this is the total number of people who responded they are not comfortable with driverless cars in the General Social Survey.</p>
 <p>The values shown thus far quantify how well observations are classified based on the observed response. Another question that is often of interest is among those with predicted class of <span class="math inline">\(\hat{y}_i = 1\)</span>, how many actually have observed values of <span class="math inline">\(y_i = 1\)</span>? This value is called the <strong>precision.</strong></p>
-<p><span id="eq-precision"><span class="math display">\[\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}} \tag{12.9}\]</span></span></p>
+<p><span id="eq-precision"><span class="math display">\[\text{Precision} = \frac{\text{True positive}}{\text{False positive} + \text{True positive}} \tag{12.10}\]</span></span></p>
 <p>Now the denominator is the number of observations that have a predicted class <span class="math inline">\(\hat{y}_i = 1\)</span>, the second row in the <a href="#tbl-confusion-matrix-detailed" class="quarto-xref">Table&nbsp;<span>12.5</span></a>. In the context of our analysis, the precision is how many of the individuals who are predicted to be comfortable with driverless cars actually responded on the General Social Survey that they are comfortable with driverless cars. If we’re using the model to identify individuals for a targeted marketing campaign, the precision can be useful in quantifying whether the marketing will generally capture those who are actually comfortable with driverless cars or if a large proportion would be aimed at those who actually aren’t comfortable with driverless cars and likely won’t become robotaxi customers.</p>
 <div class="yourturn">
 <p>Use <a href="#tbl-confusion-matrix" class="quarto-xref">Table&nbsp;<span>12.4</span></a> to compute the following:</p>
@@ -1216,19 +1216,19 @@ Figure&nbsp;12.4: ROC curve for model in <a href="#tbl-aidrive-comfort-fit" clas
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-curve-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.5: Example ROC curves for different model performs
+Figure&nbsp;12.5: Example ROC curves for different model performances
 </figcaption></figure>
 </div>
 <!--# think of better words than distinction?-->
 <p><a href="#fig-roc-curve-examples" class="quarto-xref">Figure&nbsp;<span>12.5</span></a> shows example ROC curves for different model fits. <a href="#fig-roc-curve-examples-1" class="quarto-xref">Figure&nbsp;<span>12.5 (a)</span></a> is the ROC curve for a model that does a poor job distinguishing between the true positives and false positives (close to the diagonal line) and <a href="#fig-roc-curve-examples-3" class="quarto-xref">Figure&nbsp;<span>12.5 (c)</span></a> is the ROC curve for a model that almost perfectly distinguishes between the true and false positives (close to the top-left corner). Generally, we expect to see ROC curves somewhere in the middle, similar to <a href="#fig-roc-curve-examples-2" class="quarto-xref">Figure&nbsp;<span>12.5 (b)</span></a>. Here, the model generally does a good job distinguishing between the true and false positives, but we will expect to get some false positives if we want a high true positive rate (sensitivity).</p>
 <p>Each point in the ROC curve is <span class="math inline">\((1 - \text{Specificity, } \text{Sensitivity})\)</span> at a given threshold and can be thought of as representing an individual confusion matrix for a given threshold. For example, the point marked in red on the ROC curve in <a href="#fig-aidrive-comfort-roc-curve" class="quarto-xref">Figure&nbsp;<span>12.4</span></a> corresponds to <span class="math inline">\(1 - \text{Specificity} = 0.525\)</span> and <span class="math inline">\(\text{Sensitivity} = 0.75\)</span>. This point corresponds to the classification threshold 0.4888088. The corresponding confusion matrix is shown in <a href="#tbl-aidrive-roc-confmat" class="quarto-xref">Table&nbsp;<span>12.7</span></a>. Observations with predicted probability <span class="math inline">\(\hat{\pi}_i &gt; 0.4888088\)</span> are classified as being comfortable with driverless cars, and those with <span class="math inline">\(\hat{\pi}_i \leq 0.4888088\)</span> are classified as not being comfortable with driverless cars.</p>
-<div class="cell" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
-<div id="tbl-aidrive-roc-confmat" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-label="Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088">
-<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12.7
+<div class="cell">
+<div id="tbl-aidrive-roc-confmat" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;12.7: Confusion matrix for model in <span class="quarto-unresolved-ref">?tbl-aidrive-comfort</span> at threshold 0.4888088
 </figcaption><div aria-describedby="tbl-aidrive-roc-confmat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="do-not-create-environment caption-top table table-sm table-striped small">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">

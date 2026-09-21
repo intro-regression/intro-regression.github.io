@@ -30,7 +30,7 @@ source("_common.R")
 
 ## Introduction: Predicting comfort with driverless cars
 
-In @sec-ch-logistic, we introduced data from the 2024 General Social Survey in which adults in the United States were asked their opinons on a variety of issues, including their comfort with driverless cars. In the previous chapter, we fit a logistic regression model and used the model to describe the characteristics associated with the odds an adult is comfortable with driverless cars. We continue with the analysis in this chapter, with a focus on using the model for prediction. We will also evaluate the model performance and show an example workflow for comparing two logistic regression models.
+In @sec-ch-logistic, we introduced data from the 2024 General Social Survey in which adults in the United States were asked their pinons on a variety of issues, including their comfort with driverless cars. In the previous chapter, we fit a logistic regression model and used the model to describe the characteristics associated with the odds an adult is comfortable with driverless cars. We continue with the analysis in this chapter, with a focus on using the model for prediction. We will also evaluate the model performance and show an example workflow for comparing two logistic regression models.
 
 We use the variables below in this chapter. The variable definitions are based on survey prompts and variable definitions in the *General Social Survey Documentation and Public Use File Codebook* [@gss2024].
 
@@ -88,11 +88,11 @@ We conducted exploratory data analysis for the response variable `aidrive_comfor
 
 ```{r}
 #| label: fig-aidrive-eda-2
-#| fig-cap: Univariate exploratory data analysis 
+#| fig-cap: Univariate exploratory data analysis for new predictors
 #| fig-subcap: 
-#|   - "`income`"
-#|   - "`polviews`"
-#|   - "`tech_harm`"
+#|   - "income"
+#|   - "polviews"
+#|   - "tech_harm"
 #| layout-ncol: 2
 
 ggplot(data = gss24_ai, aes(x = income_fct)) +
@@ -123,11 +123,11 @@ The distribution of `polviews_fct` in @fig-aidrive-eda-2-2 shows a relatively ev
 
 ```{r}
 #| label: fig-aidrive-bivariate-eda-2
-#| fig-cap: "Bivariate exploratory data analysis. Blue: `adrive_comfort = 0`, Red: `aidrive_comfort = 1`"
+#| fig-cap: "Bivariate exploratory data analysis. Blue: adrive_comfort = 0, Red: aidrive_comfort = 1"
 #| fig-subcap: 
-#|   - "`aidrive_comfort` vs. `income`"
-#|   - "`aidrive_comfort` vs. `polviews`"
-#|   - "`aidrive_comfort` vs. `tech_harm`"
+#|   - "aidrive_comfort versus income"
+#|   - "aidrive_comfort versus polviews"
+#|   - "aidrive_comfort versus tech_harm"
 #| layout-ncol: 2
 
 
@@ -165,7 +165,7 @@ We begin by fitting a model using the predictors from @sec-ch-logistic, `age` an
 
 ```{r}
 #| label: tbl-aidrive-comfort-fit
-#| tbl-cap: "Model of `aidrive_comfort` versus `age`, `tech_easy`, and `income` with 95% confidence intervals"
+#| tbl-cap: "Model of aidrive_comfort versus age, tech_easy, and income with 95% confidence intervals"
 
 
 aidrive_comfort_fit <- glm(aidrive_comfort ~ age + tech_easy + income_fct, 
@@ -194,7 +194,7 @@ Recall from @sec-logistic-model that the response variable in the logistic regre
 
 ```{r}
 #| label: tbl-aidrive-comfort-predict
-#| tbl-cap: "Predictions from model in @tbl-aidrive-comfort-fit for 10 respondents"
+#| tbl-cap: "Predictions for 10 respondents computed from in @tbl-aidrive-comfort-fit"
 
 aidrive_comfort_aug <- augment(aidrive_comfort_fit)
 
@@ -245,7 +245,7 @@ $$\hat{\pi} = \frac{\widehat{\text{odds}}}{1 + \widehat{\text{odds}}} = \frac{3.
 ::: {.math_rules latex=""}
 The relationship between the predicted log odds and the predicted probability is more concisely represented by the **sigmoid function** (@eq-sigmoid). The sigmoid function, denoted $\sigma(z)$, is the inverse of the logit function, i.e., the log odds.
 
-$$\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}$$
+$$\sigma(z) = \frac{e^z}{1 + e^z} = \frac{1}{1 + e^{-z}}$$ {#eq-sigmoid}
 
 It produces the "S" curve often seen for the predicted probabilities from a logistic regression model. @fig-sigmoid is an illustration of the sigmoid function.
 
@@ -293,7 +293,7 @@ For now, let's use the threshold equal to 0.5 to assign the predicted classes of
 
 ```{r}
 #| label: tbl-aidrive-comfort-pred-class
-#| tbl-cap: "Predicted class based on model in @tbl-aidrive-comfort-fit and threshold of 0.5 for 10 respondents"
+#| tbl-cap: "Predicted class for 10 respondents based on model in @tbl-aidrive-comfort-fit and threshold of 0.5"
 
 aidrive_comfort_aug <- aidrive_comfort_aug |>
 mutate(pred_class = if_else(pred_prob > 0.5, "1", "0"))
@@ -370,7 +370,7 @@ The accuracy and misclassification rate provide a nice initial indication of the
 | **Classified** **not comfortable**$(\hat{y}_i = 0)$ | True negative (TN) | False negative (FN) |
 | **Classified comfortable**$(\hat{y}_i = 1)$ | False positive (FP) | True positive (TP) |
 
-: Detailed confusion matrix {#tbl-confusion-matrix-detailed}
+: Detailed confusion matrix, Observed class (columns), Predicted class (rows) {#tbl-confusion-matrix-detailed}
 
 <!--# check the notation used in this table, y_i and p_i-->
 
@@ -482,7 +482,7 @@ aidrive_comfort_aug |>
 
 ```{r}
 #| label: fig-roc-curve-examples
-#| fig-cap: Example ROC curves for different model performs
+#| fig-cap: Example ROC curves for different model performances
 #| fig-subcap: 
 #|   - Poor distinction 
 #|   - Good distinction 
@@ -543,7 +543,7 @@ Each point in the ROC curve is $(1 - \text{Specificity, } \text{Sensitivity})$ a
 
 ```{r}
 #| label: tbl-aidrive-roc-confmat
-#| tbl-label: "Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088"
+#| tbl-cap: "Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088"
 
 aidrive_comfort_aug |>
   mutate(pred_class3 = if_else(pred_prob >0.4888088, "1", "0")) |>
