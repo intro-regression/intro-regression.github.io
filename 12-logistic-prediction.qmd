@@ -543,7 +543,7 @@ Each point in the ROC curve is $(1 - \text{Specificity, } \text{Sensitivity})$ a
 
 ```{r}
 #| label: tbl-aidrive-roc-confmat
-#| tbl-cap: "Confusion matrix for model in @tbl-aidrive-comfort at threshold 0.4888088"
+#| tbl-cap: "Confusion matrix for model in @tbl-aidrive-comfort-fit at threshold 0.4888088"
 
 aidrive_comfort_aug |>
   mutate(pred_class3 = if_else(pred_prob >0.4888088, "1", "0")) |>
